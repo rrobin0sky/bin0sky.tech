@@ -1,6 +1,33 @@
+# System junk
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 Thumbs.db
-node_modules/
-.wrangler/
-.git/
+ehthumbs.db
+
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Dependencies and caches
+node_modules/
+.pnpm-store/
+.npm/
+.cache/
+
+# Cloudflare & build artifacts
+.wrangler/
+dist/
+out/
+.next/
+
+# Temporary / scratch scripts
+build_redesign.py
+apply_redesign.py
+*.tmp
+*.bak

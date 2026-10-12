@@ -316,9 +316,21 @@
             <!-- Upcoming placeholder -->
             <div class="px-2.5 py-1.5 flex items-center gap-2.5 text-zinc-400/60 dark:text-zinc-600 text-xs font-mono">
               <span class="w-1.5 h-1.5 rounded-full bg-zinc-400/40 dark:bg-zinc-700"></span>
-              <span>更多数据洞察构思中...</span>
+              <span>更多研报规划中...</span>
             </div>
           </nav>
+        </div>
+
+        <!-- Section 3: Experimental Labs (Tri-slot Framework) -->
+        <div>
+          <div class="flex items-center justify-between px-2 mb-2">
+            <span class="text-[10px] font-mono tracking-wider uppercase text-zinc-400 font-bold" data-i18n="nav.labsTitle">🧪 实验作 LABS</span>
+            <span class="text-[9px] font-mono text-emerald-500 font-semibold">PREVIEW</span>
+          </div>
+          <div class="px-2.5 py-2 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-zinc-400 text-xs font-mono flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-[11px] text-zinc-300">WebGPU/微算法实验孵化中</span>
+          </div>
         </div>
       </div>
 
@@ -916,7 +928,7 @@
     }
 
     function filterCards(type) {
-      const tabs = ['all', 'tools', 'notes'];
+      const tabs = ['all', 'tools', 'notes', 'labs'];
       tabs.forEach(t => {
         const btn = document.getElementById(`tab-${t}`);
         if (!btn) return;
