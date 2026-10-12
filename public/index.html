@@ -115,6 +115,28 @@
     .wave-bar:nth-child(8) { animation-delay: 0.1s; }
 
     /* Keycap badge */
+    /* Sidebar smooth collapsible transitions */
+    #sidebar {
+      transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                  padding 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-width 0.28s ease,
+                  opacity 0.2s ease,
+                  transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @media (min-width: 1024px) {
+      #sidebar.collapsed {
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        border-right-width: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        overflow: hidden !important;
+      }
+    }
+
     .kbd {
       font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
@@ -204,7 +226,7 @@
     <div id="sidebarBackdrop" onclick="toggleSidebar(false)" class="fixed inset-0 z-30 bg-black/50 backdrop-blur-xs hidden lg:hidden"></div>
 
     <!-- ==================== LEFT STRUCTURED TREE SIDEBAR ==================== -->
-    <aside id="sidebar" class="fixed lg:sticky top-14 left-0 z-30 w-64 h-[calc(100vh-3.5rem)] flex-shrink-0 flex flex-col justify-between border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#070709]/95 backdrop-blur-xl -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-y-auto p-4 select-none">
+    <aside id="sidebar" class="fixed lg:sticky top-14 left-0 z-30 w-64 h-[calc(100vh-3.5rem)] flex-shrink-0 flex flex-col justify-between border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#070709]/95 backdrop-blur-xl -translate-x-full lg:translate-x-0 overflow-y-auto p-4 select-none">
       
       <div class="space-y-6">
         <!-- Overview Link -->
@@ -868,14 +890,28 @@
       const sb = document.getElementById('sidebar');
       const bd = document.getElementById('sidebarBackdrop');
       if (!sb) return;
-      const isHidden = sb.classList.contains('-translate-x-full');
-      const show = forceState !== undefined ? forceState : isHidden;
-      if (show) {
-        sb.classList.remove('-translate-x-full');
-        if (bd) bd.classList.remove('hidden');
+      const isMobile = window.innerWidth < 1024;
+      
+      if (isMobile) {
+        const isHidden = sb.classList.contains('-translate-x-full');
+        const show = forceState !== undefined ? forceState : isHidden;
+        if (show) {
+          sb.classList.remove('-translate-x-full');
+          if (bd) bd.classList.remove('hidden');
+        } else {
+          sb.classList.add('-translate-x-full');
+          if (bd) bd.classList.add('hidden');
+        }
       } else {
-        sb.classList.add('-translate-x-full');
-        if (bd) bd.classList.add('hidden');
+        const isCollapsed = sb.classList.contains('collapsed');
+        const shouldCollapse = forceState !== undefined ? !forceState : !isCollapsed;
+        if (shouldCollapse) {
+          sb.classList.add('collapsed');
+          localStorage.setItem('b0_sidebar', 'collapsed');
+        } else {
+          sb.classList.remove('collapsed');
+          localStorage.setItem('b0_sidebar', 'expanded');
+        }
       }
     }
 
@@ -1000,6 +1036,10 @@
         else if (bl.startsWith('zh-tw') || bl.startsWith('zh-hk')) setLanguage('zh-TW');
         else if (bl.startsWith('ja')) setLanguage('ja');
         else setLanguage('zh-CN');
+      }
+      if (window.innerWidth >= 1024 && localStorage.getItem('b0_sidebar') === 'collapsed') {
+        const sb = document.getElementById('sidebar');
+        if (sb) sb.classList.add('collapsed');
       }
       if (window.lucide) lucide.createIcons();
     });
