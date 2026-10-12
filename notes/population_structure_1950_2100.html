@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>全球人口结构变迁 1950–2100 · UN WPP 2024</title>
+<style>
+:root{
+  --bg:#0a0e14; --bg2:#0e141d; --panel:#121a26; --panel2:#161f2e;
+  --border:#22303f; --border2:#2c3d50;
+  --text:#e8eef6; --muted:#8a98ab; --muted2:#6b7a8d;
+  --accent:#58a6ff; --accent2:#7ee787;
+  --china:#ef4444; --india:#f59e0b; --usa:#3b82f6; --japan:#a855f7;
+  --shadow:0 8px 30px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:radial-gradient(1200px 700px at 15% -10%, #16233a 0%, transparent 55%),
+             radial-gradient(1000px 600px at 90% 0%, #1c1630 0%, transparent 50%),
+             var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.6; -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+.wrap{max-width:1360px;margin:0 auto;padding:0 22px 90px}
+
+/* ---------- hero ---------- */
+.hero{padding:64px 0 30px;text-align:left}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent);background:rgba(88,166,255,.09);
+  border:1px solid rgba(88,166,255,.28);padding:7px 15px;border-radius:999px;font-weight:600}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+h1{font-size:clamp(30px,4.6vw,54px);line-height:1.1;margin:22px 0 14px;font-weight:800;letter-spacing:-.02em}
+h1 .g{background:linear-gradient(100deg,#60a5fa,#a78bfa 45%,#f472b6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{font-size:16.5px;color:var(--muted);max-width:820px}
+.lede b{color:var(--text);font-weight:600}
+
+/* ---------- kpi strip ---------- */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:34px 0 8px}
+.kpi{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--border);
+  border-radius:15px;padding:17px 18px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+.kpi.k2::before{background:var(--china)} .kpi.k3::before{background:var(--japan)}
+.kpi.k4::before{background:var(--india)}
+.kpi .lbl{font-size:12px;color:var(--muted);letter-spacing:.03em}
+.kpi .val{font-size:27px;font-weight:800;margin:5px 0 2px;letter-spacing:-.01em}
+.kpi .sub{font-size:12px;color:var(--muted2)}
+.kpi .val .u{font-size:14px;color:var(--muted);font-weight:600}
+
+/* ---------- section ---------- */
+section{margin-top:60px;scroll-margin-top:20px}
+.shead{display:flex;align-items:flex-start;gap:16px;margin-bottom:6px;flex-wrap:wrap}
+.snum{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(150deg,#1d2c42,#131c29);border:1px solid var(--border2);
+  color:var(--accent);font-weight:800;font-size:17px}
+.stitle{font-size:clamp(20px,2.5vw,27px);font-weight:750;letter-spacing:-.015em;line-height:1.25}
+.sdesc{color:var(--muted);font-size:14.5px;margin-top:3px;max-width:940px}
+.card{background:linear-gradient(170deg,var(--panel2),var(--panel));border:1px solid var(--border);
+  border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-top:18px}
+.card.pad{padding:26px}
+.note{font-size:13px;color:var(--muted);border-left:2px solid var(--border2);padding:2px 0 2px 13px;margin-top:14px}
+.note b{color:#c9d6e6}
+
+/* ---------- pyramid ---------- */
+.pyr-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.yearbox{display:flex;align-items:baseline;gap:12px}
+.yearbox .yr{font-size:42px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;min-width:150px}
+.yearbox .tag{font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;border:1px solid var(--border2)}
+.ctrls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+button.btn{background:#1a2536;color:var(--text);border:1px solid var(--border2);padding:9px 16px;border-radius:10px;
+  font-size:13.5px;font-weight:650;cursor:pointer;transition:.15s;font-family:inherit}
+button.btn:hover{background:#22314a;border-color:#3a5480}
+button.btn.play{background:linear-gradient(135deg,#1d4ed8,#7c3aed);border:none;color:#fff}
+button.btn.play:hover{filter:brightness(1.12)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;
+  background:linear-gradient(90deg,#1e3a5f,#2b4a7a);outline:none;margin:18px 0 4px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#fff,#58a6ff);border:2px solid #0a0e14;box-shadow:0 0 12px rgba(88,166,255,.85);cursor:grab}
+.ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--muted2);font-variant-numeric:tabular-nums}
+.pyrgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
+.pyrpanel{background:rgba(10,17,26,.55);border:1px solid var(--border);border-radius:14px;padding:8px 6px 4px}
+canvas.pyr{width:100%;height:430px;display:block}
+.pyrfoot{text-align:center;font-size:12px;color:var(--muted);padding:2px 0 6px;font-variant-numeric:tabular-nums}
+.legegend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:14px}
+.legegend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* ---------- charts ---------- */
+.chartwrap{position:relative;height:430px}
+.chartwrap.tall{height:470px}
+.chartwrap.mid{height:400px}
+@media(max-width:1000px){.pyrgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.pyrgrid{grid-template-columns:1fr}.chartwrap{height:360px}}
+
+/* ---------- dividend gantt ---------- */
+.gantt{margin-top:20px}
+.grow{display:grid;grid-template-columns:190px 1fr;align-items:center;gap:12px;margin-bottom:9px;font-size:13px}
+.gname{font-weight:650;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.gname .sw{width:9px;height:9px;border-radius:50%}
+.gtrack{position:relative;height:30px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.gbar{position:absolute;top:4px;bottom:4px;border-radius:5px;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#04121f;box-shadow:0 0 14px rgba(0,0,0,.3)}
+.gaxis{display:grid;grid-template-columns:190px 1fr;gap:12px;font-size:11px;color:var(--muted2);margin-top:4px}
+.gaxis .marks{display:flex;justify-content:space-between}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;margin-left:8px}
+.pill.open{background:rgba(126,231,135,.14);color:#7ee787;border:1px solid rgba(126,231,135,.35)}
+.pill.closed{background:rgba(239,68,68,.14);color:#f87171;border:1px solid rgba(239,68,68,.35)}
+
+/* ---------- method grid ---------- */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:18px}
+.mcard{background:rgba(10,17,26,.5);border:1px solid var(--border);border-radius:14px;padding:18px}
+.mcard h4{font-size:14.5px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.mcard h4 .ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:#1a2536;font-size:13px}
+.mcard p{font-size:13px;color:var(--muted)}
+.mcard code{background:#0c131d;border:1px solid var(--border);padding:1px 6px;border-radius:5px;font-size:12px;color:#7ee787}
+.taglist{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.taglist span{font-size:11.5px;color:var(--muted);border:1px solid var(--border);padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.02)}
+
+/* ---------- insight cards ---------- */
+.insights{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:18px}
+.ins{background:rgba(10,17,26,.5);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:12px;padding:15px 17px}
+.ins h5{font-size:13.5px;margin-bottom:5px;color:#cfe0f5}
+.ins p{font-size:12.8px;color:var(--muted)}
+.ins.warn{border-left-color:#f59e0b} .ins.bad{border-left-color:#ef4444} .ins.good{border-left-color:#7ee787}
+
+footer{margin-top:70px;padding-top:26px;border-top:1px solid var(--border);color:var(--muted2);font-size:12.5px}
+footer a{color:var(--accent);text-decoration:none}
+.legend-note{font-size:12px;color:var(--muted2);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Nav / Back to Studio -->
+  <nav style="display:flex;align-items:center;justify-content:space-between;padding:24px 0 12px;border-b:1px solid rgba(255,255,255,0.06);">
+    <a href="/" style="display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none;padding:6px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);transition:all .15s;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      <span>bin0sky.tech</span>
+    </a>
+    <div style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted2);">
+      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#ef4444;"></span>
+      <span>NOTES / UN WPP 2024</span>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <span class="eyebrow"><span class="dot"></span>全球人口结构变迁 · 1950 – 2100</span>
+    <h1>从<span class="g">金字塔</span>到<span class="g">倒金字塔</span><br>全球人口结构的世纪变迁与预测</h1>
+    <p class="lede">基于联合国经济和社会事务部人口司（UN DESA Population Division）<b>《世界人口展望 2024 年修订版》</b>的实测与预测数据。
+      覆盖四大人口国（中国、印度、美国、日本）的年龄结构、生育率与城市化，展示一场跨越 150 年、从年轻金字塔走向深度老龄化的结构性转变。</p>
+
+    <div class="kpis">
+      <div class="kpi">
+        <div class="lbl">全球人口 2024 → 2050</div>
+        <div class="val">81.6<span class="u"> 亿</span> → 96.6<span class="u"> 亿</span></div>
+        <div class="sub">净增 +15.0 亿（+18.4%）</div>
+      </div>
+      <div class="kpi k2">
+        <div class="lbl">中国 65+ 占比</div>
+        <div class="val">14.7<span class="u">%</span> → 30.9<span class="u">%</span></div>
+        <div class="sub">2024 → 2050，2100 达 45.8%</div>
+      </div>
+      <div class="kpi k3">
+        <div class="lbl">日本 65+ 占比（全球最高）</div>
+        <div class="val">29.8<span class="u">%</span></div>
+        <div class="sub">2005 年即进入「超老龄化」</div>
+      </div>
+      <div class="kpi k4">
+        <div class="lbl">非洲贡献全球新增人口</div>
+        <div class="val">63<span class="u">%</span></div>
+        <div class="sub">2024–2050 年 +9.5 亿 / +15.0 亿</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ 1. DATA SOURCE / METHOD ============ -->
+  <section id="method">
+    <div class="shead">
+      <div class="snum">01</div>
+      <div>
+        <div class="stitle">数据来源与预测方法论</div>
+        <div class="sdesc">全部指标来自联合国人口司官方发布的数据集，本页数据为原始文件解析所得（非二手转述），可复现。</div>
+      </div>
+    </div>
+    <div class="card pad">
+      <div class="mgrid">
+        <div class="mcard">
+          <h4><span class="ic">🏛️</span>主数据源</h4>
+          <p>联合国经济和社会事务部人口司 · <b>World Population Prospects 2024</b>（第 28 版，2024 年 7 月发布），中方案（Medium variant）。</p>
+          <div class="taglist">
+            <span>WPP2024_Demographic_Indicators_Medium</span>
+            <span>WPP2024_PopulationByAge5GroupSex_Medium</span>
+          </div>
+        </div>
+        <div class="mcard">
+          <h4><span class="ic">🌐</span>城市化数据</h4>
+          <p>城市化率取自世界银行 WDI（源自联合国《世界城市化展望》）指标 <code>SP.URB.TOTL.IN.ZS</code>，并与 WPP 口径交叉核对。</p>
+          <div class="taglist"><span>1960 – 2024 实测</span><span>国家收入分组：世行 Atlas 法</span></div>
+        </div>
+        <div class="mcard">
+          <h4><span class="ic">📐</span>预测方法论</h4>
+          <p>采用<b>队列成分法（cohort-component method）</b>：以 2022 年各国人口基线为起点，按分年龄生育率、分年龄死亡率与净迁移率的假定，逐岁、逐年向前递推至 2100 年。</p>
+          <div class="taglist"><span>TFR 收敛假定</span><span>预期寿命递增</span><span>迁移流估计</span></div>
+        </div>
+        <div class="mcard">
+          <h4><span class="ic">⚠️</span>解读须知</h4>
+          <p>1950–2022 为<b>估计值</b>，2023–2100 为<b>预测值</b>。预测基于「中方案」——假定各国生育率最终收敛，<b>并非确定性结论</b>，应理解为条件情景而非预言。</p>
+          <div class="taglist"><span>含 90% 预测区间</span><span>不适用于单点确定性引用</span></div>
+        </div>
+      </div>
+      <div class="note">
+        <b>数据抓取记录：</b>年龄结构 / 生育率 / 中位年龄来自 <code>population.un.org/wpp</code> 官方 CSV 原始文件（1950–2100）；城市化率来自 <code>api.worldbank.org</code>。
+        所有数值以原始文件为准，本页仅做聚合与可视化。全量指标说明见 WPP 2024 官方方法论报告。
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. POPULATION PYRAMID ============ -->
+  <section id="pyramid">
+    <div class="shead">
+      <div class="snum">02</div>
+      <div>
+        <div class="stitle">人口金字塔动画 · 四国并排（1950 → 2100）</div>
+        <div class="sdesc">每 10 年一个关键帧（1950/1960/…/2050/2100），播放时在关键帧之间平滑插值。观察底部「宽基座」如何逐层上移、最终反转为「倒金字塔」——这是人口结构的世纪级重塑。</div>
+      </div>
+    </div>
+    <div class="card pad">
+      <div class="pyr-top">
+        <div class="yearbox">
+          <div class="yr" id="pyrYear">1950</div>
+          <div class="tag" id="pyrShape">年轻型 · 金字塔</div>
+        </div>
+        <div class="ctrls">
+          <button class="btn play" id="playBtn">▶ 播放变迁</button>
+          <button class="btn" data-jump="1950">1950</button>
+          <button class="btn" data-jump="2000">2000</button>
+          <button class="btn" data-jump="2024">2024</button>
+          <button class="btn" data-jump="2050">2050</button>
+          <button class="btn" data-jump="2100">2100</button>
+        </div>
+      </div>
+      <input type="range" id="pyrSlider" min="1950" max="2100" step="1" value="1950">
+      <div class="ticks"><span>1950</span><span>1975</span><span>2000</span><span>2025</span><span>2050</span><span>2075</span><span>2100</span></div>
+
+      <div class="pyrgrid">
+        <div class="pyrpanel"><canvas class="pyr" id="pc0"></canvas><div class="pyrfoot" id="pf0"></div></div>
+        <div class="pyrpanel"><canvas class="pyr" id="pc1"></canvas><div class="pyrfoot" id="pf1"></div></div>
+        <div class="pyrpanel"><canvas class="pyr" id="pc2"></canvas><div class="pyrfoot" id="pf2"></div></div>
+        <div class="pyrpanel"><canvas class="pyr" id="pc3"></canvas><div class="pyrfoot" id="pf3"></div></div>
+      </div>
+      <div class="legegend">
+        <span><i style="background:#7ea6d8"></i>男性（左）</span>
+        <span><i style="background:#e894ab"></i>女性（右）</span>
+        <span>横轴＝该年龄组占总人口比例（%），纵轴＝年龄组</span>
+      </div>
+      <div class="note">
+        <b>为什么用「占比」而非绝对人数？</b>四国人口体量相差近百倍（印度 14.5 亿 vs 日本 1.2 亿）。用组内占比可视化，方能公平比较<b>结构形态</b>；各面板底部另标注该国总人口量级。
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. AGING LINE ============ -->
+  <section id="aging">
+    <div class="shead">
+      <div class="snum">03</div>
+      <div>
+        <div class="stitle">老龄化率趋势 · 65 岁以上人口占比（1950–2100）</div>
+        <div class="sdesc">虚线为国际通用阈值：<b>7% 老龄化社会</b> · <b>14% 深度老龄化</b> · <b>20% 超老龄化</b>。可直观看到日本早已冲顶、中国正加速追赶，而印度尚有约 25 年缓冲期。</div>
+      </div>
+    </div>
+    <div class="card pad">
+      <div class="chartwrap tall"><canvas id="agingChart"></canvas></div>
+      <div class="insights">
+        <div class="ins bad">
+          <h5>日本 · 全球老龄化「先行者」</h5>
+          <p>1969 年即越过 7%，2005 年前后突破 20% 进入「超老龄化」，2024 年达 29.8%，2050 年将逼近 37.5%。</p>
+        </div>
+        <div class="ins warn">
+          <h5>中国 · 速度最快的老龄化</h5>
+          <p>2000 年步入老龄化，约 2022 年越过 14%（深度老龄化门槛），2035 年预计达 22.8%，2050 年 30.9%，2100 年可能高达 45.8%。</p>
+        </div>
+        <div class="ins">
+          <h5>美国 · 靠移民「缓冲」</h5>
+          <p>2014 年越过 14%，但持续净迁入使曲线斜率平缓，2050 年约 23%，显著低于中日。</p>
+        </div>
+        <div class="ins good">
+          <h5>印度 · 最后的窗口</h5>
+          <p>2023 年才刚迈过 7%，2050 年约 14.7%，是本世纪中期全球最大的「年轻劳动力池」。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. SCATTER ============ -->
+  <section id="scatter">
+    <div class="shead">
+      <div class="snum">04</div>
+      <div>
+        <div class="stitle">生育率 × 城市化率 · 相关性分析（2024）</div>
+        <div class="sdesc">横轴：城市化率（%）；纵轴：总和生育率（TFR，每名妇女平均生育数）。按世界银行收入分组着色，虚线为 2.1 的人口更替水平。绿点＝高收入国家。</div>
+      </div>
+    </div>
+    <div class="card pad">
+      <div class="chartwrap tall"><canvas id="scatterChart"></canvas></div>
+      <div class="insights">
+        <div class="ins good">
+          <h5>整体呈负相关</h5>
+          <p id="corrText">—</p>
+        </div>
+        <div class="ins warn">
+          <h5>异常样本 · 以色列</h5>
+          <p>高收入（HIC）却拥有 TFR ≈ 2.79，远高于同类国家均值，是图形右上方的显著离群点——宗教与族群结构使其逆势而行。</p>
+        </div>
+        <div class="ins bad">
+          <h5>异常样本 · 东亚「极低生育」</h5>
+          <p>中国澳门 0.68、中国香港 0.73、韩国 0.73、中国台湾 0.86——城市化高 + 生育率全球最低，构成左下角的极端聚集带。</p>
+        </div>
+        <div class="ins">
+          <h5>异常样本 · 萨赫勒地带</h5>
+          <p>乍得 6.03、索马里 6.01、尼日尔 5.94——城市化率极低、生育率全球最高，与以色列形成「高生育」的两极。</p>
+        </div>
+      </div>
+      <div class="note">
+        <b>方法：</b>相关系数 r 由 216 个国家/地区的 2024 年数据点计算（Pearson）。图中个别国家因城市化率数据缺失被剔除。
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. DIVIDEND ============ -->
+  <section id="dividend">
+    <div class="shead">
+      <div class="snum">05</div>
+      <div>
+        <div class="stitle">人口红利窗口期 · 劳动年龄人口占比 &gt; 65%</div>
+        <div class="sdesc">定义：<b>15–64 岁劳动年龄人口占总人口比例 &gt; 65%</b> 即处于「人口红利窗口」。窗口开启意味着抚养负担最轻、增长潜力最大的黄金期；窗口关闭则标志红利消退。</div>
+      </div>
+    </div>
+    <div class="card pad">
+      <div class="chartwrap mid"><canvas id="workChart"></canvas></div>
+      <div class="gantt">
+        <div class="grow" id="gr0"><div class="gname"><span class="sw" style="background:var(--china)"></span>中国</div><div class="gtrack" id="gt0"></div></div>
+        <div class="grow" id="gr1"><div class="gname"><span class="sw" style="background:var(--india)"></span>印度</div><div class="gtrack" id="gt1"></div></div>
+        <div class="grow" id="gr2"><div class="gname"><span class="sw" style="background:var(--usa)"></span>美国</div><div class="gtrack" id="gt2"></div></div>
+        <div class="grow" id="gr3"><div class="gname"><span class="sw" style="background:var(--japan)"></span>日本</div><div class="gtrack" id="gt3"></div></div>
+        <div class="gaxis"><div></div><div class="marks"><span>1950</span><span>1975</span><span>2000</span><span>2025</span><span>2050</span><span>2075</span><span>2100</span></div></div>
+      </div>
+      <div class="note" id="divNote"></div>
+    </div>
+  </section>
+
+  <!-- ============ 6. WATERFALL ============ -->
+  <section id="waterfall">
+    <div class="shead">
+      <div class="snum">06</div>
+      <div>
+        <div class="stitle">区域人口增长贡献 · 瀑布图（2024 → 2050）</div>
+        <div class="sdesc">全球人口将从 81.6 亿增至 96.6 亿，净增 <b>+15.0 亿</b>。其中<b>非洲一洲贡献约 9.5 亿（占 63%）</b>，亚洲贡献 4.7 亿，而欧洲将成为唯一人口净减少的大洲。</div>
+      </div>
+    </div>
+    <div class="card pad">
+      <div class="chartwrap tall"><canvas id="waterfallChart"></canvas></div>
+      <div class="insights">
+        <div class="ins good">
+          <h5>非洲 · 增长的绝对引擎</h5>
+          <p>2024 年 15.2 亿 → 2050 年 24.7 亿，增量 9.5 亿，占全球新增人口的 63.3%。</p>
+        </div>
+        <div class="ins">
+          <h5>亚洲 · 基数仍最大，增速放缓</h5>
+          <p>2024 年 48.1 亿 → 2050 年 52.8 亿，增量 4.7 亿；2030 年代后期印度将超越中国成为第一人口大国。</p>
+        </div>
+        <div class="ins bad">
+          <h5>欧洲 · 唯一负增长大洲</h5>
+          <p>2024 年 7.45 亿 → 2050 年 7.03 亿，减少约 4200 万，为全球唯一人口收缩的大洲。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>数据来源</b>：联合国经济和社会事务部人口司，《世界人口展望 2024 年修订版》(World Population Prospects 2024, Medium variant) · <a href="https://population.un.org/wpp/" target="_blank">population.un.org/wpp</a>；城市化率：世界银行 WDI（源自《世界城市化展望》）。</p>
+    <p style="margin-top:8px">本页所有图表由上述官方原始数据集解析生成 · 生成日期 2026-10-10 · 1950–2022 为估计值，2023–2100 为中方案预测值，仅供研究参考。</p>
+  </footer>
+</div>
+
+<script src="assets/chart.umd.js"></script>
+<script src="assets/population_data.js"></script>
+<script>
+(function(){
+"use strict";
+const POP = window.POP;
+const COUNTRIES = ["China","India","United States","Japan"];
+const CN = {China:"中国",India:"印度","United States":"美国",Japan:"日本"};
+const CO = {China:"#ef4444",India:"#f59e0b","United States":"#3b82f6",Japan:"#a855f7"};
+const COF= {China:"#fca5a5",India:"#fcd34d","United States":"#93c5fd",Japan:"#d8b4fe"};
+
+/* =================================================================
+   2. POPULATION PYRAMID
+   ================================================================= */
+const PYR = POP.pyramids, YRS = POP.pyrYears, AGES = POP.ages;
+const NAGE = AGES.length;
+const MALE_C="#7ea6d8", FEM_C="#e894ab";
+
+function frameAt(country, year){
+  year = Math.max(1950, Math.min(2100, year));
+  let i = Math.min(YRS.length-2, Math.max(0, Math.floor((year-1950)/10)));
+  const y0=YRS[i], y1=YRS[i+1], t=(year-y0)/(y1-y0);
+  const A=PYR[country][y0], B=PYR[country][y1];
+  const m=new Array(NAGE), f=new Array(NAGE);
+  for(let k=0;k<NAGE;k++){ m[k]=A.m[k]+(B.m[k]-A.m[k])*t; f[k]=A.f[k]+(B.f[k]-A.f[k])*t; }
+  return {m,f};
+}
+// global max share (%) for a common x-scale
+let MAXPCT=0;
+for(const c of COUNTRIES){ for(const y of YRS){ const p=PYR[c][y];
+  const tot=p.m.reduce((a,b)=>a+b,0)+p.f.reduce((a,b)=>a+b,0);
+  for(let k=0;k<NAGE;k++){ MAXPCT=Math.max(MAXPCT,100*p.m[k]/tot,100*p.f[k]/tot); } } }
+MAXPCT = Math.ceil(MAXPCT*10)/10;
+
+function drawPyramid(canvas, country, year){
+  const c = canvas, dpr = window.devicePixelRatio||1;
+  const rect = c.parentElement.getBoundingClientRect();
+  const W = Math.max(150, rect.width-12), H = 430;
+  if(c.width!==W*dpr||c.height!==H*dpr){ c.width=W*dpr; c.height=H*dpr; c.style.width=W+"px"; c.style.height=H+"px"; }
+  const g = c.getContext("2d"); g.setTransform(dpr,0,0,dpr,0,0);
+  g.clearRect(0,0,W,H);
+
+  const padT=30, padB=20, padL=6, padR=6, GAP=16;
+  const plotH = H-padT-padB, rowH = plotH/NAGE;
+  const cx = W/2, halfW = (W-padL-padR)/2 - GAP - 4;
+
+  const fr = frameAt(country, year);
+  const tot = fr.m.reduce((a,b)=>a+b,0)+fr.f.reduce((a,b)=>a+b,0) || 1;
+
+  // country title
+  g.fillStyle = CO[country]; g.font="700 15px -apple-system,PingFang SC,sans-serif";
+  g.textAlign="left"; g.textBaseline="top";
+  g.fillText(CN[country], padL+2, 4);
+  g.fillStyle="#8a98ab"; g.font="600 12px -apple-system,sans-serif"; g.textAlign="right";
+  g.fillText((tot/1000).toFixed(tot/1000>=100?0:1)+"M", W-padR-2, 6);
+
+  // center axis + faint gridlines
+  g.strokeStyle="rgba(255,255,255,.10)"; g.lineWidth=1;
+  g.beginPath(); g.moveTo(cx,padT-6); g.lineTo(cx,H-padB+4); g.stroke();
+  for(let k=1;k<=3;k++){
+    const x=cx - (halfW*k/3); g.strokeStyle="rgba(255,255,255,.045)";
+    g.beginPath(); g.moveTo(x,padT); g.lineTo(x,H-padB); g.stroke();
+    g.beginPath(); g.moveTo(cx+(halfW*k/3),padT); g.lineTo(cx+(halfW*k/3),H-padB); g.stroke();
+  }
+  // bars
+  for(let i=0;i<NAGE;i++){
+    const y = H-padB-(i+1)*rowH;
+    const bh = Math.max(1.2, rowH-1.2);
+    const wm = (100*fr.m[i]/tot)/MAXPCT*halfW;
+    const wf = (100*fr.f[i]/tot)/MAXPCT*halfW;
+    g.fillStyle = MALE_C; g.fillRect(cx-GAP-wm, y, wm, bh);
+    g.fillStyle = FEM_C; g.fillRect(cx+GAP, y, wf, bh);
+  }
+  // age labels (on top, in the centre gap)
+  g.textAlign="center"; g.textBaseline="middle";
+  for(let i=0;i<NAGE;i++){
+    const y = H-padB-(i+0.5)*rowH;
+    if(i%2===0||i===NAGE-1){
+      g.fillStyle="#7d8b9e"; g.font="500 9px -apple-system,sans-serif";
+      g.fillText(AGES[i], cx, y);
+    }
+  }
+  // 65+ marker line
+  const y65 = H-padB-(13)*rowH;
+  g.strokeStyle="rgba(255,255,255,.28)"; g.setLineDash([3,4]); g.lineWidth=1;
+  g.beginPath(); g.moveTo(padL,y65); g.lineTo(W-padR,y65); g.stroke(); g.setLineDash([]);
+  g.fillStyle="rgba(255,255,255,.42)"; g.font="600 9px -apple-system,sans-serif";
+  g.textAlign="left"; g.textBaseline="bottom";
+  g.fillText("65 岁", padL+1, y65-1);
+}
+
+const pyCanv = [0,1,2,3].map(i=>document.getElementById("pc"+i));
+const pyFoot = [0,1,2,3].map(i=>document.getElementById("pf"+i));
+const slider = document.getElementById("pyrSlider");
+const yrLabel = document.getElementById("pyrYear");
+const shapeLabel = document.getElementById("pyrShape");
+let curYear=1950, playing=false, rafId=null, lastTs=0;
+
+function shapeType(old){
+  if(old<7) return ["年轻型 · 金字塔","#22c55e",0];
+  if(old<14) return ["成年型 · 钟形","#eab308",0];
+  if(old<20) return ["老龄型 · 收缩型","#f97316",0];
+  return ["超老龄型 · 倒金字塔","#ef4444",0];
+}
+function agingAt(country,year){
+  const s=POP.aging[country];
+  const y0=Math.max(1950,Math.min(2100,Math.floor(year))),y1=Math.min(2100,y0+1);
+  const a=s[String(y0)],b=s[String(y1)]||a, t=year-Math.floor(year);
+  return a+(b-a)*t;
+}
+function renderPyramids(){
+  yrLabel.textContent = Math.round(curYear);
+  for(let i=0;i<4;i++){
+    const c=COUNTRIES[i];
+    drawPyramid(pyCanv[i], c, curYear);
+    const old=agingAt(c,curYear);
+    pyFoot[i].innerHTML = "65+ 占 "+old.toFixed(1)+"%";
+  }
+  const oldCN = agingAt("China", curYear);
+  const st = shapeType(oldCN);
+  shapeLabel.textContent = "中国 · "+st[0];
+  shapeLabel.style.color = st[1];
+  shapeLabel.style.borderColor = st[1]+"66";
+}
+function tick(ts){
+  if(!playing) return;
+  if(!lastTs) lastTs=ts;
+  const dt=(ts-lastTs)/1000; lastTs=ts;
+  curYear += dt*30;
+  if(curYear>=2100){ curYear=2100; playing=false; lastTs=0; setPlayUI(); }
+  slider.value=Math.round(curYear);
+  renderPyramids();
+  if(playing) rafId=requestAnimationFrame(tick);
+}
+function setPlayUI(){ const b=document.getElementById("playBtn"); b.textContent = playing?"❚❚ 暂停":"▶ 播放变迁"; }
+document.getElementById("playBtn").addEventListener("click",()=>{
+  if(playing){ playing=false; cancelAnimationFrame(rafId); lastTs=0; }
+  else { if(curYear>=2100) curYear=1950; playing=true; lastTs=0; rafId=requestAnimationFrame(tick); }
+  setPlayUI();
+});
+slider.addEventListener("input",e=>{ playing=false; setPlayUI(); curYear=+e.target.value; renderPyramids(); });
+document.querySelectorAll("[data-jump]").forEach(b=>b.addEventListener("click",()=>{
+  playing=false; setPlayUI(); curYear=+b.dataset.jump; slider.value=curYear; renderPyramids();
+}));
+window.addEventListener("resize",()=>renderPyramids());
+
+/* =================================================================
+   CHART.JS GLOBAL DEFAULTS
+   ================================================================= */
+Chart.defaults.color="#8a98ab";
+Chart.defaults.font.family="-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,sans-serif";
+Chart.defaults.font.size=12;
+Chart.defaults.animation.duration=750;
+
+/* ---------- 自绘 overlay 插件：虚线导引线 + 标注标签框（不依赖外部注释库） ---------- */
+function roundRectPath(g,x,y,w,h,r){ g.beginPath();
+  if(g.roundRect){ g.roundRect(x,y,w,h,r); return; }
+  g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r);
+  g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
+function drawTag(g, x, y, lines, o){
+  o=o||{}; const fs=o.fs||11, pad=5, lh=fs*1.34;
+  g.font="700 "+fs+"px -apple-system,PingFang SC,Microsoft YaHei,sans-serif";
+  let w=0; lines.forEach(t=>w=Math.max(w,g.measureText(t).width));
+  w+=pad*2; const h=lines.length*lh+pad*1.5;
+  let bx=x-w/2, by=y-h/2;
+  if(o.anchor==="left") bx=x; else if(o.anchor==="right") bx=x-w;
+  g.fillStyle=o.bg||"rgba(14,20,29,.92)"; g.strokeStyle=o.border||"#2c3d50"; g.lineWidth=1;
+  roundRectPath(g,bx,by,w,h,7); g.fill(); g.stroke();
+  g.fillStyle=o.color||"#e8eef6"; g.textAlign="center"; g.textBaseline="middle";
+  lines.forEach((t,i)=>g.fillText(t, bx+w/2, by+pad*0.75+lh*(i+0.5)));
+  return {x:bx,y:by,w,h};
+}
+const overlayPlugin={
+  id:"overlay",
+  afterDatasetsDraw(chart,args,opts){
+    if(!opts) return;
+    const g=chart.ctx, ca=chart.chartArea, sc=chart.scales;
+    // x 轴可能是 category（年份作标签）也可能是 linear
+    const xPix=function(v){
+      const s=sc.x;
+      if(s.type==="category"||s.type==="CategoryScale"){
+        let i=chart.data.labels.indexOf(v);
+        if(i<0) i=chart.data.labels.indexOf(String(v));
+        if(i<0 && typeof v==="number") i=v-chart.data.labels[0];
+        return s.getPixelForValue(i);
+      }
+      return s.getPixelForValue(v);
+    };
+    g.save();
+    (opts.lines||[]).forEach(L=>{
+      const s=sc[L.axis]; if(!s) return;
+      const p = (L.axis==="x") ? xPix(L.value) : s.getPixelForValue(L.value);
+      g.strokeStyle=L.color||"rgba(255,255,255,.35)"; g.lineWidth=L.width||1;
+      g.setLineDash(L.dash||[6,5]); g.beginPath();
+      if(L.axis==="y"){ g.moveTo(ca.left,p); g.lineTo(ca.right,p); }
+      else { g.moveTo(p,ca.top); g.lineTo(p,ca.bottom); }
+      g.stroke(); g.setLineDash([]);
+      if(L.label){
+        let lx,ly;
+        if(L.axis==="y"){ ly=p-12; lx = (L.labelPos==="end")?ca.right-8:ca.left+8; }
+        else { lx=p; ly=ca.top+14; }
+        g.font="700 11px -apple-system,PingFang SC,sans-serif"; g.textBaseline="middle";
+        g.textAlign = L.axis==="y" ? (L.labelPos==="end"?"right":"left") : "center";
+        const tw=g.measureText(L.label).width;
+        const bx = g.textAlign==="right"? lx-tw-7 : (g.textAlign==="center"? lx-tw/2-7 : lx-7);
+        g.fillStyle="rgba(9,13,20,.82)"; roundRectPath(g,bx,ly-9,tw+14,18,5); g.fill();
+        g.fillStyle=L.labelColor||"#c9d6e6"; g.fillText(L.label,lx,ly);
+      }
+    });
+    (opts.dots||[]).forEach(D=>{
+      const x=xPix(D.x), y=sc.y.getPixelForValue(D.y);
+      g.beginPath(); g.arc(x,y,D.r||5,0,Math.PI*2); g.lineWidth=1.5;
+      g.fillStyle=D.color||"#fff"; g.fill();
+      g.strokeStyle="rgba(10,14,20,.9)"; g.stroke();
+      if(D.text) drawTag(g, x+(D.dx||14), y+(D.dy||-14), D.text,
+        {bg:D.bg,border:D.border,color:D.color,fs:10.5,anchor:D.anchor,pad:4});
+    });
+    (opts.tags||[]).forEach(T=>{
+      let x,y;
+      if(T.rx!==undefined){ x=ca.left+T.rx*(ca.right-ca.left); y=ca.top+T.ry*(ca.bottom-ca.top); }
+      else { x=xPix(T.x)+(T.dx||0); y=sc.y.getPixelForValue(T.y)+(T.dy||0); }
+      drawTag(g,x,y,T.text,{bg:T.bg,border:T.border,color:T.color,fs:T.fs||11.5,anchor:T.anchor,pad:T.pad});
+    });
+    g.restore();
+  }
+};
+Chart.register(overlayPlugin);
+const GRID="rgba(255,255,255,.055)";
+
+/* =================================================================
+   3. AGING LINE
+   ================================================================= */
+const yearsAll=[]; for(let y=1950;y<=2100;y++) yearsAll.push(y);
+function seriesOf(obj){ return yearsAll.map(y=>obj[String(y)]); }
+function cross(obj,lv){ const ys=yearsAll;
+  for(let i=1;i<ys.length;i++){ const a=obj[String(ys[i-1])],b=obj[String(ys[i])];
+    if(a<lv&&b>=lv) return ys[i-1]+(lv-a)/(b-a); } return null; }
+
+const annAging = {
+  lines:[
+    {axis:"y",value:7,color:"rgba(126,231,135,.55)",dash:[6,5],label:"7% 老龄化社会",labelColor:"#7ee787"},
+    {axis:"y",value:14,color:"rgba(234,179,8,.55)",dash:[6,5],label:"14% 深度老龄化",labelColor:"#eab308"},
+    {axis:"y",value:20,color:"rgba(239,68,68,.55)",dash:[6,5],label:"20% 超老龄化",labelColor:"#ef4444"},
+    {axis:"x",value:2005,color:"rgba(168,85,247,.55)",dash:[4,4]},
+    {axis:"x",value:2035,color:"rgba(239,68,68,.55)",dash:[4,4]}
+  ],
+  tags:[
+    {x:2005,y:43,text:["日本 2005 · 超老龄化","65+ 突破 20%"],color:"#f3b6d3",bg:"rgba(168,85,247,.20)",border:"rgba(168,85,247,.65)"},
+    {x:2035,y:43,text:["中国 2035","65+ ≈ 22.8%"],color:"#ffb4b4",bg:"rgba(239,68,68,.20)",border:"rgba(239,68,68,.65)"}
+  ]
+};
+new Chart(document.getElementById("agingChart"),{
+  type:"line",
+  data:{ labels:yearsAll, datasets:COUNTRIES.map(c=>({
+    label:CN[c], data:seriesOf(POP.aging[c]), borderColor:CO[c], backgroundColor:CO[c]+"18",
+    borderWidth:2.6, pointRadius:0, pointHoverRadius:5, tension:.18, fill:false })) },
+  options:{
+    responsive:true, maintainAspectRatio:false, interaction:{mode:"index",intersect:false},
+    plugins:{
+      legend:{position:"top",labels:{usePointStyle:true,pointStyle:"circle",boxWidth:8,padding:18,font:{size:13}}},
+      tooltip:{callbacks:{label:ctx=>" "+ctx.dataset.label+"："+ctx.parsed.y.toFixed(1)+"%"},
+        backgroundColor:"rgba(14,20,29,.95)",borderColor:"#2c3d50",borderWidth:1,padding:10,titleFont:{size:12}},
+      overlay:annAging
+    },
+    scales:{
+      x:{grid:{color:GRID},ticks:{maxTicksLimit:11,callback:(v,i)=>yearsAll[i]%50===0?yearsAll[i]:""}},
+      y:{grid:{color:GRID},min:0,max:50,ticks:{callback:v=>v+"%"},title:{display:true,text:"65 岁以上人口占比",color:"#8a98ab"}}
+    }
+  }
+});
+
+/* =================================================================
+   4. SCATTER
+   ================================================================= */
+const INC_ORDER=["HIC","UMC","LMC","LIC"];
+const INC_COLOR={HIC:"#22c55e",UMC:"#3b82f6",LMC:"#f59e0b",LIC:"#ef4444"};
+const pts=POP.scatter;
+// correlation
+(function(){ const n=pts.length; let sx=0,sy=0,sxy=0,sx2=0,sy2=0;
+  pts.forEach(p=>{sx+=p.urb;sy+=p.tfr;sxy+=p.urb*p.tfr;sx2+=p.urb*p.urb;sy2+=p.tfr*p.tfr;});
+  const r=(n*sxy-sx*sy)/Math.sqrt((n*sx2-sx*sx)*(n*sy2-sy*sy));
+  // regression
+  const b=(n*sxy-sx*sy)/(n*sx2-sx*sx), a=(sy-b*sx)/n;
+  window.__reg={a,b,r,n};
+  document.getElementById("corrText").innerHTML =
+    "Pearson 相关系数 <b style='color:#7ee787'>r = "+r.toFixed(2)+"</b>（n="+n+"）——城市化率越高，生育率系统性越低。回归拟合显示：城市化率每提高 <b>10 个百分点</b>，总和生育率平均下降约 <b>"+Math.abs(b*10).toFixed(2)+"</b>。";
+})();
+const regLine=[ ...Array(11).keys() ].map(i=>{ const x=i*10; return {x, y:window.__reg.a+window.__reg.b*x}; });
+const SC_LABELS={
+  ISR:{t:["以色列"],dx:-13,dy:-17,anchor:"right"},
+  KOR:{t:["韩国"],dx:-13,dy:17,anchor:"right"},
+  CHN:{t:["中国"],dx:0,dy:-18},
+  IND:{t:["印度"],dx:0,dy:18},
+  USA:{t:["美国"],dx:13,dy:17},
+  JPN:{t:["日本"],dx:14,dy:-15},
+  NER:{t:["尼日尔"],dx:0,dy:-17},
+  TCD:{t:["乍得"],dx:16,dy:-13}
+};
+const scatterDots=[];
+Object.keys(SC_LABELS).forEach(iso=>{
+  const p=pts.find(q=>q.iso===iso); if(!p) return;
+  const c=SC_LABELS[iso];
+  scatterDots.push({x:p.urb,y:p.tfr,text:c.t,color:"#eef4fb",
+    bg:"rgba(13,18,26,.9)",border:"#41536a",dx:c.dx,dy:c.dy,anchor:c.anchor,r:5});
+});
+const annScatter={
+  lines:[{axis:"y",value:2.1,color:"rgba(255,255,255,.5)",dash:[6,5],label:"更替水平 2.1",labelColor:"#c9d6e6",labelPos:"end"}],
+  dots:scatterDots
+};
+new Chart(document.getElementById("scatterChart"),{
+  type:"scatter",
+  data:{ datasets:[
+    ...INC_ORDER.map(g=>({
+      label:POP.incLabels[g], data:pts.filter(p=>p.inc===g).map(p=>({x:p.urb,y:p.tfr,name:p.name})),
+      backgroundColor:INC_COLOR[g]+"cc", borderColor:INC_COLOR[g], borderWidth:1, pointRadius:4.4, pointHoverRadius:7 })),
+    {type:"line",label:"趋势线",data:regLine,borderColor:"rgba(255,255,255,.55)",borderWidth:1.8,borderDash:[7,5],
+      pointRadius:0,fill:false,tension:0}
+  ]},
+  options:{
+    responsive:true,maintainAspectRatio:false,interaction:{mode:"nearest",intersect:true},
+    plugins:{
+      legend:{position:"top",labels:{usePointStyle:true,pointStyle:"circle",boxWidth:8,padding:16}},
+      tooltip:{callbacks:{label:ctx=>{const r=ctx.raw; return r.name?" "+r.name+"：城市化 "+r.x.toFixed(0)+"% ，TFR "+r.y.toFixed(2):null;}},
+        filter:i=>!!i.raw.name,backgroundColor:"rgba(14,20,29,.95)",borderColor:"#2c3d50",borderWidth:1,padding:10},
+      overlay:annScatter
+    },
+    scales:{
+      x:{min:0,max:100,grid:{color:GRID},title:{display:true,text:"城市化率（%）",color:"#8a98ab"},ticks:{callback:v=>v+"%"}},
+      y:{min:0,max:6.5,grid:{color:GRID},title:{display:true,text:"总和生育率 TFR（每名妇女生育数）",color:"#8a98ab"}}
+    }
+  }
+});
+
+/* =================================================================
+   5. DIVIDEND — working-age line + gantt
+   ================================================================= */
+const DIV=POP.dividend;
+const divAnn={ lines:[{axis:"y",value:65,color:"rgba(126,231,135,.85)",dash:[7,5],label:"人口红利阈值 65%",labelColor:"#7ee787",labelPos:"end"}] };
+new Chart(document.getElementById("workChart"),{
+  type:"line",
+  data:{ labels:yearsAll, datasets:COUNTRIES.map(c=>({
+    label:CN[c], data:seriesOf(POP.work[c]), borderColor:CO[c], backgroundColor:CO[c]+"10",
+    borderWidth:2.4, pointRadius:0, pointHoverRadius:5, tension:.2, fill:false })) },
+  options:{
+    responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+    plugins:{
+      legend:{position:"top",labels:{usePointStyle:true,pointStyle:"circle",boxWidth:8,padding:18,font:{size:13}}},
+      tooltip:{callbacks:{label:ctx=>" "+ctx.dataset.label+" 劳动年龄占比："+ctx.parsed.y.toFixed(1)+"%"},
+        backgroundColor:"rgba(14,20,29,.95)",borderColor:"#2c3d50",borderWidth:1,padding:10},
+      overlay:divAnn
+    },
+    scales:{
+      x:{grid:{color:GRID},ticks:{maxTicksLimit:11,callback:(v,i)=>yearsAll[i]%50===0?yearsAll[i]:""}},
+      y:{grid:{color:GRID},min:48,max:80,ticks:{callback:v=>v+"%"},title:{display:true,text:"15–64 岁劳动年龄人口占比",color:"#8a98ab"}}
+    }
+  }
+});
+// gantt
+(function(){
+  const pct=y=>((y-1950)/(2100-1950))*100;
+  COUNTRIES.forEach((c,i)=>{
+    const d=DIV[c], track=document.getElementById("gt"+i);
+    const open=d.open||1950, close=d.close||2100;
+    const bar=document.createElement("div"); bar.className="gbar";
+    bar.style.left=pct(open)+"%"; bar.style.width=Math.max(1,(pct(close)-pct(open)))+"%";
+    bar.style.background="linear-gradient(90deg,"+CO[c]+","+CO[c]+"99)";
+    bar.textContent = open+" – "+close;
+    track.appendChild(bar);
+    const pill=document.createElement("span");
+    const isOpen = d.c2024>65;
+    pill.className="pill "+(isOpen?"open":"closed");
+    pill.textContent = isOpen?"窗口进行中":"窗口已关闭";
+    document.getElementById("gr"+i).querySelector(".gname").appendChild(pill);
+  });
+  document.getElementById("divNote").innerHTML =
+    "<b>窗口解读：</b>日本窗口 <b>1961–2007</b>（峰值 70.0%，1992）——红利早已结束，如今 65+ 高达 29.8%；"+
+    "美国窗口 <b>1976–2023</b>（2024 年刚好滑落至 64.8%）；中国窗口 <b>1987–2039</b>（峰值 72.9%，2009，已是历史最高点）；"+
+    "印度窗口 <b>2014–2060</b> 仍在延续（峰值 69.2%，2034），是四国中唯一尚处红利期的经济体。";
+})();
+
+/* =================================================================
+   6. WATERFALL
+   ================================================================= */
+(function(){
+  const wf=POP.waterfall, base=POP.world.p2024;
+  const order=["Africa","Asia","Latin America & Caribbean","Northern America","Oceania","Europe"];
+  const sorted=order.map(r=>wf.find(w=>w.region===r));
+  const labels=["2024 全球"], bars=[[0,base]], colors=["#58a6ff"], texts=["8,162"];
+  let cur=base;
+  const RC={"Africa":"#f59e0b","Asia":"#22c55e","Latin America & Caribbean":"#a855f7","Northern America":"#3b82f6","Oceania":"#06b6d4"};
+  sorted.forEach(w=>{
+    const start=cur, end=cur+w.delta; cur=end;
+    labels.push(w.cn+(w.delta>=0?" +":" "));
+    bars.push([Math.min(start,end),Math.max(start,end)]);
+    colors.push(w.delta>=0?RC[w.region]:"#ef4444");
+    texts.push((w.delta>=0?"+":"")+Math.round(w.delta)+"M");
+  });
+  labels.push("2050 全球"); bars.push([0,base+POP.world.delta]); colors.push("#58a6ff");
+  texts.push(Math.round(base+POP.world.delta).toLocaleString());
+
+  const totalDelta=POP.world.delta;
+  new Chart(document.getElementById("waterfallChart"),{
+    type:"bar",
+    data:{ labels, datasets:[{ data:bars, backgroundColor:colors.map(c=>c+"cc"), borderColor:colors,
+      borderWidth:1, borderRadius:4, barPercentage:.72 }] },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>" 人口 "+ctx.raw[0].toFixed(0)+" → "+ctx.raw[1].toFixed(0)+" 百万"},
+          backgroundColor:"rgba(14,20,29,.95)",borderColor:"#2c3d50",borderWidth:1,padding:10},
+        overlay:{tags:[
+          ...sorted.map((w,i)=>({x:labels[i+1], y:(w.delta<0?bars[i+1][0]:bars[i+1][1]), dy:-13,
+            text:[(w.delta>=0?"+":"")+Math.round(w.delta)+"M"], color:colors[i+1],
+            bg:"rgba(10,15,22,.92)", border:colors[i+1], fs:11.5, pad:4})),
+          {rx:0.50, ry:0.56, text:["净增 +15.0 亿","非洲一洲贡献 63%"],color:"#ffd9a0",
+           bg:"rgba(245,158,11,.18)",border:"rgba(245,158,11,.6)",fs:13}
+        ]}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:11.5}}},
+        y:{grid:{color:GRID},min:0,max:10600,ticks:{callback:v=>v.toLocaleString()},title:{display:true,text:"人口（百万）",color:"#8a98ab"}}
+      }
+    }
+  });
+})();
+
+/* ---- initial render (defer to ensure layout) ---- */
+requestAnimationFrame(()=>renderPyramids());
+window.addEventListener("load",()=>renderPyramids());
+})();
+</script>
+</body>
+</html>
