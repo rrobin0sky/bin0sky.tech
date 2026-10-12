@@ -145,6 +145,54 @@
       border: 1px solid var(--card-border);
       background: rgba(125, 125, 125, 0.08);
     }
+  
+    /* Icon Rail (Mini Sidebar) & Tooltip Styles */
+    #sidebar {
+      transition: width 0.24s cubic-bezier(0.16, 1, 0.3, 1), padding 0.24s ease;
+    }
+    #sidebar.is-mini {
+      width: 68px !important;
+      padding-left: 8px !important;
+      padding-right: 8px !important;
+    }
+    #sidebar.is-mini .sidebar-text {
+      display: none !important;
+    }
+    #sidebar.is-mini .sidebar-section-title {
+      display: none !important;
+    }
+    #sidebar.is-mini .nav-item {
+      justify-content: center !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    #sidebar.is-mini .sidebar-badge {
+      display: none !important;
+    }
+    /* Tooltip */
+    #sidebar.is-mini [data-tooltip] {
+      position: relative;
+    }
+    #sidebar.is-mini [data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: calc(100% + 12px);
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(15, 18, 24, 0.95);
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      pointer-events: none;
+      z-index: 99999;
+      backdrop-filter: blur(12px);
+    }
+
   </style>
 </head>
 <body class="selection:bg-zinc-800 selection:text-white dark:selection:bg-zinc-200 dark:selection:text-black min-h-screen flex flex-col justify-between overflow-x-hidden">
@@ -154,7 +202,7 @@
 
   <!-- Ultra-Minimal Header -->
   <header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/70 dark:bg-black/60 border-b border-black/[0.06] dark:border-white/[0.07] transition-colors">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-14 flex items-center justify-between">
+    <div class="w-full px-4 sm:px-6 h-14 flex items-center justify-between">
       
       <!-- Sidebar Toggle & Brand -->
       <div class="flex items-center gap-3">
@@ -225,122 +273,114 @@
     <!-- Mobile Sidebar Backdrop -->
     <div id="sidebarBackdrop" onclick="toggleSidebar(false)" class="fixed inset-0 z-30 bg-black/50 backdrop-blur-xs hidden lg:hidden"></div>
 
-    <!-- ==================== LEFT STRUCTURED TREE SIDEBAR ==================== -->
-    <aside id="sidebar" class="fixed lg:sticky top-14 left-0 z-30 w-64 h-[calc(100vh-3.5rem)] flex-shrink-0 flex flex-col justify-between border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#070709]/95 backdrop-blur-xl -translate-x-full lg:translate-x-0 overflow-y-auto p-4 select-none">
+        <!-- ==================== LEFT STRUCTURED TREE / ICON RAIL ==================== -->
+    <aside id="sidebar" class="fixed md:sticky top-14 left-0 z-30 w-60 h-[calc(100vh-3.5rem)] flex-shrink-0 flex flex-col justify-between border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#070709]/95 backdrop-blur-xl -translate-x-full md:translate-x-0 overflow-y-auto p-3 select-none">
       
-      <div class="space-y-6">
+      <div class="space-y-5">
         <!-- Overview Link -->
         <div>
-          <button onclick="filterCards('all')" class="nav-item w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold bg-black/[0.04] dark:bg-white/[0.06] text-zinc-900 dark:text-white transition-all text-left">
+          <button onclick="filterCards('all')" class="nav-item w-full flex items-center justify-between p-2 rounded-xl text-xs font-semibold bg-black/[0.04] dark:bg-white/[0.06] text-zinc-900 dark:text-white transition-all text-left" data-tooltip="全站概览 · ALL">
             <div class="flex items-center gap-2.5">
-              <span class="w-5 h-5 rounded-md bg-zinc-900 text-white dark:bg-white dark:text-black flex items-center justify-center">
-                <i data-lucide="layers" class="w-3 h-3"></i>
+              <span class="w-7 h-7 rounded-lg bg-zinc-900 text-white dark:bg-white dark:text-black flex items-center justify-center flex-shrink-0">
+                <i data-lucide="layers" class="w-3.5 h-3.5"></i>
               </span>
-              <span data-i18n="nav.all">全站概览</span>
+              <span class="sidebar-text" data-i18n="nav.all">全站概览</span>
             </div>
-            <span class="text-[10px] font-mono opacity-50 px-1.5 py-0.5 rounded bg-black/[0.05] dark:bg-white/[0.08]">5</span>
+            <span class="sidebar-badge text-[10px] font-mono opacity-50 px-1.5 py-0.5 rounded bg-black/[0.05] dark:bg-white/[0.08]">5</span>
           </button>
         </div>
 
-        <!-- Section 1: Digital Tools Matrix (Colored Icons) -->
+        <!-- Section 1: Digital Tools Matrix -->
         <div>
-          <div class="flex items-center justify-between px-2 mb-2">
+          <div class="sidebar-section-title flex items-center justify-between px-2 mb-1.5">
             <span class="text-[10px] font-mono tracking-wider uppercase text-zinc-400 font-bold" data-i18n="nav.toolsTitle">🚀 工具矩阵 MATRIX</span>
             <span class="text-[9px] font-mono text-zinc-500">4 APPS</span>
           </div>
           <nav class="space-y-1">
-            <!-- ArchIcons -->
-            <a href="https://icon.bin0sky.tech" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors">
+            <a href="https://icon.bin0sky.tech" target="_blank" rel="noopener noreferrer" class="nav-item group flex items-center justify-between p-2 rounded-xl text-xs font-medium hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors" data-tooltip="ArchIcons · 01 矢量图标">
               <div class="flex items-center gap-2.5">
-                <span class="w-5 h-5 rounded-md bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center">
-                  <i data-lucide="network" class="w-3 h-3"></i>
+                <span class="w-7 h-7 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="network" class="w-3.5 h-3.5"></i>
                 </span>
-                <span class="text-zinc-700 dark:text-zinc-200 group-hover:text-sky-400 transition-colors">ArchIcons</span>
+                <span class="sidebar-text text-zinc-700 dark:text-zinc-200 group-hover:text-sky-400 transition-colors">ArchIcons</span>
               </div>
-              <span class="text-[9px] font-mono text-zinc-400 opacity-60">01</span>
+              <span class="sidebar-badge text-[9px] font-mono text-zinc-400 opacity-60">01</span>
             </a>
 
-            <!-- SlideCraft -->
-            <a href="https://ppt.bin0sky.tech" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors">
+            <a href="https://ppt.bin0sky.tech" target="_blank" rel="noopener noreferrer" class="nav-item group flex items-center justify-between p-2 rounded-xl text-xs font-medium hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors" data-tooltip="SlideCraft · 02 AI 幻灯片">
               <div class="flex items-center gap-2.5">
-                <span class="w-5 h-5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center">
-                  <i data-lucide="presentation" class="w-3 h-3"></i>
+                <span class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
                 </span>
-                <span class="text-zinc-700 dark:text-zinc-200 group-hover:text-amber-400 transition-colors">SlideCraft</span>
+                <span class="sidebar-text text-zinc-700 dark:text-zinc-200 group-hover:text-amber-400 transition-colors">SlideCraft</span>
               </div>
-              <span class="text-[9px] font-mono text-zinc-400 opacity-60">02</span>
+              <span class="sidebar-badge text-[9px] font-mono text-zinc-400 opacity-60">02</span>
             </a>
 
-            <!-- AIConsole -->
-            <a href="https://console.bin0sky.tech" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors">
+            <a href="https://console.bin0sky.tech" target="_blank" rel="noopener noreferrer" class="nav-item group flex items-center justify-between p-2 rounded-xl text-xs font-medium hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors" data-tooltip="AIConsole · 03 原生智能终端">
               <div class="flex items-center gap-2.5">
-                <span class="w-5 h-5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
-                  <i data-lucide="terminal" class="w-3 h-3"></i>
+                <span class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
                 </span>
-                <span class="text-zinc-700 dark:text-zinc-200 group-hover:text-emerald-400 transition-colors">AIConsole</span>
+                <span class="sidebar-text text-zinc-700 dark:text-zinc-200 group-hover:text-emerald-400 transition-colors">AIConsole</span>
               </div>
-              <span class="text-[9px] font-mono text-zinc-400 opacity-60">03</span>
+              <span class="sidebar-badge text-[9px] font-mono text-zinc-400 opacity-60">03</span>
             </a>
 
-            <!-- Ambient 4K -->
-            <a href="https://ambient.bin0sky.tech" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors">
+            <a href="https://ambient.bin0sky.tech" target="_blank" rel="noopener noreferrer" class="nav-item group flex items-center justify-between p-2 rounded-xl text-xs font-medium hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors" data-tooltip="Ambient 4K · 04 声学专注空间">
               <div class="flex items-center gap-2.5">
-                <span class="w-5 h-5 rounded-md bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center">
-                  <i data-lucide="sparkles" class="w-3 h-3"></i>
+                <span class="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
                 </span>
-                <span class="text-zinc-700 dark:text-zinc-200 group-hover:text-purple-400 transition-colors">Ambient 4K</span>
+                <span class="sidebar-text text-zinc-700 dark:text-zinc-200 group-hover:text-purple-400 transition-colors">Ambient 4K</span>
               </div>
-              <span class="text-[9px] font-mono text-zinc-400 opacity-60">04</span>
+              <span class="sidebar-badge text-[9px] font-mono text-zinc-400 opacity-60">04</span>
             </a>
           </nav>
         </div>
 
-        <!-- Section 2: Interactive Notes & Reports (Colored Icons) -->
+        <!-- Section 2: Interactive Notes -->
         <div>
-          <div class="flex items-center justify-between px-2 mb-2">
-            <span class="text-[10px] font-mono tracking-wider uppercase text-zinc-400 font-bold" data-i18n="nav.notesTitle">📑 交互笔记 & 研报</span>
+          <div class="sidebar-section-title flex items-center justify-between px-2 mb-1.5">
+            <span class="text-[10px] font-mono tracking-wider uppercase text-zinc-400 font-bold" data-i18n="nav.notesTitle">📑 交互笔记 NOTES</span>
             <span class="text-[9px] font-mono text-rose-500 font-semibold">1 MODEL</span>
           </div>
           <nav class="space-y-1">
-            <!-- Population Note -->
-            <a href="notes/population_structure_1950_2100.html" class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium hover:bg-rose-500/5 transition-colors">
+            <a href="notes/population_structure_1950_2100.html" class="nav-item group flex items-center justify-between p-2 rounded-xl text-xs font-medium hover:bg-rose-500/5 transition-colors" data-tooltip="全球人口结构变迁 1950–2100">
               <div class="flex items-center gap-2.5 truncate mr-1">
-                <span class="w-5 h-5 rounded-md bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="bar-chart-2" class="w-3 h-3"></i>
+                <span class="w-7 h-7 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
                 </span>
-                <span class="truncate text-zinc-700 dark:text-zinc-200 group-hover:text-rose-400 transition-colors" title="全球人口结构变迁 1950–2100">人口结构变迁</span>
+                <span class="sidebar-text truncate text-zinc-700 dark:text-zinc-200 group-hover:text-rose-400 transition-colors">人口结构变迁</span>
               </div>
-              <span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold">NEW</span>
+              <span class="sidebar-badge text-[8px] font-mono px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold">NEW</span>
             </a>
-
-            <!-- Upcoming placeholder -->
-            <div class="px-2.5 py-1.5 flex items-center gap-2.5 text-zinc-400/60 dark:text-zinc-600 text-xs font-mono">
-              <span class="w-1.5 h-1.5 rounded-full bg-zinc-400/40 dark:bg-zinc-700"></span>
-              <span>更多研报规划中...</span>
-            </div>
           </nav>
         </div>
 
-        <!-- Section 3: Experimental Labs (Tri-slot Framework) -->
+        <!-- Section 3: Experimental Labs -->
         <div>
-          <div class="flex items-center justify-between px-2 mb-2">
+          <div class="sidebar-section-title flex items-center justify-between px-2 mb-1.5">
             <span class="text-[10px] font-mono tracking-wider uppercase text-zinc-400 font-bold" data-i18n="nav.labsTitle">🧪 实验作 LABS</span>
             <span class="text-[9px] font-mono text-emerald-500 font-semibold">PREVIEW</span>
           </div>
-          <div class="px-2.5 py-2 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-zinc-400 text-xs font-mono flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span class="text-[11px] text-zinc-300">WebGPU/微算法实验孵化中</span>
+          <div class="nav-item p-2 rounded-xl bg-emerald-500/5 border border-emerald-500/10 text-zinc-400 text-xs font-mono flex items-center gap-2" data-tooltip="WebGPU/微算法实验孵化中">
+            <span class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="flask-conical" class="w-3.5 h-3.5"></i>
+            </span>
+            <span class="sidebar-text text-[11px] text-zinc-300">WebGPU/实验中</span>
           </div>
         </div>
       </div>
 
-      <!-- Sidebar Footer -->
-      <div class="pt-4 border-t border-black/[0.06] dark:border-white/[0.07] text-[11px] font-mono text-zinc-400 flex items-center justify-between">
-        <span class="flex items-center gap-1.5">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          <span>Cloudflare Edge</span>
-        </span>
-        <span>v2.2</span>
+      <!-- Bottom Controls: Collapse / Expand Toggle Button -->
+      <div class="pt-3 border-t border-black/[0.06] dark:border-white/[0.07] flex items-center justify-between">
+        <button id="railToggleBtn" onclick="toggleMiniSidebar()" class="nav-item w-full flex items-center gap-2.5 p-2 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-500 dark:text-zinc-400 text-xs font-mono transition-colors" data-tooltip="展开 / 折叠图标列 (⌘B)">
+          <span class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i data-lucide="chevrons-left" id="railToggleIcon" class="w-4 h-4"></i>
+          </span>
+          <span class="sidebar-text" id="railToggleText">收起为图标列</span>
+        </button>
       </div>
     </aside>
 
@@ -898,13 +938,37 @@
     const langLabels = { 'zh-CN': '简', 'en': 'EN', 'zh-TW': '繁', 'ja': 'JA' };
 
     
+    function toggleMiniSidebar() {
+      const sb = document.getElementById('sidebar');
+      const icon = document.getElementById('railToggleIcon');
+      const text = document.getElementById('railToggleText');
+      if (!sb) return;
+      const isMini = sb.classList.toggle('is-mini');
+      localStorage.setItem('b0_sidebar_mini', isMini ? 'true' : 'false');
+      if (icon) {
+        icon.setAttribute('data-lucide', isMini ? 'chevrons-right' : 'chevrons-left');
+              // Restore Icon Rail State
+      if (window.innerWidth >= 768 && localStorage.getItem('b0_sidebar_mini') === 'true') {
+        const sb = document.getElementById('sidebar');
+        if (sb) {
+          sb.classList.add('is-mini');
+          const icon = document.getElementById('railToggleIcon');
+          const text = document.getElementById('railToggleText');
+          if (icon) icon.setAttribute('data-lucide', 'chevrons-right');
+          if (text) text.textContent = '展开目录树';
+        }
+      }
+      if (window.lucide) lucide.createIcons();
+      }
+      if (text) text.textContent = isMini ? '展开目录树' : '收起为图标列';
+    }
+
     function toggleSidebar(forceState) {
       const sb = document.getElementById('sidebar');
       const bd = document.getElementById('sidebarBackdrop');
       if (!sb) return;
-      const isMobile = window.innerWidth < 1024;
-      
-      if (isMobile) {
+      if (window.innerWidth < 768) {
+        // Mobile drawer toggle
         const isHidden = sb.classList.contains('-translate-x-full');
         const show = forceState !== undefined ? forceState : isHidden;
         if (show) {
@@ -915,15 +979,8 @@
           if (bd) bd.classList.add('hidden');
         }
       } else {
-        const isCollapsed = sb.classList.contains('collapsed');
-        const shouldCollapse = forceState !== undefined ? !forceState : !isCollapsed;
-        if (shouldCollapse) {
-          sb.classList.add('collapsed');
-          localStorage.setItem('b0_sidebar', 'collapsed');
-        } else {
-          sb.classList.remove('collapsed');
-          localStorage.setItem('b0_sidebar', 'expanded');
-        }
+        // Desktop Icon Rail toggle
+        toggleMiniSidebar();
       }
     }
 
