@@ -1,57 +1,29 @@
-# bin0sky.tech — Official Digital Studio Portal
+# bin0sky.tech — Official Digital Studio & Engineering Lab
 
-> A minimalist, monochrome studio portal built for high-performance engineering tools and macOS native applications.
+> 专为工程师与思索者打造的原生极简数字工具矩阵、交互式深度研报与实验空间。
 
-## 🚀 Features
+## 🏛️ 项目矩阵映射表 (Local & Cloudflare)
 
-- **Apple Restraint & Google Simplicity**: Obsidian black (`#000000`) & paper canvas (`#ffffff`) monochrome design language.
-- **Multilingual Support**: English (`EN`), 简体中文 (`简`), 繁體中文 (`繁`), and 日本語 (`JA`) with auto-detection & persistent preferences.
-- **⌘K Quick Launcher**: Instant keyboard-driven omnibox command palette to jump to any tool or switch themes.
-- **Keyboard Shortcuts**:
-  - `1`: Open **ArchIcons** (`icon.bin0sky.tech`)
-  - `2`: Open **SlideCraft** (`ppt.bin0sky.tech`)
-  - `3`: Open **AIConsole** (`console.bin0sky.tech`)
-  - `4`: Open **Ambient 4K** (`ambient.bin0sky.tech`)
-  - `T`: Toggle light/dark monochrome theme
-  - `⌘K`: Open command palette
-- **Zero Build Dependencies**: Pure vanilla HTML5 + Tailwind CSS CDN + Lucide Icons. Ultra-fast, zero maintenance.
+| 产品 / 内容 | 线上访问地址 | 本地文件夹路径 | 对应 GitHub 仓库 | 角色分类 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Studio Portal** | `bin0sky.tech` | `/Antigravity/bin0sky.tech` | `rrobin0sky/bin0sky.tech` | 门户与研报中心 |
+| **01 ArchIcons** | `bin0sky.tech/icon` / `icon.bin0sky.tech` | `/Antigravity/ArchIcons` | `rrobin0sky/online-ai-tools` | 🚀 生产力工具 APPS |
+| **02 SlideCraft** | `bin0sky.tech/ppt` / `ppt.bin0sky.tech` | `/Antigravity/AiPPT-Web` | `rrobin0sky/online-ai-slidecraft` | 🚀 生产力工具 APPS |
+| **03 AIConsole** | `bin0sky.tech/console` / `console.bin0sky.tech` | `/Antigravity/AIconsole` | `rrobin0sky/online-ai-aiconsole` | 🚀 生产力工具 APPS |
+| **04 Ambient 4K** | `bin0sky.tech/ambient` / `ambient.bin0sky.tech` | `/Antigravity/Ambient4K-Web` | `rrobin0sky/online-ai-ambient` | 🚀 生产力工具 APPS |
+| **05 人口结构变迁**| `bin0sky.tech/notes/population_structure_1950_2100.html` | `/Antigravity/bin0sky.tech/notes/` | `rrobin0sky/bin0sky.tech` | 📑 交互研报 NOTES |
 
 ---
 
-## 🌐 Cloudflare Pages Deployment Guide
+## 🎨 视觉与交互架构
 
-1. Push this repository to GitHub:
-   ```bash
-   git init
-   git add .
-   git commit -m "feat: initial release of bin0sky studio portal"
-   git branch -M main
-   git remote add origin https://github.com/rrobin0sky/bin0sky.tech.git
-   git push -u origin main
-   ```
-
-2. Go to **Cloudflare Dashboard** → **Workers & Pages** → **Create Application** → **Pages** → **Connect to Git**.
-3. Select your repository `bin0sky.tech`.
-4. Build Settings:
-   - **Framework preset**: `None`
-   - **Build command**: *(leave empty)*
-   - **Build output directory**: `/` (or leave empty / `.`)
-5. In **Custom Domains**, add:
-   - `bin0sky.tech` (Primary Apex Domain)
-   - `www.bin0sky.tech` (The included `_redirects` file automatically handles 301 redirection to apex domain)
+- **左侧结构化目录树 / 小图标轨 (Icon Rail)**：常驻左侧，支持在「完整目录 (240px)」与「微型图标列 (68px)」之间平滑折叠，内置悬浮 Tooltip 气泡。
+- **三槽位内容体系**：`🚀 APPS` (高可用工具) + `📑 NOTES` (交互研报) + `🧪 LABS` (实验与微算法)。
+- **全站通用浮动胶囊 (`shared/nav-pill.js`)**：在任意子应用或研报中引入一行脚本即可获得统一的磨砂玻璃返回与生态切换体验。
+- **⌘K 快速检索**：支持按键 `1`~`5` 秒级直达，按 `T` 切换深浅模式。
 
 ---
 
-## 🔗 (Optional) Ecosystem Switcher for Your 4 Sub-sites
+## 🌐 边缘路由代理 (Cloudflare Worker)
 
-To create cross-promotional traffic between `ppt`, `icon`, `ambient`, and `console`, you can add this minimal top-right pill to the header of your other websites:
-
-```html
-<a href="https://bin0sky.tech" target="_blank" title="Explore bin0sky Suite"
-   style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:9999px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:#a1a1aa;font-size:11px;font-family:monospace;text-decoration:none;transition:all 0.2s;"
-   onmouseover="this.style.color='#ffffff';this.style.borderColor='rgba(255,255,255,0.3)'"
-   onmouseout="this.style.color='#a1a1aa';this.style.borderColor='rgba(255,255,255,0.12)'">
-  <span style="width:6px;height:6px;border-radius:50%;background:#10b981;"></span>
-  <span>bin0sky Studio</span>
-</a>
-```
+详见 [cloudflare/README.md](cloudflare/README.md) 了解如何通过几行边缘 Worker 实现全站统一主域名无缝访问。
