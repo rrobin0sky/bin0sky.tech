@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>全球人口结构变迁 1950–2100 · UN WPP 2024</title>
+<script>
+  if (window.top === window.self) {
+    window.location.replace('/#/notes');
+  }
+</script>
 <style>
 :root{
   --bg:#0a0e14; --bg2:#0e141d; --panel:#121a26; --panel2:#161f2e;
@@ -377,7 +382,12 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-<script src="assets/population_data.js"></script>
+<script src="./assets/population_data.js"></script>
+<script>
+  if (typeof POP === 'undefined') {
+    document.write('<script src="/notes/assets/population_data.js"><\/script>');
+  }
+</script>
 <script>
 (function(){
 "use strict";

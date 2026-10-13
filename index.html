@@ -326,7 +326,7 @@
         <!-- 5 Cards Stream -->
         <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
 <!-- ==================== 01: ArchIcons (bin0sky.tech/icon) ==================== -->
-      <a href="/icon" onclick="event.preventDefault(); loadStage('icon')" target="_blank" rel="noopener noreferrer" data-category="tools" class="bento-card" rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
+      <a href="javascript:void(0)" onclick="loadStage('icon')" data-category="tools" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
         <!-- Top Info -->
         <div>
           <div class="flex items-center justify-between mb-3">
@@ -403,7 +403,7 @@
       </a>
 
       <!-- ==================== 02: SlideCraft (bin0sky.tech/ppt) ==================== -->
-      <a href="/ppt" onclick="event.preventDefault(); loadStage('ppt')" target="_blank" rel="noopener noreferrer" data-category="tools" class="bento-card" rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
+      <a href="javascript:void(0)" onclick="loadStage('ppt')" data-category="tools" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
         <!-- Top Info -->
         <div>
           <div class="flex items-center justify-between mb-3">
@@ -468,7 +468,7 @@
       </a>
 
       <!-- ==================== 03: AIConsole (bin0sky.tech/console) ==================== -->
-      <a href="/console" onclick="event.preventDefault(); loadStage('console')" target="_blank" rel="noopener noreferrer" data-category="tools" class="bento-card" rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
+      <a href="javascript:void(0)" onclick="loadStage('console')" data-category="tools" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
         <!-- Top Info -->
         <div>
           <div class="flex items-center justify-between mb-3">
@@ -530,7 +530,7 @@
       </a>
 
       <!-- ==================== 04: Ambient 4K (bin0sky.tech/ambient) ==================== -->
-      <a href="/ambient" onclick="event.preventDefault(); loadStage('ambient')" target="_blank" rel="noopener noreferrer" data-category="tools" class="bento-card" rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
+      <a href="javascript:void(0)" onclick="loadStage('ambient')" data-category="tools" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
         <!-- Top Info -->
         <div>
           <div class="flex items-center justify-between mb-3">
@@ -588,13 +588,13 @@
 
 
       <!-- ==================== 05: Population Model Note ==================== -->
-      <a href="/notes/population_structure_1950_2100.html" onclick="event.preventDefault(); loadStage('population')" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline md:col-span-2 relative overflow-hidden" data-category="notes">
+      <a href="javascript:void(0)" onclick="loadStage('population')" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline md:col-span-2 relative overflow-hidden" data-category="notes">
         <div>
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2.5">
               <span class="w-6 h-6 rounded-lg bg-rose-500/10 text-rose-500 border border-rose-500/20 flex items-center justify-center font-mono text-[11px] font-bold">05</span>
               <span class="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">全球人口结构变迁 1950–2100</span>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold">NEW · 交互研报</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold">交互研报</span>
             </div>
             <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400">
               <span class="hidden sm:inline">联合国 UN WPP 2024</span>
@@ -701,15 +701,15 @@
   <!-- JavaScript Workstation Logic -->
   <script>
     const STAGES = {
-      'overview': { title: '工作台全景', category: '⚡ OVERVIEW', src: null, path: '/' },
-      'icon': { title: 'ArchIcons', category: 'APPS', src: 'https://icon.bin0sky.tech', path: '/icon' },
-      'ppt': { title: 'SlideCraft', category: 'APPS', src: 'https://ppt.bin0sky.tech', path: '/ppt' },
-      'console': { title: 'AIConsole', category: 'APPS', src: 'https://console.bin0sky.tech', path: '/console' },
-      'ambient': { title: 'Ambient 4K', category: 'APPS', src: 'https://ambient.bin0sky.tech', path: '/ambient' },
-      'population': { title: '全球人口结构变迁', category: 'NOTES', src: '/notes/population_structure_1950_2100.html', path: '/notes/population_structure_1950_2100.html' }
+      'overview': { title: '工作台全景', category: '⚡ OVERVIEW', src: null, hash: '#/' },
+      'icon': { title: 'ArchIcons', category: 'APPS', src: 'https://icon.bin0sky.tech', hash: '#/icon' },
+      'ppt': { title: 'SlideCraft', category: 'APPS', src: 'https://ppt.bin0sky.tech', hash: '#/ppt' },
+      'console': { title: 'AIConsole', category: 'APPS', src: 'https://console.bin0sky.tech', hash: '#/console' },
+      'ambient': { title: 'Ambient 4K', category: 'APPS', src: 'https://ambient.bin0sky.tech', hash: '#/ambient' },
+      'population': { title: '全球人口结构变迁', category: 'NOTES', src: '/notes/population_structure_1950_2100.html', hash: '#/notes' }
     };
 
-    function loadStage(key) {
+    function loadStage(key, updateHistory = true) {
       const stage = STAGES[key] || STAGES['overview'];
       const viewOverview = document.getElementById('stageOverview');
       const viewFrame = document.getElementById('stageFrameContainer');
@@ -719,12 +719,27 @@
       document.getElementById('stageCategoryBadge').textContent = stage.category;
       document.getElementById('stageTitleBreadcrumb').textContent = stage.title;
 
+      // Update sidebar active highlights
+      const navKeys = ['icon', 'ppt', 'console', 'ambient', 'population'];
+      navKeys.forEach(k => {
+        const btn = document.getElementById('nav-item-' + k);
+        if (btn) {
+          if (k === key) {
+            btn.classList.add('bg-black/[0.06]', 'dark:bg-white/[0.08]');
+          } else {
+            btn.classList.remove('bg-black/[0.06]', 'dark:bg-white/[0.08]');
+          }
+        }
+      });
+
       if (key === 'overview') {
         viewOverview.classList.remove('hidden');
         viewFrame.classList.add('hidden');
         iframe.src = 'about:blank';
         iframe.removeAttribute('data-key');
-        history.pushState(null, '', '/');
+        if (updateHistory && location.hash !== '' && location.hash !== '#/') {
+          history.pushState(null, '', location.pathname);
+        }
       } else {
         viewOverview.classList.add('hidden');
         viewFrame.classList.remove('hidden');
@@ -734,7 +749,9 @@
           iframe.src = stage.src;
           iframe.setAttribute('data-key', key);
         }
-        history.pushState(null, '', stage.path);
+        if (updateHistory && location.hash !== stage.hash) {
+          history.pushState(null, '', stage.hash);
+        }
       }
     }
 
@@ -806,18 +823,26 @@
       if (e.key === '5') loadStage('population');
     });
 
+    function handleRoute() {
+      const h = location.hash.toLowerCase();
+      const p = location.pathname.toLowerCase();
+      if (h.includes('icon') || p.endsWith('/icon')) loadStage('icon', false);
+      else if (h.includes('ppt') || p.endsWith('/ppt')) loadStage('ppt', false);
+      else if (h.includes('console') || p.endsWith('/console')) loadStage('console', false);
+      else if (h.includes('ambient') || p.endsWith('/ambient')) loadStage('ambient', false);
+      else if (h.includes('notes') || h.includes('popul') || p.includes('popul')) loadStage('population', false);
+      else loadStage('overview', false);
+    }
+
+    window.addEventListener('hashchange', handleRoute);
+    window.addEventListener('popstate', handleRoute);
+
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
       if (localStorage.getItem('b0_sidebar_expanded') === 'true') {
         document.getElementById('appSidebar').classList.add('expanded');
       }
-      // Check initial path
-      const p = location.pathname;
-      if (p.includes('/icon')) loadStage('icon');
-      else if (p.includes('/ppt')) loadStage('ppt');
-      else if (p.includes('/console')) loadStage('console');
-      else if (p.includes('/ambient')) loadStage('ambient');
-      else if (p.includes('/notes/')) loadStage('population');
+      handleRoute();
       if (window.lucide) lucide.createIcons();
     });
   </script>

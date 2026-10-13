@@ -13,7 +13,22 @@ export default {
     const url = new URL(request.url);
     const { pathname, search } = url;
 
-    // Sub-apps route mapping
+    // Direct app routes: Redirect to App Shell workstation hash navigation
+    // This preserves App Shell (Zones 1-11) and loads the app seamlessly in Zone 12
+    const hashRoutes = {
+      '/icon': '#/icon',
+      '/ppt': '#/ppt',
+      '/console': '#/console',
+      '/ambient': '#/ambient',
+      '/notes': '#/notes',
+    };
+
+    const cleanPath = pathname.replace(/\/+$/, '');
+    if (hashRoutes[cleanPath]) {
+      return Response.redirect(`${url.origin}/${hashRoutes[cleanPath]}`, 302);
+    }
+
+    // Sub-apps route mapping for deep assets
     const routes = [
       { prefix: '/icon', target: 'https://icon.bin0sky.tech' },
       { prefix: '/ppt', target: 'https://ppt.bin0sky.tech' },
@@ -22,8 +37,8 @@ export default {
     ];
 
     for (const route of routes) {
-      if (pathname === route.prefix || pathname.startsWith(route.prefix + '/')) {
-        // Strip the prefix to request the root of the sub-app
+      if (pathname.startsWith(route.prefix + '/')) {
+        // Strip the prefix to request the sub-path
         const subPath = pathname.slice(route.prefix.length) || '/';
         const targetUrl = `${route.target}${subPath}${search}`;
         
