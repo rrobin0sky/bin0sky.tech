@@ -129,10 +129,7 @@
             <circle cx="8" cy="10" r="1.4" class="fill-sky-400 stroke-none"/>
           </svg>
         </div>
-        <div class="flex flex-col">
-          <span class="font-extrabold text-sm tracking-tight leading-tight">bin0sky</span>
-          <span class="text-[9px] font-mono text-zinc-400 tracking-wider">STUDIO OS</span>
-        </div>
+        <span class="font-extrabold text-base tracking-tight text-zinc-900 dark:text-white pl-0.5">Bin</span>
       </a>
     </div>
 
@@ -188,15 +185,21 @@
     <aside id="appSidebar" class="h-full z-30 border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#070709]/95 backdrop-blur-2xl flex flex-col justify-between p-2 flex-shrink-0 overflow-y-auto overflow-x-hidden">
       
       <div class="space-y-4">
-        <!-- 区域 4: 全部标签与总览 -->
-        <div>
-          <button onclick="loadStage('overview')" id="nav-item-overview" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold bg-black/[0.04] dark:bg-white/[0.06] text-zinc-900 dark:text-white transition-all text-left group">
-            <span class="w-7 h-7 rounded-lg bg-zinc-900 text-white dark:bg-white dark:text-black flex items-center justify-center flex-shrink-0">
-              <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+        <!-- 区域 4: >≡ 侧栏展开/锁定触发图标与总览入口 -->
+        <div class="px-1">
+          <button onclick="toggleSidebarPin()" id="sidebarToggleIconBtn" class="w-full flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-600 dark:text-zinc-300 transition-all text-left group" title="点击锁定/折叠侧边栏 (悬停自动展开)">
+            <!-- Geek Terminal Prompt >≡ SVG Icon -->
+            <span class="w-7 h-7 rounded-lg bg-black/[0.03] dark:bg-white/[0.05] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform text-zinc-800 dark:text-zinc-200">
+              <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 7l4 4-4 4"/>
+                <path d="M11 7h9"/>
+                <path d="M11 12h7"/>
+                <path d="M11 17h9"/>
+              </svg>
             </span>
-            <span class="expanded-content flex-1 flex items-center justify-between">
-              <span>全部总览</span>
-              <span class="text-[9px] font-mono opacity-50 px-1 rounded bg-black/[0.05] dark:bg-white/[0.08]">ALL</span>
+            <span class="expanded-content flex-1 flex items-center justify-between text-xs font-mono">
+              <span id="pinStateLabel" class="text-zinc-600 dark:text-zinc-400 font-semibold">锁定侧栏</span>
+              <span class="kbd text-[9px]">PIN</span>
             </span>
           </button>
         </div>
@@ -284,10 +287,10 @@
         </div>
       </div>
 
-      <!-- 区域 11: 底部常驻信息 (关于、快捷键、图钉锁定) -->
-      <div class="pt-2 border-t border-black/[0.06] dark:border-white/[0.07] flex items-center justify-between">
-        <button id="pinBtn" onclick="toggleSidebarPin()" class="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" title="固定/取消固定侧边栏">
-          <i data-lucide="pin" class="w-4 h-4"></i>
+      <!-- 区域 11: 底部常驻信息 (关于、总览回到首页) -->
+      <div class="pt-2 border-t border-black/[0.06] dark:border-white/[0.07] flex items-center justify-between px-1">
+        <button onclick="loadStage('overview')" class="w-7 h-7 rounded-lg flex items-center justify-center text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors" title="返回总览看板">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i>
         </button>
         <div class="expanded-content flex items-center gap-2 text-[10px] font-mono text-zinc-400">
           <span>Cloudflare Edge</span>
@@ -756,6 +759,8 @@
       const sb = document.getElementById('appSidebar');
       const isPinned = sb.classList.toggle('pinned');
       localStorage.setItem('b0_sidebar_pinned', isPinned ? 'true' : 'false');
+      const lbl = document.getElementById('pinStateLabel');
+      if (lbl) lbl.textContent = isPinned ? '已固定' : '悬浮自动展开';
     }
 
     function initTheme() {

@@ -1,16 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <style>
-    .bg { fill: #09090b; }
-    .fg { stroke: #ffffff; }
-    .dot { fill: #ffffff; }
-    @media (prefers-color-scheme: light) {
-      .bg { fill: #09090b; }
-      .fg { stroke: #ffffff; }
-      .dot { fill: #ffffff; }
-    }
-  </style>
-  <rect class="bg" width="64" height="64" rx="16"/>
-  <rect x="1.5" y="1.5" width="61" height="61" rx="14.5" stroke="#ffffff" stroke-opacity="0.16" stroke-width="1"/>
-  <path class="fg" d="M20 44L44 20M44 20H26M44 20V38" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle class="dot" cx="20" cy="20" r="3.5"/>
+  <!-- Obsidian Canvas -->
+  <rect width="64" height="64" rx="16" fill="#09090b"/>
+  <rect x="1" y="1" width="62" height="62" rx="15" stroke="#ffffff" stroke-opacity="0.14" stroke-width="1.5"/>
+  <!-- Mountain horizon (Life) with digital pulse (Tech) -->
+  <path d="M10 44L22 26L34 38L45 20L54 44" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Ambient Pulse Dots -->
+  <circle cx="45" cy="20" r="4.5" fill="#f43f5e"/>
+  <circle cx="22" cy="26" r="3.5" fill="#38bdf8"/>
 </svg>
