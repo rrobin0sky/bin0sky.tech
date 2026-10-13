@@ -124,8 +124,17 @@
   <!-- ==================== TOP NAVIGATION BAR (区域 1, 2, 3) ==================== -->
   <header class="h-13 border-b border-black/[0.06] dark:border-white/[0.07] bg-white/80 dark:bg-black/80 backdrop-blur-xl px-3 sm:px-5 flex items-center justify-between z-40 flex-shrink-0">
     
-    <!-- 区域 1: Logo 图片 (融合干净科技与自然生活元素) -->
-    <div class="flex items-center gap-3">
+    <!-- 区域 1: 3条横杠侧栏切换按钮 + Logo 图片与品牌名 -->
+    <div class="flex items-center gap-2.5">
+      <!-- 3条横杠侧边栏切换按钮 (大小合适、精简无冗余) -->
+      <button onclick="toggleSidebarState()" id="sidebarToggleBtn" class="w-8 h-8 rounded-xl border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-700 dark:text-zinc-200 transition-all flex items-center justify-center cursor-pointer flex-shrink-0" title="展开 / 收起侧边栏" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3.5" y1="6" x2="20.5" y2="6"/>
+          <line x1="3.5" y1="12" x2="20.5" y2="12"/>
+          <line x1="3.5" y1="18" x2="20.5" y2="18"/>
+        </svg>
+      </button>
+
       <a href="javascript:void(0)" onclick="loadStage('overview')" class="flex items-center gap-2.5 group cursor-pointer" title="返回 bin0sky 总览">
         <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-zinc-900 to-zinc-950 dark:from-white dark:to-zinc-200 p-1 flex items-center justify-center shadow-xs transition-transform group-hover:scale-105 active:scale-95">
           <!-- Clean Tech & Life Nature SVG Logo -->
@@ -191,106 +200,68 @@
     <!-- ==================== LEFT SIDEBAR (区域 4 ~ 11: Hover to Expand) ==================== -->
     <aside id="appSidebar" class="h-full z-30 border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#070709]/95 backdrop-blur-2xl flex flex-col justify-between p-2 flex-shrink-0 overflow-y-auto overflow-x-hidden">
       
-      <div class="space-y-4">
-        <!-- 区域 4: >≡ 侧栏展开/收起切换 (严苛定点基准线，展开与折叠零位移) -->
-        <div>
-          <button onclick="toggleSidebarState()" id="sidebarToggleBtn" class="w-full flex items-center gap-2.5 p-1 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors text-left group" title="展开 / 收起侧边栏">
-            <span class="icon-slot rounded-lg group-hover:scale-105 transition-transform">
-              <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 7l4 4-4 4"/>
-                <path d="M11 7h9"/>
-                <path d="M11 12h7"/>
-                <path d="M11 17h9"/>
-              </svg>
-            </span>
-            
-          </button>
-        </div>
-
-        <!-- 区域 5 & 6: 工具 (ArchIcons, SlideCraft, Ambient 4K, AIConsole) -->
+      <div class="space-y-4 pt-1">
+        <!-- 工具 (ArchIcons, SlideCraft, Ambient 4K, AIConsole) -->
         <div>
           <div class="expanded-content px-2 mb-1 flex items-center justify-between text-[10px] font-mono font-bold text-zinc-400">
             <span>APPS</span>
-            <span>4</span>
           </div>
           <nav class="space-y-1">
             <button onclick="loadStage('icon')" id="nav-item-icon" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
               <span class="icon-slot rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="network" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 flex items-center justify-between">
-                <span class="text-zinc-800 dark:text-zinc-200 group-hover:text-sky-400">ArchIcons</span>
-                <span class="text-[9px] font-mono text-zinc-400">01</span>
-              </span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-sky-400">ArchIcons</span>
             </button>
 
             <button onclick="loadStage('ppt')" id="nav-item-ppt" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
               <span class="icon-slot rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 flex items-center justify-between">
-                <span class="text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">SlideCraft</span>
-                <span class="text-[9px] font-mono text-zinc-400">02</span>
-              </span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">SlideCraft</span>
             </button>
 
             <button onclick="loadStage('console')" id="nav-item-console" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
               <span class="icon-slot rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 flex items-center justify-between">
-                <span class="text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-400">AIConsole</span>
-                <span class="text-[9px] font-mono text-zinc-400">03</span>
-              </span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-400">AIConsole</span>
             </button>
 
             <button onclick="loadStage('ambient')" id="nav-item-ambient" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
               <span class="icon-slot rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 flex items-center justify-between">
-                <span class="text-zinc-800 dark:text-zinc-200 group-hover:text-purple-400">Ambient 4K</span>
-                <span class="text-[9px] font-mono text-zinc-400">04</span>
-              </span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-purple-400">Ambient 4K</span>
             </button>
           </nav>
         </div>
 
-        <!-- 区域 7 & 8: 笔记 (人口结构变迁、公募周期、破位透视) -->
+        <!-- 笔记 (人口结构变迁、公募周期、破位透视) -->
         <div>
           <div class="expanded-content px-2 mb-1 flex items-center justify-between text-[10px] font-mono font-bold text-zinc-400">
             <span>NOTES</span>
-            <span>3</span>
           </div>
           <nav class="space-y-1">
             <button onclick="loadStage('population')" id="nav-item-population" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-rose-500/10 transition-colors text-left group">
               <span class="icon-slot rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 flex items-center justify-between">
-                <span class="truncate text-zinc-800 dark:text-zinc-200 group-hover:text-rose-400">人口结构变迁</span>
-                <span class="text-[8px] font-mono px-1 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold">05</span>
-              </span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-rose-400">人口结构变迁</span>
             </button>
 
             <button onclick="loadStage('fund-cycle')" id="nav-item-fund-cycle" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-blue-500/10 transition-colors text-left group">
               <span class="icon-slot rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 flex items-center justify-between">
-                <span class="truncate text-zinc-800 dark:text-zinc-200 group-hover:text-blue-400">公募与产业周期</span>
-                <span class="text-[8px] font-mono px-1 py-0.5 rounded bg-blue-500/20 text-blue-400 font-bold">06</span>
-              </span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-blue-400">公募与产业周期</span>
             </button>
 
             <button onclick="loadStage('fund-breakdown')" id="nav-item-fund-breakdown" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-amber-500/10 transition-colors text-left group">
               <span class="icon-slot rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="activity" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 flex items-center justify-between">
-                <span class="truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">破位基金透视</span>
-                <span class="text-[8px] font-mono px-1 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">07</span>
-              </span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">破位基金透视</span>
             </button>
           </nav>
         </div>
