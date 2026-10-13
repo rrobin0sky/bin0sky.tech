@@ -21,6 +21,8 @@ export default {
       '/console': '#/console',
       '/ambient': '#/ambient',
       '/notes': '#/notes',
+      '/fund-cycle': '#/fund-cycle',
+      '/fund-breakdown': '#/fund-breakdown',
     };
 
     const cleanPath = pathname.replace(/\/+$/, '');

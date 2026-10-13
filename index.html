@@ -256,11 +256,11 @@
           </nav>
         </div>
 
-        <!-- 区域 7 & 8: 笔记 (人口结构变迁等) -->
+        <!-- 区域 7 & 8: 笔记 (人口结构变迁、公募周期、破位透视) -->
         <div>
           <div class="expanded-content px-2 mb-1 flex items-center justify-between text-[10px] font-mono font-bold text-zinc-400">
             <span>NOTES</span>
-            <span>1</span>
+            <span>3</span>
           </div>
           <nav class="space-y-1">
             <button onclick="loadStage('population')" id="nav-item-population" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-rose-500/10 transition-colors text-left group">
@@ -270,6 +270,26 @@
               <span class="expanded-content flex-1 flex items-center justify-between">
                 <span class="truncate text-zinc-800 dark:text-zinc-200 group-hover:text-rose-400">人口结构变迁</span>
                 <span class="text-[8px] font-mono px-1 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold">05</span>
+              </span>
+            </button>
+
+            <button onclick="loadStage('fund-cycle')" id="nav-item-fund-cycle" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-blue-500/10 transition-colors text-left group">
+              <span class="icon-slot rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+              </span>
+              <span class="expanded-content flex-1 flex items-center justify-between">
+                <span class="truncate text-zinc-800 dark:text-zinc-200 group-hover:text-blue-400">公募与产业周期</span>
+                <span class="text-[8px] font-mono px-1 py-0.5 rounded bg-blue-500/20 text-blue-400 font-bold">06</span>
+              </span>
+            </button>
+
+            <button onclick="loadStage('fund-breakdown')" id="nav-item-fund-breakdown" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-amber-500/10 transition-colors text-left group">
+              <span class="icon-slot rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+              </span>
+              <span class="expanded-content flex-1 flex items-center justify-between">
+                <span class="truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">破位基金透视</span>
+                <span class="text-[8px] font-mono px-1 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">07</span>
               </span>
             </button>
           </nav>
@@ -655,6 +675,128 @@
           </span>
         </div>
       </a>
+
+      <!-- ==================== 06: Fund & Industry Cycles Note ==================== -->
+      <a href="javascript:void(0)" onclick="loadStage('fund-cycle')" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline relative overflow-hidden" data-category="notes">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20 flex items-center justify-center font-mono text-[11px] font-bold">06</span>
+              <span class="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">公募基金与产业周期全景</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-semibold">交互研报</span>
+            </div>
+            <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400">
+              <span class="hidden sm:inline">24 产业赛道 · 周期量化</span>
+            </div>
+          </div>
+          <div class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-5 font-medium max-w-xl">
+            超跌稳盘 → 右侧反弹 • 系统性解构前期泡沫出清、底部横盘整固与商业常识催化反弹逻辑。
+          </div>
+          <!-- Visual Canvas: Industry Cycle State Strip & Heatmap Mockup -->
+          <div class="w-full h-44 rounded-xl border border-black/[0.06] dark:border-white/[0.07] bg-gradient-to-br from-zinc-900 via-[#0a111a] to-[#111e2e] p-4 flex flex-col justify-between relative overflow-hidden group-hover:border-blue-500/30 transition-all text-white">
+            <div class="flex items-center justify-between text-[10px] font-mono text-zinc-400 border-b border-white/[0.08] pb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                <span class="text-zinc-200 font-semibold">三阶段周期演化矩阵</span>
+              </div>
+              <span class="text-blue-400 font-semibold">泛科技 / 医药 / 制造 / 消费</span>
+            </div>
+            <!-- Visual Phase Cards -->
+            <div class="grid grid-cols-3 gap-2 my-auto items-center">
+              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
+                <span class="text-[9px] font-mono text-rose-400">阶段 1 · 泡沫出清</span>
+                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-rose-500 h-full w-full"></div>
+                </div>
+                <span class="text-[8px] text-zinc-400">估值杀跌 释放风险</span>
+              </div>
+              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
+                <span class="text-[9px] font-mono text-amber-400">阶段 2 · 底部整固</span>
+                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-amber-400 h-full w-2/3"></div>
+                </div>
+                <span class="text-[8px] text-zinc-400">多空平衡 筹码沉淀</span>
+              </div>
+              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
+                <span class="text-[9px] font-mono text-emerald-400">阶段 3 · 右侧突破</span>
+                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-emerald-400 h-full w-4/5"></div>
+                </div>
+                <span class="text-[8px] text-zinc-400">常识催化 趋势确立</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between text-[9px] font-mono text-zinc-400 pt-1">
+              <span>8 周连续跟踪 • ETF 标的池 • 驱动力归因</span>
+              <span class="text-blue-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">开启周期看板 <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
+          <span class="text-xs text-zinc-400 font-mono">notes/fund_industry_cycles_2026.html</span>
+          <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all group-hover:scale-105 shadow-md shadow-blue-600/20">
+            <span>进入产业周期</span>
+            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+          </span>
+        </div>
+      </a>
+
+      <!-- ==================== 07: Breakdown Fund Analysis Note ==================== -->
+      <a href="javascript:void(0)" onclick="loadStage('fund-breakdown')" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline relative overflow-hidden" data-category="notes">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center font-mono text-[11px] font-bold">07</span>
+              <span class="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">破位基金本质透视看板</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">交互研报</span>
+            </div>
+            <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400">
+              <span class="hidden sm:inline">深度复盘 · 2026</span>
+            </div>
+          </div>
+          <div class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-5 font-medium max-w-xl">
+            穿透“底外有底”的技术陷阱 • 基于公募深度分化与商业常识模型交互解析，透视流动性与估值重构。
+          </div>
+          <!-- Visual Canvas: Breakdown Trajectory & Diagnostic Signals -->
+          <div class="w-full h-44 rounded-xl border border-black/[0.06] dark:border-white/[0.07] bg-gradient-to-br from-zinc-900 via-[#14100c] to-[#24170d] p-4 flex flex-col justify-between relative overflow-hidden group-hover:border-amber-500/30 transition-all text-white">
+            <div class="flex items-center justify-between text-[10px] font-mono text-zinc-400 border-b border-white/[0.08] pb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span class="text-zinc-200 font-semibold">破位形态与常识归因系统</span>
+              </div>
+              <span class="text-amber-400 font-semibold">真破位 vs 假企稳</span>
+            </div>
+            <div class="grid grid-cols-2 gap-4 my-auto items-center px-2">
+              <div class="flex flex-col gap-1 border-r border-white/[0.08] pr-2">
+                <span class="text-[10px] font-mono text-rose-400">高危陷阱特征</span>
+                <div class="space-y-1 text-[9px] text-zinc-300">
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> 资产流动性折价放大</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> 赛道逻辑颠覆（不可逆）</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> 赎回负反馈踩踏</div>
+                </div>
+              </div>
+              <div class="flex flex-col gap-1 pl-2">
+                <span class="text-[10px] font-mono text-emerald-400">常识见底信号</span>
+                <div class="space-y-1 text-[9px] text-zinc-300">
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 破净+自由现金流支撑</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 周期出清进入行业极值</div>
+                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 筹码出清结构重组</div>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between text-[9px] font-mono text-zinc-400 pt-1">
+              <span>个基诊断 • 风险穿透 • 逻辑重构模型</span>
+              <span class="text-amber-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">开启透视看板 <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
+          <span class="text-xs text-zinc-400 font-mono">notes/breakdown_fund_analysis_2026.html</span>
+          <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold transition-all group-hover:scale-105 shadow-md shadow-amber-600/20">
+            <span>进入透视看板</span>
+            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+          </span>
+        </div>
+      </a>
         </section>
       </div>
 
@@ -694,6 +836,14 @@
           <span class="font-bold text-zinc-900 dark:text-white">全球人口结构变迁 1950–2100</span>
           <span class="kbd">5</span>
         </a>
+        <a href="javascript:void(0)" onclick="loadStage('fund-cycle'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-500/10" data-label="公募 基金 产业 周期 06 Notes">
+          <span class="font-bold text-zinc-900 dark:text-white">公募基金与产业周期全景</span>
+          <span class="kbd">6</span>
+        </a>
+        <a href="javascript:void(0)" onclick="loadStage('fund-breakdown'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-500/10" data-label="破位 基金 透视 常识 07 Notes">
+          <span class="font-bold text-zinc-900 dark:text-white">破位基金本质透视看板</span>
+          <span class="kbd">7</span>
+        </a>
       </div>
     </div>
   </div>
@@ -706,7 +856,9 @@
       'ppt': { title: 'SlideCraft', category: 'APPS', src: 'https://ppt.bin0sky.tech', hash: '#/ppt' },
       'console': { title: 'AIConsole', category: 'APPS', src: 'https://console.bin0sky.tech', hash: '#/console' },
       'ambient': { title: 'Ambient 4K', category: 'APPS', src: 'https://ambient.bin0sky.tech', hash: '#/ambient' },
-      'population': { title: '全球人口结构变迁', category: 'NOTES', src: '/notes/population_structure_1950_2100.html', hash: '#/notes' }
+      'population': { title: '全球人口结构变迁', category: 'NOTES', src: '/notes/population_structure_1950_2100.html', hash: '#/notes' },
+      'fund-cycle': { title: '公募基金与产业周期', category: 'NOTES', src: '/notes/fund_industry_cycles_2026.html', hash: '#/fund-cycle' },
+      'fund-breakdown': { title: '破位基金透视看板', category: 'NOTES', src: '/notes/breakdown_fund_analysis_2026.html', hash: '#/fund-breakdown' }
     };
 
     function loadStage(key, updateHistory = true) {
@@ -720,7 +872,7 @@
       document.getElementById('stageTitleBreadcrumb').textContent = stage.title;
 
       // Update sidebar active highlights
-      const navKeys = ['icon', 'ppt', 'console', 'ambient', 'population'];
+      const navKeys = ['icon', 'ppt', 'console', 'ambient', 'population', 'fund-cycle', 'fund-breakdown'];
       navKeys.forEach(k => {
         const btn = document.getElementById('nav-item-' + k);
         if (btn) {
@@ -821,6 +973,8 @@
       if (e.key === '3') loadStage('console');
       if (e.key === '4') loadStage('ambient');
       if (e.key === '5') loadStage('population');
+      if (e.key === '6') loadStage('fund-cycle');
+      if (e.key === '7') loadStage('fund-breakdown');
     });
 
     function handleRoute() {
@@ -830,6 +984,8 @@
       else if (h.includes('ppt') || p.endsWith('/ppt')) loadStage('ppt', false);
       else if (h.includes('console') || p.endsWith('/console')) loadStage('console', false);
       else if (h.includes('ambient') || p.endsWith('/ambient')) loadStage('ambient', false);
+      else if (h.includes('fund-cycle') || h.includes('cycle') || p.includes('cycle') || p.includes('%e5%85%ac%e5%8b%9f')) loadStage('fund-cycle', false);
+      else if (h.includes('fund-breakdown') || h.includes('breakdown') || p.includes('breakdown') || p.includes('%e7%a0%b4%e4%bd%8d')) loadStage('fund-breakdown', false);
       else if (h.includes('notes') || h.includes('popul') || p.includes('popul')) loadStage('population', false);
       else loadStage('overview', false);
     }
