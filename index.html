@@ -69,13 +69,23 @@
     .dark .bento-card:hover {
       box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.9);
     }
-    /* Apple Restraint: Click-Driven Sidebar (No Hover Popup) */
+    /* Pixel-Perfect Fixed Baseline Sidebar Alignment */
     #appSidebar {
-      width: 68px;
+      width: 58px;
       transition: width 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+      box-sizing: border-box;
     }
     #appSidebar.expanded {
       width: 240px;
+    }
+    /* Fixed 28px Icon Slot Alignment for zero-jitter */
+    .icon-slot {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     #appSidebar .expanded-content {
       display: none;
@@ -182,10 +192,10 @@
     <aside id="appSidebar" class="h-full z-30 border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#070709]/95 backdrop-blur-2xl flex flex-col justify-between p-2 flex-shrink-0 overflow-y-auto overflow-x-hidden">
       
       <div class="space-y-4">
-        <!-- 区域 4: >≡ 侧栏展开/收起切换 (Apple 极简无字) -->
-        <div class="px-1 flex justify-center">
-          <button onclick="toggleSidebarState()" id="sidebarToggleBtn" class="w-full flex items-center justify-center p-1.5 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-all group" title="展开 / 收起侧边栏">
-            <span class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+        <!-- 区域 4: >≡ 侧栏展开/收起切换 (严苛定点基准线，展开与折叠零位移) -->
+        <div>
+          <button onclick="toggleSidebarState()" id="sidebarToggleBtn" class="w-full flex items-center gap-2.5 p-1 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors text-left group" title="展开 / 收起侧边栏">
+            <span class="icon-slot rounded-lg group-hover:scale-105 transition-transform">
               <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 7l4 4-4 4"/>
                 <path d="M11 7h9"/>
@@ -193,6 +203,7 @@
                 <path d="M11 17h9"/>
               </svg>
             </span>
+            <span class="expanded-content flex-1 text-xs font-mono text-zinc-400">折叠菜单</span>
           </button>
         </div>
 
@@ -204,7 +215,7 @@
           </div>
           <nav class="space-y-1">
             <button onclick="loadStage('icon')" id="nav-item-icon" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
-              <span class="w-7 h-7 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
+              <span class="icon-slot rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="network" class="w-3.5 h-3.5"></i>
               </span>
               <span class="expanded-content flex-1 flex items-center justify-between">
@@ -214,7 +225,7 @@
             </button>
 
             <button onclick="loadStage('ppt')" id="nav-item-ppt" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
-              <span class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+              <span class="icon-slot rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
               </span>
               <span class="expanded-content flex-1 flex items-center justify-between">
@@ -224,7 +235,7 @@
             </button>
 
             <button onclick="loadStage('console')" id="nav-item-console" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
-              <span class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
+              <span class="icon-slot rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
               </span>
               <span class="expanded-content flex-1 flex items-center justify-between">
@@ -234,7 +245,7 @@
             </button>
 
             <button onclick="loadStage('ambient')" id="nav-item-ambient" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
-              <span class="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
+              <span class="icon-slot rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
               </span>
               <span class="expanded-content flex-1 flex items-center justify-between">
@@ -253,7 +264,7 @@
           </div>
           <nav class="space-y-1">
             <button onclick="loadStage('population')" id="nav-item-population" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-rose-500/10 transition-colors text-left group">
-              <span class="w-7 h-7 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
+              <span class="icon-slot rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
               </span>
               <span class="expanded-content flex-1 flex items-center justify-between">
@@ -271,7 +282,7 @@
             <span class="text-emerald-500">NEW</span>
           </div>
           <div class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-mono text-zinc-400 opacity-60">
-            <span class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0">
+            <span class="icon-slot rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0">
               <i data-lucide="flask-conical" class="w-3.5 h-3.5"></i>
             </span>
             <span class="expanded-content text-[11px]">WebGPU 实验孵化中</span>
@@ -279,16 +290,17 @@
         </div>
       </div>
 
-      <!-- 区域 11: 底部常驻信息 (关于、总览回到首页) -->
-      <div class="pt-2 border-t border-black/[0.06] dark:border-white/[0.07] flex items-center justify-between px-1">
-        <button onclick="loadStage('overview')" class="w-7 h-7 rounded-lg flex items-center justify-center text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors" title="返回总览看板">
-          <i data-lucide="home" class="w-3.5 h-3.5"></i>
+      <!-- 区域 11: 底部常驻信息 (基准线对齐) -->
+      <div class="pt-2 border-t border-black/[0.06] dark:border-white/[0.07]">
+        <button onclick="loadStage('overview')" class="w-full flex items-center gap-2.5 p-1 rounded-xl text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors text-left group" title="返回总览看板">
+          <span class="icon-slot rounded-lg">
+            <i data-lucide="home" class="w-4 h-4"></i>
+          </span>
+          <span class="expanded-content flex-1 text-xs font-mono text-zinc-400 flex items-center justify-between">
+            <span>总览看板</span>
+            <a href="https://github.com/rrobin0sky" target="_blank" class="text-[10px] hover:underline" onclick="event.stopPropagation()">关于 ↗</a>
+          </span>
         </button>
-        <div class="expanded-content flex items-center gap-2 text-[10px] font-mono text-zinc-400">
-          <span>Cloudflare Edge</span>
-          <span>•</span>
-          <a href="https://github.com/rrobin0sky" target="_blank" class="hover:underline">关于</a>
-        </div>
       </div>
     </aside>
 
