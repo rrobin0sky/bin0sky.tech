@@ -69,27 +69,24 @@
     .dark .bento-card:hover {
       box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.9);
     }
-    /* Hover to expand sidebar */
+    /* Apple Restraint: Click-Driven Sidebar (No Hover Popup) */
     #appSidebar {
       width: 68px;
-      transition: width 0.24s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.24s ease;
+      transition: width 0.24s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    #appSidebar:hover, #appSidebar.pinned {
+    #appSidebar.expanded {
       width: 240px;
-      box-shadow: 12px 0 35px -8px rgba(0, 0, 0, 0.45);
     }
     #appSidebar .expanded-content {
+      display: none;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.18s ease;
       white-space: nowrap;
     }
-    #appSidebar:hover .expanded-content, #appSidebar.pinned .expanded-content {
+    #appSidebar.expanded .expanded-content {
+      display: flex;
       opacity: 1;
       pointer-events: auto;
-    }
-    #appSidebar.pinned #pinBtn {
-      color: #38bdf8;
     }
     /* Keycap badge */
     .kbd {
@@ -185,21 +182,16 @@
     <aside id="appSidebar" class="h-full z-30 border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#070709]/95 backdrop-blur-2xl flex flex-col justify-between p-2 flex-shrink-0 overflow-y-auto overflow-x-hidden">
       
       <div class="space-y-4">
-        <!-- 区域 4: >≡ 侧栏展开/锁定触发图标与总览入口 -->
-        <div class="px-1">
-          <button onclick="toggleSidebarPin()" id="sidebarToggleIconBtn" class="w-full flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-600 dark:text-zinc-300 transition-all text-left group" title="点击锁定/折叠侧边栏 (悬停自动展开)">
-            <!-- Geek Terminal Prompt >≡ SVG Icon -->
-            <span class="w-7 h-7 rounded-lg bg-black/[0.03] dark:bg-white/[0.05] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform text-zinc-800 dark:text-zinc-200">
+        <!-- 区域 4: >≡ 侧栏展开/收起切换 (Apple 极简无字) -->
+        <div class="px-1 flex justify-center">
+          <button onclick="toggleSidebarState()" id="sidebarToggleBtn" class="w-full flex items-center justify-center p-1.5 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-all group" title="展开 / 收起侧边栏">
+            <span class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
               <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 7l4 4-4 4"/>
                 <path d="M11 7h9"/>
                 <path d="M11 12h7"/>
                 <path d="M11 17h9"/>
               </svg>
-            </span>
-            <span class="expanded-content flex-1 flex items-center justify-between text-xs font-mono">
-              <span id="pinStateLabel" class="text-zinc-600 dark:text-zinc-400 font-semibold">锁定侧栏</span>
-              <span class="kbd text-[9px]">PIN</span>
             </span>
           </button>
         </div>
@@ -755,12 +747,10 @@
       }
     }
 
-    function toggleSidebarPin() {
+    function toggleSidebarState() {
       const sb = document.getElementById('appSidebar');
-      const isPinned = sb.classList.toggle('pinned');
-      localStorage.setItem('b0_sidebar_pinned', isPinned ? 'true' : 'false');
-      const lbl = document.getElementById('pinStateLabel');
-      if (lbl) lbl.textContent = isPinned ? '已固定' : '悬浮自动展开';
+      const isExpanded = sb.classList.toggle('expanded');
+      localStorage.setItem('b0_sidebar_expanded', isExpanded ? 'true' : 'false');
     }
 
     function initTheme() {
@@ -827,8 +817,8 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
-      if (localStorage.getItem('b0_sidebar_pinned') === 'true') {
-        document.getElementById('appSidebar').classList.add('pinned');
+      if (localStorage.getItem('b0_sidebar_expanded') === 'true') {
+        document.getElementById('appSidebar').classList.add('expanded');
       }
       // Check initial path
       const p = location.pathname;
