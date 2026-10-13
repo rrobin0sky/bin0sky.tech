@@ -203,14 +203,14 @@
                 <path d="M11 17h9"/>
               </svg>
             </span>
-            <span class="expanded-content flex-1 text-xs font-mono text-zinc-400">折叠菜单</span>
+            
           </button>
         </div>
 
         <!-- 区域 5 & 6: 工具 (ArchIcons, SlideCraft, Ambient 4K, AIConsole) -->
         <div>
           <div class="expanded-content px-2 mb-1 flex items-center justify-between text-[10px] font-mono font-bold text-zinc-400">
-            <span>🚀 区域 5: 工具 APPS</span>
+            <span>APPS</span>
             <span>4</span>
           </div>
           <nav class="space-y-1">
@@ -259,7 +259,7 @@
         <!-- 区域 7 & 8: 笔记 (人口结构变迁等) -->
         <div>
           <div class="expanded-content px-2 mb-1 flex items-center justify-between text-[10px] font-mono font-bold text-zinc-400">
-            <span>📑 区域 7: 笔记 NOTES</span>
+            <span>NOTES</span>
             <span>1</span>
           </div>
           <nav class="space-y-1">
@@ -278,8 +278,8 @@
         <!-- 区域 9 & 10: 实验室 -->
         <div>
           <div class="expanded-content px-2 mb-1 flex items-center justify-between text-[10px] font-mono font-bold text-zinc-400">
-            <span>🧪 区域 9: 实验室 LABS</span>
-            <span class="text-emerald-500">NEW</span>
+            <span>LABS</span>
+            
           </div>
           <div class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-mono text-zinc-400 opacity-60">
             <span class="icon-slot rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0">
@@ -658,27 +658,9 @@
         </section>
       </div>
 
-      <!-- 视图 B: 全屏内嵌工作台 (无感呈现对应网站内容) -->
+      <!-- 视图 B: 全屏纯净工作台 (彻底去除外部条幅，无缝融合) -->
       <div id="stageFrameContainer" class="flex-1 h-full hidden flex-col relative bg-black">
-        <!-- Stage Frame Top Action Bar -->
-        <div class="h-9 px-4 border-b border-black/[0.06] dark:border-white/[0.08] bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md flex items-center justify-between text-xs font-mono text-zinc-400 flex-shrink-0">
-          <div class="flex items-center gap-2">
-            <span id="frameTypeBadge" class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-500/10 text-sky-400">APP</span>
-            <span id="frameNameLabel" class="text-zinc-900 dark:text-white font-semibold">ArchIcons</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <a id="frameExternalLink" href="#" target="_blank" class="hover:text-white flex items-center gap-1" title="在独立标签页打开">
-              <span>独立打开</span>
-              <i data-lucide="external-link" class="w-3 h-3"></i>
-            </a>
-            <button onclick="loadStage('overview')" class="hover:text-white flex items-center gap-1" title="返回总览">
-              <span>关闭视窗 ✕</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- The Seamless Sandbox Iframe -->
-        <iframe id="stageIframe" class="w-full flex-1 border-none bg-black" src="about:blank"></iframe>
+        <iframe id="stageIframe" class="w-full h-full border-none bg-black" src="about:blank"></iframe>
       </div>
     </main>
   </div>
@@ -719,12 +701,12 @@
   <!-- JavaScript Workstation Logic -->
   <script>
     const STAGES = {
-      'overview': { title: '工作台全景', category: '⚡ OVERVIEW', url: null },
-      'icon': { title: 'ArchIcons 矢量图标库', category: '🚀 APPS', url: '/icon' },
-      'ppt': { title: 'SlideCraft 演示文稿', category: '🚀 APPS', url: '/ppt' },
-      'console': { title: 'AIConsole 智能终端', category: '🚀 APPS', url: '/console' },
-      'ambient': { title: 'Ambient 4K 专注声场', category: '🚀 APPS', url: '/ambient' },
-      'population': { title: '全球人口结构变迁', category: '📑 NOTES', url: '/notes/population_structure_1950_2100.html' }
+      'overview': { title: '工作台全景', category: '⚡ OVERVIEW', src: null, path: '/' },
+      'icon': { title: 'ArchIcons', category: 'APPS', src: 'https://icon.bin0sky.tech', path: '/icon' },
+      'ppt': { title: 'SlideCraft', category: 'APPS', src: 'https://ppt.bin0sky.tech', path: '/ppt' },
+      'console': { title: 'AIConsole', category: 'APPS', src: 'https://console.bin0sky.tech', path: '/console' },
+      'ambient': { title: 'Ambient 4K', category: 'APPS', src: 'https://ambient.bin0sky.tech', path: '/ambient' },
+      'population': { title: '全球人口结构变迁', category: 'NOTES', src: '/notes/population_structure_1950_2100.html', path: '/notes/population_structure_1950_2100.html' }
     };
 
     function loadStage(key) {
@@ -733,7 +715,7 @@
       const viewFrame = document.getElementById('stageFrameContainer');
       const iframe = document.getElementById('stageIframe');
       
-      // Update breadcrumbs
+      // Update top breadcrumbs in Header
       document.getElementById('stageCategoryBadge').textContent = stage.category;
       document.getElementById('stageTitleBreadcrumb').textContent = stage.title;
 
@@ -741,21 +723,18 @@
         viewOverview.classList.remove('hidden');
         viewFrame.classList.add('hidden');
         iframe.src = 'about:blank';
+        iframe.removeAttribute('data-key');
         history.pushState(null, '', '/');
       } else {
         viewOverview.classList.add('hidden');
         viewFrame.classList.remove('hidden');
         viewFrame.classList.add('flex');
-        
-        document.getElementById('frameNameLabel').textContent = stage.title;
-        document.getElementById('frameTypeBadge').textContent = stage.category;
-        document.getElementById('frameExternalLink').href = stage.url;
 
-        if (iframe.src !== location.origin + stage.url && iframe.getAttribute('data-key') !== key) {
-          iframe.src = stage.url;
+        if (iframe.getAttribute('data-key') !== key) {
+          iframe.src = stage.src;
           iframe.setAttribute('data-key', key);
         }
-        history.pushState(null, '', stage.url);
+        history.pushState(null, '', stage.path);
       }
     }
 
