@@ -3,16 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>bin0sky — Digital Tools & Engineering Studio</title>
-  <meta name="description" content="A curated suite of native macOS apps, cloud architecture toolkits, AI presentation studios, and ambient workspaces.">
+  <title>bin0sky — Digital Studio & Workstation</title>
+  <meta name="description" content="Personal Digital Workstation & Engineering Studio by bin0sky.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta name="theme-color" content="#000000">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="bin0sky — Digital Tools & Engineering Studio">
-  <meta property="og:description" content="Tools crafted for focus, architecture and engineering.">
-  <meta property="og:url" content="https://bin0sky.tech">
-  <meta property="og:type" content="website">
 
   <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,8 +21,8 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', 'system-ui', 'sans-serif'],
-            mono: ['"JetBrains Mono"', '"SF Mono"', 'Menlo', 'monospace'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
           }
         }
       }
@@ -42,70 +36,73 @@
     :root {
       --bg: #ffffff;
       --fg: #09090b;
+      --sidebar-bg: rgba(248, 250, 252, 0.95);
+      --border: rgba(0, 0, 0, 0.08);
       --card-bg: #f8f9fa;
-      --card-border: rgba(0, 0, 0, 0.08);
       --card-hover: rgba(0, 0, 0, 0.2);
-      --surface-inner: #ffffff;
-      --surface-border: rgba(0, 0, 0, 0.06);
     }
-
     .dark {
       --bg: #000000;
       --fg: #f4f4f5;
+      --sidebar-bg: rgba(10, 10, 12, 0.95);
+      --border: rgba(255, 255, 255, 0.08);
       --card-bg: #09090b;
-      --card-border: rgba(255, 255, 255, 0.08);
       --card-hover: rgba(255, 255, 255, 0.22);
-      --surface-inner: #030304;
-      --surface-border: rgba(255, 255, 255, 0.07);
     }
-
     body {
-      background-color: var(--bg);
+      background: var(--bg);
       color: var(--fg);
-      transition: background-color 0.25s ease, color 0.25s ease;
-      -webkit-font-smoothing: antialiased;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow: hidden;
     }
-
-    /* Ambient Apple Spotlight */
-    .spotlight {
-      position: absolute;
-      top: -120px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 1000px;
-      height: 480px;
-      pointer-events: none;
-      z-index: 0;
-      background: radial-gradient(ellipse 60% 45% at 50% 0%, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
-    }
-    html:not(.dark) .spotlight {
-      background: radial-gradient(ellipse 60% 45% at 50% 0%, rgba(0, 0, 0, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
-    }
-
     /* Bento Cards */
     .bento-card {
       background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid var(--border);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .bento-card:hover {
       border-color: var(--card-hover);
-      transform: translateY(-3px);
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.15);
     }
     .dark .bento-card:hover {
-      box-shadow: 0 24px 50px -18px rgba(0, 0, 0, 0.9);
+      box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.9);
     }
-
-    /* Animated Soundwave */
-    @keyframes wave {
-      0%, 100% { height: 6px; }
-      50% { height: 28px; }
+    /* Hover to expand sidebar */
+    #appSidebar {
+      width: 68px;
+      transition: width 0.24s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.24s ease;
     }
-    .wave-bar {
-      animation: wave 1.2s ease-in-out infinite;
+    #appSidebar:hover, #appSidebar.pinned {
+      width: 240px;
+      box-shadow: 12px 0 35px -8px rgba(0, 0, 0, 0.45);
     }
+    #appSidebar .expanded-content {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+      white-space: nowrap;
+    }
+    #appSidebar:hover .expanded-content, #appSidebar.pinned .expanded-content {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #appSidebar.pinned #pinBtn {
+      color: #38bdf8;
+    }
+    /* Keycap badge */
+    .kbd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: rgba(125, 125, 125, 0.08);
+    }
+    /* Animated wave */
+    @keyframes wave { 0%, 100% { height: 6px; } 50% { height: 28px; } }
+    .wave-bar { animation: wave 1.2s ease-in-out infinite; }
     .wave-bar:nth-child(2) { animation-delay: 0.15s; }
     .wave-bar:nth-child(3) { animation-delay: 0.3s; }
     .wave-bar:nth-child(4) { animation-delay: 0.45s; }
@@ -113,307 +110,216 @@
     .wave-bar:nth-child(6) { animation-delay: 0.35s; }
     .wave-bar:nth-child(7) { animation-delay: 0.5s; }
     .wave-bar:nth-child(8) { animation-delay: 0.1s; }
-
-    /* Keycap badge */
-    /* Sidebar smooth collapsible transitions */
-    #sidebar {
-      transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-                  padding 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-                  border-width 0.28s ease,
-                  opacity 0.2s ease,
-                  transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    @media (min-width: 1024px) {
-      #sidebar.collapsed {
-        width: 0 !important;
-        min-width: 0 !important;
-        max-width: 0 !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        border-right-width: 0 !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-        overflow: hidden !important;
-      }
-    }
-
-    .kbd {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      padding: 1px 5px;
-      border-radius: 4px;
-      border: 1px solid var(--card-border);
-      background: rgba(125, 125, 125, 0.08);
-    }
-  
-    /* Icon Rail (Mini Sidebar) & Tooltip Styles */
-    #sidebar {
-      transition: width 0.24s cubic-bezier(0.16, 1, 0.3, 1), padding 0.24s ease;
-    }
-    #sidebar.is-mini {
-      width: 68px !important;
-      padding-left: 8px !important;
-      padding-right: 8px !important;
-    }
-    #sidebar.is-mini .sidebar-text {
-      display: none !important;
-    }
-    #sidebar.is-mini .sidebar-section-title {
-      display: none !important;
-    }
-    #sidebar.is-mini .nav-item {
-      justify-content: center !important;
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-    }
-    #sidebar.is-mini .sidebar-badge {
-      display: none !important;
-    }
-    /* Tooltip */
-    #sidebar.is-mini [data-tooltip] {
-      position: relative;
-    }
-    #sidebar.is-mini [data-tooltip]:hover::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      left: calc(100% + 12px);
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(15, 18, 24, 0.95);
-      color: #fff;
-      padding: 5px 10px;
-      font-size: 11px;
-      font-weight: 600;
-      white-space: nowrap;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-      pointer-events: none;
-      z-index: 99999;
-      backdrop-filter: blur(12px);
-    }
-
   </style>
 </head>
-<body class="selection:bg-zinc-800 selection:text-white dark:selection:bg-zinc-200 dark:selection:text-black min-h-screen flex flex-col justify-between overflow-x-hidden">
+<body class="h-screen w-screen flex flex-col select-none">
 
-  <!-- Ambient Light -->
-  <div class="spotlight"></div>
-
-  <!-- Ultra-Minimal Header -->
-  <header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/70 dark:bg-black/60 border-b border-black/[0.06] dark:border-white/[0.07] transition-colors">
-    <div class="w-full px-4 sm:px-6 h-14 flex items-center justify-between">
-      
-      <!-- Sidebar Toggle & Brand -->
-      <div class="flex items-center gap-3">
-        <button id="sidebarToggle" onclick="toggleSidebar()" aria-label="Toggle Navigation" class="p-2 -ml-2 rounded-lg border border-black/[0.06] dark:border-white/[0.08] hover:border-black/20 dark:hover:border-white/20 text-zinc-600 dark:text-zinc-300 transition-colors">
-          <i data-lucide="panel-left" class="w-4 h-4"></i>
-        </button>
-        <a href="/" class="flex items-center gap-2.5 group">
-        <div class="w-7 h-7 rounded-lg bg-zinc-950 dark:bg-white text-white dark:text-black flex items-center justify-center font-mono font-bold text-xs shadow-xs transition-transform group-hover:scale-105 active:scale-95">
-          b0
+  <!-- ==================== TOP NAVIGATION BAR (区域 1, 2, 3) ==================== -->
+  <header class="h-13 border-b border-black/[0.06] dark:border-white/[0.07] bg-white/80 dark:bg-black/80 backdrop-blur-xl px-3 sm:px-5 flex items-center justify-between z-40 flex-shrink-0">
+    
+    <!-- 区域 1: Logo 图片 (融合干净科技与自然生活元素) -->
+    <div class="flex items-center gap-3">
+      <a href="javascript:void(0)" onclick="loadStage('overview')" class="flex items-center gap-2.5 group cursor-pointer" title="返回 bin0sky 总览">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-zinc-900 to-zinc-950 dark:from-white dark:to-zinc-200 p-1 flex items-center justify-center shadow-xs transition-transform group-hover:scale-105 active:scale-95">
+          <!-- Clean Tech & Life Nature SVG Logo -->
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Mountain horizon (Life) with digital pulse (Tech) -->
+            <path d="M3 17L8 10L13 15L17 8L21 17" class="stroke-zinc-100 dark:stroke-zinc-900" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="17" cy="8" r="1.8" class="fill-rose-500 stroke-none"/>
+            <circle cx="8" cy="10" r="1.4" class="fill-sky-400 stroke-none"/>
+          </svg>
         </div>
-        <span class="font-extrabold text-sm sm:text-base tracking-tight">bin0sky</span>
+        <div class="flex flex-col">
+          <span class="font-extrabold text-sm tracking-tight leading-tight">bin0sky</span>
+          <span class="text-[9px] font-mono text-zinc-400 tracking-wider">STUDIO OS</span>
+        </div>
       </a>
-      </div>
+    </div>
 
-      <!-- Quick ⌘K Launch Trigger -->
-      <button onclick="toggleCommandPalette(true)" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.03] hover:border-black/20 dark:hover:border-white/25 text-xs text-zinc-500 dark:text-zinc-400 transition-all">
+    <!-- 区域 2: 动态上下文面包屑 & 极简状态 -->
+    <div id="topBreadcrumb" class="hidden sm:flex items-center gap-2 text-xs font-mono text-zinc-400">
+      <span class="hover:text-zinc-900 dark:hover:text-white cursor-pointer" onclick="loadStage('overview')">bin0sky.tech</span>
+      <span class="opacity-40">/</span>
+      <span id="stageCategoryBadge" class="text-sky-400 font-semibold uppercase">⚡ OVERVIEW</span>
+      <span class="opacity-40">/</span>
+      <span id="stageTitleBreadcrumb" class="text-zinc-800 dark:text-zinc-200 font-bold">工作台全景</span>
+      <span class="ml-2 w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" title="Cloudflare Edge Online"></span>
+    </div>
+
+    <!-- 区域 3: 功能按键 (语音/语言, 深浅模式, 快捷检索) -->
+    <div class="flex items-center gap-2">
+      <!-- ⌘K Quick search trigger -->
+      <button onclick="toggleCommandPalette(true)" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-xs text-zinc-400 transition-all">
         <i data-lucide="search" class="w-3.5 h-3.5"></i>
-        <span class="hidden sm:inline" data-i18n="nav.search">快速启动</span>
         <span class="kbd">⌘K</span>
       </button>
 
-      <!-- Right Controls: Language & Theme -->
-      <div class="flex items-center gap-2">
-        <!-- Language Switcher -->
-        <div class="relative">
-          <button id="langBtn" onclick="toggleLangMenu()" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/25 text-xs font-semibold tracking-tight transition-all">
-            <span id="currentLangLabel">简</span>
-            <i data-lucide="chevron-down" class="w-3 h-3 opacity-40"></i>
-          </button>
-          
-          <div id="langMenu" class="hidden absolute right-0 mt-1.5 w-32 rounded-xl border border-black/[0.1] dark:border-white/[0.12] bg-white dark:bg-zinc-900 shadow-xl py-1 z-50 text-xs font-medium">
-            <button onclick="setLanguage('zh-CN')" class="w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">
-              <span>简体中文</span>
-              <span class="font-mono text-[10px] opacity-40">简</span>
-            </button>
-            <button onclick="setLanguage('en')" class="w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">
-              <span>English</span>
-              <span class="font-mono text-[10px] opacity-40">EN</span>
-            </button>
-            <button onclick="setLanguage('zh-TW')" class="w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">
-              <span>繁體中文</span>
-              <span class="font-mono text-[10px] opacity-40">繁</span>
-            </button>
-            <button onclick="setLanguage('ja')" class="w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">
-              <span>日本語</span>
-              <span class="font-mono text-[10px] opacity-40">JA</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Theme Toggle -->
-        <button onclick="toggleTheme()" aria-label="Toggle theme" class="p-2 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/25 text-zinc-700 dark:text-zinc-200 transition-all">
-          <i data-lucide="moon" class="w-3.5 h-3.5 hidden dark:block"></i>
-          <i data-lucide="sun" class="w-3.5 h-3.5 block dark:hidden"></i>
+      <!-- Language dropdown -->
+      <div class="relative">
+        <button id="langBtn" onclick="toggleLangMenu()" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-xs font-semibold tracking-tight transition-all">
+          <span id="currentLangLabel">简</span>
+          <i data-lucide="chevron-down" class="w-3 h-3 opacity-40"></i>
         </button>
-
-        <!-- GitHub -->
-        <a href="https://github.com/rrobin0sky" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/25 text-zinc-700 dark:text-zinc-200 transition-all" title="GitHub">
-          <i data-lucide="github" class="w-3.5 h-3.5"></i>
-        </a>
+        <div id="langMenu" class="hidden absolute right-0 mt-1.5 w-28 rounded-xl border border-black/[0.1] dark:border-white/[0.12] bg-white dark:bg-zinc-900 shadow-xl py-1 z-50 text-xs font-medium">
+          <button onclick="setLanguage('zh-CN')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">简体中文</button>
+          <button onclick="setLanguage('en')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">English</button>
+          <button onclick="setLanguage('zh-TW')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">繁體中文</button>
+          <button onclick="setLanguage('ja')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">日本語</button>
+        </div>
       </div>
+
+      <!-- Theme Switcher -->
+      <button onclick="toggleTheme()" aria-label="Toggle theme" class="p-2 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-zinc-700 dark:text-zinc-200 transition-all">
+        <i data-lucide="moon" class="w-3.5 h-3.5 hidden dark:block"></i>
+        <i data-lucide="sun" class="w-3.5 h-3.5 block dark:hidden"></i>
+      </button>
+
+      <!-- GitHub -->
+      <a href="https://github.com/rrobin0sky" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-zinc-700 dark:text-zinc-200 transition-all">
+        <i data-lucide="github" class="w-3.5 h-3.5"></i>
+      </a>
     </div>
   </header>
 
-  <!-- Main Body Wrapper with Left Sidebar & Right Feed -->
-  <div class="flex-1 flex w-full relative">
+  <!-- ==================== BODY APP SHELL ==================== -->
+  <div class="flex-1 flex overflow-hidden relative">
 
-    <!-- Mobile Sidebar Backdrop -->
-    <div id="sidebarBackdrop" onclick="toggleSidebar(false)" class="fixed inset-0 z-30 bg-black/50 backdrop-blur-xs hidden lg:hidden"></div>
-
-        <!-- ==================== LEFT STRUCTURED TREE / ICON RAIL ==================== -->
-    <aside id="sidebar" class="fixed md:sticky top-14 left-0 z-30 w-60 h-[calc(100vh-3.5rem)] flex-shrink-0 flex flex-col justify-between border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#070709]/95 backdrop-blur-xl -translate-x-full md:translate-x-0 overflow-y-auto p-3 select-none">
+    <!-- ==================== LEFT SIDEBAR (区域 4 ~ 11: Hover to Expand) ==================== -->
+    <aside id="appSidebar" class="h-full z-30 border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#070709]/95 backdrop-blur-2xl flex flex-col justify-between p-2 flex-shrink-0 overflow-y-auto overflow-x-hidden">
       
-      <div class="space-y-5">
-        <!-- Overview Link -->
+      <div class="space-y-4">
+        <!-- 区域 4: 全部标签与总览 -->
         <div>
-          <button onclick="filterCards('all')" class="nav-item w-full flex items-center justify-between p-2 rounded-xl text-xs font-semibold bg-black/[0.04] dark:bg-white/[0.06] text-zinc-900 dark:text-white transition-all text-left" data-tooltip="全站概览 · ALL">
-            <div class="flex items-center gap-2.5">
-              <span class="w-7 h-7 rounded-lg bg-zinc-900 text-white dark:bg-white dark:text-black flex items-center justify-center flex-shrink-0">
-                <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-              </span>
-              <span class="sidebar-text" data-i18n="nav.all">全站概览</span>
-            </div>
-            <span class="sidebar-badge text-[10px] font-mono opacity-50 px-1.5 py-0.5 rounded bg-black/[0.05] dark:bg-white/[0.08]">5</span>
+          <button onclick="loadStage('overview')" id="nav-item-overview" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold bg-black/[0.04] dark:bg-white/[0.06] text-zinc-900 dark:text-white transition-all text-left group">
+            <span class="w-7 h-7 rounded-lg bg-zinc-900 text-white dark:bg-white dark:text-black flex items-center justify-center flex-shrink-0">
+              <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+            </span>
+            <span class="expanded-content flex-1 flex items-center justify-between">
+              <span>全部总览</span>
+              <span class="text-[9px] font-mono opacity-50 px-1 rounded bg-black/[0.05] dark:bg-white/[0.08]">ALL</span>
+            </span>
           </button>
         </div>
 
-        <!-- Section 1: Digital Tools Matrix -->
+        <!-- 区域 5 & 6: 工具 (ArchIcons, SlideCraft, Ambient 4K, AIConsole) -->
         <div>
-          <div class="sidebar-section-title flex items-center justify-between px-2 mb-1.5">
-            <span class="text-[10px] font-mono tracking-wider uppercase text-zinc-400 font-bold" data-i18n="nav.toolsTitle">🚀 工具矩阵 MATRIX</span>
-            <span class="text-[9px] font-mono text-zinc-500">4 APPS</span>
+          <div class="expanded-content px-2 mb-1 flex items-center justify-between text-[10px] font-mono font-bold text-zinc-400">
+            <span>🚀 区域 5: 工具 APPS</span>
+            <span>4</span>
           </div>
           <nav class="space-y-1">
-            <a href="/icon" target="_blank" rel="noopener noreferrer" class="nav-item group flex items-center justify-between p-2 rounded-xl text-xs font-medium hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors" data-tooltip="ArchIcons · 01 矢量图标">
-              <div class="flex items-center gap-2.5">
-                <span class="w-7 h-7 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="network" class="w-3.5 h-3.5"></i>
-                </span>
-                <span class="sidebar-text text-zinc-700 dark:text-zinc-200 group-hover:text-sky-400 transition-colors">ArchIcons</span>
-              </div>
-              <span class="sidebar-badge text-[9px] font-mono text-zinc-400 opacity-60">01</span>
-            </a>
+            <button onclick="loadStage('icon')" id="nav-item-icon" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
+              <span class="w-7 h-7 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="network" class="w-3.5 h-3.5"></i>
+              </span>
+              <span class="expanded-content flex-1 flex items-center justify-between">
+                <span class="text-zinc-800 dark:text-zinc-200 group-hover:text-sky-400">ArchIcons</span>
+                <span class="text-[9px] font-mono text-zinc-400">01</span>
+              </span>
+            </button>
 
-            <a href="/ppt" target="_blank" rel="noopener noreferrer" class="nav-item group flex items-center justify-between p-2 rounded-xl text-xs font-medium hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors" data-tooltip="SlideCraft · 02 AI 幻灯片">
-              <div class="flex items-center gap-2.5">
-                <span class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
-                </span>
-                <span class="sidebar-text text-zinc-700 dark:text-zinc-200 group-hover:text-amber-400 transition-colors">SlideCraft</span>
-              </div>
-              <span class="sidebar-badge text-[9px] font-mono text-zinc-400 opacity-60">02</span>
-            </a>
+            <button onclick="loadStage('ppt')" id="nav-item-ppt" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
+              <span class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
+              </span>
+              <span class="expanded-content flex-1 flex items-center justify-between">
+                <span class="text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">SlideCraft</span>
+                <span class="text-[9px] font-mono text-zinc-400">02</span>
+              </span>
+            </button>
 
-            <a href="/console" target="_blank" rel="noopener noreferrer" class="nav-item group flex items-center justify-between p-2 rounded-xl text-xs font-medium hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors" data-tooltip="AIConsole · 03 原生智能终端">
-              <div class="flex items-center gap-2.5">
-                <span class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
-                </span>
-                <span class="sidebar-text text-zinc-700 dark:text-zinc-200 group-hover:text-emerald-400 transition-colors">AIConsole</span>
-              </div>
-              <span class="sidebar-badge text-[9px] font-mono text-zinc-400 opacity-60">03</span>
-            </a>
+            <button onclick="loadStage('console')" id="nav-item-console" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
+              <span class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+              </span>
+              <span class="expanded-content flex-1 flex items-center justify-between">
+                <span class="text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-400">AIConsole</span>
+                <span class="text-[9px] font-mono text-zinc-400">03</span>
+              </span>
+            </button>
 
-            <a href="/ambient" target="_blank" rel="noopener noreferrer" class="nav-item group flex items-center justify-between p-2 rounded-xl text-xs font-medium hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors" data-tooltip="Ambient 4K · 04 声学专注空间">
-              <div class="flex items-center gap-2.5">
-                <span class="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                </span>
-                <span class="sidebar-text text-zinc-700 dark:text-zinc-200 group-hover:text-purple-400 transition-colors">Ambient 4K</span>
-              </div>
-              <span class="sidebar-badge text-[9px] font-mono text-zinc-400 opacity-60">04</span>
-            </a>
+            <button onclick="loadStage('ambient')" id="nav-item-ambient" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
+              <span class="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              </span>
+              <span class="expanded-content flex-1 flex items-center justify-between">
+                <span class="text-zinc-800 dark:text-zinc-200 group-hover:text-purple-400">Ambient 4K</span>
+                <span class="text-[9px] font-mono text-zinc-400">04</span>
+              </span>
+            </button>
           </nav>
         </div>
 
-        <!-- Section 2: Interactive Notes -->
+        <!-- 区域 7 & 8: 笔记 (人口结构变迁等) -->
         <div>
-          <div class="sidebar-section-title flex items-center justify-between px-2 mb-1.5">
-            <span class="text-[10px] font-mono tracking-wider uppercase text-zinc-400 font-bold" data-i18n="nav.notesTitle">📑 交互笔记 NOTES</span>
-            <span class="text-[9px] font-mono text-rose-500 font-semibold">1 MODEL</span>
+          <div class="expanded-content px-2 mb-1 flex items-center justify-between text-[10px] font-mono font-bold text-zinc-400">
+            <span>📑 区域 7: 笔记 NOTES</span>
+            <span>1</span>
           </div>
           <nav class="space-y-1">
-            <a href="notes/population_structure_1950_2100.html" class="nav-item group flex items-center justify-between p-2 rounded-xl text-xs font-medium hover:bg-rose-500/5 transition-colors" data-tooltip="全球人口结构变迁 1950–2100">
-              <div class="flex items-center gap-2.5 truncate mr-1">
-                <span class="w-7 h-7 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
-                </span>
-                <span class="sidebar-text truncate text-zinc-700 dark:text-zinc-200 group-hover:text-rose-400 transition-colors">人口结构变迁</span>
-              </div>
-              <span class="sidebar-badge text-[8px] font-mono px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold">NEW</span>
-            </a>
+            <button onclick="loadStage('population')" id="nav-item-population" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-rose-500/10 transition-colors text-left group">
+              <span class="w-7 h-7 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
+              </span>
+              <span class="expanded-content flex-1 flex items-center justify-between">
+                <span class="truncate text-zinc-800 dark:text-zinc-200 group-hover:text-rose-400">人口结构变迁</span>
+                <span class="text-[8px] font-mono px-1 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold">05</span>
+              </span>
+            </button>
           </nav>
         </div>
 
-        <!-- Section 3: Experimental Labs -->
+        <!-- 区域 9 & 10: 实验室 -->
         <div>
-          <div class="sidebar-section-title flex items-center justify-between px-2 mb-1.5">
-            <span class="text-[10px] font-mono tracking-wider uppercase text-zinc-400 font-bold" data-i18n="nav.labsTitle">🧪 实验作 LABS</span>
-            <span class="text-[9px] font-mono text-emerald-500 font-semibold">PREVIEW</span>
+          <div class="expanded-content px-2 mb-1 flex items-center justify-between text-[10px] font-mono font-bold text-zinc-400">
+            <span>🧪 区域 9: 实验室 LABS</span>
+            <span class="text-emerald-500">NEW</span>
           </div>
-          <div class="nav-item p-2 rounded-xl bg-emerald-500/5 border border-emerald-500/10 text-zinc-400 text-xs font-mono flex items-center gap-2" data-tooltip="WebGPU/微算法实验孵化中">
+          <div class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-mono text-zinc-400 opacity-60">
             <span class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0">
               <i data-lucide="flask-conical" class="w-3.5 h-3.5"></i>
             </span>
-            <span class="sidebar-text text-[11px] text-zinc-300">WebGPU/实验中</span>
+            <span class="expanded-content text-[11px]">WebGPU 实验孵化中</span>
           </div>
         </div>
       </div>
 
-      <!-- Bottom Controls: Collapse / Expand Toggle Button -->
-      <div class="pt-3 border-t border-black/[0.06] dark:border-white/[0.07] flex items-center justify-between">
-        <button id="railToggleBtn" onclick="toggleMiniSidebar()" class="nav-item w-full flex items-center gap-2.5 p-2 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-500 dark:text-zinc-400 text-xs font-mono transition-colors" data-tooltip="展开 / 折叠图标列 (⌘B)">
-          <span class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0">
-            <i data-lucide="chevrons-left" id="railToggleIcon" class="w-4 h-4"></i>
-          </span>
-          <span class="sidebar-text" id="railToggleText">收起为图标列</span>
+      <!-- 区域 11: 底部常驻信息 (关于、快捷键、图钉锁定) -->
+      <div class="pt-2 border-t border-black/[0.06] dark:border-white/[0.07] flex items-center justify-between">
+        <button id="pinBtn" onclick="toggleSidebarPin()" class="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" title="固定/取消固定侧边栏">
+          <i data-lucide="pin" class="w-4 h-4"></i>
         </button>
+        <div class="expanded-content flex items-center gap-2 text-[10px] font-mono text-zinc-400">
+          <span>Cloudflare Edge</span>
+          <span>•</span>
+          <a href="https://github.com/rrobin0sky" target="_blank" class="hover:underline">关于</a>
+        </div>
       </div>
     </aside>
 
-    <!-- Main Container -->
-    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-8 pt-8 sm:pt-12 pb-16 z-10">
+    <!-- ==================== 区域 12: 主交互空间 (MAIN STAGE) ==================== -->
+    <main class="flex-1 h-full overflow-hidden relative flex flex-col bg-zinc-50/50 dark:bg-black">
+      
+      <!-- 视图 A: 矩阵总览看板 (默认视图) -->
+      <div id="stageOverview" class="flex-1 h-full overflow-y-auto px-5 sm:px-10 py-8 max-w-6xl w-full mx-auto">
+        <!-- Hero Title -->
+        <section class="text-center max-w-2xl mx-auto mb-10">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.03] text-[11px] font-mono text-zinc-500 dark:text-zinc-400 mb-4">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>bin0sky 统一工作台架构已激活</span>
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.12]">
+            Tools for Focus. Notes for Depth.
+          </h1>
+          <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
+            原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。
+          </p>
+        </section>
 
-    <!-- Minimal Punchy Hero (Apple Restraint: Low-text) -->
-    <section class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.03] text-[11px] font-mono text-zinc-500 dark:text-zinc-400 mb-5">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span data-i18n="hero.badge">4 款独立数字化工具已上线</span>
-      </div>
-
-      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.12]" data-i18n="hero.title">
-        Tools for Focus. Notes for Depth.
-      </h1>
-      <p class="mt-3 text-sm sm:text-base text-zinc-500 dark:text-zinc-400 font-normal" data-i18n="hero.subtitle">
-        为工程师与思考者打造的原生极简工具矩阵与交互数据模型。
-      </p>
-
-      <!-- Fast Filter Tabs -->
-      <div class="inline-flex items-center gap-1.5 mt-7 p-1 rounded-xl border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.02] text-xs font-medium">
-        <button onclick="filterCards('all')" id="tab-all" class="filter-tab px-3 py-1.5 rounded-lg bg-zinc-950 dark:bg-white text-white dark:text-black font-semibold transition-all" data-i18n="tab.all">全部 ALL</button>
-        <button onclick="filterCards('tools')" id="tab-tools" class="filter-tab px-3 py-1.5 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all" data-i18n="tab.tools">🚀 工具矩阵</button>
-        <button onclick="filterCards('notes')" id="tab-notes" class="filter-tab px-3 py-1.5 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all" data-i18n="tab.notes">📑 深度笔记</button>
-      </div>
-    </section>
-
-    <!-- 4 High-Visual Bento Showcase Cards (80% Visual, 20% Text, Effortless UX) -->
-    <section id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-
-      <!-- ==================== 01: ArchIcons (bin0sky.tech/icon) ==================== -->
-      <a href="/icon" target="_blank" rel="noopener noreferrer" data-category="tools" class="bento-card" rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
+        <!-- 5 Cards Stream -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+<!-- ==================== 01: ArchIcons (bin0sky.tech/icon) ==================== -->
+      <a href="/icon" onclick="event.preventDefault(); loadStage('icon')" target="_blank" rel="noopener noreferrer" data-category="tools" class="bento-card" rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
         <!-- Top Info -->
         <div>
           <div class="flex items-center justify-between mb-3">
@@ -490,7 +396,7 @@
       </a>
 
       <!-- ==================== 02: SlideCraft (bin0sky.tech/ppt) ==================== -->
-      <a href="/ppt" target="_blank" rel="noopener noreferrer" data-category="tools" class="bento-card" rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
+      <a href="/ppt" onclick="event.preventDefault(); loadStage('ppt')" target="_blank" rel="noopener noreferrer" data-category="tools" class="bento-card" rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
         <!-- Top Info -->
         <div>
           <div class="flex items-center justify-between mb-3">
@@ -555,7 +461,7 @@
       </a>
 
       <!-- ==================== 03: AIConsole (bin0sky.tech/console) ==================== -->
-      <a href="/console" target="_blank" rel="noopener noreferrer" data-category="tools" class="bento-card" rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
+      <a href="/console" onclick="event.preventDefault(); loadStage('console')" target="_blank" rel="noopener noreferrer" data-category="tools" class="bento-card" rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
         <!-- Top Info -->
         <div>
           <div class="flex items-center justify-between mb-3">
@@ -617,7 +523,7 @@
       </a>
 
       <!-- ==================== 04: Ambient 4K (bin0sky.tech/ambient) ==================== -->
-      <a href="/ambient" target="_blank" rel="noopener noreferrer" data-category="tools" class="bento-card" rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
+      <a href="/ambient" onclick="event.preventDefault(); loadStage('ambient')" target="_blank" rel="noopener noreferrer" data-category="tools" class="bento-card" rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
         <!-- Top Info -->
         <div>
           <div class="flex items-center justify-between mb-3">
@@ -675,7 +581,7 @@
 
 
       <!-- ==================== 05: Population Model Note ==================== -->
-      <a href="notes/population_structure_1950_2100.html" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline md:col-span-2 relative overflow-hidden" data-category="notes">
+      <a href="/notes/population_structure_1950_2100.html" onclick="event.preventDefault(); loadStage('population')" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline md:col-span-2 relative overflow-hidden" data-category="notes">
         <div>
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2.5">
@@ -742,267 +648,114 @@
           </span>
         </div>
       </a>
-    </section>
-
-    <!-- Visual Linear Pipeline (Zero Essay, Pure Glanceable Workflow) -->
-    <section class="rounded-2xl border border-black/[0.06] dark:border-white/[0.07] bg-black/[0.015] dark:bg-white/[0.015] p-5 sm:p-6 mb-12">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-zinc-500">
-        <div class="flex items-center gap-2">
-          <span class="font-bold text-zinc-900 dark:text-white" data-i18n="pipeline.title">工作流链路</span>
-          <span class="text-zinc-400">•</span>
-          <span data-i18n="pipeline.desc">为技术人打造的无缝闭环</span>
-        </div>
-
-        <div class="flex items-center flex-wrap gap-2 text-[11px]">
-          <span class="px-2.5 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.05] text-zinc-800 dark:text-zinc-200 font-medium">01 拓扑画图</span>
-          <span class="text-zinc-400">→</span>
-          <span class="px-2.5 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.05] text-zinc-800 dark:text-zinc-200 font-medium">02 方案汇报</span>
-          <span class="text-zinc-400">→</span>
-          <span class="px-2.5 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.05] text-zinc-800 dark:text-zinc-200 font-medium">03 终端运维</span>
-          <span class="text-zinc-400">→</span>
-          <span class="px-2.5 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.05] text-zinc-800 dark:text-zinc-200 font-medium">04 沉浸专注</span>
-          <span class="text-zinc-400">→</span>
-          <span class="px-2.5 py-1 rounded-lg bg-rose-500/10 text-rose-400 font-medium border border-rose-500/20">05 深度研报</span>
-        </div>
+        </section>
       </div>
-    </section>
 
-  </main>
+      <!-- 视图 B: 全屏内嵌工作台 (无感呈现对应网站内容) -->
+      <div id="stageFrameContainer" class="flex-1 h-full hidden flex-col relative bg-black">
+        <!-- Stage Frame Top Action Bar -->
+        <div class="h-9 px-4 border-b border-black/[0.06] dark:border-white/[0.08] bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md flex items-center justify-between text-xs font-mono text-zinc-400 flex-shrink-0">
+          <div class="flex items-center gap-2">
+            <span id="frameTypeBadge" class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-sky-500/10 text-sky-400">APP</span>
+            <span id="frameNameLabel" class="text-zinc-900 dark:text-white font-semibold">ArchIcons</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <a id="frameExternalLink" href="#" target="_blank" class="hover:text-white flex items-center gap-1" title="在独立标签页打开">
+              <span>独立打开</span>
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+            <button onclick="loadStage('overview')" class="hover:text-white flex items-center gap-1" title="返回总览">
+              <span>关闭视窗 ✕</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- The Seamless Sandbox Iframe -->
+        <iframe id="stageIframe" class="w-full flex-1 border-none bg-black" src="about:blank"></iframe>
+      </div>
+    </main>
   </div>
 
-  <!-- Clean Footer -->
-  <footer class="border-t border-black/[0.06] dark:border-white/[0.07] bg-white/40 dark:bg-black/40 text-zinc-500 text-xs py-6 transition-colors">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-[11px]">
-      <div class="flex items-center gap-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-        <span class="text-zinc-700 dark:text-zinc-300 font-semibold font-sans">bin0sky Studio</span>
-        <span>•</span>
-        <span>Cloudflare Edge</span>
-      </div>
-
-      <div class="flex items-center gap-4 text-zinc-400">
-        <span>按 <span class="kbd">1</span>~<span class="kbd">5</span> 直达对应条目</span>
-        <span>按 <span class="kbd">T</span> 切换黑白</span>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <span>© 2026 bin0sky.tech</span>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Command Palette Modal (⌘K Quick Launcher) -->
+  <!-- Command Palette Modal (⌘K) -->
   <div id="cmdPalette" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-start justify-center pt-24 px-4" onclick="handleBackdropClick(event)">
-    <div class="w-full max-w-lg rounded-2xl border border-black/[0.12] dark:border-white/[0.14] bg-white dark:bg-zinc-900 shadow-2xl overflow-hidden text-zinc-900 dark:text-zinc-100">
-      
-      <!-- Input -->
-      <div class="flex items-center px-4 border-b border-black/[0.06] dark:border-white/[0.07]">
-        <i data-lucide="search" class="w-4 h-4 text-zinc-400 mr-2"></i>
-        <input id="cmdInput" type="text" placeholder="搜索或跳转应用..." class="w-full py-3.5 bg-transparent border-none outline-none text-xs sm:text-sm placeholder-zinc-400 font-medium" oninput="filterPalette()">
-        <span class="kbd text-[10px]">ESC</span>
+    <div class="w-full max-w-lg rounded-2xl border border-black/[0.1] dark:border-white/[0.15] bg-white dark:bg-zinc-900 shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
+      <div class="flex items-center px-4 border-b border-black/[0.06] dark:border-white/[0.08]">
+        <i data-lucide="search" class="w-4 h-4 text-zinc-400 mr-3"></i>
+        <input id="cmdInput" type="text" placeholder="搜索或跳转应用与研报..." class="w-full py-3.5 bg-transparent border-none outline-none text-xs sm:text-sm placeholder-zinc-400 font-medium" oninput="filterPalette()">
+        <span class="kbd">ESC</span>
       </div>
-
-      <!-- Quick Options -->
       <div id="cmdList" class="p-2 max-h-80 overflow-y-auto space-y-1 text-xs">
-        <a href="/icon" target="_blank" class="cmd-item flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-black/[0.05] dark:hover:bg-white/[0.07] transition-colors" data-label="ArchIcons 拓扑 图标 Cisco 华为 AWS">
-          <div class="flex items-center gap-3">
-            <span class="w-6 h-6 rounded bg-black/[0.05] dark:bg-white/[0.08] flex items-center justify-center font-mono font-bold text-[10px]">01</span>
-            <div>
-              <div class="font-bold">ArchIcons</div>
-              <div class="text-[11px] text-zinc-400">网络拓扑与云架构矢量设备库</div>
-            </div>
-          </div>
-          <span class="kbd">bin0sky.tech/icon</span>
+        <a href="javascript:void(0)" onclick="loadStage('icon'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06]" data-label="ArchIcons 01 图标 拓扑">
+          <span class="font-bold text-zinc-900 dark:text-white">ArchIcons</span>
+          <span class="kbd">1</span>
         </a>
-
-        <a href="/ppt" target="_blank" class="cmd-item flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-black/[0.05] dark:hover:bg-white/[0.07] transition-colors" data-label="SlideCraft AI PPT 演示文稿 标书">
-          <div class="flex items-center gap-3">
-            <span class="w-6 h-6 rounded bg-black/[0.05] dark:bg-white/[0.08] flex items-center justify-center font-mono font-bold text-[10px]">02</span>
-            <div>
-              <div class="font-bold">SlideCraft</div>
-              <div class="text-[11px] text-zinc-400">AI 演示文稿与方案汇报工作台</div>
-            </div>
-          </div>
-          <span class="kbd">bin0sky.tech/ppt</span>
+        <a href="javascript:void(0)" onclick="loadStage('ppt'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06]" data-label="SlideCraft 02 PPT 演示">
+          <span class="font-bold text-zinc-900 dark:text-white">SlideCraft</span>
+          <span class="kbd">2</span>
         </a>
-
-        <a href="/console" target="_blank" class="cmd-item flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-black/[0.05] dark:hover:bg-white/[0.07] transition-colors" data-label="AIConsole 终端 macOS SSH AI Copilot">
-          <div class="flex items-center gap-3">
-            <span class="w-6 h-6 rounded bg-black/[0.05] dark:bg-white/[0.08] flex items-center justify-center font-mono font-bold text-[10px]">03</span>
-            <div>
-              <div class="font-bold">AIConsole</div>
-              <div class="text-[11px] text-zinc-400">macOS 原生 AI 智能终端客户端</div>
-            </div>
-          </div>
-          <span class="kbd">bin0sky.tech/console</span>
+        <a href="javascript:void(0)" onclick="loadStage('console'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06]" data-label="AIConsole 03 终端 SSH">
+          <span class="font-bold text-zinc-900 dark:text-white">AIConsole</span>
+          <span class="kbd">3</span>
         </a>
-
-        <a href="/ambient" target="_blank" class="cmd-item flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-black/[0.05] dark:hover:bg-white/[0.07] transition-colors" data-label="Ambient 4K 白噪音 氛围 空间 专注">
-          <div class="flex items-center gap-3">
-            <span class="w-6 h-6 rounded bg-black/[0.05] dark:bg-white/[0.08] flex items-center justify-center font-mono font-bold text-[10px]">04</span>
-            <div>
-              <div class="font-bold">Ambient 4K</div>
-              <div class="text-[11px] text-zinc-400">4K 极简白噪音与沉浸式画廊空间</div>
-            </div>
-          </div>
-          <span class="kbd">bin0sky.tech/ambient</span>
+        <a href="javascript:void(0)" onclick="loadStage('ambient'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06]" data-label="Ambient 4K 04 白噪音">
+          <span class="font-bold text-zinc-900 dark:text-white">Ambient 4K</span>
+          <span class="kbd">4</span>
         </a>
-
-        <button onclick="toggleTheme()" class="cmd-item w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-black/[0.05] dark:hover:bg-white/[0.07] transition-colors" data-label="Theme 切换 主题 黑白">
-          <div class="flex items-center gap-3">
-            <span class="w-6 h-6 rounded bg-black/[0.05] dark:bg-white/[0.08] flex items-center justify-center font-mono text-[10px]">🎨</span>
-            <div>
-              <div class="font-bold">切换黑白主题</div>
-              <div class="text-[11px] text-zinc-400">在极夜黑与纯白模式间切换</div>
-            </div>
-          </div>
-          <span class="kbd">T</span>
-        </button>
+        <a href="javascript:void(0)" onclick="loadStage('population'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-rose-500/10" data-label="人口 研报 05 Notes">
+          <span class="font-bold text-zinc-900 dark:text-white">全球人口结构变迁 1950–2100</span>
+          <span class="kbd">5</span>
+        </a>
       </div>
     </div>
   </div>
 
-  <!-- Multilingual & Interactive JS -->
+  <!-- JavaScript Workstation Logic -->
   <script>
-    const i18n = {
-      'zh-CN': {
-        'nav.search': '快速启动',
-        'hero.badge': '5 款数字化工具与深度交互笔记已就绪',
-        'hero.title': 'Tools for Focus & Flow.',
-        'hero.subtitle': '为工程师与创造者打造的原生极简工具矩阵。',
-        'card.archicons.tag': '网络拓扑与云架构 2.5D/2D 矢量设备图标库',
-        'card.slidecraft.tag': 'AI 演示文稿工作台 • 技术方案与汇报秒级生成',
-        'card.aiconsole.tag': '为 macOS 打造的原生 AI 智能终端 • 全协议 & 报错根因诊断',
-        'card.ambient.tag': '沉浸式 4K 视觉画廊与极简声学氛围工作空间',
-        'btn.openLibrary': '打开图标库',
-        'btn.createDeck': '立即生成',
-        'btn.getApp': '下载 / 体验',
-        'btn.enterAmbient': '全屏沉浸',
-        'pipeline.title': '工作流链路',
-        'pipeline.desc': '为技术人打造的无缝闭环',
-        'searchPlaceholder': '搜索或跳转应用...',
-      },
-      'en': {
-        'nav.search': 'Quick Launch',
-        'hero.badge': '4 Digital Tools Live on Edge',
-        'hero.title': 'Tools for Focus & Flow.',
-        'hero.subtitle': 'A refined digital toolsuite built for engineers and creators.',
-        'card.archicons.tag': 'Network topology & cloud architecture 2.5D/2D vector device library',
-        'card.slidecraft.tag': 'AI presentation studio • Turn technical proposals into slides in seconds',
-        'card.aiconsole.tag': 'Native macOS AI terminal • Multi-protocol remote & error root diagnosis',
-        'card.ambient.tag': 'Immersive 4K visual gallery & minimal ambient acoustic workspace',
-        'btn.openLibrary': 'Open Library',
-        'btn.createDeck': 'Create Deck',
-        'btn.getApp': 'Download / Try',
-        'btn.enterAmbient': 'Launch 4K',
-        'pipeline.title': 'Workflow Pipeline',
-        'pipeline.desc': 'Seamless flow designed for engineers',
-        'searchPlaceholder': 'Search or jump to tool...',
-      },
-      'zh-TW': {
-        'nav.search': '快速啟動',
-        'hero.badge': '5 款數位化工具與深度互動筆記已就緒',
-        'hero.title': 'Tools for Focus & Flow.',
-        'hero.subtitle': '為工程師與創作者打造的原生極簡工具矩陣。',
-        'card.archicons.tag': '網路拓撲與雲端架構 2.5D/2D 向量設備圖標庫',
-        'card.slidecraft.tag': 'AI 簡報工作台 • 技術方案與匯報秒級生成',
-        'card.aiconsole.tag': '為 macOS 打造的原生 AI 智慧終端 • 全協議 & 報錯根因診斷',
-        'card.ambient.tag': '沉浸式 4K 視覺畫廊與極簡聲學氛圍工作空間',
-        'btn.openLibrary': '打開圖標庫',
-        'btn.createDeck': '立即生成',
-        'btn.getApp': '下載 / 體驗',
-        'btn.enterAmbient': '全螢幕沉浸',
-        'pipeline.title': '工作流鏈路',
-        'pipeline.desc': '為技術人打造的無縫閉環',
-        'searchPlaceholder': '搜尋或跳轉應用...',
-      },
-      'ja': {
-        'nav.search': 'クイック検索',
-        'hero.badge': '5 つのデジタルツール＆インタラクティブノート稼働中',
-        'hero.title': 'Tools for Focus & Flow.',
-        'hero.subtitle': 'エンジニアとクリエイターのためのミニマリスト・ツール群。',
-        'card.archicons.tag': '2.5D/2D ネットワーク・クラウド設計ベクトルライブラリ',
-        'card.slidecraft.tag': 'AI プレゼンスタジオ • 提案書を瞬時に高品質スライドへ',
-        'card.aiconsole.tag': 'macOS 専用 AI 端末 • 全プロトコル＆エラー自動診断',
-        'card.ambient.tag': '4K 没入型ギャラリー＆ホワイトノイズ集中空間',
-        'btn.openLibrary': 'ライブラリを開く',
-        'btn.createDeck': '作成する',
-        'btn.getApp': 'ダウンロード',
-        'btn.enterAmbient': '4K全画面で開く',
-        'pipeline.title': 'ワークフロー',
-        'pipeline.desc': 'エンジニアのための調和した体験',
-        'searchPlaceholder': 'ツールを検索またはジャンプ...',
-      }
+    const STAGES = {
+      'overview': { title: '工作台全景', category: '⚡ OVERVIEW', url: null },
+      'icon': { title: 'ArchIcons 矢量图标库', category: '🚀 APPS', url: '/icon' },
+      'ppt': { title: 'SlideCraft 演示文稿', category: '🚀 APPS', url: '/ppt' },
+      'console': { title: 'AIConsole 智能终端', category: '🚀 APPS', url: '/console' },
+      'ambient': { title: 'Ambient 4K 专注声场', category: '🚀 APPS', url: '/ambient' },
+      'population': { title: '全球人口结构变迁', category: '📑 NOTES', url: '/notes/population_structure_1950_2100.html' }
     };
 
-    const langLabels = { 'zh-CN': '简', 'en': 'EN', 'zh-TW': '繁', 'ja': 'JA' };
+    function loadStage(key) {
+      const stage = STAGES[key] || STAGES['overview'];
+      const viewOverview = document.getElementById('stageOverview');
+      const viewFrame = document.getElementById('stageFrameContainer');
+      const iframe = document.getElementById('stageIframe');
+      
+      // Update breadcrumbs
+      document.getElementById('stageCategoryBadge').textContent = stage.category;
+      document.getElementById('stageTitleBreadcrumb').textContent = stage.title;
 
-    
-    function toggleMiniSidebar() {
-      const sb = document.getElementById('sidebar');
-      const icon = document.getElementById('railToggleIcon');
-      const text = document.getElementById('railToggleText');
-      if (!sb) return;
-      const isMini = sb.classList.toggle('is-mini');
-      localStorage.setItem('b0_sidebar_mini', isMini ? 'true' : 'false');
-      if (icon) {
-        icon.setAttribute('data-lucide', isMini ? 'chevrons-right' : 'chevrons-left');
-              // Restore Icon Rail State
-      if (window.innerWidth >= 768 && localStorage.getItem('b0_sidebar_mini') === 'true') {
-        const sb = document.getElementById('sidebar');
-        if (sb) {
-          sb.classList.add('is-mini');
-          const icon = document.getElementById('railToggleIcon');
-          const text = document.getElementById('railToggleText');
-          if (icon) icon.setAttribute('data-lucide', 'chevrons-right');
-          if (text) text.textContent = '展开目录树';
-        }
-      }
-      if (window.lucide) lucide.createIcons();
-      }
-      if (text) text.textContent = isMini ? '展开目录树' : '收起为图标列';
-    }
-
-    function toggleSidebar(forceState) {
-      const sb = document.getElementById('sidebar');
-      const bd = document.getElementById('sidebarBackdrop');
-      if (!sb) return;
-      if (window.innerWidth < 768) {
-        // Mobile drawer toggle
-        const isHidden = sb.classList.contains('-translate-x-full');
-        const show = forceState !== undefined ? forceState : isHidden;
-        if (show) {
-          sb.classList.remove('-translate-x-full');
-          if (bd) bd.classList.remove('hidden');
-        } else {
-          sb.classList.add('-translate-x-full');
-          if (bd) bd.classList.add('hidden');
-        }
+      if (key === 'overview') {
+        viewOverview.classList.remove('hidden');
+        viewFrame.classList.add('hidden');
+        iframe.src = 'about:blank';
+        history.pushState(null, '', '/');
       } else {
-        // Desktop Icon Rail toggle
-        toggleMiniSidebar();
+        viewOverview.classList.add('hidden');
+        viewFrame.classList.remove('hidden');
+        viewFrame.classList.add('flex');
+        
+        document.getElementById('frameNameLabel').textContent = stage.title;
+        document.getElementById('frameTypeBadge').textContent = stage.category;
+        document.getElementById('frameExternalLink').href = stage.url;
+
+        if (iframe.src !== location.origin + stage.url && iframe.getAttribute('data-key') !== key) {
+          iframe.src = stage.url;
+          iframe.setAttribute('data-key', key);
+        }
+        history.pushState(null, '', stage.url);
       }
     }
 
-    function filterCards(type) {
-      const tabs = ['all', 'tools', 'notes', 'labs'];
-      tabs.forEach(t => {
-        const btn = document.getElementById(`tab-${t}`);
-        if (!btn) return;
-        if (t === type) {
-          btn.className = 'filter-tab px-3 py-1.5 rounded-lg bg-zinc-950 dark:bg-white text-white dark:text-black font-semibold transition-all';
-        } else {
-          btn.className = 'filter-tab px-3 py-1.5 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all';
-        }
-      });
-      document.querySelectorAll('#cardsContainer [data-category]').forEach(card => {
-        const cat = card.getAttribute('data-category');
-        if (type === 'all' || cat === type) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
+    function toggleSidebarPin() {
+      const sb = document.getElementById('appSidebar');
+      const isPinned = sb.classList.toggle('pinned');
+      localStorage.setItem('b0_sidebar_pinned', isPinned ? 'true' : 'false');
     }
 
     function initTheme() {
@@ -1019,24 +772,15 @@
       localStorage.setItem('b0_theme', isDark ? 'dark' : 'light');
     }
 
-    function setLanguage(lang) {
-      if (!i18n[lang]) return;
-      localStorage.setItem('b0_lang', lang);
-      document.getElementById('currentLangLabel').textContent = langLabels[lang] || '简';
-      
-      const dict = i18n[lang];
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (dict[key]) el.textContent = dict[key];
-      });
-
-      const inp = document.getElementById('cmdInput');
-      if (inp && dict['searchPlaceholder']) inp.placeholder = dict['searchPlaceholder'];
-      document.getElementById('langMenu').classList.add('hidden');
-    }
-
     function toggleLangMenu() {
       document.getElementById('langMenu').classList.toggle('hidden');
+    }
+
+    function setLanguage(lang) {
+      const labels = { 'zh-CN': '简', 'en': 'EN', 'zh-TW': '繁', 'ja': 'JA' };
+      localStorage.setItem('b0_lang', lang);
+      document.getElementById('currentLangLabel').textContent = labels[lang] || '简';
+      document.getElementById('langMenu').classList.add('hidden');
     }
 
     function toggleCommandPalette(show) {
@@ -1046,8 +790,6 @@
         setTimeout(() => document.getElementById('cmdInput').focus(), 50);
       } else {
         modal.classList.add('hidden');
-        document.getElementById('cmdInput').value = '';
-        filterPalette();
       }
     }
 
@@ -1063,53 +805,33 @@
       });
     }
 
-    // Keyboard Shortcuts: ⌘K, 1-4, T
     window.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        const modal = document.getElementById('cmdPalette');
-        toggleCommandPalette(modal.classList.contains('hidden'));
-        return;
+        toggleCommandPalette(document.getElementById('cmdPalette').classList.contains('hidden'));
       }
-      if (e.key === 'Escape') {
-        toggleCommandPalette(false);
-        document.getElementById('langMenu').classList.add('hidden');
-        return;
-      }
+      if (e.key === 'Escape') toggleCommandPalette(false);
       if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-
       if (e.key.toLowerCase() === 't') toggleTheme();
-      else if (e.key === '1') window.open('https://bin0sky.tech/icon', '_blank');
-      else if (e.key === '2') window.open('https://bin0sky.tech/ppt', '_blank');
-      else if (e.key === '3') window.open('https://bin0sky.tech/console', '_blank');
-      else if (e.key === '4') window.open('https://bin0sky.tech/ambient', '_blank');
-      else if (e.key === '5') window.location.href = 'notes/population_structure_1950_2100.html';
-    });
-
-    window.addEventListener('click', (e) => {
-      const btn = document.getElementById('langBtn');
-      const menu = document.getElementById('langMenu');
-      if (!btn.contains(e.target) && !menu.contains(e.target)) {
-        menu.classList.add('hidden');
-      }
+      if (e.key === '1') loadStage('icon');
+      if (e.key === '2') loadStage('ppt');
+      if (e.key === '3') loadStage('console');
+      if (e.key === '4') loadStage('ambient');
+      if (e.key === '5') loadStage('population');
     });
 
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
-      const savedLang = localStorage.getItem('b0_lang');
-      if (savedLang && i18n[savedLang]) {
-        setLanguage(savedLang);
-      } else {
-        const bl = (navigator.language || '').toLowerCase();
-        if (bl.startsWith('en')) setLanguage('en');
-        else if (bl.startsWith('zh-tw') || bl.startsWith('zh-hk')) setLanguage('zh-TW');
-        else if (bl.startsWith('ja')) setLanguage('ja');
-        else setLanguage('zh-CN');
+      if (localStorage.getItem('b0_sidebar_pinned') === 'true') {
+        document.getElementById('appSidebar').classList.add('pinned');
       }
-      if (window.innerWidth >= 1024 && localStorage.getItem('b0_sidebar') === 'collapsed') {
-        const sb = document.getElementById('sidebar');
-        if (sb) sb.classList.add('collapsed');
-      }
+      // Check initial path
+      const p = location.pathname;
+      if (p.includes('/icon')) loadStage('icon');
+      else if (p.includes('/ppt')) loadStage('ppt');
+      else if (p.includes('/console')) loadStage('console');
+      else if (p.includes('/ambient')) loadStage('ambient');
+      else if (p.includes('/notes/')) loadStage('population');
       if (window.lucide) lucide.createIcons();
     });
   </script>
