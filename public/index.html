@@ -141,6 +141,43 @@
       border-color: #ffffff;
       box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
     }
+      /* Draggable Resizer Handle (可拖拽侧边栏分割线) */
+    .resizer-handle {
+      width: 10px;
+      margin-left: -5px;
+      margin-right: -5px;
+      height: 100%;
+      z-index: 35;
+      cursor: col-resize;
+      position: relative;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+      background: transparent;
+    }
+    .resizer-line {
+      width: 1px;
+      height: 100%;
+      background: transparent;
+      transition: background 0.15s ease, width 0.15s ease, box-shadow 0.15s ease;
+    }
+    .resizer-handle:hover .resizer-line,
+    .resizer-handle.resizing .resizer-line {
+      width: 2px;
+      background: #38bdf8; /* Apple/Sky blue glow */
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+    }
+    body.is-resizing {
+      cursor: col-resize !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+    }
+    body.is-resizing iframe {
+      pointer-events: none !important;
+    }
   </style>
 </head>
 <body class="h-screen w-screen flex flex-col select-none">
@@ -173,14 +210,13 @@
       </a>
     </div>
 
-    <!-- 区域 2: 动态上下文面包屑 & 极简状态 -->
-    <div id="topBreadcrumb" class="hidden sm:flex items-center gap-2 text-xs font-mono text-zinc-400">
-      <span class="hover:text-zinc-900 dark:hover:text-white cursor-pointer" onclick="loadStage('overview')">bin0sky.tech</span>
-      <span class="opacity-40">/</span>
-      <span id="stageCategoryBadge" class="text-sky-400 font-semibold uppercase">⚡ OVERVIEW</span>
-      <span class="opacity-40">/</span>
-      <span id="stageTitleBreadcrumb" class="text-zinc-800 dark:text-zinc-200 font-bold">工作台全景</span>
-      <span class="ml-2 w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" title="Cloudflare Edge Online"></span>
+    <!-- 区域 2: 动态上下文面包屑 (字体统一，精简无杂质) -->
+    <div id="topBreadcrumb" class="hidden sm:flex items-center gap-2 text-xs font-medium tracking-tight text-zinc-400">
+      <span class="hover:text-zinc-900 dark:hover:text-white cursor-pointer transition-colors" onclick="loadStage('overview')">bin0sky.tech</span>
+      <span class="text-zinc-300 dark:text-zinc-700 select-none">/</span>
+      <span id="stageCategoryBadge" class="text-zinc-500 dark:text-zinc-400 font-semibold uppercase tracking-wider">OVERVIEW</span>
+      <span class="text-zinc-300 dark:text-zinc-700 select-none">/</span>
+      <span id="stageTitleBreadcrumb" class="text-zinc-900 dark:text-white font-semibold">工作台全景</span>
     </div>
 
     <!-- 区域 3: 功能按键 (语音/语言, 深浅模式, 快捷检索) -->
@@ -227,14 +263,10 @@
       <div class="space-y-4 pt-1">
         <!-- 工具 (ArchIcons, SlideCraft, Ambient 4K, AIConsole) -->
         <div>
-          <button onclick="loadCategoryHub('apps')" class="expanded-content w-full px-2 py-1 mb-1.5 flex items-center justify-between text-xs font-mono font-bold tracking-wider text-zinc-400 hover:text-sky-400 dark:hover:text-sky-300 transition-colors group/cat rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 APPS 应用总览">
+          <button onclick="loadCategoryHub('apps')" class="expanded-content w-full px-2 py-1 mb-1 flex items-center text-xs font-semibold tracking-wider text-zinc-400 hover:text-sky-400 dark:hover:text-sky-300 transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 APPS 应用总览">
             <span class="flex items-center gap-1.5">
               <span>APPS</span>
-              <span class="text-[10px] font-normal text-zinc-500 font-sans">应用</span>
-            </span>
-            <span class="flex items-center gap-1 text-[10px] font-normal text-zinc-400 group-hover/cat:text-sky-400">
-              <span class="px-1.5 py-0.2 rounded bg-black/[0.04] dark:bg-white/[0.06] text-[9px]">4</span>
-              <i data-lucide="chevron-right" class="w-3 h-3 transition-transform group-hover/cat:translate-x-0.5"></i>
+              <span class="text-[10px] font-normal text-zinc-500">应用</span>
             </span>
           </button>
           <nav class="space-y-1">
@@ -270,14 +302,10 @@
 
         <!-- 笔记 (人口结构变迁、公募周期、破位透视) -->
         <div>
-          <button onclick="loadCategoryHub('notes')" class="expanded-content w-full px-2 py-1 mb-1.5 flex items-center justify-between text-xs font-mono font-bold tracking-wider text-zinc-400 hover:text-rose-400 dark:hover:text-rose-300 transition-colors group/cat rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 NOTES 研报总览">
+          <button onclick="loadCategoryHub('notes')" class="expanded-content w-full px-2 py-1 mb-1 flex items-center text-xs font-semibold tracking-wider text-zinc-400 hover:text-rose-400 dark:hover:text-rose-300 transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 NOTES 研报总览">
             <span class="flex items-center gap-1.5">
               <span>NOTES</span>
-              <span class="text-[10px] font-normal text-zinc-500 font-sans">研报</span>
-            </span>
-            <span class="flex items-center gap-1 text-[10px] font-normal text-zinc-400 group-hover/cat:text-rose-400">
-              <span class="px-1.5 py-0.2 rounded bg-black/[0.04] dark:bg-white/[0.06] text-[9px]">3</span>
-              <i data-lucide="chevron-right" class="w-3 h-3 transition-transform group-hover/cat:translate-x-0.5"></i>
+              <span class="text-[10px] font-normal text-zinc-500">研报</span>
             </span>
           </button>
           <nav class="space-y-1">
@@ -332,6 +360,11 @@
         </button>
       </div>
     </aside>
+
+    <!-- 可拖拽分割线 (Draggable Splitter Handle - 蓝色的线) -->
+    <div id="sidebarResizer" class="resizer-handle group" title="左右拖动调整侧栏宽度 (双击恢复默认)">
+      <div class="resizer-line"></div>
+    </div>
 
     <!-- ==================== 区域 12: 主交互空间 (MAIN STAGE) ==================== -->
     <main class="flex-1 h-full overflow-hidden relative flex flex-col bg-zinc-50/50 dark:bg-black">
@@ -920,7 +953,7 @@
   <!-- JavaScript Workstation Logic -->
   <script>
     const STAGES = {
-      'overview': { title: '工作台全景', category: '⚡ OVERVIEW', src: null, hash: '#/' },
+      'overview': { title: '工作台全景', category: 'OVERVIEW', src: null, hash: '#/' },
       'apps': { title: '应用矩阵总览', category: 'APPS', src: null, hash: '#/apps' },
       'notes': { title: '深度研报总览', category: 'NOTES', src: null, hash: '#/notes' },
       'labs': { title: '前沿实验总览', category: 'LABS', src: null, hash: '#/labs' },
@@ -989,7 +1022,7 @@
         badge.textContent = 'bin0sky 统一工作台架构已激活';
         title.textContent = 'Tools for Focus. Notes for Depth.';
         subtitle.textContent = '原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。';
-        catBadge.textContent = '⚡ OVERVIEW';
+        catBadge.textContent = 'OVERVIEW';
         titleBread.textContent = '工作台全景';
         if (updateHash && location.hash !== '' && location.hash !== '#/') history.pushState(null, '', location.pathname);
       }
@@ -1068,10 +1101,88 @@
       }
     }
 
+    const DEFAULT_EXPANDED_WIDTH = 240;
+    const COLLAPSED_WIDTH = 58;
+
     function toggleSidebarState() {
       const sb = document.getElementById('appSidebar');
-      const isExpanded = sb.classList.toggle('expanded');
-      localStorage.setItem('b0_sidebar_expanded', isExpanded ? 'true' : 'false');
+      const isCurrentlyExpanded = sb.classList.contains('expanded');
+      if (isCurrentlyExpanded) {
+        sb.classList.remove('expanded');
+        sb.style.width = COLLAPSED_WIDTH + 'px';
+        localStorage.setItem('b0_sidebar_expanded', 'false');
+      } else {
+        sb.classList.add('expanded');
+        const savedW = parseInt(localStorage.getItem('b0_sidebar_custom_width')) || DEFAULT_EXPANDED_WIDTH;
+        sb.style.width = savedW + 'px';
+        localStorage.setItem('b0_sidebar_expanded', 'true');
+      }
+    }
+
+    function initSidebarResizer() {
+      const resizer = document.getElementById('sidebarResizer');
+      const sb = document.getElementById('appSidebar');
+      if (!resizer || !sb) return;
+
+      let isDragging = false;
+      let startX = 0;
+      let startWidth = 0;
+
+      resizer.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startWidth = sb.getBoundingClientRect().width;
+
+        document.body.classList.add('is-resizing');
+        resizer.classList.add('resizing');
+        sb.style.transition = 'none'; // disable CSS transition while dragging
+        e.preventDefault();
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+
+        let newWidth = startWidth + (e.clientX - startX);
+
+        // Snap threshold to collapse
+        if (newWidth < 110) {
+          sb.classList.remove('expanded');
+          sb.style.width = COLLAPSED_WIDTH + 'px';
+        } else {
+          // Clamp between 180px and 480px or 50% viewport
+          newWidth = Math.max(180, Math.min(newWidth, Math.min(480, window.innerWidth * 0.5)));
+          sb.classList.add('expanded');
+          sb.style.width = newWidth + 'px';
+        }
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        document.body.classList.remove('is-resizing');
+        resizer.classList.remove('resizing');
+        sb.style.transition = ''; // restore transition
+
+        const currentWidth = sb.getBoundingClientRect().width;
+        if (currentWidth <= COLLAPSED_WIDTH + 10) {
+          sb.classList.remove('expanded');
+          sb.style.width = COLLAPSED_WIDTH + 'px';
+          localStorage.setItem('b0_sidebar_expanded', 'false');
+        } else {
+          sb.classList.add('expanded');
+          localStorage.setItem('b0_sidebar_expanded', 'true');
+          localStorage.setItem('b0_sidebar_custom_width', Math.round(currentWidth));
+        }
+      });
+
+      // Double click on resizer resets to default width
+      resizer.addEventListener('dblclick', () => {
+        sb.classList.add('expanded');
+        sb.style.transition = 'width 0.24s cubic-bezier(0.16, 1, 0.3, 1)';
+        sb.style.width = DEFAULT_EXPANDED_WIDTH + 'px';
+        localStorage.setItem('b0_sidebar_expanded', 'true');
+        localStorage.setItem('b0_sidebar_custom_width', DEFAULT_EXPANDED_WIDTH);
+      });
     }
 
     function initTheme() {
@@ -1159,9 +1270,17 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
-      if (localStorage.getItem('b0_sidebar_expanded') === 'true') {
-        document.getElementById('appSidebar').classList.add('expanded');
+      const sb = document.getElementById('appSidebar');
+      const isExpanded = localStorage.getItem('b0_sidebar_expanded') === 'true';
+      if (isExpanded) {
+        sb.classList.add('expanded');
+        const savedW = parseInt(localStorage.getItem('b0_sidebar_custom_width')) || DEFAULT_EXPANDED_WIDTH;
+        sb.style.width = savedW + 'px';
+      } else {
+        sb.classList.remove('expanded');
+        sb.style.width = COLLAPSED_WIDTH + 'px';
       }
+      initSidebarResizer();
       handleRoute();
       if (window.lucide) lucide.createIcons();
     });
