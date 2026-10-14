@@ -117,21 +117,45 @@
     .wave-bar:nth-child(6) { animation-delay: 0.35s; }
     .wave-bar:nth-child(7) { animation-delay: 0.5s; }
     .wave-bar:nth-child(8) { animation-delay: 0.1s; }
+      /* Category Filter Pills */
+    .cat-pill {
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: #9ca3af;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cat-pill:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      color: var(--fg);
+      transform: translateY(-1px);
+    }
+    .cat-pill.active {
+      background: #18181b;
+      color: #ffffff;
+      border-color: #3f3f46;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .dark .cat-pill.active {
+      background: #ffffff;
+      color: #09090b;
+      border-color: #ffffff;
+      box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+    }
   </style>
 </head>
 <body class="h-screen w-screen flex flex-col select-none">
 
   <!-- ==================== TOP NAVIGATION BAR (区域 1, 2, 3) ==================== -->
-  <header class="h-13 border-b border-black/[0.06] dark:border-white/[0.07] bg-white/80 dark:bg-black/80 backdrop-blur-xl px-3 sm:px-5 flex items-center justify-between z-40 flex-shrink-0">
+  <header class="h-13 border-b border-black/[0.06] dark:border-white/[0.07] bg-white/80 dark:bg-black/80 backdrop-blur-xl px-4 sm:px-4 flex items-center justify-between z-40 flex-shrink-0">
     
     <!-- 区域 1: 3条横杠侧栏切换按钮 + Logo 图片与品牌名 -->
     <div class="flex items-center gap-2.5">
       <!-- 3条横杠侧边栏切换按钮 (大小合适、精简无冗余) -->
       <button onclick="toggleSidebarState()" id="sidebarToggleBtn" class="w-8 h-8 rounded-xl border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-700 dark:text-zinc-200 transition-all flex items-center justify-center cursor-pointer flex-shrink-0" title="展开 / 收起侧边栏" aria-label="Toggle sidebar">
-        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="3.5" y1="6" x2="20.5" y2="6"/>
-          <line x1="3.5" y1="12" x2="20.5" y2="12"/>
-          <line x1="3.5" y1="18" x2="20.5" y2="18"/>
+        <svg viewBox="0 0 24 24" class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
         </svg>
       </button>
 
@@ -203,9 +227,16 @@
       <div class="space-y-4 pt-1">
         <!-- 工具 (ArchIcons, SlideCraft, Ambient 4K, AIConsole) -->
         <div>
-          <div class="expanded-content px-2 mb-1 flex items-center justify-between text-[10px] font-mono font-bold text-zinc-400">
-            <span>APPS</span>
-          </div>
+          <button onclick="loadCategoryHub('apps')" class="expanded-content w-full px-2 py-1 mb-1.5 flex items-center justify-between text-xs font-mono font-bold tracking-wider text-zinc-400 hover:text-sky-400 dark:hover:text-sky-300 transition-colors group/cat rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 APPS 应用总览">
+            <span class="flex items-center gap-1.5">
+              <span>APPS</span>
+              <span class="text-[10px] font-normal text-zinc-500 font-sans">应用</span>
+            </span>
+            <span class="flex items-center gap-1 text-[10px] font-normal text-zinc-400 group-hover/cat:text-sky-400">
+              <span class="px-1.5 py-0.2 rounded bg-black/[0.04] dark:bg-white/[0.06] text-[9px]">4</span>
+              <i data-lucide="chevron-right" class="w-3 h-3 transition-transform group-hover/cat:translate-x-0.5"></i>
+            </span>
+          </button>
           <nav class="space-y-1">
             <button onclick="loadStage('icon')" id="nav-item-icon" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
               <span class="icon-slot rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
@@ -239,9 +270,16 @@
 
         <!-- 笔记 (人口结构变迁、公募周期、破位透视) -->
         <div>
-          <div class="expanded-content px-2 mb-1 flex items-center justify-between text-[10px] font-mono font-bold text-zinc-400">
-            <span>NOTES</span>
-          </div>
+          <button onclick="loadCategoryHub('notes')" class="expanded-content w-full px-2 py-1 mb-1.5 flex items-center justify-between text-xs font-mono font-bold tracking-wider text-zinc-400 hover:text-rose-400 dark:hover:text-rose-300 transition-colors group/cat rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 NOTES 研报总览">
+            <span class="flex items-center gap-1.5">
+              <span>NOTES</span>
+              <span class="text-[10px] font-normal text-zinc-500 font-sans">研报</span>
+            </span>
+            <span class="flex items-center gap-1 text-[10px] font-normal text-zinc-400 group-hover/cat:text-rose-400">
+              <span class="px-1.5 py-0.2 rounded bg-black/[0.04] dark:bg-white/[0.06] text-[9px]">3</span>
+              <i data-lucide="chevron-right" class="w-3 h-3 transition-transform group-hover/cat:translate-x-0.5"></i>
+            </span>
+          </button>
           <nav class="space-y-1">
             <button onclick="loadStage('population')" id="nav-item-population" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-rose-500/10 transition-colors text-left group">
               <span class="icon-slot rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
@@ -301,23 +339,31 @@
       <!-- 视图 A: 矩阵总览看板 (默认视图) -->
       <div id="stageOverview" class="flex-1 h-full overflow-y-auto px-5 sm:px-10 py-8 max-w-6xl w-full mx-auto">
         <!-- Hero Title -->
-        <section class="text-center max-w-2xl mx-auto mb-10">
+        <section class="text-center max-w-2xl mx-auto mb-6">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.03] text-[11px] font-mono text-zinc-500 dark:text-zinc-400 mb-4">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>bin0sky 统一工作台架构已激活</span>
+            <span id="overviewHeroBadge">bin0sky 统一工作台架构已激活</span>
           </div>
-          <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.12]">
+          <h1 id="overviewHeroTitle" class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.12]">
             Tools for Focus. Notes for Depth.
           </h1>
-          <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
+          <p id="overviewHeroSubtitle" class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
             原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。
           </p>
         </section>
 
+        <!-- Category Filter Tabs Bar (全部 / APPS / NOTES / LABS) -->
+        <div class="flex items-center justify-center gap-2 mb-8" id="overviewCategoryTabs">
+          <button onclick="filterOverview('all')" data-cat="all" class="cat-pill active px-4 py-1.5 rounded-full text-xs font-semibold tracking-tight transition-all cursor-pointer">全部总览 (8)</button>
+          <button onclick="filterOverview('apps')" data-cat="apps" class="cat-pill px-4 py-1.5 rounded-full text-xs font-semibold tracking-tight transition-all cursor-pointer">APPS 应用 (4)</button>
+          <button onclick="filterOverview('notes')" data-cat="notes" class="cat-pill px-4 py-1.5 rounded-full text-xs font-semibold tracking-tight transition-all cursor-pointer">NOTES 深度研报 (3)</button>
+          <button onclick="filterOverview('labs')" data-cat="labs" class="cat-pill px-4 py-1.5 rounded-full text-xs font-semibold tracking-tight transition-all cursor-pointer">LABS 实验室 (1)</button>
+        </div>
+
         <!-- 5 Cards Stream -->
         <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
 <!-- ==================== 01: ArchIcons (bin0sky.tech/icon) ==================== -->
-      <a href="javascript:void(0)" onclick="loadStage('icon')" data-category="tools" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
+      <a href="javascript:void(0)" onclick="loadStage('icon')" data-category="apps" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
         <!-- Top Info -->
         <div>
           <div class="flex items-center justify-between mb-3">
@@ -394,7 +440,7 @@
       </a>
 
       <!-- ==================== 02: SlideCraft (bin0sky.tech/ppt) ==================== -->
-      <a href="javascript:void(0)" onclick="loadStage('ppt')" data-category="tools" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
+      <a href="javascript:void(0)" onclick="loadStage('ppt')" data-category="apps" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
         <!-- Top Info -->
         <div>
           <div class="flex items-center justify-between mb-3">
@@ -459,7 +505,7 @@
       </a>
 
       <!-- ==================== 03: AIConsole (bin0sky.tech/console) ==================== -->
-      <a href="javascript:void(0)" onclick="loadStage('console')" data-category="tools" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
+      <a href="javascript:void(0)" onclick="loadStage('console')" data-category="apps" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
         <!-- Top Info -->
         <div>
           <div class="flex items-center justify-between mb-3">
@@ -521,7 +567,7 @@
       </a>
 
       <!-- ==================== 04: Ambient 4K (bin0sky.tech/ambient) ==================== -->
-      <a href="javascript:void(0)" onclick="loadStage('ambient')" data-category="tools" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
+      <a href="javascript:void(0)" onclick="loadStage('ambient')" data-category="apps" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
         <!-- Top Info -->
         <div>
           <div class="flex items-center justify-between mb-3">
@@ -768,6 +814,58 @@
           </span>
         </div>
       </a>
+      <!-- ==================== 08: WebGPU Labs ==================== -->
+      <a href="javascript:void(0)" onclick="loadCategoryHub('labs')" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline md:col-span-2 relative overflow-hidden" data-category="labs">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center font-mono text-[11px] font-bold">08</span>
+              <span class="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">WebGPU 实验孵化与技术沙盒</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">孵化中</span>
+            </div>
+            <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400">
+              <span class="hidden sm:inline">Shader Compute • Next-Gen Web</span>
+            </div>
+          </div>
+          <div class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-5 font-medium max-w-xl">
+            下一代图形学与实时计算着色器试验场 • 探索浏览器内低延迟物理仿真、流体渲染与端侧 AI 交互界面。
+          </div>
+          <div class="w-full h-44 rounded-xl border border-black/[0.06] dark:border-white/[0.07] bg-gradient-to-br from-zinc-900 via-[#0a1510] to-[#0d2218] p-4 flex flex-col justify-between relative overflow-hidden group-hover:border-emerald-500/30 transition-all text-white">
+            <div class="flex items-center justify-between text-[10px] font-mono text-zinc-400 border-b border-white/[0.08] pb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-zinc-200 font-semibold">WGSL 计算着色器管线</span>
+              </div>
+              <span class="text-emerald-400 font-semibold">60 FPS 硬件加速</span>
+            </div>
+            <div class="grid grid-cols-3 gap-3 my-auto items-center px-2">
+              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
+                <span class="text-[9px] font-mono text-emerald-400">粒子物理场</span>
+                <span class="text-[8px] text-zinc-400">100K 并发点阵模拟</span>
+              </div>
+              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
+                <span class="text-[9px] font-mono text-cyan-400">流体动态 Navier-Stokes</span>
+                <span class="text-[8px] text-zinc-400">粘滞度与涡度求解器</span>
+              </div>
+              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
+                <span class="text-[9px] font-mono text-amber-400">端侧 AI 视觉</span>
+                <span class="text-[8px] text-zinc-400">WebNN / ONNX Runtime</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between text-[9px] font-mono text-zinc-400 pt-1">
+              <span>Apple Metal / Vulkan 后端映射</span>
+              <span class="text-emerald-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">探索概念验证沙盒 <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
+          <span class="text-xs text-zinc-400 font-mono">bin0sky.tech/labs</span>
+          <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-all group-hover:scale-105 shadow-md shadow-emerald-600/20">
+            <span>进入实验沙盒</span>
+            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+          </span>
+        </div>
+      </a>
         </section>
       </div>
 
@@ -823,16 +921,107 @@
   <script>
     const STAGES = {
       'overview': { title: '工作台全景', category: '⚡ OVERVIEW', src: null, hash: '#/' },
+      'apps': { title: '应用矩阵总览', category: 'APPS', src: null, hash: '#/apps' },
+      'notes': { title: '深度研报总览', category: 'NOTES', src: null, hash: '#/notes' },
+      'labs': { title: '前沿实验总览', category: 'LABS', src: null, hash: '#/labs' },
       'icon': { title: 'ArchIcons', category: 'APPS', src: 'https://icon.bin0sky.tech', hash: '#/icon' },
       'ppt': { title: 'SlideCraft', category: 'APPS', src: 'https://ppt.bin0sky.tech', hash: '#/ppt' },
       'console': { title: 'AIConsole', category: 'APPS', src: 'https://console.bin0sky.tech', hash: '#/console' },
       'ambient': { title: 'Ambient 4K', category: 'APPS', src: 'https://ambient.bin0sky.tech', hash: '#/ambient' },
-      'population': { title: '全球人口结构变迁', category: 'NOTES', src: '/notes/population_structure_1950_2100.html', hash: '#/notes' },
+      'population': { title: '全球人口结构变迁', category: 'NOTES', src: '/notes/population_structure_1950_2100.html', hash: '#/population' },
       'fund-cycle': { title: '公募基金与产业周期', category: 'NOTES', src: '/notes/fund_industry_cycles_2026.html', hash: '#/fund-cycle' },
       'fund-breakdown': { title: '破位基金透视看板', category: 'NOTES', src: '/notes/breakdown_fund_analysis_2026.html', hash: '#/fund-breakdown' }
     };
 
+    let currentCategoryFilter = 'all';
+
+    function filterOverview(category, updateHash = true) {
+      currentCategoryFilter = category;
+      
+      // Update pills
+      document.querySelectorAll('#overviewCategoryTabs .cat-pill').forEach(pill => {
+        if (pill.dataset.cat === category) {
+          pill.classList.add('active');
+        } else {
+          pill.classList.remove('active');
+        }
+      });
+
+      // Filter cards
+      document.querySelectorAll('.bento-card').forEach(card => {
+        const cat = card.getAttribute('data-category');
+        if (category === 'all' || cat === category) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Dynamic Hero Copy
+      const badge = document.getElementById('overviewHeroBadge');
+      const title = document.getElementById('overviewHeroTitle');
+      const subtitle = document.getElementById('overviewHeroSubtitle');
+      const catBadge = document.getElementById('stageCategoryBadge');
+      const titleBread = document.getElementById('stageTitleBreadcrumb');
+
+      if (category === 'apps') {
+        badge.textContent = '⚡ 生产力工具矩阵';
+        title.textContent = '原生效率工具 • 开箱即用';
+        subtitle.textContent = '涵盖网络拓扑、AI 演示文稿、智能终端与 4K 沉浸白噪音。原生流畅，开箱即用。';
+        catBadge.textContent = 'APPS';
+        titleBread.textContent = '应用矩阵总览';
+        if (updateHash && location.hash !== '#/apps') history.pushState(null, '', '#/apps');
+      } else if (category === 'notes') {
+        badge.textContent = '📈 深度数据研报书架';
+        title.textContent = '宏观人口与公募产业周期';
+        subtitle.textContent = '基于真实联合国宏观人口结构、公募基金出清与破位常识的交互量化研报专栏。';
+        catBadge.textContent = 'NOTES';
+        titleBread.textContent = '深度研报总览';
+        if (updateHash && location.hash !== '#/notes') history.pushState(null, '', '#/notes');
+      } else if (category === 'labs') {
+        badge.textContent = '🧪 前沿实验与技术沙盒';
+        title.textContent = 'WebGPU 着色器与端侧计算';
+        subtitle.textContent = '下一代图形学与实时计算着色器试验场 • 探索浏览器内物理仿真与端侧模型交互。';
+        catBadge.textContent = 'LABS';
+        titleBread.textContent = '前沿实验总览';
+        if (updateHash && location.hash !== '#/labs') history.pushState(null, '', '#/labs');
+      } else {
+        badge.textContent = 'bin0sky 统一工作台架构已激活';
+        title.textContent = 'Tools for Focus. Notes for Depth.';
+        subtitle.textContent = '原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。';
+        catBadge.textContent = '⚡ OVERVIEW';
+        titleBread.textContent = '工作台全景';
+        if (updateHash && location.hash !== '' && location.hash !== '#/') history.pushState(null, '', location.pathname);
+      }
+    }
+
+    function loadCategoryHub(category) {
+      const viewOverview = document.getElementById('stageOverview');
+      const viewFrame = document.getElementById('stageFrameContainer');
+      const iframe = document.getElementById('stageIframe');
+      
+      viewOverview.classList.remove('hidden');
+      viewFrame.classList.add('hidden');
+      iframe.src = 'about:blank';
+      iframe.removeAttribute('data-key');
+
+      // Clear nav active highlights
+      const navKeys = ['icon', 'ppt', 'console', 'ambient', 'population', 'fund-cycle', 'fund-breakdown', 'labs'];
+      navKeys.forEach(k => {
+        const btn = document.getElementById('nav-item-' + k);
+        if (btn) btn.classList.remove('bg-black/[0.06]', 'dark:bg-white/[0.08]');
+      });
+
+      filterOverview(category, true);
+      viewOverview.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     function loadStage(key, updateHistory = true) {
+      if (key === 'apps' || key === 'notes' || key === 'labs') {
+        loadCategoryHub(key);
+        return;
+      }
+
       const stage = STAGES[key] || STAGES['overview'];
       const viewOverview = document.getElementById('stageOverview');
       const viewFrame = document.getElementById('stageFrameContainer');
@@ -843,7 +1032,7 @@
       document.getElementById('stageTitleBreadcrumb').textContent = stage.title;
 
       // Update sidebar active highlights
-      const navKeys = ['icon', 'ppt', 'console', 'ambient', 'population', 'fund-cycle', 'fund-breakdown'];
+      const navKeys = ['icon', 'ppt', 'console', 'ambient', 'population', 'fund-cycle', 'fund-breakdown', 'labs'];
       navKeys.forEach(k => {
         const btn = document.getElementById('nav-item-' + k);
         if (btn) {
@@ -860,6 +1049,7 @@
         viewFrame.classList.add('hidden');
         iframe.src = 'about:blank';
         iframe.removeAttribute('data-key');
+        filterOverview('all', false);
         if (updateHistory && location.hash !== '' && location.hash !== '#/') {
           history.pushState(null, '', location.pathname);
         }
@@ -951,13 +1141,16 @@
     function handleRoute() {
       const h = location.hash.toLowerCase();
       const p = location.pathname.toLowerCase();
-      if (h.includes('icon') || p.endsWith('/icon')) loadStage('icon', false);
+      if (h === '#/apps' || p.endsWith('/apps')) loadCategoryHub('apps');
+      else if (h === '#/notes' || p.endsWith('/notes')) loadCategoryHub('notes');
+      else if (h === '#/labs' || p.endsWith('/labs')) loadCategoryHub('labs');
+      else if (h.includes('icon') || p.endsWith('/icon')) loadStage('icon', false);
       else if (h.includes('ppt') || p.endsWith('/ppt')) loadStage('ppt', false);
       else if (h.includes('console') || p.endsWith('/console')) loadStage('console', false);
       else if (h.includes('ambient') || p.endsWith('/ambient')) loadStage('ambient', false);
       else if (h.includes('fund-cycle') || h.includes('cycle') || p.includes('cycle') || p.includes('%e5%85%ac%e5%8b%9f')) loadStage('fund-cycle', false);
       else if (h.includes('fund-breakdown') || h.includes('breakdown') || p.includes('breakdown') || p.includes('%e7%a0%b4%e4%bd%8d')) loadStage('fund-breakdown', false);
-      else if (h.includes('notes') || h.includes('popul') || p.includes('popul')) loadStage('population', false);
+      else if (h.includes('population') || h.includes('popul') || p.includes('popul')) loadStage('population', false);
       else loadStage('overview', false);
     }
 

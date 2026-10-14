@@ -20,7 +20,10 @@ export default {
       '/ppt': '#/ppt',
       '/console': '#/console',
       '/ambient': '#/ambient',
+      '/apps': '#/apps',
       '/notes': '#/notes',
+      '/labs': '#/labs',
+      '/population': '#/population',
       '/fund-cycle': '#/fund-cycle',
       '/fund-breakdown': '#/fund-breakdown',
     };
