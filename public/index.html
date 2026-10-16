@@ -847,54 +847,71 @@
           </span>
         </div>
       </a>
-      <!-- ==================== 08: WebGPU Labs ==================== -->
-      <a href="javascript:void(0)" onclick="loadCategoryHub('labs')" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline md:col-span-2 relative overflow-hidden" data-category="labs">
+      <!-- ==================== 08: 教师工作台 (bin0sky.tech/teacher) ==================== -->
+      <a href="javascript:void(0)" onclick="loadStage('teacher')" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline md:col-span-2 relative overflow-hidden" data-category="labs">
         <div>
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2.5">
               <span class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center font-mono text-[11px] font-bold">08</span>
-              <span class="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">WebGPU 实验孵化与技术沙盒</span>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">孵化中</span>
+              <span class="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">教师工作台 · 高中日语教学空间</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">专属空间</span>
             </div>
             <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400">
-              <span class="hidden sm:inline">Shader Compute • Next-Gen Web</span>
+              <span class="hidden sm:inline">高中日语教学 • 班级管理与学情分析</span>
             </div>
           </div>
           <div class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-5 font-medium max-w-xl">
-            下一代图形学与实时计算着色器试验场 • 探索浏览器内低延迟物理仿真、流体渲染与端侧 AI 交互界面。
+            专为高中日语教师定制的极简轻量教学工作台 • 涵盖今日课表、假名与单词默写打卡、动词变形过关、高考听力与 150 分制模拟考分析。
           </div>
-          <div class="w-full h-44 rounded-xl border border-black/[0.06] dark:border-white/[0.07] bg-gradient-to-br from-zinc-900 via-[#0a1510] to-[#0d2218] p-4 flex flex-col justify-between relative overflow-hidden group-hover:border-emerald-500/30 transition-all text-white">
+          <!-- Visual Canvas: Japanese Teaching Dashboard Mockup -->
+          <div class="w-full h-44 rounded-xl border border-black/[0.06] dark:border-white/[0.07] bg-gradient-to-br from-zinc-900 via-[#0d1712] to-[#12241b] p-4 flex flex-col justify-between relative overflow-hidden group-hover:border-emerald-500/30 transition-all text-white">
             <div class="flex items-center justify-between text-[10px] font-mono text-zinc-400 border-b border-white/[0.08] pb-2">
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-zinc-200 font-semibold">WGSL 计算着色器管线</span>
+                <span class="text-zinc-200 font-semibold">高二·日语1班 & 高三·高考冲刺班</span>
               </div>
-              <span class="text-emerald-400 font-semibold">60 FPS 硬件加速</span>
+              <span class="text-emerald-400 font-semibold">🇯🇵 高考日语 150分 备考模型</span>
             </div>
-            <div class="grid grid-cols-3 gap-3 my-auto items-center px-2">
+            <div class="grid grid-cols-4 gap-2 my-auto items-center px-1">
               <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
-                <span class="text-[9px] font-mono text-emerald-400">粒子物理场</span>
-                <span class="text-[8px] text-zinc-400">100K 并发点阵模拟</span>
+                <span class="text-[9px] font-mono text-emerald-400">单词默写</span>
+                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-emerald-500 h-full w-5/6"></div>
+                </div>
+                <span class="text-[8px] text-zinc-400">92% 完成率</span>
               </div>
               <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
-                <span class="text-[9px] font-mono text-cyan-400">流体动态 Navier-Stokes</span>
-                <span class="text-[8px] text-zinc-400">粘滞度与涡度求解器</span>
+                <span class="text-[9px] font-mono text-sky-400">动词变形</span>
+                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-sky-400 h-full w-4/5"></div>
+                </div>
+                <span class="text-[8px] text-zinc-400">て/た/ない形过关</span>
               </div>
               <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
-                <span class="text-[9px] font-mono text-amber-400">端侧 AI 视觉</span>
-                <span class="text-[8px] text-zinc-400">WebNN / ONNX Runtime</span>
+                <span class="text-[9px] font-mono text-amber-400">高考听力</span>
+                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-amber-400 h-full w-3/4"></div>
+                </div>
+                <span class="text-[8px] text-zinc-400">30分 专项精听</span>
+              </div>
+              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
+                <span class="text-[9px] font-mono text-rose-400">高考作文</span>
+                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-rose-400 h-full w-2/3"></div>
+                </div>
+                <span class="text-[8px] text-zinc-400">原稿纸格式精批</span>
               </div>
             </div>
             <div class="flex items-center justify-between text-[9px] font-mono text-zinc-400 pt-1">
-              <span>Apple Metal / Vulkan 后端映射</span>
-              <span class="text-emerald-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">探索概念验证沙盒 <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+              <span>离线数据持久化 • 考勤与座位表 • 备考速查助手</span>
+              <span class="text-emerald-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">进入教师工作空间 <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
             </div>
           </div>
         </div>
         <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
-          <span class="text-xs text-zinc-400 font-mono">bin0sky.tech/labs</span>
+          <span class="text-xs text-zinc-400 font-mono">labs/teacher_workspace.html</span>
           <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-all group-hover:scale-105 shadow-md shadow-emerald-600/20">
-            <span>进入实验沙盒</span>
+            <span>打开工作台</span>
             <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
           </span>
         </div>
@@ -946,6 +963,10 @@
           <span class="font-bold text-zinc-900 dark:text-white">破位基金本质透视看板</span>
           <span class="kbd">7</span>
         </a>
+        <a href="javascript:void(0)" onclick="loadStage('teacher'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-emerald-500/10" data-label="教师 工作台 日语 教学 高考 08 Labs">
+          <span class="font-bold text-zinc-900 dark:text-white">教师工作台 · 高中日语教学空间</span>
+          <span class="kbd">8</span>
+        </a>
       </div>
     </div>
   </div>
@@ -957,6 +978,7 @@
       'apps': { title: '应用矩阵总览', category: 'APPS', src: null, hash: '#/apps' },
       'notes': { title: '深度研报总览', category: 'NOTES', src: null, hash: '#/notes' },
       'labs': { title: '前沿实验总览', category: 'LABS', src: null, hash: '#/labs' },
+      'teacher': { title: '教师工作台', category: 'LABS', src: '/labs/teacher_workspace.html', hash: '#/teacher' },
       'icon': { title: 'ArchIcons', category: 'APPS', src: 'https://icon.bin0sky.tech', hash: '#/icon' },
       'ppt': { title: 'SlideCraft', category: 'APPS', src: 'https://ppt.bin0sky.tech', hash: '#/ppt' },
       'console': { title: 'AIConsole', category: 'APPS', src: 'https://console.bin0sky.tech', hash: '#/console' },
@@ -1039,7 +1061,7 @@
       iframe.removeAttribute('data-key');
 
       // Clear nav active highlights
-      const navKeys = ['icon', 'ppt', 'console', 'ambient', 'population', 'fund-cycle', 'fund-breakdown', 'labs'];
+      const navKeys = ['icon', 'ppt', 'console', 'ambient', 'population', 'fund-cycle', 'fund-breakdown', 'teacher', 'labs'];
       navKeys.forEach(k => {
         const btn = document.getElementById('nav-item-' + k);
         if (btn) btn.classList.remove('bg-black/[0.06]', 'dark:bg-white/[0.08]');
@@ -1065,7 +1087,7 @@
       document.getElementById('stageTitleBreadcrumb').textContent = stage.title;
 
       // Update sidebar active highlights
-      const navKeys = ['icon', 'ppt', 'console', 'ambient', 'population', 'fund-cycle', 'fund-breakdown', 'labs'];
+      const navKeys = ['icon', 'ppt', 'console', 'ambient', 'population', 'fund-cycle', 'fund-breakdown', 'teacher', 'labs'];
       navKeys.forEach(k => {
         const btn = document.getElementById('nav-item-' + k);
         if (btn) {
@@ -1247,6 +1269,7 @@
       if (e.key === '5') loadStage('population');
       if (e.key === '6') loadStage('fund-cycle');
       if (e.key === '7') loadStage('fund-breakdown');
+      if (e.key === '8') loadStage('teacher');
     });
 
     function handleRoute() {
@@ -1261,6 +1284,7 @@
       else if (h.includes('ambient') || p.endsWith('/ambient')) loadStage('ambient', false);
       else if (h.includes('fund-cycle') || h.includes('cycle') || p.includes('cycle') || p.includes('%e5%85%ac%e5%8b%9f')) loadStage('fund-cycle', false);
       else if (h.includes('fund-breakdown') || h.includes('breakdown') || p.includes('breakdown') || p.includes('%e7%a0%b4%e4%bd%8d')) loadStage('fund-breakdown', false);
+      else if (h.includes('teacher') || p.includes('teacher') || p.includes('%e6%95%99%e5%b8%88')) loadStage('teacher', false);
       else if (h.includes('population') || h.includes('popul') || p.includes('popul')) loadStage('population', false);
       else loadStage('overview', false);
     }

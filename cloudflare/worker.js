@@ -23,6 +23,8 @@ export default {
       '/apps': '#/apps',
       '/notes': '#/notes',
       '/labs': '#/labs',
+      '/teacher': '#/teacher',
+      '/labs/teacher_workspace.html': '#/teacher',
       '/population': '#/population',
       '/fund-cycle': '#/fund-cycle',
       '/fund-breakdown': '#/fund-breakdown',
