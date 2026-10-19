@@ -178,6 +178,38 @@
     body.is-resizing iframe {
       pointer-events: none !important;
     }
+    /* Hairline Divider & Accordion Drawers (Apple / Linear Spec) */
+    .sidebar-hairline {
+      height: 1px;
+      margin: 8px 4px;
+      background: rgba(0, 0, 0, 0.06);
+    }
+    .dark .sidebar-hairline {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .drawer-content {
+      display: grid;
+      grid-template-rows: 1fr;
+      transition: grid-template-rows 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+    }
+    .drawer-group.is-folded .drawer-content {
+      grid-template-rows: 0fr;
+      opacity: 0;
+    }
+    .drawer-inner {
+      overflow: hidden;
+    }
+    .drawer-chevron {
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .drawer-group.is-folded .drawer-chevron {
+      transform: rotate(-90deg);
+    }
+    /* In collapsed 58px sidebar, keep icons accessible */
+    #appSidebar:not(.expanded) .drawer-content {
+      grid-template-rows: 1fr !important;
+      opacity: 1 !important;
+    }
   </style>
 </head>
 <body class="h-screen w-screen flex flex-col select-none">
@@ -260,89 +292,145 @@
     <!-- ==================== LEFT SIDEBAR (区域 4 ~ 11: Hover to Expand) ==================== -->
     <aside id="appSidebar" class="h-full z-30 border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#070709]/95 backdrop-blur-2xl flex flex-col justify-between p-2 flex-shrink-0 overflow-y-auto overflow-x-hidden">
       
-      <div class="space-y-4 pt-1">
-        <!-- 工具 (ArchIcons, SlideCraft, Ambient 4K, AIConsole) -->
-        <div>
-          <button onclick="loadCategoryHub('apps')" class="expanded-content w-full px-2 py-1 mb-1 flex items-center text-xs font-semibold tracking-wider text-zinc-400 hover:text-sky-400 dark:hover:text-sky-300 transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 APPS 应用总览">
-            <span class="flex items-center gap-1.5">
-              <span>APPS</span>
-              <span class="text-[10px] font-normal text-zinc-500">应用</span>
-            </span>
-          </button>
-          <nav class="space-y-1">
-            <button onclick="loadStage('icon')" id="nav-item-icon" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
-              <span class="icon-slot rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
-                <i data-lucide="network" class="w-3.5 h-3.5"></i>
-              </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-sky-400">ArchIcons</span>
-            </button>
-
-            <button onclick="loadStage('ppt')" id="nav-item-ppt" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
-              <span class="icon-slot rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
-                <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
-              </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">SlideCraft</span>
-            </button>
-
-            <button onclick="loadStage('console')" id="nav-item-console" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
-              <span class="icon-slot rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
-                <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
-              </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-400">AIConsole</span>
-            </button>
-
-            <button onclick="loadStage('ambient')" id="nav-item-ambient" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
-              <span class="icon-slot rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-              </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-purple-400">Ambient 4K</span>
-            </button>
-          </nav>
-        </div>
-
-        <!-- 笔记 (人口结构变迁、公募周期、破位透视) -->
-        <div>
-          <button onclick="loadCategoryHub('notes')" class="expanded-content w-full px-2 py-1 mb-1 flex items-center text-xs font-semibold tracking-wider text-zinc-400 hover:text-rose-400 dark:hover:text-rose-300 transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 NOTES 研报总览">
-            <span class="flex items-center gap-1.5">
-              <span>NOTES</span>
-              <span class="text-[10px] font-normal text-zinc-500">研报</span>
-            </span>
-          </button>
-          <nav class="space-y-1">
-            <button onclick="loadStage('population')" id="nav-item-population" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-rose-500/10 transition-colors text-left group">
-              <span class="icon-slot rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
-                <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
-              </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-rose-400">人口结构变迁</span>
-            </button>
-
-            <button onclick="loadStage('fund-cycle')" id="nav-item-fund-cycle" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-blue-500/10 transition-colors text-left group">
-              <span class="icon-slot rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
-                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
-              </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-blue-400">公募与产业周期</span>
-            </button>
-
-            <button onclick="loadStage('fund-breakdown')" id="nav-item-fund-breakdown" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-amber-500/10 transition-colors text-left group">
-              <span class="icon-slot rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
-                <i data-lucide="activity" class="w-3.5 h-3.5"></i>
-              </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">破位基金透视</span>
-            </button>
-          </nav>
-        </div>
-
-        <!-- 区域 9 & 10: 实验室 -->
-        <div>
-          <div class="expanded-content px-2 mb-1 flex items-center justify-between text-[10px] font-mono font-bold text-zinc-400">
-            <span>LABS</span>
-            
+      <div class="space-y-1.5 pt-1">
+        <!-- ==================== APPS 抽屉 ==================== -->
+        <div class="drawer-group" id="drawer-group-apps" data-drawer="apps">
+          <div class="expanded-content w-full px-2 py-1 mb-1 flex items-center justify-between text-xs font-semibold tracking-wider text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-all rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] cursor-pointer group select-none" onclick="toggleSidebarDrawer('apps')">
+            <div class="flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+              <span class="font-mono text-[11px] font-bold text-zinc-700 dark:text-zinc-200">APPS</span>
+              <span class="text-[10px] font-normal text-zinc-400">应用</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-400 font-normal">4</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button onclick="event.stopPropagation(); loadCategoryHub('apps')" class="p-1 rounded hover:bg-black/[0.06] dark:hover:bg-white/[0.08] text-zinc-400 hover:text-sky-400 transition-colors" title="进入 APPS 总览看板">
+                <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+              </button>
+              <i data-lucide="chevron-down" class="drawer-chevron w-3.5 h-3.5 text-zinc-400"></i>
+            </div>
           </div>
-          <div class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-mono text-zinc-400 opacity-60">
-            <span class="icon-slot rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0">
-              <i data-lucide="flask-conical" class="w-3.5 h-3.5"></i>
-            </span>
-            <span class="expanded-content text-[11px]">WebGPU 实验孵化中</span>
+          <div class="drawer-content" id="drawer-content-apps">
+            <div class="drawer-inner">
+              <nav class="space-y-1">
+                <button onclick="loadStage('icon')" id="nav-item-icon" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
+                  <span class="icon-slot rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="network" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-sky-400">ArchIcons</span>
+                </button>
+
+                <button onclick="loadStage('ppt')" id="nav-item-ppt" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
+                  <span class="icon-slot rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">SlideCraft</span>
+                </button>
+
+                <button onclick="loadStage('console')" id="nav-item-console" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
+                  <span class="icon-slot rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-400">AIConsole</span>
+                </button>
+
+                <button onclick="loadStage('ambient')" id="nav-item-ambient" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
+                  <span class="icon-slot rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-purple-400">Ambient 4K</span>
+                </button>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- 细线分割 (Hairline Divider 1) -->
+        <div class="sidebar-hairline"></div>
+
+        <!-- ==================== NOTES 抽屉 ==================== -->
+        <div class="drawer-group" id="drawer-group-notes" data-drawer="notes">
+          <div class="expanded-content w-full px-2 py-1 mb-1 flex items-center justify-between text-xs font-semibold tracking-wider text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-all rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] cursor-pointer group select-none" onclick="toggleSidebarDrawer('notes')">
+            <div class="flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+              <span class="font-mono text-[11px] font-bold text-zinc-700 dark:text-zinc-200">NOTES</span>
+              <span class="text-[10px] font-normal text-zinc-400">研报</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-400 font-normal">3</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button onclick="event.stopPropagation(); loadCategoryHub('notes')" class="p-1 rounded hover:bg-black/[0.06] dark:hover:bg-white/[0.08] text-zinc-400 hover:text-rose-400 transition-colors" title="进入 NOTES 总览看板">
+                <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+              </button>
+              <i data-lucide="chevron-down" class="drawer-chevron w-3.5 h-3.5 text-zinc-400"></i>
+            </div>
+          </div>
+          <div class="drawer-content" id="drawer-content-notes">
+            <div class="drawer-inner">
+              <nav class="space-y-1">
+                <button onclick="loadStage('population')" id="nav-item-population" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-rose-500/10 transition-colors text-left group">
+                  <span class="icon-slot rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-rose-400">人口结构变迁</span>
+                </button>
+
+                <button onclick="loadStage('fund-cycle')" id="nav-item-fund-cycle" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-blue-500/10 transition-colors text-left group">
+                  <span class="icon-slot rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-blue-400">公募与产业周期</span>
+                </button>
+
+                <button onclick="loadStage('fund-breakdown')" id="nav-item-fund-breakdown" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-amber-500/10 transition-colors text-left group">
+                  <span class="icon-slot rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">破位基金透视</span>
+                </button>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- 细线分割 (Hairline Divider 2) -->
+        <div class="sidebar-hairline"></div>
+
+        <!-- ==================== LABS 抽屉 ==================== -->
+        <div class="drawer-group" id="drawer-group-labs" data-drawer="labs">
+          <div class="expanded-content w-full px-2 py-1 mb-1 flex items-center justify-between text-xs font-semibold tracking-wider text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-all rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] cursor-pointer group select-none" onclick="toggleSidebarDrawer('labs')">
+            <div class="flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              <span class="font-mono text-[11px] font-bold text-zinc-700 dark:text-zinc-200">LABS</span>
+              <span class="text-[10px] font-normal text-zinc-400">实验室</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-zinc-400 font-normal">2</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button onclick="event.stopPropagation(); loadCategoryHub('labs')" class="p-1 rounded hover:bg-black/[0.06] dark:hover:bg-white/[0.08] text-zinc-400 hover:text-emerald-400 transition-colors" title="进入 LABS 总览看板">
+                <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+              </button>
+              <i data-lucide="chevron-down" class="drawer-chevron w-3.5 h-3.5 text-zinc-400"></i>
+            </div>
+          </div>
+          <div class="drawer-content" id="drawer-content-labs">
+            <div class="drawer-inner">
+              <nav class="space-y-1">
+                <button onclick="loadStage('teacher')" id="nav-item-teacher" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-emerald-500/10 transition-colors text-left group">
+                  <span class="icon-slot rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-400 flex items-center justify-between">
+                    <span>教师工作台</span>
+                    <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">🇯🇵 日语</span>
+                  </span>
+                </button>
+
+                <div class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-mono text-zinc-400 opacity-60">
+                  <span class="icon-slot rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="flask-conical" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <span class="expanded-content text-[11px]">WebGPU 实验孵化中</span>
+                </div>
+              </nav>
+            </div>
           </div>
         </div>
       </div>
@@ -910,10 +998,15 @@
         </div>
         <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
           <span class="text-xs text-zinc-400 font-mono">labs/teacher_workspace.html</span>
-          <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-all group-hover:scale-105 shadow-md shadow-emerald-600/20">
-            <span>打开工作台</span>
-            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-          </span>
+          <div class="flex items-center gap-2">
+            <a href="/labs/teacher_workspace.html" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="p-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-400 hover:text-emerald-400 transition-colors" title="新标签页独立全屏打开 (方便添加书签)">
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            </a>
+            <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-all group-hover:scale-105 shadow-md shadow-emerald-600/20">
+              <span>打开工作台</span>
+              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+            </span>
+          </div>
         </div>
       </a>
         </section>
@@ -1034,11 +1127,11 @@
         titleBread.textContent = '深度研报总览';
         if (updateHash && location.hash !== '#/notes') history.pushState(null, '', '#/notes');
       } else if (category === 'labs') {
-        badge.textContent = '🧪 前沿实验与技术沙盒';
-        title.textContent = 'WebGPU 着色器与端侧计算';
-        subtitle.textContent = '下一代图形学与实时计算着色器试验场 • 探索浏览器内物理仿真与端侧模型交互。';
+        badge.textContent = '🧪 创新实验室与专属空间';
+        title.textContent = '前沿实验与高中日语教学空间';
+        subtitle.textContent = '面向前沿实验与专用效率系统的创新试验场 • 包含教师工作台与 WebGPU 端侧计算沙盒。';
         catBadge.textContent = 'LABS';
-        titleBread.textContent = '前沿实验总览';
+        titleBread.textContent = '创新实验总览';
         if (updateHash && location.hash !== '#/labs') history.pushState(null, '', '#/labs');
       } else {
         badge.textContent = 'bin0sky 统一工作台架构已激活';
@@ -1292,8 +1385,26 @@
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('popstate', handleRoute);
 
+    function toggleSidebarDrawer(cat) {
+      const group = document.getElementById('drawer-group-' + cat);
+      if (!group) return;
+      const isFolded = group.classList.toggle('is-folded');
+      localStorage.setItem('b0_drawer_' + cat + '_folded', isFolded ? '1' : '0');
+    }
+
+    function initSidebarDrawers() {
+      ['apps', 'notes', 'labs'].forEach(cat => {
+        const isFolded = localStorage.getItem('b0_drawer_' + cat + '_folded') === '1';
+        const group = document.getElementById('drawer-group-' + cat);
+        if (group && isFolded) {
+          group.classList.add('is-folded');
+        }
+      });
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
+      initSidebarDrawers();
       const sb = document.getElementById('appSidebar');
       const isExpanded = localStorage.getItem('b0_sidebar_expanded') === 'true';
       if (isExpanded) {
