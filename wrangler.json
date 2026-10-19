@@ -7,5 +7,11 @@
   },
   "assets": {
     "directory": "./public"
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "TEACHER_KV",
+      "id": "4e056b115bba403cb2366494ac715371"
+    }
+  ]
 }
