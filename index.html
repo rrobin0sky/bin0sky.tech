@@ -335,19 +335,26 @@
     </div>
 
     <!-- 区域 2: Xcode 交互式 Jump Bar -->
-    <div id="topBreadcrumb" class="hidden sm:flex items-center gap-1.5 text-xs font-medium tracking-tight text-zinc-400">
-      <button onclick="loadStage('overview')" class="px-2 py-1 rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-600 dark:text-zinc-300 transition-colors flex items-center gap-1 cursor-pointer">
-        <i data-lucide="layout-grid" class="w-3 h-3 text-zinc-400"></i>
-        <span>bin0sky.tech</span>
+    <div id="topBreadcrumb" class="hidden sm:flex items-center gap-1 text-xs font-medium tracking-tight text-zinc-400">
+      <!-- 1. 主页 (可点击) -->
+      <button onclick="loadStage('overview')" class="px-2 py-1 rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors flex items-center gap-1 cursor-pointer" title="返回工作台主页 (⌘H)">
+        <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-zinc-400"></i>
+        <span data-i18n="breadcrumb.home">主页</span>
       </button>
-      <span class="text-zinc-300 dark:text-zinc-700 select-none">/</span>
+
+      <!-- 分隔符 1 -->
+      <span id="breadSep1" class="text-zinc-300 dark:text-zinc-700 select-none hidden">/</span>
       
-      <!-- Category Jump Popover -->
-      <div class="relative">
-        <button onclick="toggleJumpMenu('cat')" id="jumpBarCategoryBtn" class="px-2 py-1 rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-600 dark:text-zinc-300 font-semibold uppercase tracking-wider text-[11px] transition-colors flex items-center gap-1 cursor-pointer">
-          <span id="stageCategoryBadge">OVERVIEW</span>
-          <i data-lucide="chevron-down" class="w-2.5 h-2.5 opacity-50"></i>
-        </button>
+      <!-- 2. 分类 (可点击进入分类总览，也可展开切换分类) -->
+      <div class="relative hidden" id="breadCatContainer">
+        <div class="inline-flex items-center rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors">
+          <button onclick="handleCategoryBreadcrumbClick(event)" id="breadCatDirectBtn" class="px-1.5 py-1 text-zinc-600 dark:text-zinc-300 hover:text-sky-500 dark:hover:text-sky-400 font-semibold uppercase tracking-wider text-[11px] cursor-pointer" title="点击进入此分类总览">
+            <span id="stageCategoryBadge">APPS</span>
+          </button>
+          <button onclick="toggleJumpMenu('cat')" class="px-1 py-1 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 cursor-pointer" title="切换其他分类">
+            <i data-lucide="chevron-down" class="w-2.5 h-2.5 opacity-60"></i>
+          </button>
+        </div>
         <div id="jumpMenuCat" class="hidden absolute left-0 mt-1.5 w-40 rounded-xl border border-black/[0.08] dark:border-white/[0.1] bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl shadow-2xl py-1 z-50 text-xs font-medium">
           <button onclick="loadCategoryHub('all'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
             <span>全部 (ALL)</span>
@@ -368,12 +375,13 @@
         </div>
       </div>
 
-      <span class="text-zinc-300 dark:text-zinc-700 select-none">/</span>
+      <!-- 分隔符 2 -->
+      <span id="breadSep2" class="text-zinc-300 dark:text-zinc-700 select-none hidden">/</span>
       
-      <!-- Stage Jump Popover -->
-      <div class="relative">
-        <button onclick="toggleJumpMenu('stage')" id="jumpBarStageBtn" class="px-2 py-1 rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-900 dark:text-white font-semibold transition-colors flex items-center gap-1 cursor-pointer">
-          <span id="stageTitleBreadcrumb">工作台全景</span>
+      <!-- 3. 具体项目 (当前激活项目) -->
+      <div class="relative hidden" id="breadStageContainer">
+        <button onclick="toggleJumpMenu('stage')" id="jumpBarStageBtn" class="px-2 py-1 rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-900 dark:text-white font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="切换到其他项目">
+          <span id="stageTitleBreadcrumb">ArchIcons</span>
           <i data-lucide="chevron-down" class="w-2.5 h-2.5 opacity-50"></i>
         </button>
         <div id="jumpMenuStage" class="hidden absolute left-0 mt-1.5 w-52 rounded-xl border border-black/[0.08] dark:border-white/[0.1] bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl shadow-2xl py-1 z-50 text-xs font-medium max-h-72 overflow-y-auto">
@@ -892,6 +900,7 @@
 
     const I18N = {
       'zh-CN': {
+        'breadcrumb.home': '主页',
         'badge.overview': 'bin0sky 统一工作台架构已激活',
         'hero.title': 'Tools for Focus. Notes for Depth.',
         'hero.subtitle': '原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。',
@@ -929,6 +938,7 @@
         'shortcut.apps': '快速直达对应项 01 ~ 08',
       },
       'en': {
+        'breadcrumb.home': 'Home',
         'badge.overview': 'Unified Workstation Architecture Active',
         'hero.title': 'Tools for Focus. Notes for Depth.',
         'hero.subtitle': 'Native minimalist tool matrix and interactive data models. Left sidebar navigation, direct stage interaction.',
@@ -966,6 +976,7 @@
         'shortcut.apps': 'Jump to Apps & Reports 01 ~ 08',
       },
       'zh-TW': {
+        'breadcrumb.home': '主頁',
         'badge.overview': 'bin0sky 統一工作台架構已啟動',
         'hero.title': 'Tools for Focus. Notes for Depth.',
         'hero.subtitle': '原生極簡工具矩陣與交互數據模型。左側常駐導航，視窗直接交互。',
@@ -1003,6 +1014,7 @@
         'shortcut.apps': '快速直達對應項 01 ~ 08',
       },
       'ja': {
+        'breadcrumb.home': 'ホーム',
         'badge.overview': 'bin0sky 統合ワークステーションが起動しました',
         'hero.title': 'Tools for Focus. Notes for Depth.',
         'hero.subtitle': 'ネイティブなミニマルツール群とインタラクティブなデータモデル。',
@@ -1114,6 +1126,7 @@
     }
 
     function filterOverview(category, updateHash = true) {
+      updateBreadcrumb(category, null);
       currentCategoryFilter = category;
       playHaptic('click');
 
@@ -1202,9 +1215,7 @@
       const progressBar = document.getElementById('stageProgressBar');
       const loadingOverlay = document.getElementById('stageLoadingOverlay');
       
-      // Update Jump Bar
-      document.getElementById('stageCategoryBadge').textContent = stage.category;
-      document.getElementById('stageTitleBreadcrumb').textContent = stage.title;
+      updateBreadcrumb(stage.category, key);
 
       // Update sidebar active state
       document.querySelectorAll('.sidebar-nav-item').forEach(btn => {
@@ -1301,6 +1312,53 @@
     }
 
     // Jump Bar Menus
+    
+    function updateBreadcrumb(category, stageKey) {
+      const sep1 = document.getElementById('breadSep1');
+      const catContainer = document.getElementById('breadCatContainer');
+      const catBadge = document.getElementById('stageCategoryBadge');
+      const sep2 = document.getElementById('breadSep2');
+      const stageContainer = document.getElementById('breadStageContainer');
+      const stageTitle = document.getElementById('stageTitleBreadcrumb');
+
+      if (!stageKey || stageKey === 'overview') {
+        if (!category || category === 'all') {
+          // Level 1: 主页
+          sep1.classList.add('hidden');
+          catContainer.classList.add('hidden');
+          sep2.classList.add('hidden');
+          stageContainer.classList.add('hidden');
+        } else {
+          // Level 2: 主页 / APPS
+          sep1.classList.remove('hidden');
+          catContainer.classList.remove('hidden');
+          catBadge.textContent = category.toUpperCase();
+          sep2.classList.add('hidden');
+          stageContainer.classList.add('hidden');
+        }
+      } else {
+        // Level 3: 主页 / APPS / ArchIcons
+        const stage = STAGES[stageKey];
+        const cat = (stage ? stage.category : category || 'apps').toUpperCase();
+        sep1.classList.remove('hidden');
+        catContainer.classList.remove('hidden');
+        catBadge.textContent = cat;
+        sep2.classList.remove('hidden');
+        stageContainer.classList.remove('hidden');
+        stageTitle.textContent = stage ? stage.title : stageKey;
+      }
+    }
+
+    function handleCategoryBreadcrumbClick(e) {
+      e.stopPropagation();
+      const cat = document.getElementById('stageCategoryBadge').textContent.toLowerCase();
+      if (cat && cat !== 'overview' && cat !== 'all') {
+        loadCategoryHub(cat);
+      } else {
+        toggleJumpMenu('cat');
+      }
+    }
+
     function toggleJumpMenu(type) {
       playHaptic('click');
       const catMenu = document.getElementById('jumpMenuCat');
