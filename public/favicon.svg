@@ -1,9 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <!-- Obsidian Canvas -->
-  <rect width="64" height="64" rx="16" fill="#09090b"/>
-  <rect x="1" y="1" width="62" height="62" rx="15" stroke="#ffffff" stroke-opacity="0.14" stroke-width="1.5"/>
+  <style>
+    .canvas { fill: #090a0d; stroke: #ffffff; stroke-opacity: 0.14; }
+    .peak { stroke: #ffffff; }
+    @media (prefers-color-scheme: light) {
+      .canvas { fill: #ffffff; stroke: #000000; stroke-opacity: 0.12; }
+      .peak { stroke: #090a0d; }
+    }
+  </style>
+  <!-- Obsidian Canvas with Apple Rounded Squircle -->
+  <rect class="canvas" x="1" y="1" width="62" height="62" rx="15" stroke-width="1.5"/>
   <!-- Mountain horizon (Life) with digital pulse (Tech) -->
-  <path d="M10 44L22 26L34 38L45 20L54 44" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path class="peak" d="M10 44L22 26L34 38L45 20L54 44" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
   <!-- Ambient Pulse Dots -->
   <circle cx="45" cy="20" r="4.5" fill="#f43f5e"/>
   <circle cx="22" cy="26" r="3.5" fill="#38bdf8"/>

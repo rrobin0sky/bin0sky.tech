@@ -6,12 +6,16 @@
   <title>bin0sky — Digital Studio & Workstation</title>
   <meta name="description" content="Personal Digital Workstation & Engineering Studio by bin0sky.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <meta name="theme-color" content="#000000">
+  <link rel="apple-touch-icon" href="favicon.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="bin0sky">
+  <meta name="theme-color" content="#090a0d">
 
-  <!-- Typography -->
+  <!-- Typography: Apple SF Pro System Fonts with JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -21,8 +25,8 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"SF Pro Display"', '"PingFang SC"', '"Hiragino Sans GB"', '"Microsoft YaHei"', 'system-ui', 'sans-serif'],
+            mono: ['"SF Mono"', '"JetBrains Mono"', 'Menlo', 'Monaco', 'monospace'],
           }
         }
       }
@@ -34,42 +38,58 @@
 
   <style>
     :root {
-      --bg: #ffffff;
-      --fg: #09090b;
-      --sidebar-bg: rgba(248, 250, 252, 0.95);
+      --bg: #f8fafc;
+      --fg: #0f172a;
+      --sidebar-bg: rgba(255, 255, 255, 0.88);
       --border: rgba(0, 0, 0, 0.08);
-      --card-bg: #f8f9fa;
-      --card-hover: rgba(0, 0, 0, 0.2);
+      --card-bg: #ffffff;
+      --card-hover: rgba(0, 0, 0, 0.16);
+      --accent: #0284c7;
+      --accent-subtle: rgba(2, 132, 199, 0.1);
     }
     .dark {
-      --bg: #000000;
-      --fg: #f4f4f5;
-      --sidebar-bg: rgba(10, 10, 12, 0.95);
-      --border: rgba(255, 255, 255, 0.08);
-      --card-bg: #09090b;
-      --card-hover: rgba(255, 255, 255, 0.22);
+      --bg: #090a0d; /* Level 0: Pure Pro Graphite */
+      --fg: #f1f5f9;
+      --sidebar-bg: rgba(14, 16, 21, 0.88); /* Level 1: Translucent Vibrant Sidebar */
+      --border: rgba(255, 255, 255, 0.08); /* 0.5px Retina Hairline */
+      --card-bg: #13161c; /* Level 2: Surface */
+      --card-hover: rgba(255, 255, 255, 0.18);
+      --accent: #38bdf8;
+      --accent-subtle: rgba(56, 189, 248, 0.12);
     }
     body {
       background: var(--bg);
       color: var(--fg);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
       overflow: hidden;
     }
-    /* Bento Cards */
+    .num-tabular {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1;
+    }
+    /* Bento Cards with 0.5px Retina Bevel */
     .bento-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
+      box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.04);
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .bento-card:hover {
       border-color: var(--card-hover);
       transform: translateY(-2px);
-      box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.12);
+    }
+    .dark .bento-card {
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.04), 0 4px 20px -2px rgba(0, 0, 0, 0.4);
     }
     .dark .bento-card:hover {
-      box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.9);
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 20px 45px -12px rgba(0, 0, 0, 0.85);
     }
-    /* Pixel-Perfect Fixed Baseline Sidebar Alignment */
+    /* Pixel-Perfect Fixed Baseline Sidebar */
     #appSidebar {
       width: 58px;
       transition: width 0.24s cubic-bezier(0.16, 1, 0.3, 1);
@@ -78,7 +98,6 @@
     #appSidebar.expanded {
       width: 240px;
     }
-    /* Fixed 28px Icon Slot Alignment for zero-jitter */
     .icon-slot {
       width: 32px;
       height: 32px;
@@ -98,6 +117,58 @@
       opacity: 1;
       pointer-events: auto;
     }
+        /* Collapsed Sidebar Instant HUD Tooltip (Ghostty / Xcode Standard) */
+    #appSidebar:not(.expanded) .sidebar-nav-item:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 54px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(18, 20, 26, 0.95);
+      color: #f4f4f5;
+      border: 0.5px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 4px 9px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 999;
+      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+    }
+    :root:not(.dark) #appSidebar:not(.expanded) .sidebar-nav-item:hover::after {
+      background: rgba(255, 255, 255, 0.96);
+      color: #09090b;
+      border: 0.5px solid rgba(0, 0, 0, 0.12);
+      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.15);
+    }
+    /* Sidebar Active Nav Item Indicator */
+    .sidebar-nav-item {
+      position: relative;
+      border-radius: 10px;
+      transition: all 0.15s ease;
+    }
+    .sidebar-nav-item.active {
+      background: rgba(0, 0, 0, 0.06);
+      color: var(--fg);
+      font-weight: 600;
+    }
+    .dark .sidebar-nav-item.active {
+      background: rgba(255, 255, 255, 0.09);
+      color: #ffffff;
+    }
+    .sidebar-nav-item.active::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 6px;
+      bottom: 6px;
+      width: 3px;
+      border-radius: 99px;
+      background: var(--accent);
+    }
     /* Keycap badge */
     .kbd {
       font-family: 'JetBrains Mono', monospace;
@@ -106,6 +177,7 @@
       border-radius: 4px;
       border: 1px solid var(--border);
       background: rgba(125, 125, 125, 0.08);
+      font-variant-numeric: tabular-nums;
     }
     /* Animated wave */
     @keyframes wave { 0%, 100% { height: 6px; } 50% { height: 28px; } }
@@ -117,31 +189,61 @@
     .wave-bar:nth-child(6) { animation-delay: 0.35s; }
     .wave-bar:nth-child(7) { animation-delay: 0.5s; }
     .wave-bar:nth-child(8) { animation-delay: 0.1s; }
-      /* Category Filter Pills */
-    .cat-pill {
+    /* macOS Segmented Control */
+    .mac-segmented-control {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      padding: 3px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.05);
       border: 1px solid var(--border);
-      background: var(--card-bg);
-      color: #9ca3af;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      -webkit-user-select: none;
     }
-    .cat-pill:hover {
-      border-color: rgba(255, 255, 255, 0.25);
+    .dark .mac-segmented-control {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .mac-segmented-btn {
+      position: relative;
+      z-index: 2;
+      padding: 5px 14px;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      border-radius: 9px;
+      color: #71717a;
+      transition: color 0.18s ease;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+    .mac-segmented-btn:hover {
       color: var(--fg);
-      transform: translateY(-1px);
     }
-    .cat-pill.active {
-      background: #18181b;
-      color: #ffffff;
-      border-color: #3f3f46;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-    .dark .cat-pill.active {
-      background: #ffffff;
+    .mac-segmented-btn.active {
       color: #09090b;
-      border-color: #ffffff;
-      box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
     }
-      /* Draggable Resizer Handle (可拖拽侧边栏分割线) */
+    .dark .mac-segmented-btn.active {
+      color: #ffffff;
+    }
+    .mac-segmented-thumb {
+      position: absolute;
+      top: 3px;
+      bottom: 3px;
+      border-radius: 9px;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.08);
+      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .dark .mac-segmented-thumb {
+      background: #27272a;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+    /* Draggable Resizer Handle (macOS Pro Splitter - Restrained 1px Line) */
     .resizer-handle {
       width: 10px;
       margin-left: -5px;
@@ -162,13 +264,12 @@
       width: 1px;
       height: 100%;
       background: transparent;
-      transition: background 0.15s ease, width 0.15s ease, box-shadow 0.15s ease;
+      transition: background 0.15s ease;
     }
     .resizer-handle:hover .resizer-line,
     .resizer-handle.resizing .resizer-line {
-      width: 2px;
-      background: #38bdf8; /* Apple/Sky blue glow */
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+      width: 1.5px;
+      background: var(--accent);
     }
     body.is-resizing {
       cursor: col-resize !important;
@@ -178,7 +279,6 @@
     body.is-resizing iframe {
       pointer-events: none !important;
     }
-    /* Clean Restrained Sidebar Hairline Divider */
     .sidebar-hairline {
       height: 1px;
       margin: 8px 4px;
@@ -187,77 +287,147 @@
     .dark .sidebar-hairline {
       background: rgba(255, 255, 255, 0.08);
     }
+    :focus-visible {
+      outline: 2px solid #38bdf8;
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
   </style>
 </head>
-<body class="h-screen w-screen flex flex-col select-none">
 
-  <!-- ==================== TOP NAVIGATION BAR (区域 1, 2, 3) ==================== -->
-  <header class="h-13 border-b border-black/[0.06] dark:border-white/[0.07] bg-white/80 dark:bg-black/80 backdrop-blur-xl px-4 sm:px-4 flex items-center justify-between z-40 flex-shrink-0">
+<body class="h-screen w-screen flex flex-col font-sans antialiased text-zinc-900 dark:text-zinc-100 selection:bg-sky-500/20 selection:text-sky-500 overflow-hidden">
+
+  <!-- ==================== TOP PROGRESS BAR (Safari Style 1.5px) ==================== -->
+  <div id="stageProgressBar" class="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-sky-400 via-indigo-500 to-emerald-400 transition-all duration-300 z-50 opacity-0 pointer-events-none" style="width: 0%;"></div>
+
+  <!-- ==================== TOP NAVIGATION BAR ==================== -->
+  <header class="h-13 border-b border-black/[0.06] dark:border-white/[0.07] bg-white/80 dark:bg-black/80 backdrop-blur-xl px-4 flex items-center justify-between z-40 flex-shrink-0">
     
-    <!-- 区域 1: 3条横杠侧栏切换按钮 + Logo 图片与品牌名 -->
+    <!-- 区域 1: SF sidebar.left 侧栏切换 + Logo -->
     <div class="flex items-center gap-2.5">
-      <!-- 3条横杠侧边栏切换按钮 (大小合适、精简无冗余) -->
-      <button onclick="toggleSidebarState()" id="sidebarToggleBtn" class="w-8 h-8 rounded-xl border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-700 dark:text-zinc-200 transition-all flex items-center justify-center cursor-pointer flex-shrink-0" title="展开 / 收起侧边栏" aria-label="Toggle sidebar">
-        <svg viewBox="0 0 24 24" class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
+      <button onclick="toggleSidebarState()" id="sidebarToggleBtn" class="w-8 h-8 rounded-xl border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-700 dark:text-zinc-200 transition-all flex items-center justify-center cursor-pointer flex-shrink-0" title="切换侧边栏 (⌘0)" aria-label="Toggle sidebar">
+        <!-- SF Symbol: sidebar.left -->
+        <svg viewBox="0 0 24 24" class="w-[17px] h-[17px]" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="4" ry="4"/>
+          <line x1="9" y1="3" x2="9" y2="21"/>
         </svg>
       </button>
 
-      <a href="javascript:void(0)" onclick="loadStage('overview')" class="flex items-center gap-2.5 group cursor-pointer" title="返回 bin0sky 总览">
+      <a href="javascript:void(0)" onclick="loadStage('overview')" class="flex items-center gap-2.5 group cursor-pointer" title="返回工作台全景 (⌘H)">
         <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-zinc-900 to-zinc-950 dark:from-white dark:to-zinc-200 p-1 flex items-center justify-center shadow-xs transition-transform group-hover:scale-105 active:scale-95">
-          <!-- Clean Tech & Life Nature SVG Logo -->
           <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2">
-            <!-- Mountain horizon (Life) with digital pulse (Tech) -->
             <path d="M3 17L8 10L13 15L17 8L21 17" class="stroke-zinc-100 dark:stroke-zinc-900" stroke-linecap="round" stroke-linejoin="round"/>
             <circle cx="17" cy="8" r="1.8" class="fill-rose-500 stroke-none"/>
             <circle cx="8" cy="10" r="1.4" class="fill-sky-400 stroke-none"/>
           </svg>
         </div>
-        <span class="font-extrabold text-base tracking-tight text-zinc-900 dark:text-white pl-0.5">Bin</span>
+        <div class="flex flex-col">
+          <span class="font-bold text-sm tracking-tight text-zinc-900 dark:text-white leading-none">bin0sky</span>
+          <span class="text-[9px] font-mono text-zinc-400 dark:text-zinc-500 leading-tight">STUDIO</span>
+        </div>
       </a>
     </div>
 
-    <!-- 区域 2: 动态上下文面包屑 (字体统一，精简无杂质) -->
-    <div id="topBreadcrumb" class="hidden sm:flex items-center gap-2 text-xs font-medium tracking-tight text-zinc-400">
-      <span class="hover:text-zinc-900 dark:hover:text-white cursor-pointer transition-colors" onclick="loadStage('overview')">bin0sky.tech</span>
+    <!-- 区域 2: Xcode 交互式 Jump Bar -->
+    <div id="topBreadcrumb" class="hidden sm:flex items-center gap-1.5 text-xs font-medium tracking-tight text-zinc-400">
+      <button onclick="loadStage('overview')" class="px-2 py-1 rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-600 dark:text-zinc-300 transition-colors flex items-center gap-1 cursor-pointer">
+        <i data-lucide="layout-grid" class="w-3 h-3 text-zinc-400"></i>
+        <span>bin0sky.tech</span>
+      </button>
       <span class="text-zinc-300 dark:text-zinc-700 select-none">/</span>
-      <span id="stageCategoryBadge" class="text-zinc-500 dark:text-zinc-400 font-semibold uppercase tracking-wider">OVERVIEW</span>
+      
+      <!-- Category Jump Popover -->
+      <div class="relative">
+        <button onclick="toggleJumpMenu('cat')" id="jumpBarCategoryBtn" class="px-2 py-1 rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-600 dark:text-zinc-300 font-semibold uppercase tracking-wider text-[11px] transition-colors flex items-center gap-1 cursor-pointer">
+          <span id="stageCategoryBadge">OVERVIEW</span>
+          <i data-lucide="chevron-down" class="w-2.5 h-2.5 opacity-50"></i>
+        </button>
+        <div id="jumpMenuCat" class="hidden absolute left-0 mt-1.5 w-40 rounded-xl border border-black/[0.08] dark:border-white/[0.1] bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl shadow-2xl py-1 z-50 text-xs font-medium">
+          <button onclick="loadCategoryHub('all'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
+            <span>全部 (ALL)</span>
+            <span class="text-[10px] font-mono text-zinc-400">8</span>
+          </button>
+          <button onclick="loadCategoryHub('apps'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
+            <span class="text-sky-500 font-medium">APPS 应用</span>
+            <span class="text-[10px] font-mono text-zinc-400">4</span>
+          </button>
+          <button onclick="loadCategoryHub('notes'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
+            <span class="text-rose-500 font-medium">NOTES 研报</span>
+            <span class="text-[10px] font-mono text-zinc-400">3</span>
+          </button>
+          <button onclick="loadCategoryHub('labs'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
+            <span class="text-emerald-500 font-medium">LABS 实验</span>
+            <span class="text-[10px] font-mono text-zinc-400">1</span>
+          </button>
+        </div>
+      </div>
+
       <span class="text-zinc-300 dark:text-zinc-700 select-none">/</span>
-      <span id="stageTitleBreadcrumb" class="text-zinc-900 dark:text-white font-semibold">工作台全景</span>
+      
+      <!-- Stage Jump Popover -->
+      <div class="relative">
+        <button onclick="toggleJumpMenu('stage')" id="jumpBarStageBtn" class="px-2 py-1 rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-900 dark:text-white font-semibold transition-colors flex items-center gap-1 cursor-pointer">
+          <span id="stageTitleBreadcrumb">工作台全景</span>
+          <i data-lucide="chevron-down" class="w-2.5 h-2.5 opacity-50"></i>
+        </button>
+        <div id="jumpMenuStage" class="hidden absolute left-0 mt-1.5 w-52 rounded-xl border border-black/[0.08] dark:border-white/[0.1] bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl shadow-2xl py-1 z-50 text-xs font-medium max-h-72 overflow-y-auto">
+          <!-- Populated by JS -->
+        </div>
+      </div>
     </div>
 
-    <!-- 区域 3: 功能按键 (语音/语言, 深浅模式, 快捷检索) -->
-    <div class="flex items-center gap-2">
+    <!-- 区域 3: 功能按键 -->
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <!-- Status Capsule -->
+      <div id="topActivityCapsule" class="hidden lg:inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] text-[11px] font-mono text-zinc-400 select-none">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span id="topActivityText">Ready • Edge Synced</span>
+      </div>
+
       <!-- ⌘K Quick search trigger -->
-      <button onclick="toggleCommandPalette(true)" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-xs text-zinc-400 transition-all">
+      <button onclick="toggleCommandPalette(true)" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-xs text-zinc-400 transition-all cursor-pointer" title="呼出指令面板 (⌘K)">
         <i data-lucide="search" class="w-3.5 h-3.5"></i>
         <span class="kbd">⌘K</span>
       </button>
 
+      <!-- Micro-haptics sound toggle -->
+      <button onclick="toggleSound()" id="soundToggleBtn" class="p-2 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-zinc-700 dark:text-zinc-200 transition-all cursor-pointer" title="微触感声效开关">
+        <i data-lucide="volume-2" id="soundIcon" class="w-3.5 h-3.5"></i>
+      </button>
+
       <!-- Language dropdown -->
       <div class="relative">
-        <button id="langBtn" onclick="toggleLangMenu()" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-xs font-semibold tracking-tight transition-all">
+        <button id="langBtn" onclick="toggleLangMenu()" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-xs font-semibold tracking-tight transition-all cursor-pointer">
           <span id="currentLangLabel">简</span>
           <i data-lucide="chevron-down" class="w-3 h-3 opacity-40"></i>
         </button>
         <div id="langMenu" class="hidden absolute right-0 mt-1.5 w-28 rounded-xl border border-black/[0.1] dark:border-white/[0.12] bg-white dark:bg-zinc-900 shadow-xl py-1 z-50 text-xs font-medium">
-          <button onclick="setLanguage('zh-CN')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">简体中文</button>
-          <button onclick="setLanguage('en')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">English</button>
-          <button onclick="setLanguage('zh-TW')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">繁體中文</button>
-          <button onclick="setLanguage('ja')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06]">日本語</button>
+          <button onclick="setLanguage('zh-CN')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] cursor-pointer">简体中文</button>
+          <button onclick="setLanguage('en')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] cursor-pointer">English</button>
+          <button onclick="setLanguage('zh-TW')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] cursor-pointer">繁體中文</button>
+          <button onclick="setLanguage('ja')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] cursor-pointer">日本語</button>
         </div>
       </div>
 
       <!-- Theme Switcher -->
-      <button onclick="toggleTheme()" aria-label="Toggle theme" class="p-2 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-zinc-700 dark:text-zinc-200 transition-all">
+      <button onclick="toggleTheme()" aria-label="Toggle theme" class="p-2 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-zinc-700 dark:text-zinc-200 transition-all cursor-pointer" title="切换外观主题 (⌘\)">
         <i data-lucide="moon" class="w-3.5 h-3.5 hidden dark:block"></i>
         <i data-lucide="sun" class="w-3.5 h-3.5 block dark:hidden"></i>
       </button>
 
+      <!-- Keyboard shortcuts helper (?) -->
+      <button onclick="toggleShortcutModal(true)" class="p-2 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-zinc-700 dark:text-zinc-200 transition-all cursor-pointer" title="查看键盘快捷键 (?)">
+        <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+      </button>
+
       <!-- GitHub -->
-      <a href="https://github.com/rrobin0sky" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-zinc-700 dark:text-zinc-200 transition-all">
+      <a href="https://github.com/rrobin0sky" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-zinc-700 dark:text-zinc-200 transition-all" title="GitHub 仓库">
         <i data-lucide="github" class="w-3.5 h-3.5"></i>
       </a>
     </div>
@@ -266,739 +436,444 @@
   <!-- ==================== BODY APP SHELL ==================== -->
   <div class="flex-1 flex overflow-hidden relative">
 
-    <!-- ==================== LEFT SIDEBAR (区域 4 ~ 11: Hover to Expand) ==================== -->
-    <aside id="appSidebar" class="h-full z-30 border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#070709]/95 backdrop-blur-2xl flex flex-col justify-between p-2 flex-shrink-0 overflow-y-auto overflow-x-hidden">
+    <!-- ==================== LEFT SIDEBAR ==================== -->
+    <aside id="appSidebar" class="h-full z-30 border-r border-black/[0.06] dark:border-white/[0.07] bg-white/95 dark:bg-[#090a0d]/95 backdrop-blur-2xl flex flex-col justify-between p-2 flex-shrink-0 overflow-y-auto overflow-x-hidden select-none">
       
       <div class="space-y-1.5 pt-1">
         <!-- ==================== APPS ==================== -->
         <div>
-          <button onclick="loadCategoryHub('apps')" class="expanded-content w-full px-2 py-1 mb-1 flex items-center text-xs font-semibold tracking-wider text-zinc-400 hover:text-sky-400 dark:hover:text-sky-300 transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 APPS 应用总览">
+          <button onclick="loadCategoryHub('apps')" class="expanded-content w-full px-2 py-1 mb-1 flex items-center justify-between text-xs font-semibold tracking-wider text-zinc-400 hover:text-sky-400 dark:hover:text-sky-300 transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 APPS 应用总览">
             <span class="flex items-center gap-1.5">
               <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
               <span class="font-mono text-[11px] font-bold text-zinc-700 dark:text-zinc-200">APPS</span>
-              <span class="text-[10px] font-normal text-zinc-400">应用</span>
+              <span class="text-[10px] font-normal text-zinc-400" data-i18n="nav.apps">应用</span>
             </span>
+            <i data-lucide="chevron-right" class="w-3 h-3 text-zinc-500 opacity-60"></i>
           </button>
           <nav class="space-y-1">
-            <button onclick="loadStage('icon')" id="nav-item-icon" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
+            <button onclick="loadStage('icon')" id="nav-item-icon" data-tooltip="ArchIcons ⌘1" class="sidebar-nav-item w-full flex items-center gap-2.5 p-2 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="ArchIcons (⌘1)">
               <span class="icon-slot rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="network" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-sky-400">ArchIcons</span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-sky-400 flex items-center justify-between">
+                <span>ArchIcons</span>
+                <span class="kbd opacity-0 group-hover:opacity-100 transition-opacity">⌘1</span>
+              </span>
             </button>
 
-            <button onclick="loadStage('ppt')" id="nav-item-ppt" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
+            <button onclick="loadStage('ppt')" id="nav-item-ppt" data-tooltip="SlideCraft ⌘2" class="sidebar-nav-item w-full flex items-center gap-2.5 p-2 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="SlideCraft (⌘2)">
               <span class="icon-slot rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">SlideCraft</span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400 flex items-center justify-between">
+                <span>SlideCraft</span>
+                <span class="kbd opacity-0 group-hover:opacity-100 transition-opacity">⌘2</span>
+              </span>
             </button>
 
-            <button onclick="loadStage('console')" id="nav-item-console" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
+            <button onclick="loadStage('console')" id="nav-item-console" data-tooltip="AIConsole ⌘3" class="sidebar-nav-item w-full flex items-center gap-2.5 p-2 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="AIConsole (⌘3)">
               <span class="icon-slot rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-400">AIConsole</span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-400 flex items-center justify-between">
+                <span>AIConsole</span>
+                <span class="kbd opacity-0 group-hover:opacity-100 transition-opacity">⌘3</span>
+              </span>
             </button>
 
-            <button onclick="loadStage('ambient')" id="nav-item-ambient" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group">
+            <button onclick="loadStage('ambient')" id="nav-item-ambient" data-tooltip="Ambient 4K ⌘4" class="sidebar-nav-item w-full flex items-center gap-2.5 p-2 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="Ambient 4K (⌘4)">
               <span class="icon-slot rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-purple-400">Ambient 4K</span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-purple-400 flex items-center justify-between">
+                <span>Ambient 4K</span>
+                <span class="kbd opacity-0 group-hover:opacity-100 transition-opacity">⌘4</span>
+              </span>
             </button>
           </nav>
         </div>
 
-        <!-- 细线分割 -->
         <div class="sidebar-hairline"></div>
 
         <!-- ==================== NOTES ==================== -->
         <div>
-          <button onclick="loadCategoryHub('notes')" class="expanded-content w-full px-2 py-1 mb-1 flex items-center text-xs font-semibold tracking-wider text-zinc-400 hover:text-rose-400 dark:hover:text-rose-300 transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 NOTES 研报总览">
+          <button onclick="loadCategoryHub('notes')" class="expanded-content w-full px-2 py-1 mb-1 flex items-center justify-between text-xs font-semibold tracking-wider text-zinc-400 hover:text-rose-400 dark:hover:text-rose-300 transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 NOTES 研报总览">
             <span class="flex items-center gap-1.5">
               <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
               <span class="font-mono text-[11px] font-bold text-zinc-700 dark:text-zinc-200">NOTES</span>
-              <span class="text-[10px] font-normal text-zinc-400">研报</span>
+              <span class="text-[10px] font-normal text-zinc-400" data-i18n="nav.notes">研报</span>
             </span>
+            <i data-lucide="chevron-right" class="w-3 h-3 text-zinc-500 opacity-60"></i>
           </button>
           <nav class="space-y-1">
-            <button onclick="loadStage('population')" id="nav-item-population" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-rose-500/10 transition-colors text-left group">
+            <button onclick="loadStage('population')" id="nav-item-population" data-tooltip="人口结构变迁 ⌘5" class="sidebar-nav-item w-full flex items-center gap-2.5 p-2 text-xs font-medium hover:bg-rose-500/10 transition-colors text-left group cursor-pointer" title="全球人口结构变迁 (⌘5)">
               <span class="icon-slot rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-rose-400">人口结构变迁</span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-rose-400 flex items-center justify-between">
+                <span data-i18n="item.population">人口结构变迁</span>
+                <span class="kbd opacity-0 group-hover:opacity-100 transition-opacity">⌘5</span>
+              </span>
             </button>
 
-            <button onclick="loadStage('fund-cycle')" id="nav-item-fund-cycle" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-blue-500/10 transition-colors text-left group">
+            <button onclick="loadStage('fund-cycle')" id="nav-item-fund-cycle" data-tooltip="公募产业周期 ⌘6" class="sidebar-nav-item w-full flex items-center gap-2.5 p-2 text-xs font-medium hover:bg-blue-500/10 transition-colors text-left group cursor-pointer" title="公募基金与产业周期 (⌘6)">
               <span class="icon-slot rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-blue-400">公募与产业周期</span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-blue-400 flex items-center justify-between">
+                <span data-i18n="item.fund_cycle">公募与产业周期</span>
+                <span class="kbd opacity-0 group-hover:opacity-100 transition-opacity">⌘6</span>
+              </span>
             </button>
 
-            <button onclick="loadStage('fund-breakdown')" id="nav-item-fund-breakdown" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-amber-500/10 transition-colors text-left group">
+            <button onclick="loadStage('fund-breakdown')" id="nav-item-fund-breakdown" data-tooltip="破位基金透视 ⌘7" class="sidebar-nav-item w-full flex items-center gap-2.5 p-2 text-xs font-medium hover:bg-amber-500/10 transition-colors text-left group cursor-pointer" title="破位基金本质透视 (⌘7)">
               <span class="icon-slot rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="activity" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">破位基金透视</span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400 flex items-center justify-between">
+                <span data-i18n="item.breakdown">破位基金透视</span>
+                <span class="kbd opacity-0 group-hover:opacity-100 transition-opacity">⌘7</span>
+              </span>
             </button>
           </nav>
         </div>
 
-        <!-- 细线分割 -->
         <div class="sidebar-hairline"></div>
 
         <!-- ==================== LABS ==================== -->
         <div>
-          <button onclick="loadCategoryHub('labs')" class="expanded-content w-full px-2 py-1 mb-1 flex items-center text-xs font-semibold tracking-wider text-zinc-400 hover:text-emerald-400 dark:hover:text-emerald-300 transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 LABS 实验室总览">
+          <button onclick="loadCategoryHub('labs')" class="expanded-content w-full px-2 py-1 mb-1 flex items-center justify-between text-xs font-semibold tracking-wider text-zinc-400 hover:text-emerald-400 dark:hover:text-emerald-300 transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer" title="点击进入 LABS 实验室总览">
             <span class="flex items-center gap-1.5">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
               <span class="font-mono text-[11px] font-bold text-zinc-700 dark:text-zinc-200">LABS</span>
-              <span class="text-[10px] font-normal text-zinc-400">实验室</span>
+              <span class="text-[10px] font-normal text-zinc-400" data-i18n="nav.labs">实验室</span>
             </span>
+            <i data-lucide="chevron-right" class="w-3 h-3 text-zinc-500 opacity-60"></i>
           </button>
           <nav class="space-y-1">
-            <button onclick="loadStage('teacher')" id="nav-item-teacher" class="w-full flex items-center gap-2.5 p-2 rounded-xl text-xs font-medium hover:bg-emerald-500/10 transition-colors text-left group">
+            <button onclick="loadStage('teacher')" id="nav-item-teacher" data-tooltip="教师工作台 ⌘8" class="sidebar-nav-item w-full flex items-center gap-2.5 p-2 text-xs font-medium hover:bg-emerald-500/10 transition-colors text-left group cursor-pointer" title="教师工作台 (⌘8)">
               <span class="icon-slot rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i>
               </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-400">教师工作台</span>
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-400 flex items-center justify-between">
+                <span data-i18n="item.teacher">教师工作台</span>
+                <span class="kbd opacity-0 group-hover:opacity-100 transition-opacity">⌘8</span>
+              </span>
             </button>
           </nav>
         </div>
       </div>
 
-      <!-- 区域 11: 底部常驻信息 (基准线对齐) -->
+      <!-- 底部常驻信息 -->
       <div class="pt-2 border-t border-black/[0.06] dark:border-white/[0.07]">
-        <button onclick="loadStage('overview')" class="w-full flex items-center gap-2.5 p-1 rounded-xl text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors text-left group" title="返回总览看板">
+        <button onclick="loadStage('overview')" class="w-full flex items-center gap-2.5 p-1 rounded-xl text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors text-left group cursor-pointer" title="返回总览看板 (⌘H)">
           <span class="icon-slot rounded-lg">
             <i data-lucide="home" class="w-4 h-4"></i>
           </span>
           <span class="expanded-content flex-1 text-xs font-mono text-zinc-400 flex items-center justify-between">
-            <span>总览看板</span>
-            <a href="https://github.com/rrobin0sky" target="_blank" class="text-[10px] hover:underline" onclick="event.stopPropagation()">关于 ↗</a>
+            <span data-i18n="nav.overview">总览看板</span>
+            <span class="kbd">⌘H</span>
           </span>
         </button>
       </div>
     </aside>
 
-    <!-- 可拖拽分割线 (Draggable Splitter Handle - 蓝色的线) -->
+    <!-- 可拖拽分割线 (macOS Pro Splitter) -->
     <div id="sidebarResizer" class="resizer-handle group" title="左右拖动调整侧栏宽度 (双击恢复默认)">
       <div class="resizer-line"></div>
     </div>
 
-    <!-- ==================== 区域 12: 主交互空间 (MAIN STAGE) ==================== -->
-    <main class="flex-1 h-full overflow-hidden relative flex flex-col bg-zinc-50/50 dark:bg-black">
+    <!-- ==================== MAIN STAGE ==================== -->
+    
+    <!-- ==================== MAIN STAGE ==================== -->
+    <main class="flex-1 h-full overflow-hidden relative flex flex-col bg-zinc-50/50 dark:bg-[#090a0d]">
       
-      <!-- 视图 A: 矩阵总览看板 (默认视图) -->
-      <div id="stageOverview" class="flex-1 h-full overflow-y-auto px-5 sm:px-10 py-8 max-w-6xl w-full mx-auto">
-        <!-- Hero Title -->
-        <section class="text-center max-w-2xl mx-auto mb-6">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.03] text-[11px] font-mono text-zinc-500 dark:text-zinc-400 mb-4">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span id="overviewHeroBadge">bin0sky 统一工作台架构已激活</span>
-          </div>
-          <h1 id="overviewHeroTitle" class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.12]">
-            Tools for Focus. Notes for Depth.
-          </h1>
-          <p id="overviewHeroSubtitle" class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
-            原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。
-          </p>
-        </section>
-
-        <!-- Category Filter Tabs Bar (全部 / APPS / NOTES / LABS) -->
-        <div class="flex items-center justify-center gap-2 mb-8" id="overviewCategoryTabs">
-          <button onclick="filterOverview('all')" data-cat="all" class="cat-pill active px-4 py-1.5 rounded-full text-xs font-semibold tracking-tight transition-all cursor-pointer">全部总览 (8)</button>
-          <button onclick="filterOverview('apps')" data-cat="apps" class="cat-pill px-4 py-1.5 rounded-full text-xs font-semibold tracking-tight transition-all cursor-pointer">APPS 应用 (4)</button>
-          <button onclick="filterOverview('notes')" data-cat="notes" class="cat-pill px-4 py-1.5 rounded-full text-xs font-semibold tracking-tight transition-all cursor-pointer">NOTES 深度研报 (3)</button>
-          <button onclick="filterOverview('labs')" data-cat="labs" class="cat-pill px-4 py-1.5 rounded-full text-xs font-semibold tracking-tight transition-all cursor-pointer">LABS 实验室 (1)</button>
-        </div>
-
-        <!-- 5 Cards Stream -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-<!-- ==================== 01: ArchIcons (bin0sky.tech/icon) ==================== -->
-      <a href="javascript:void(0)" onclick="loadStage('icon')" data-category="apps" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
-        <!-- Top Info -->
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2">
-              <span class="font-mono text-xs font-bold text-zinc-400">01</span>
-              <span class="text-xs font-bold tracking-tight text-zinc-900 dark:text-white">ArchIcons</span>
-            </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-400">112+ 矢量图标</span>
-          </div>
-
-          <div class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-5 font-medium" data-i18n="card.archicons.tag">
-            网络拓扑与云架构 2.5D/2D 矢量设备图标库
-          </div>
-
-          <!-- Visual Canvas: 3 Isometric High-End Devices -->
-          <div class="w-full h-44 rounded-xl border border-black/[0.06] dark:border-white/[0.07] bg-white dark:bg-[#030304] p-4 flex items-center justify-around relative overflow-hidden group-hover:border-black/20 dark:group-hover:border-white/20 transition-all">
-            <!-- Isometric Core Switch -->
-            <div class="flex flex-col items-center gap-1.5 transition-transform duration-300 group-hover:scale-105">
-              <svg viewBox="0 0 100 85" class="w-20 h-16 drop-shadow-md">
-                <defs>
-                  <linearGradient id="sw-top" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#38bdf8"/>
-                    <stop offset="100%" stop-color="#0284c7"/>
-                  </linearGradient>
-                  <linearGradient id="sw-side" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#0369a1"/>
-                    <stop offset="100%" stop-color="#082f49"/>
-                  </linearGradient>
-                </defs>
-                <polygon points="50,10 88,28 50,46 12,28" fill="url(#sw-top)" stroke="#7dd3fc" stroke-width="0.8"/>
-                <polygon points="12,28 50,46 50,70 12,52" fill="url(#sw-side)" stroke="#38bdf8" stroke-width="0.8"/>
-                <polygon points="50,46 88,28 88,52 50,70" fill="#04273d" stroke="#38bdf8" stroke-width="0.8"/>
-                <circle cx="24" cy="38" r="1.5" fill="#4ade80"/>
-                <circle cx="32" cy="42" r="1.5" fill="#4ade80"/>
-                <circle cx="40" cy="46" r="1.5" fill="#38bdf8"/>
-              </svg>
-              <span class="text-[10px] font-mono text-zinc-400">Core Switch</span>
-            </div>
-
-            <!-- Isometric Cloud Node -->
-            <div class="flex flex-col items-center gap-1.5 transition-transform duration-300 group-hover:scale-110">
-              <svg viewBox="0 0 100 85" class="w-20 h-16 drop-shadow-md">
-                <polygon points="50,8 86,26 50,44 14,26" fill="#6366f1" stroke="#a5b4fc" stroke-width="0.8"/>
-                <polygon points="14,26 50,44 50,68 14,50" fill="#4338ca" stroke="#818cf8" stroke-width="0.8"/>
-                <polygon points="50,44 86,26 86,50 50,68" fill="#312e81" stroke="#818cf8" stroke-width="0.8"/>
-                <path d="M42,26 L58,26 M50,18 L50,34" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              <span class="text-[10px] font-mono text-indigo-400">Cloud VPC</span>
-            </div>
-
-            <!-- Isometric Security Firewall -->
-            <div class="flex flex-col items-center gap-1.5 transition-transform duration-300 group-hover:scale-105">
-              <svg viewBox="0 0 100 85" class="w-20 h-16 drop-shadow-md">
-                <polygon points="50,10 88,28 50,46 12,28" fill="#f43f5e" stroke="#fda4af" stroke-width="0.8"/>
-                <polygon points="12,28 50,46 50,70 12,52" fill="#be123c" stroke="#fb7185" stroke-width="0.8"/>
-                <polygon points="50,46 88,28 88,52 50,70" fill="#881337" stroke="#fb7185" stroke-width="0.8"/>
-                <circle cx="50" cy="28" r="4" fill="#ffffff" fill-opacity="0.9"/>
-              </svg>
-              <span class="text-[10px] font-mono text-rose-400">Firewall</span>
-            </div>
-
-            <div class="absolute bottom-2 right-3 font-mono text-[9px] text-zinc-500">SVG • PNG • Draw.io</div>
-          </div>
-        </div>
-
-        <!-- Big Launch Pill -->
-        <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
-          <span class="text-xs text-zinc-400 font-mono">bin0sky.tech/icon</span>
-          <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-zinc-950 dark:bg-white text-white dark:text-black text-xs font-semibold transition-transform group-hover:translate-x-0.5">
-            <span data-i18n="btn.openLibrary">打开图标库</span>
-            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-          </span>
-        </div>
-      </a>
-
-      <!-- ==================== 02: SlideCraft (bin0sky.tech/ppt) ==================== -->
-      <a href="javascript:void(0)" onclick="loadStage('ppt')" data-category="apps" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
-        <!-- Top Info -->
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2">
-              <span class="font-mono text-xs font-bold text-zinc-400">02</span>
-              <span class="text-xs font-bold tracking-tight text-zinc-900 dark:text-white">SlideCraft</span>
-            </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-400">AI 驱动生成</span>
-          </div>
-
-          <div class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-5 font-medium" data-i18n="card.slidecraft.tag">
-            AI 演示文稿工作台 • 技术方案与汇报秒级生成
-          </div>
-
-          <!-- Visual Canvas: Apple Keynote Style Widescreen Deck Mockup -->
-          <div class="w-full h-44 rounded-xl border border-black/[0.06] dark:border-white/[0.07] bg-white dark:bg-[#030304] p-3 flex flex-col justify-between relative overflow-hidden group-hover:border-black/20 dark:group-hover:border-white/20 transition-all">
-            <!-- Slide Canvas -->
-            <div class="w-full h-28 rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-900 dark:to-zinc-950 p-3 flex flex-col justify-between shadow-inner">
-              <div class="flex items-center justify-between">
-                <span class="text-[10px] font-bold text-zinc-800 dark:text-zinc-200 tracking-tight">Q3 架构规划与业务演进</span>
-                <span class="inline-flex items-center gap-1 text-[9px] font-mono text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded">
-                  <span class="w-1 h-1 rounded-full bg-emerald-500"></span> AI 生成
-                </span>
-              </div>
-              <div class="grid grid-cols-3 gap-1.5">
-                <div class="h-10 rounded bg-white/70 dark:bg-black/40 border border-black/[0.04] dark:border-white/[0.06] p-1 flex flex-col justify-between">
-                  <div class="w-6 h-1 bg-zinc-400 rounded"></div>
-                  <div class="w-full h-0.5 bg-zinc-300 dark:bg-zinc-700"></div>
+      <!-- 视图 A: 矩阵总览看板 (极简 Pro 紧凑流 · 零多余标语) -->
+      <div id="stageOverview" class="flex-1 h-full overflow-y-auto px-5 sm:px-8 py-8 max-w-7xl w-full mx-auto">
+        
+        <!-- 8 Compact Bento Cards Grid (一目了然，无冗余假图，无01/02编号) -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="overviewCardsGrid">
+          
+          <!-- ArchIcons -->
+          <div tabindex="0" onclick="loadStage('icon')" data-category="apps" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
+            <div>
+              <div class="flex items-center justify-between mb-3.5">
+                <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="network" class="w-5 h-5"></i>
                 </div>
-                <div class="h-10 rounded bg-white/70 dark:bg-black/40 border border-black/[0.04] dark:border-white/[0.06] p-1 flex flex-col justify-between">
-                  <div class="w-8 h-1 bg-zinc-400 rounded"></div>
-                  <div class="w-3/4 h-0.5 bg-zinc-300 dark:bg-zinc-700"></div>
-                </div>
-                <div class="h-10 rounded bg-white/70 dark:bg-black/40 border border-black/[0.04] dark:border-white/[0.06] p-1 flex flex-col justify-between">
-                  <div class="w-5 h-1 bg-zinc-400 rounded"></div>
-                  <div class="w-4/5 h-0.5 bg-zinc-300 dark:bg-zinc-700"></div>
-                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-400 font-semibold uppercase">APPS</span>
               </div>
+              <h3 class="font-bold text-sm text-zinc-900 dark:text-white tracking-tight group-hover:text-sky-400 transition-colors">ArchIcons</h3>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed font-normal" data-i18n="card.archicons.tag">
+                云架构与网络拓扑 2.5D/2D 矢量设备图标库。
+              </p>
             </div>
-
-            <!-- Slide Strip Indicator -->
-            <div class="flex items-center justify-between px-1">
-              <div class="flex items-center gap-1 text-[9px] font-mono text-zinc-400">
-                <span class="px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white font-bold">01</span>
-                <span>02</span>
-                <span>03</span>
-                <span>04</span>
-              </div>
-              <span class="text-[9px] font-mono text-zinc-400">一键导出 PPTX</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Big Launch Pill -->
-        <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
-          <span class="text-xs text-zinc-400 font-mono">bin0sky.tech/ppt</span>
-          <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-zinc-950 dark:bg-white text-white dark:text-black text-xs font-semibold transition-transform group-hover:translate-x-0.5">
-            <span data-i18n="btn.createDeck">立即生成</span>
-            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-          </span>
-        </div>
-      </a>
-
-      <!-- ==================== 03: AIConsole (bin0sky.tech/console) ==================== -->
-      <a href="javascript:void(0)" onclick="loadStage('console')" data-category="apps" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
-        <!-- Top Info -->
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2">
-              <span class="font-mono text-xs font-bold text-zinc-400">03</span>
-              <span class="text-xs font-bold tracking-tight text-zinc-900 dark:text-white">AIConsole</span>
-            </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-400">macOS 原生客户端</span>
-          </div>
-
-          <div class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-5 font-medium" data-i18n="card.aiconsole.tag">
-            为 macOS 打造的原生 AI 智能终端 • 全协议 & 报错根因诊断
-          </div>
-
-          <!-- Visual Canvas: Apple Dark Glass Terminal Window -->
-          <div class="w-full h-44 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-zinc-950 text-zinc-200 p-3 font-mono text-[10px] flex flex-col justify-between shadow-inner relative overflow-hidden group-hover:border-black/20 dark:group-hover:border-white/20 transition-all">
-            <!-- Terminal Header -->
-            <div class="flex items-center justify-between border-b border-zinc-800/80 pb-2">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></span>
-                <span class="ml-2 text-zinc-500 text-[10px]">prod-cluster • SSH active</span>
-              </div>
-              <span class="text-[9px] text-emerald-400 flex items-center gap-1">
-                <i data-lucide="shield-check" class="w-3 h-3"></i> Touch ID
+            <div class="mt-5 pt-3 border-t border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between text-[11px] text-zinc-400 font-mono">
+              <span>⌘1</span>
+              <span class="group-hover:translate-x-0.5 transition-transform text-zinc-700 dark:text-zinc-300 flex items-center gap-1 font-sans font-medium text-xs">
+                <span data-i18n="btn.enter">进入</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
               </span>
             </div>
+          </div>
 
-            <!-- Terminal Commands & AI Copilot Callout -->
-            <div class="space-y-1.5 my-1">
-              <div>
-                <span class="text-zinc-500">root@node-01:</span><span class="text-cyan-400">~</span>$ systemctl status k8s-mesh
-              </div>
-              <div class="p-2 rounded bg-zinc-900 border border-zinc-800 text-[10px] flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <span class="text-emerald-400 font-bold">✦ AI Copilot</span>
-                  <span class="text-zinc-300">根因分析已定位: 端口 443 证书过期</span>
+          <!-- SlideCraft -->
+          <div tabindex="0" onclick="loadStage('ppt')" data-category="apps" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
+            <div>
+              <div class="flex items-center justify-between mb-3.5">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="presentation" class="w-5 h-5"></i>
                 </div>
-                <span class="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono text-[9px]">一键修复</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 font-semibold uppercase">APPS</span>
               </div>
+              <h3 class="font-bold text-sm text-zinc-900 dark:text-white tracking-tight group-hover:text-amber-400 transition-colors">SlideCraft</h3>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed font-normal" data-i18n="card.slidecraft.tag">
+                AI 演示文稿工作台，技术方案与汇报文档秒级生成。
+              </p>
             </div>
-
-            <div class="flex items-center justify-between text-[9px] text-zinc-500">
-              <span>Apple Silicon 深度优化</span>
-              <span>Universal .dmg</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Big Launch Pill -->
-        <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
-          <span class="text-xs text-zinc-400 font-mono">bin0sky.tech/console</span>
-          <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-zinc-950 dark:bg-white text-white dark:text-black text-xs font-semibold transition-transform group-hover:translate-x-0.5">
-            <span data-i18n="btn.getApp">下载 / 体验</span>
-            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-          </span>
-        </div>
-      </a>
-
-      <!-- ==================== 04: Ambient 4K (bin0sky.tech/ambient) ==================== -->
-      <a href="javascript:void(0)" onclick="loadStage('ambient')" data-category="apps" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline">
-        <!-- Top Info -->
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2">
-              <span class="font-mono text-xs font-bold text-zinc-400">04</span>
-              <span class="text-xs font-bold tracking-tight text-zinc-900 dark:text-white">Ambient 4K</span>
-            </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-400">4K HDR • 白噪音</span>
-          </div>
-
-          <div class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-5 font-medium" data-i18n="card.ambient.tag">
-            沉浸式 4K 视觉画廊与极简声学氛围工作空间
-          </div>
-
-          <!-- Visual Canvas: 4K Deep Horizon & Animated Equalizer Waves -->
-          <div class="w-full h-44 rounded-xl border border-black/[0.06] dark:border-white/[0.07] bg-gradient-to-b from-zinc-900 via-zinc-950 to-black p-4 flex flex-col justify-between relative overflow-hidden group-hover:border-black/20 dark:group-hover:border-white/20 transition-all text-white">
-            <!-- Simulated Horizon Light -->
-            <div class="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-indigo-500/10 to-transparent pointer-events-none"></div>
-
-            <div class="flex items-center justify-between text-[10px] font-mono text-zinc-400">
-              <span class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-indigo-500"></span> 深度心流声场
+            <div class="mt-5 pt-3 border-t border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between text-[11px] text-zinc-400 font-mono">
+              <span>⌘2</span>
+              <span class="group-hover:translate-x-0.5 transition-transform text-zinc-700 dark:text-zinc-300 flex items-center gap-1 font-sans font-medium text-xs">
+                <span data-i18n="btn.enter">进入</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
               </span>
-              <span>3840 × 2160</span>
             </div>
+          </div>
 
-            <!-- Dynamic Animated Equalizer Bars -->
-            <div class="flex items-center justify-center gap-1.5 h-12 my-auto">
-              <span class="w-1 bg-white/70 rounded-full wave-bar"></span>
-              <span class="w-1 bg-white/80 rounded-full wave-bar"></span>
-              <span class="w-1 bg-white rounded-full wave-bar"></span>
-              <span class="w-1 bg-indigo-400 rounded-full wave-bar"></span>
-              <span class="w-1 bg-white rounded-full wave-bar"></span>
-              <span class="w-1 bg-white/80 rounded-full wave-bar"></span>
-              <span class="w-1 bg-white/60 rounded-full wave-bar"></span>
-              <span class="w-1 bg-white/40 rounded-full wave-bar"></span>
+          <!-- AIConsole -->
+          <div tabindex="0" onclick="loadStage('console')" data-category="apps" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
+            <div>
+              <div class="flex items-center justify-between mb-3.5">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="terminal" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold uppercase">APPS</span>
+              </div>
+              <h3 class="font-bold text-sm text-zinc-900 dark:text-white tracking-tight group-hover:text-emerald-400 transition-colors">AIConsole</h3>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed font-normal" data-i18n="card.aiconsole.tag">
+                为 macOS 打造的原生 AI 智能终端，支持报错根因即时诊断。
+              </p>
             </div>
+            <div class="mt-5 pt-3 border-t border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between text-[11px] text-zinc-400 font-mono">
+              <span>⌘3</span>
+              <span class="group-hover:translate-x-0.5 transition-transform text-zinc-700 dark:text-zinc-300 flex items-center gap-1 font-sans font-medium text-xs">
+                <span data-i18n="btn.enter">进入</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </span>
+            </div>
+          </div>
 
-            <div class="flex items-center justify-between text-[9px] font-mono text-zinc-400">
-              <span>雨声 • 篝火 • 极简深空</span>
-              <span>即开即用全屏</span>
+          <!-- Ambient 4K -->
+          <div tabindex="0" onclick="loadStage('ambient')" data-category="apps" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
+            <div>
+              <div class="flex items-center justify-between mb-3.5">
+                <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 font-semibold uppercase">APPS</span>
+              </div>
+              <h3 class="font-bold text-sm text-zinc-900 dark:text-white tracking-tight group-hover:text-purple-400 transition-colors">Ambient 4K</h3>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed font-normal" data-i18n="card.ambient.tag">
+                4K 视觉画廊与极简声学氛围空间，沉浸式心流白噪音。
+              </p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between text-[11px] text-zinc-400 font-mono">
+              <span>⌘4</span>
+              <span class="group-hover:translate-x-0.5 transition-transform text-zinc-700 dark:text-zinc-300 flex items-center gap-1 font-sans font-medium text-xs">
+                <span data-i18n="btn.enter">进入</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </span>
             </div>
           </div>
-        </div>
 
-        <!-- Big Launch Pill -->
-        <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
-          <span class="text-xs text-zinc-400 font-mono">bin0sky.tech/ambient</span>
-          <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-zinc-950 dark:bg-white text-white dark:text-black text-xs font-semibold transition-transform group-hover:translate-x-0.5">
-            <span data-i18n="btn.enterAmbient">全屏沉浸</span>
-            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-          </span>
-        </div>
-      </a>
+          <!-- Population Structure -->
+          <div tabindex="0" onclick="loadStage('population')" data-category="notes" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
+            <div>
+              <div class="flex items-center justify-between mb-3.5">
+                <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 font-semibold uppercase">NOTES</span>
+              </div>
+              <h3 class="font-bold text-sm text-zinc-900 dark:text-white tracking-tight group-hover:text-rose-400 transition-colors" data-i18n="item.population">全球人口结构变迁</h3>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed font-normal" data-i18n="card.population.tag">
+                中美印日 150 年人口年龄金字塔与老龄化拐点量化演化模型。
+              </p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between text-[11px] text-zinc-400 font-mono">
+              <span>⌘5</span>
+              <span class="group-hover:translate-x-0.5 transition-transform text-zinc-700 dark:text-zinc-300 flex items-center gap-1 font-sans font-medium text-xs">
+                <span data-i18n="btn.read">阅读</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </span>
+            </div>
+          </div>
 
+          <!-- Fund Cycles -->
+          <div tabindex="0" onclick="loadStage('fund-cycle')" data-category="notes" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
+            <div>
+              <div class="flex items-center justify-between mb-3.5">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="trending-up" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 font-semibold uppercase">NOTES</span>
+              </div>
+              <h3 class="font-bold text-sm text-zinc-900 dark:text-white tracking-tight group-hover:text-blue-400 transition-colors" data-i18n="item.fund_cycle">公募基金与产业周期</h3>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed font-normal" data-i18n="card.fund_cycle.tag">
+                24 产业赛道周期量化、前期估值出清与商业常识反弹催化看板。
+              </p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between text-[11px] text-zinc-400 font-mono">
+              <span>⌘6</span>
+              <span class="group-hover:translate-x-0.5 transition-transform text-zinc-700 dark:text-zinc-300 flex items-center gap-1 font-sans font-medium text-xs">
+                <span data-i18n="btn.read">阅读</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </span>
+            </div>
+          </div>
 
-      <!-- ==================== 05: Population Model Note ==================== -->
-      <a href="javascript:void(0)" onclick="loadStage('population')" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline md:col-span-2 relative overflow-hidden" data-category="notes">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2.5">
-              <span class="w-6 h-6 rounded-lg bg-rose-500/10 text-rose-500 border border-rose-500/20 flex items-center justify-center font-mono text-[11px] font-bold">05</span>
-              <span class="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">全球人口结构变迁 1950–2100</span>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-semibold">交互研报</span>
-            </div>
-            <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400">
-              <span class="hidden sm:inline">联合国 UN WPP 2024</span>
-              <span class="px-2 py-0.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04]">预计阅读 10 分钟</span>
-            </div>
-          </div>
-          <div class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-5 font-medium max-w-2xl" data-i18n="card.population.tag">
-            从金字塔到倒金字塔 • 覆盖中国、印度、美国、日本 150 年人口年龄结构、生育率拐点与深度老龄化推演。
-          </div>
-          <div class="w-full h-44 rounded-xl border border-black/[0.06] dark:border-white/[0.07] bg-gradient-to-br from-zinc-900 via-[#0a0e14] to-[#121a26] p-4 flex flex-col justify-between relative overflow-hidden group-hover:border-rose-500/30 transition-all text-white">
-            <div class="flex items-center justify-between text-[10px] font-mono text-zinc-400 border-b border-white/[0.08] pb-2">
-              <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
-                <span class="text-zinc-200 font-semibold">四国动态金字塔演化模型</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-500/30">中</span>
-                <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">印</span>
-                <span class="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">美</span>
-                <span class="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">日</span>
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-4 my-auto items-center px-4">
-              <div class="flex flex-col items-center gap-1">
-                <div class="text-[10px] font-mono text-zinc-400">1950 年代 · 经典金字塔</div>
-                <div class="w-full max-w-[140px] flex flex-col items-center gap-0.5 opacity-80">
-                  <div class="w-6 h-1 bg-sky-400 rounded-xs"></div>
-                  <div class="w-12 h-1 bg-sky-400 rounded-xs"></div>
-                  <div class="w-20 h-1 bg-sky-400 rounded-xs"></div>
-                  <div class="w-28 h-1 bg-sky-400 rounded-xs"></div>
-                  <div class="w-36 h-1.5 bg-sky-400 rounded-xs"></div>
+          <!-- Fund Breakdown -->
+          <div tabindex="0" onclick="loadStage('fund-breakdown')" data-category="notes" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
+            <div>
+              <div class="flex items-center justify-between mb-3.5">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="activity" class="w-5 h-5"></i>
                 </div>
-                <span class="text-[9px] font-mono text-sky-400">青年劳动力主导</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 font-semibold uppercase">NOTES</span>
               </div>
-              <div class="flex flex-col items-center gap-1 border-l border-white/[0.08] pl-4">
-                <div class="text-[10px] font-mono text-zinc-400">2050 年代 · 倒金字塔/橄榄型</div>
-                <div class="w-full max-w-[140px] flex flex-col items-center gap-0.5">
-                  <div class="w-32 h-1.5 bg-rose-400 rounded-xs"></div>
-                  <div class="w-36 h-1 bg-rose-400 rounded-xs"></div>
-                  <div class="w-28 h-1 bg-amber-400 rounded-xs"></div>
-                  <div class="w-18 h-1 bg-amber-400 rounded-xs"></div>
-                  <div class="w-10 h-1 bg-zinc-600 rounded-xs"></div>
-                </div>
-                <span class="text-[9px] font-mono text-rose-400">深度老龄化重构</span>
-              </div>
+              <h3 class="font-bold text-sm text-zinc-900 dark:text-white tracking-tight group-hover:text-amber-400 transition-colors" data-i18n="item.breakdown">破位基金本质透视</h3>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed font-normal" data-i18n="card.breakdown.tag">
+                穿透“底外有底”的技术陷阱，基于公募流动性与商业常识深度归因。
+              </p>
             </div>
-            <div class="flex items-center justify-between text-[9px] font-mono text-zinc-400 pt-1">
-              <span>动态时间轴滑动 • 年龄结构推演 • 扶养比模型</span>
-              <span class="text-rose-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">开启交互分析 <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+            <div class="mt-5 pt-3 border-t border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between text-[11px] text-zinc-400 font-mono">
+              <span>⌘7</span>
+              <span class="group-hover:translate-x-0.5 transition-transform text-zinc-700 dark:text-zinc-300 flex items-center gap-1 font-sans font-medium text-xs">
+                <span data-i18n="btn.read">阅读</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </span>
             </div>
           </div>
-        </div>
-        <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
-          <span class="text-xs text-zinc-400 font-mono">notes/population_structure_1950_2100.html</span>
-          <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold transition-all group-hover:scale-105 shadow-md shadow-rose-600/20">
-            <span data-i18n="btn.readReport">阅读交互研报</span>
-            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-          </span>
-        </div>
-      </a>
 
-      <!-- ==================== 06: Fund & Industry Cycles Note ==================== -->
-      <a href="javascript:void(0)" onclick="loadStage('fund-cycle')" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline relative overflow-hidden" data-category="notes">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2.5">
-              <span class="w-6 h-6 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20 flex items-center justify-center font-mono text-[11px] font-bold">06</span>
-              <span class="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">公募基金与产业周期全景</span>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-semibold">交互研报</span>
+          <!-- Teacher Workspace -->
+          <div tabindex="0" onclick="loadStage('teacher')" data-category="labs" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
+            <div>
+              <div class="flex items-center justify-between mb-3.5">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold uppercase">LABS</span>
+              </div>
+              <h3 class="font-bold text-sm text-zinc-900 dark:text-white tracking-tight group-hover:text-emerald-400 transition-colors" data-i18n="item.teacher">教师工作台</h3>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed font-normal" data-i18n="card.teacher.tag">
+                高中日语教学、课表日程、单词默写打卡与学情分析系统。
+              </p>
             </div>
-            <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400">
-              <span class="hidden sm:inline">24 产业赛道 · 周期量化</span>
+            <div class="mt-5 pt-3 border-t border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between text-[11px] text-zinc-400 font-mono">
+              <span>⌘8</span>
+              <span class="group-hover:translate-x-0.5 transition-transform text-zinc-700 dark:text-zinc-300 flex items-center gap-1 font-sans font-medium text-xs">
+                <span data-i18n="btn.enter">进入</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </span>
             </div>
           </div>
-          <div class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-5 font-medium max-w-xl">
-            超跌稳盘 → 右侧反弹 • 系统性解构前期泡沫出清、底部横盘整固与商业常识催化反弹逻辑。
-          </div>
-          <!-- Visual Canvas: Industry Cycle State Strip & Heatmap Mockup -->
-          <div class="w-full h-44 rounded-xl border border-black/[0.06] dark:border-white/[0.07] bg-gradient-to-br from-zinc-900 via-[#0a111a] to-[#111e2e] p-4 flex flex-col justify-between relative overflow-hidden group-hover:border-blue-500/30 transition-all text-white">
-            <div class="flex items-center justify-between text-[10px] font-mono text-zinc-400 border-b border-white/[0.08] pb-2">
-              <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-                <span class="text-zinc-200 font-semibold">三阶段周期演化矩阵</span>
-              </div>
-              <span class="text-blue-400 font-semibold">泛科技 / 医药 / 制造 / 消费</span>
-            </div>
-            <!-- Visual Phase Cards -->
-            <div class="grid grid-cols-3 gap-2 my-auto items-center">
-              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
-                <span class="text-[9px] font-mono text-rose-400">阶段 1 · 泡沫出清</span>
-                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
-                  <div class="bg-rose-500 h-full w-full"></div>
-                </div>
-                <span class="text-[8px] text-zinc-400">估值杀跌 释放风险</span>
-              </div>
-              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
-                <span class="text-[9px] font-mono text-amber-400">阶段 2 · 底部整固</span>
-                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
-                  <div class="bg-amber-400 h-full w-2/3"></div>
-                </div>
-                <span class="text-[8px] text-zinc-400">多空平衡 筹码沉淀</span>
-              </div>
-              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
-                <span class="text-[9px] font-mono text-emerald-400">阶段 3 · 右侧突破</span>
-                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
-                  <div class="bg-emerald-400 h-full w-4/5"></div>
-                </div>
-                <span class="text-[8px] text-zinc-400">常识催化 趋势确立</span>
-              </div>
-            </div>
-            <div class="flex items-center justify-between text-[9px] font-mono text-zinc-400 pt-1">
-              <span>8 周连续跟踪 • ETF 标的池 • 驱动力归因</span>
-              <span class="text-blue-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">开启周期看板 <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
-            </div>
-          </div>
-        </div>
-        <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
-          <span class="text-xs text-zinc-400 font-mono">notes/fund_industry_cycles_2026.html</span>
-          <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all group-hover:scale-105 shadow-md shadow-blue-600/20">
-            <span>进入产业周期</span>
-            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-          </span>
-        </div>
-      </a>
 
-      <!-- ==================== 07: Breakdown Fund Analysis Note ==================== -->
-      <a href="javascript:void(0)" onclick="loadStage('fund-breakdown')" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline relative overflow-hidden" data-category="notes">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2.5">
-              <span class="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center font-mono text-[11px] font-bold">07</span>
-              <span class="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">破位基金本质透视看板</span>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">交互研报</span>
-            </div>
-            <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400">
-              <span class="hidden sm:inline">深度复盘 · 2026</span>
-            </div>
-          </div>
-          <div class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-5 font-medium max-w-xl">
-            穿透“底外有底”的技术陷阱 • 基于公募深度分化与商业常识模型交互解析，透视流动性与估值重构。
-          </div>
-          <!-- Visual Canvas: Breakdown Trajectory & Diagnostic Signals -->
-          <div class="w-full h-44 rounded-xl border border-black/[0.06] dark:border-white/[0.07] bg-gradient-to-br from-zinc-900 via-[#14100c] to-[#24170d] p-4 flex flex-col justify-between relative overflow-hidden group-hover:border-amber-500/30 transition-all text-white">
-            <div class="flex items-center justify-between text-[10px] font-mono text-zinc-400 border-b border-white/[0.08] pb-2">
-              <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-                <span class="text-zinc-200 font-semibold">破位形态与常识归因系统</span>
-              </div>
-              <span class="text-amber-400 font-semibold">真破位 vs 假企稳</span>
-            </div>
-            <div class="grid grid-cols-2 gap-4 my-auto items-center px-2">
-              <div class="flex flex-col gap-1 border-r border-white/[0.08] pr-2">
-                <span class="text-[10px] font-mono text-rose-400">高危陷阱特征</span>
-                <div class="space-y-1 text-[9px] text-zinc-300">
-                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> 资产流动性折价放大</div>
-                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> 赛道逻辑颠覆（不可逆）</div>
-                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> 赎回负反馈踩踏</div>
-                </div>
-              </div>
-              <div class="flex flex-col gap-1 pl-2">
-                <span class="text-[10px] font-mono text-emerald-400">常识见底信号</span>
-                <div class="space-y-1 text-[9px] text-zinc-300">
-                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 破净+自由现金流支撑</div>
-                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 周期出清进入行业极值</div>
-                  <div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 筹码出清结构重组</div>
-                </div>
-              </div>
-            </div>
-            <div class="flex items-center justify-between text-[9px] font-mono text-zinc-400 pt-1">
-              <span>个基诊断 • 风险穿透 • 逻辑重构模型</span>
-              <span class="text-amber-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">开启透视看板 <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
-            </div>
-          </div>
-        </div>
-        <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
-          <span class="text-xs text-zinc-400 font-mono">notes/breakdown_fund_analysis_2026.html</span>
-          <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold transition-all group-hover:scale-105 shadow-md shadow-amber-600/20">
-            <span>进入透视看板</span>
-            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-          </span>
-        </div>
-      </a>
-      <!-- ==================== 08: 教师工作台 (bin0sky.tech/teacher) ==================== -->
-      <a href="javascript:void(0)" onclick="loadStage('teacher')" class="bento-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group cursor-pointer text-inherit no-underline md:col-span-2 relative overflow-hidden" data-category="labs">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2.5">
-              <span class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center font-mono text-[11px] font-bold">08</span>
-              <span class="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">教师工作台</span>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">专属空间</span>
-            </div>
-            <div class="flex items-center gap-2 text-[10px] font-mono text-zinc-400">
-              <span class="hidden sm:inline">高中教学 • 班级管理与学情分析</span>
-            </div>
-          </div>
-          <div class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mb-5 font-medium max-w-xl">
-            专为教师定制的极简轻量教学工作台 • 涵盖今日课表、单词默写打卡、动词变形过关、听力与 150 分制模拟考分析。
-          </div>
-          <!-- Visual Canvas: Japanese Teaching Dashboard Mockup -->
-          <div class="w-full h-44 rounded-xl border border-black/[0.06] dark:border-white/[0.07] bg-gradient-to-br from-zinc-900 via-[#0d1712] to-[#12241b] p-4 flex flex-col justify-between relative overflow-hidden group-hover:border-emerald-500/30 transition-all text-white">
-            <div class="flex items-center justify-between text-[10px] font-mono text-zinc-400 border-b border-white/[0.08] pb-2">
-              <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-zinc-200 font-semibold">高二·教学1班 & 高三·高考冲刺班</span>
-              </div>
-              <span class="text-emerald-400 font-semibold">高考 150分 备考教学模型</span>
-            </div>
-            <div class="grid grid-cols-4 gap-2 my-auto items-center px-1">
-              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
-                <span class="text-[9px] font-mono text-emerald-400">单词默写</span>
-                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
-                  <div class="bg-emerald-500 h-full w-5/6"></div>
-                </div>
-                <span class="text-[8px] text-zinc-400">92% 完成率</span>
-              </div>
-              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
-                <span class="text-[9px] font-mono text-sky-400">动词变形</span>
-                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
-                  <div class="bg-sky-400 h-full w-4/5"></div>
-                </div>
-                <span class="text-[8px] text-zinc-400">て/た/ない形过关</span>
-              </div>
-              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
-                <span class="text-[9px] font-mono text-amber-400">高考听力</span>
-                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
-                  <div class="bg-amber-400 h-full w-3/4"></div>
-                </div>
-                <span class="text-[8px] text-zinc-400">30分 专项精听</span>
-              </div>
-              <div class="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex flex-col gap-1 text-center">
-                <span class="text-[9px] font-mono text-rose-400">高考作文</span>
-                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
-                  <div class="bg-rose-400 h-full w-2/3"></div>
-                </div>
-                <span class="text-[8px] text-zinc-400">原稿纸格式精批</span>
-              </div>
-            </div>
-            <div class="flex items-center justify-between text-[9px] font-mono text-zinc-400 pt-1">
-              <span>离线数据持久化 • 考勤与座位表 • 备考速查助手</span>
-              <span class="text-emerald-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">进入教师工作空间 <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
-            </div>
-          </div>
-        </div>
-        <div class="mt-5 pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
-          <span class="text-xs text-zinc-400 font-mono">labs/teacher_workspace.html</span>
-          <div class="flex items-center gap-2">
-            <a href="/labs/teacher_workspace.html" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="p-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-400 hover:text-emerald-400 transition-colors" title="新标签页独立全屏打开 (方便添加书签)">
-              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-            </a>
-            <span class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-all group-hover:scale-105 shadow-md shadow-emerald-600/20">
-              <span>打开工作台</span>
-              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-            </span>
-          </div>
-        </div>
-      </a>
         </section>
       </div>
 
-      <!-- 视图 B: 全屏纯净工作台 (彻底去除外部条幅，无缝融合) -->
-      <div id="stageFrameContainer" class="flex-1 h-full hidden flex-col relative bg-black">
-        <iframe id="stageIframe" class="w-full h-full border-none bg-black" src="about:blank"></iframe>
+      <!-- 视图 B: 全屏纯净工作台 (Stage Iframe with Pro Toolstrip & Loader) -->
+      <div id="stageFrameContainer" class="flex-1 h-full hidden flex-col relative bg-zinc-950">
+        <!-- Floating macOS Pro Stage HUD Toolstrip -->
+        <div class="stage-hud-bar absolute top-3 right-4 z-40 flex items-center gap-1.5 p-1 rounded-xl border border-black/[0.08] dark:border-white/[0.1] bg-white/85 dark:bg-[#12141a]/85 backdrop-blur-xl shadow-lg transition-opacity duration-200 opacity-70 hover:opacity-100 select-none">
+          <button onclick="reloadCurrentStage()" class="p-1.5 rounded-lg hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer" title="重新载入视窗 (⌘R)">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          </button>
+          <button onclick="openCurrentStageExternal()" class="p-1.5 rounded-lg hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer" title="在新标签页独立打开 (⌘O)">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </button>
+          <button onclick="copyCurrentStageLink()" class="p-1.5 rounded-lg hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer" title="复制直达链接">
+            <i data-lucide="link" class="w-3.5 h-3.5"></i>
+          </button>
+          <div class="w-px h-3.5 bg-black/[0.08] dark:border-white/[0.1] my-auto"></div>
+          <button onclick="toggleFullscreen()" class="p-1.5 rounded-lg hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer" title="切换全屏沉浸 (⌃⌘F)">
+            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+          </button>
+          <button onclick="loadStage('overview')" class="p-1.5 rounded-lg hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer" title="返回总览看板 (ESC / ⌘H)">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <!-- Stage Loading Skeleton Indicator -->
+        <div id="stageLoadingOverlay" class="absolute inset-0 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md z-30 flex flex-col items-center justify-center gap-3 transition-opacity duration-300 opacity-0 pointer-events-none select-none">
+          <div class="w-7 h-7 rounded-full border-2 border-zinc-300 dark:border-zinc-700 border-t-sky-500 animate-spin"></div>
+          <span class="font-mono text-xs text-zinc-400" id="stageLoadingText">正在连接舞台工作区...</span>
+        </div>
+
+        <iframe id="stageIframe" class="w-full h-full border-none bg-transparent" src="about:blank" allow="clipboard-read; clipboard-write; fullscreen"></iframe>
       </div>
     </main>
   </div>
 
-  <!-- Command Palette Modal (⌘K) -->
-  <div id="cmdPalette" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-start justify-center pt-24 px-4" onclick="handleBackdropClick(event)">
-    <div class="w-full max-w-lg rounded-2xl border border-black/[0.1] dark:border-white/[0.15] bg-white dark:bg-zinc-900 shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
-      <div class="flex items-center px-4 border-b border-black/[0.06] dark:border-white/[0.08]">
+  <!-- Command Palette Modal (⌘K Pro) -->
+  <div id="cmdPalette" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-start justify-center pt-20 px-4" onclick="handleBackdropClick(event)">
+    <div class="w-full max-w-xl rounded-2xl border border-black/[0.1] dark:border-white/[0.12] bg-white/95 dark:bg-[#12141a]/95 backdrop-blur-2xl shadow-2xl overflow-hidden flex flex-col" onclick="event.stopPropagation()">
+      <div class="flex items-center px-4 py-3 border-b border-black/[0.06] dark:border-white/[0.08]">
         <i data-lucide="search" class="w-4 h-4 text-zinc-400 mr-3"></i>
-        <input id="cmdInput" type="text" placeholder="搜索或跳转应用与研报..." class="w-full py-3.5 bg-transparent border-none outline-none text-xs sm:text-sm placeholder-zinc-400 font-medium" oninput="filterPalette()">
+        <input id="cmdInput" type="text" placeholder="搜索应用、研报、实验或输入指令 (如: theme)..." class="w-full bg-transparent border-none outline-none text-xs sm:text-sm placeholder-zinc-400 font-medium text-zinc-900 dark:text-zinc-100" oninput="filterPalette()" onkeydown="handlePaletteKeydown(event)">
         <span class="kbd">ESC</span>
       </div>
-      <div id="cmdList" class="p-2 max-h-80 overflow-y-auto space-y-1 text-xs">
-        <a href="javascript:void(0)" onclick="loadStage('icon'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06]" data-label="ArchIcons 01 图标 拓扑">
-          <span class="font-bold text-zinc-900 dark:text-white">ArchIcons</span>
-          <span class="kbd">1</span>
-        </a>
-        <a href="javascript:void(0)" onclick="loadStage('ppt'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06]" data-label="SlideCraft 02 PPT 演示">
-          <span class="font-bold text-zinc-900 dark:text-white">SlideCraft</span>
-          <span class="kbd">2</span>
-        </a>
-        <a href="javascript:void(0)" onclick="loadStage('console'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06]" data-label="AIConsole 03 终端 SSH">
-          <span class="font-bold text-zinc-900 dark:text-white">AIConsole</span>
-          <span class="kbd">3</span>
-        </a>
-        <a href="javascript:void(0)" onclick="loadStage('ambient'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06]" data-label="Ambient 4K 04 白噪音">
-          <span class="font-bold text-zinc-900 dark:text-white">Ambient 4K</span>
-          <span class="kbd">4</span>
-        </a>
-        <a href="javascript:void(0)" onclick="loadStage('population'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-rose-500/10" data-label="人口 研报 05 Notes">
-          <span class="font-bold text-zinc-900 dark:text-white">全球人口结构变迁 1950–2100</span>
-          <span class="kbd">5</span>
-        </a>
-        <a href="javascript:void(0)" onclick="loadStage('fund-cycle'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-500/10" data-label="公募 基金 产业 周期 06 Notes">
-          <span class="font-bold text-zinc-900 dark:text-white">公募基金与产业周期全景</span>
-          <span class="kbd">6</span>
-        </a>
-        <a href="javascript:void(0)" onclick="loadStage('fund-breakdown'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-500/10" data-label="破位 基金 透视 常识 07 Notes">
-          <span class="font-bold text-zinc-900 dark:text-white">破位基金本质透视看板</span>
-          <span class="kbd">7</span>
-        </a>
-        <a href="javascript:void(0)" onclick="loadStage('teacher'); toggleCommandPalette(false);" class="cmd-item flex items-center justify-between p-2.5 rounded-xl hover:bg-emerald-500/10" data-label="教师 工作台 日语 教学 高考 08 Labs">
-          <span class="font-bold text-zinc-900 dark:text-white">教师工作台</span>
-          <span class="kbd">8</span>
-        </a>
+      <div id="cmdList" class="p-2 max-h-96 overflow-y-auto space-y-1 text-xs">
+        <!-- Rendered dynamically with categorized items & actions -->
+      </div>
+      <!-- Footer Shortcut Hints -->
+      <div class="px-4 py-2 border-t border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02] flex items-center justify-between text-[10px] font-mono text-zinc-400 select-none">
+        <div class="flex items-center gap-3">
+          <span><span class="kbd">↑↓</span> 移动</span>
+          <span><span class="kbd">↵</span> 执行</span>
+          <span><span class="kbd">ESC</span> 关闭</span>
+        </div>
+        <span><span class="kbd">⌘1~8</span> 直达</span>
       </div>
     </div>
   </div>
 
-  <!-- JavaScript Workstation Logic -->
+  <!-- Shortcuts Help Modal (?) -->
+  <div id="shortcutModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-4" onclick="toggleShortcutModal(false)">
+    <div class="w-full max-w-md rounded-2xl border border-black/[0.1] dark:border-white/[0.12] bg-white dark:bg-[#12141a] shadow-2xl p-6" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between mb-4 border-b border-black/[0.06] dark:border-white/[0.08] pb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="command" class="w-4 h-4 text-sky-400"></i>
+          <h3 class="font-bold text-sm text-zinc-900 dark:text-white" data-i18n="shortcut.title">macOS 工作台快捷键</h3>
+        </div>
+        <button onclick="toggleShortcutModal(false)" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-white cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="space-y-2.5 text-xs text-zinc-600 dark:text-zinc-300 font-medium">
+        <div class="flex items-center justify-between py-1 border-b border-black/[0.03] dark:border-white/[0.04]">
+          <span data-i18n="shortcut.cmd_k">呼出指令面板 / 快速检索</span>
+          <span class="kbd">⌘K</span>
+        </div>
+        <div class="flex items-center justify-between py-1 border-b border-black/[0.03] dark:border-white/[0.04]">
+          <span data-i18n="shortcut.sidebar">折叠 / 展开侧边栏</span>
+          <span class="kbd">⌘0</span>
+        </div>
+        <div class="flex items-center justify-between py-1 border-b border-black/[0.03] dark:border-white/[0.04]">
+          <span data-i18n="shortcut.theme">切换外观主题 (Dark / Light)</span>
+          <span class="kbd">⌘\</span>
+        </div>
+        <div class="flex items-center justify-between py-1 border-b border-black/[0.03] dark:border-white/[0.04]">
+          <span data-i18n="shortcut.overview">返回工作台总览全景</span>
+          <span class="kbd">⌘H</span>
+        </div>
+        <div class="flex items-center justify-between py-1 border-b border-black/[0.03] dark:border-white/[0.04]">
+          <span data-i18n="shortcut.reload">重新载入当前视窗舞台</span>
+          <span class="kbd">⌘R</span>
+        </div>
+        <div class="flex items-center justify-between py-1 border-b border-black/[0.03] dark:border-white/[0.04]">
+          <span data-i18n="shortcut.fullscreen">全屏沉浸视窗</span>
+          <span class="kbd">⌃⌘F</span>
+        </div>
+        <div class="flex items-center justify-between py-1">
+          <span data-i18n="shortcut.apps">快速直达对应项 01 ~ 08</span>
+          <span class="kbd">⌘1 ~ ⌘8</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const STAGES = {
       'overview': { title: '工作台全景', category: 'OVERVIEW', src: null, hash: '#/' },
@@ -1015,28 +890,247 @@
       'fund-breakdown': { title: '破位基金透视看板', category: 'NOTES', src: '/notes/breakdown_fund_analysis_2026.html', hash: '#/fund-breakdown' }
     };
 
+    const I18N = {
+      'zh-CN': {
+        'badge.overview': 'bin0sky 统一工作台架构已激活',
+        'hero.title': 'Tools for Focus. Notes for Depth.',
+        'hero.subtitle': '原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。',
+        'tab.all': '全部总览 (8)',
+        'tab.apps': 'APPS 应用 (4)',
+        'tab.notes': 'NOTES 深度研报 (3)',
+        'tab.labs': 'LABS 实验室 (1)',
+        'nav.apps': '应用',
+        'nav.notes': '研报',
+        'nav.labs': '实验室',
+        'nav.overview': '总览看板',
+        'item.population': '人口结构变迁',
+        'item.fund_cycle': '公募与产业周期',
+        'item.breakdown': '破位基金透视',
+        'item.teacher': '教师工作台',
+        'card.archicons.tag': '网络拓扑与云架构 2.5D/2D 矢量设备图标库',
+        'card.slidecraft.tag': 'AI 演示文稿工作台 • 技术方案与汇报秒级生成',
+        'card.aiconsole.tag': '为 macOS 打造的原生 AI 智能终端 • 全协议 & 报错根因诊断',
+        'card.ambient.tag': '沉浸式 4K 视觉画廊与极简声学氛围工作空间',
+        'card.population.tag': '从金字塔到倒金字塔 • 覆盖中国、印度、美国、日本 150 年人口年龄结构、生育率拐点与深度老龄化推演。',
+        'btn.openLibrary': '打开图标库',
+        'btn.createDeck': '立即生成',
+        'btn.getApp': '下载 / 体验',
+        'btn.enterAmbient': '全屏沉浸',
+        'btn.readReport': '阅读交互研报',
+        'btn.enter': '进入',
+        'btn.read': '阅读',
+        'shortcut.title': 'macOS 工作台快捷键',
+        'shortcut.cmd_k': '呼出指令面板 / 快速检索',
+        'shortcut.sidebar': '折叠 / 展开侧边栏',
+        'shortcut.theme': '切换外观主题 (Dark / Light)',
+        'shortcut.overview': '返回工作台总览全景',
+        'shortcut.reload': '重新载入当前视窗舞台',
+        'shortcut.fullscreen': '全屏沉浸视窗',
+        'shortcut.apps': '快速直达对应项 01 ~ 08',
+      },
+      'en': {
+        'badge.overview': 'Unified Workstation Architecture Active',
+        'hero.title': 'Tools for Focus. Notes for Depth.',
+        'hero.subtitle': 'Native minimalist tool matrix and interactive data models. Left sidebar navigation, direct stage interaction.',
+        'tab.all': 'All Overview (8)',
+        'tab.apps': 'APPS Matrix (4)',
+        'tab.notes': 'NOTES Reports (3)',
+        'tab.labs': 'LABS Innovation (1)',
+        'nav.apps': 'Apps',
+        'nav.notes': 'Notes',
+        'nav.labs': 'Labs',
+        'nav.overview': 'Overview',
+        'item.population': 'Demographics',
+        'item.fund_cycle': 'Industry Cycles',
+        'item.breakdown': 'Fund Analysis',
+        'item.teacher': 'Teacher Space',
+        'card.archicons.tag': 'Network topology & cloud architecture 2.5D/2D vector device icon library.',
+        'card.slidecraft.tag': 'AI presentation workstation • Instant slide generation for tech architecture.',
+        'card.aiconsole.tag': 'Native AI Terminal built for macOS • Full-protocol SSH & root-cause diagnostics.',
+        'card.ambient.tag': 'Immersive 4K visual gallery with minimalist acoustic ambient soundscapes.',
+        'card.population.tag': 'Pyramid to inverted pyramid • 150-year age structures & fertility inflection of CN, IN, US, JP.',
+        'btn.openLibrary': 'Open Library',
+        'btn.createDeck': 'Create Deck',
+        'btn.getApp': 'Download App',
+        'btn.enterAmbient': 'Enter Ambient',
+        'btn.readReport': 'Read Report',
+        'btn.enter': 'Open',
+        'btn.read': 'Read',
+        'shortcut.title': 'macOS Workstation Shortcuts',
+        'shortcut.cmd_k': 'Open Command Palette / Search',
+        'shortcut.sidebar': 'Toggle Sidebar Collapse',
+        'shortcut.theme': 'Toggle Theme (Dark / Light)',
+        'shortcut.overview': 'Return to Workstation Overview',
+        'shortcut.reload': 'Reload Current Stage Window',
+        'shortcut.fullscreen': 'Toggle Fullscreen Mode',
+        'shortcut.apps': 'Jump to Apps & Reports 01 ~ 08',
+      },
+      'zh-TW': {
+        'badge.overview': 'bin0sky 統一工作台架構已啟動',
+        'hero.title': 'Tools for Focus. Notes for Depth.',
+        'hero.subtitle': '原生極簡工具矩陣與交互數據模型。左側常駐導航，視窗直接交互。',
+        'tab.all': '全部總覽 (8)',
+        'tab.apps': 'APPS 應用 (4)',
+        'tab.notes': 'NOTES 深度研報 (3)',
+        'tab.labs': 'LABS 實驗室 (1)',
+        'nav.apps': '應用',
+        'nav.notes': '研報',
+        'nav.labs': '實驗室',
+        'nav.overview': '總覽看板',
+        'item.population': '人口結構變遷',
+        'item.fund_cycle': '公募與產業週期',
+        'item.breakdown': '破位基金透視',
+        'item.teacher': '教師工作台',
+        'card.archicons.tag': '網絡拓撲與雲架構 2.5D/2D 向量設備圖標庫',
+        'card.slidecraft.tag': 'AI 演示文稿工作台 • 技術方案與匯報秒級生成',
+        'card.aiconsole.tag': '為 macOS 打造的原生 AI 智能終端 • 全協議 & 報錯根因診斷',
+        'card.ambient.tag': '沉浸式 4K 視覺畫廊與極簡聲學氛圍工作空間',
+        'card.population.tag': '從金字塔到倒金字塔 • 覆蓋中、印、美、日 150 年人口年齡結構推演。',
+        'btn.openLibrary': '打開圖標庫',
+        'btn.createDeck': '立即生成',
+        'btn.getApp': '下載 / 體驗',
+        'btn.enterAmbient': '全屏沉浸',
+        'btn.readReport': '閱讀交互研報',
+        'btn.enter': '進入',
+        'btn.read': '閱讀',
+        'shortcut.title': 'macOS 工作台快捷鍵',
+        'shortcut.cmd_k': '呼出指令面板 / 快速檢索',
+        'shortcut.sidebar': '折疊 / 展開側邊欄',
+        'shortcut.theme': '切換外觀主題 (Dark / Light)',
+        'shortcut.overview': '返回工作台總覽全景',
+        'shortcut.reload': '重新載入當前視窗舞台',
+        'shortcut.fullscreen': '全屏沉浸視窗',
+        'shortcut.apps': '快速直達對應項 01 ~ 08',
+      },
+      'ja': {
+        'badge.overview': 'bin0sky 統合ワークステーションが起動しました',
+        'hero.title': 'Tools for Focus. Notes for Depth.',
+        'hero.subtitle': 'ネイティブなミニマルツール群とインタラクティブなデータモデル。',
+        'tab.all': 'すべて (8)',
+        'tab.apps': 'APPS アプリ (4)',
+        'tab.notes': 'NOTES レポート (3)',
+        'tab.labs': 'LABS 実験室 (1)',
+        'nav.apps': 'アプリ',
+        'nav.notes': 'レポート',
+        'nav.labs': '実験室',
+        'nav.overview': 'ダッシュボード',
+        'item.population': '人口動態推移',
+        'item.fund_cycle': '産業サイクル',
+        'item.breakdown': 'ファンド分析',
+        'item.teacher': '教育スペース',
+        'card.archicons.tag': 'ネットワークトポロジ＆クラウド構造 2.5D/2D ベクターアイコン集',
+        'card.slidecraft.tag': 'AI プレゼンテーションワークステーション • 技術提案書を瞬時に生成',
+        'card.aiconsole.tag': 'macOS向けネイティブAIターミナル • SSH＆エラー根本原因診断',
+        'card.ambient.tag': '没入型 4K ビジュアルギャラリー＆ミニマル音響アンビエント',
+        'card.population.tag': 'ピラミッドから逆ピラミッドへ • 150年間にわたる日・中・印・米の人口動態推移。',
+        'btn.openLibrary': 'アイコン集を開く',
+        'btn.createDeck': 'スライド生成',
+        'btn.getApp': 'アプリを入手',
+        'btn.enterAmbient': '全画面没入',
+        'btn.readReport': 'レポートを読む',
+        'btn.enter': '開く',
+        'btn.read': '読む',
+        'shortcut.title': 'macOS ショートカット一覧',
+        'shortcut.cmd_k': 'コマンドパレット / 検索',
+        'shortcut.sidebar': 'サイドバー開閉',
+        'shortcut.theme': '外観モード切り替え (Dark / Light)',
+        'shortcut.overview': 'ワークステーション全景へ戻る',
+        'shortcut.reload': '現在のステージを再読込',
+        'shortcut.fullscreen': '全画面表示切り替え',
+        'shortcut.apps': '01 〜 08 のアプリ・レポートへジャンプ',
+      }
+    };
+
     let currentCategoryFilter = 'all';
+    let audioCtx = null;
+    let soundEnabled = localStorage.getItem('b0_sound') !== 'false';
+
+    function playHaptic(type = 'click') {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+        if (type === 'click') {
+          osc.frequency.setValueAtTime(1000, now);
+          osc.frequency.exponentialRampToValueAtTime(300, now + 0.012);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
+          osc.start(now);
+          osc.stop(now + 0.012);
+        } else if (type === 'pop') {
+          osc.frequency.setValueAtTime(450, now);
+          osc.frequency.exponentialRampToValueAtTime(800, now + 0.025);
+          gain.gain.setValueAtTime(0.03, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+          osc.start(now);
+          osc.stop(now + 0.025);
+        }
+      } catch (e) {}
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      localStorage.setItem('b0_sound', soundEnabled ? 'true' : 'false');
+      const icon = document.getElementById('soundIcon');
+      if (icon) {
+        icon.setAttribute('data-lucide', soundEnabled ? 'volume-2' : 'volume-x');
+        if (window.lucide) lucide.createIcons();
+      // Spatial Arrow Key Navigation on Bento Cards
+      document.querySelectorAll('.bento-card').forEach((card, idx, all) => {
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            card.click();
+          } else if (e.key === 'ArrowRight' && all[idx + 1]) {
+            e.preventDefault();
+            all[idx + 1].focus();
+          } else if (e.key === 'ArrowLeft' && all[idx - 1]) {
+            e.preventDefault();
+            all[idx - 1].focus();
+          } else if (e.key === 'ArrowDown' && all[idx + 4]) {
+            e.preventDefault();
+            all[idx + 4].focus();
+          } else if (e.key === 'ArrowUp' && all[idx - 4]) {
+            e.preventDefault();
+            all[idx - 4].focus();
+          }
+        });
+      });
+
+      }
+      if (soundEnabled) playHaptic('pop');
+    }
+
+    function updateSegmentedThumb(btn) {
+      const thumb = document.getElementById('segmentedIndicator');
+      if (!thumb || !btn) return;
+      thumb.style.left = btn.offsetLeft + 'px';
+      thumb.style.width = btn.offsetWidth + 'px';
+    }
 
     function filterOverview(category, updateHash = true) {
       currentCategoryFilter = category;
-      
-      // Update pills
-      document.querySelectorAll('#overviewCategoryTabs .cat-pill').forEach(pill => {
-        if (pill.dataset.cat === category) {
-          pill.classList.add('active');
+      playHaptic('click');
+
+      // Update segmented control buttons
+      document.querySelectorAll('#overviewSegmented .mac-segmented-btn').forEach(btn => {
+        if (btn.dataset.cat === category) {
+          btn.classList.add('active');
+          updateSegmentedThumb(btn);
         } else {
-          pill.classList.remove('active');
+          btn.classList.remove('active');
         }
       });
 
       // Filter cards
       document.querySelectorAll('.bento-card').forEach(card => {
         const cat = card.getAttribute('data-category');
-        if (category === 'all' || cat === category) {
-          card.style.display = '';
-        } else {
-          card.style.display = 'none';
-        }
+        card.style.display = (category === 'all' || cat === category) ? '' : 'none';
       });
 
       // Dynamic Hero Copy
@@ -1088,11 +1182,7 @@
       iframe.removeAttribute('data-key');
 
       // Clear nav active highlights
-      const navKeys = ['icon', 'ppt', 'console', 'ambient', 'population', 'fund-cycle', 'fund-breakdown', 'teacher', 'labs'];
-      navKeys.forEach(k => {
-        const btn = document.getElementById('nav-item-' + k);
-        if (btn) btn.classList.remove('bg-black/[0.06]', 'dark:bg-white/[0.08]');
-      });
+      document.querySelectorAll('.sidebar-nav-item').forEach(btn => btn.classList.remove('active'));
 
       filterOverview(category, true);
       viewOverview.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1103,26 +1193,25 @@
         loadCategoryHub(key);
         return;
       }
+      playHaptic('click');
 
       const stage = STAGES[key] || STAGES['overview'];
       const viewOverview = document.getElementById('stageOverview');
       const viewFrame = document.getElementById('stageFrameContainer');
       const iframe = document.getElementById('stageIframe');
+      const progressBar = document.getElementById('stageProgressBar');
+      const loadingOverlay = document.getElementById('stageLoadingOverlay');
       
-      // Update top breadcrumbs in Header
+      // Update Jump Bar
       document.getElementById('stageCategoryBadge').textContent = stage.category;
       document.getElementById('stageTitleBreadcrumb').textContent = stage.title;
 
-      // Update sidebar active highlights
-      const navKeys = ['icon', 'ppt', 'console', 'ambient', 'population', 'fund-cycle', 'fund-breakdown', 'teacher', 'labs'];
-      navKeys.forEach(k => {
-        const btn = document.getElementById('nav-item-' + k);
-        if (btn) {
-          if (k === key) {
-            btn.classList.add('bg-black/[0.06]', 'dark:bg-white/[0.08]');
-          } else {
-            btn.classList.remove('bg-black/[0.06]', 'dark:bg-white/[0.08]');
-          }
+      // Update sidebar active state
+      document.querySelectorAll('.sidebar-nav-item').forEach(btn => {
+        if (btn.id === 'nav-item-' + key) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
         }
       });
 
@@ -1141,8 +1230,28 @@
         viewFrame.classList.add('flex');
 
         if (iframe.getAttribute('data-key') !== key) {
+          // Trigger Safari Progress Bar
+          progressBar.style.opacity = '1';
+          progressBar.style.width = '35%';
+          loadingOverlay.style.opacity = '1';
+          loadingOverlay.style.pointerEvents = 'auto';
+
+          setTimeout(() => { progressBar.style.width = '70%'; }, 200);
+
           iframe.src = stage.src;
           iframe.setAttribute('data-key', key);
+
+          iframe.onload = () => {
+            progressBar.style.width = '100%';
+            setTimeout(() => {
+              progressBar.style.opacity = '0';
+              progressBar.style.width = '0%';
+              loadingOverlay.style.opacity = '0';
+              loadingOverlay.style.pointerEvents = 'none';
+            }, 300);
+            // Sync theme to iframe
+            syncThemeToIframe();
+          };
         }
         if (updateHistory && location.hash !== stage.hash) {
           history.pushState(null, '', stage.hash);
@@ -1150,10 +1259,119 @@
       }
     }
 
+    // Stage HUD Toolstrip Actions
+    function reloadCurrentStage() {
+      const iframe = document.getElementById('stageIframe');
+      const progressBar = document.getElementById('stageProgressBar');
+      playHaptic('click');
+      if (iframe && iframe.src) {
+        progressBar.style.opacity = '1';
+        progressBar.style.width = '50%';
+        iframe.src = iframe.src;
+      }
+    }
+
+    function openCurrentStageExternal() {
+      const iframe = document.getElementById('stageIframe');
+      playHaptic('click');
+      if (iframe && iframe.src && iframe.src !== 'about:blank') {
+        window.open(iframe.src, '_blank');
+      }
+    }
+
+    function copyCurrentStageLink() {
+      playHaptic('pop');
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        const topText = document.getElementById('topActivityText');
+        if (topText) {
+          const old = topText.textContent;
+          topText.textContent = '✓ 直达链接已复制';
+          setTimeout(() => { topText.textContent = old; }, 2000);
+        }
+      });
+    }
+
+    function toggleFullscreen() {
+      playHaptic('click');
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // Jump Bar Menus
+    function toggleJumpMenu(type) {
+      playHaptic('click');
+      const catMenu = document.getElementById('jumpMenuCat');
+      const stageMenu = document.getElementById('jumpMenuStage');
+      if (type === 'cat') {
+        catMenu.classList.toggle('hidden');
+        stageMenu.classList.add('hidden');
+      } else {
+        stageMenu.classList.toggle('hidden');
+        catMenu.classList.add('hidden');
+        renderJumpMenuStages();
+      }
+    }
+
+    function closeJumpMenus() {
+      document.getElementById('jumpMenuCat').classList.add('hidden');
+      document.getElementById('jumpMenuStage').classList.add('hidden');
+    }
+
+    function renderJumpMenuStages() {
+      const container = document.getElementById('jumpMenuStage');
+      if (!container) return;
+      container.innerHTML = `
+        <div class="px-2.5 py-1 text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-wider">选择视窗舞台</div>
+        <button onclick="loadStage('icon'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
+          <span class="font-medium text-zinc-800 dark:text-zinc-200">ArchIcons</span>
+          <span class="kbd">⌘1</span>
+        </button>
+        <button onclick="loadStage('ppt'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
+          <span class="font-medium text-zinc-800 dark:text-zinc-200">SlideCraft</span>
+          <span class="kbd">⌘2</span>
+        </button>
+        <button onclick="loadStage('console'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
+          <span class="font-medium text-zinc-800 dark:text-zinc-200">AIConsole</span>
+          <span class="kbd">⌘3</span>
+        </button>
+        <button onclick="loadStage('ambient'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
+          <span class="font-medium text-zinc-800 dark:text-zinc-200">Ambient 4K</span>
+          <span class="kbd">⌘4</span>
+        </button>
+        <button onclick="loadStage('population'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
+          <span class="font-medium text-zinc-800 dark:text-zinc-200">人口结构变迁</span>
+          <span class="kbd">⌘5</span>
+        </button>
+        <button onclick="loadStage('fund-cycle'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
+          <span class="font-medium text-zinc-800 dark:text-zinc-200">公募产业周期</span>
+          <span class="kbd">⌘6</span>
+        </button>
+        <button onclick="loadStage('fund-breakdown'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
+          <span class="font-medium text-zinc-800 dark:text-zinc-200">破位基金透视</span>
+          <span class="kbd">⌘7</span>
+        </button>
+        <button onclick="loadStage('teacher'); closeJumpMenus();" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] flex items-center justify-between cursor-pointer">
+          <span class="font-medium text-zinc-800 dark:text-zinc-200">教师工作台</span>
+          <span class="kbd">⌘8</span>
+        </button>
+      `;
+    }
+
+    document.addEventListener('click', (e) => {
+      const topBread = document.getElementById('topBreadcrumb');
+      if (topBread && !topBread.contains(e.target)) {
+        closeJumpMenus();
+      }
+    });
+
     const DEFAULT_EXPANDED_WIDTH = 240;
     const COLLAPSED_WIDTH = 58;
 
     function toggleSidebarState() {
+      playHaptic('click');
       const sb = document.getElementById('appSidebar');
       const isCurrentlyExpanded = sb.classList.contains('expanded');
       if (isCurrentlyExpanded) {
@@ -1181,24 +1399,19 @@
         isDragging = true;
         startX = e.clientX;
         startWidth = sb.getBoundingClientRect().width;
-
         document.body.classList.add('is-resizing');
         resizer.classList.add('resizing');
-        sb.style.transition = 'none'; // disable CSS transition while dragging
+        sb.style.transition = 'none';
         e.preventDefault();
       });
 
       window.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
-
         let newWidth = startWidth + (e.clientX - startX);
-
-        // Snap threshold to collapse
         if (newWidth < 110) {
           sb.classList.remove('expanded');
           sb.style.width = COLLAPSED_WIDTH + 'px';
         } else {
-          // Clamp between 180px and 480px or 50% viewport
           newWidth = Math.max(180, Math.min(newWidth, Math.min(480, window.innerWidth * 0.5)));
           sb.classList.add('expanded');
           sb.style.width = newWidth + 'px';
@@ -1210,7 +1423,7 @@
         isDragging = false;
         document.body.classList.remove('is-resizing');
         resizer.classList.remove('resizing');
-        sb.style.transition = ''; // restore transition
+        sb.style.transition = '';
 
         const currentWidth = sb.getBoundingClientRect().width;
         if (currentWidth <= COLLAPSED_WIDTH + 10) {
@@ -1224,13 +1437,13 @@
         }
       });
 
-      // Double click on resizer resets to default width
       resizer.addEventListener('dblclick', () => {
         sb.classList.add('expanded');
         sb.style.transition = 'width 0.24s cubic-bezier(0.16, 1, 0.3, 1)';
         sb.style.width = DEFAULT_EXPANDED_WIDTH + 'px';
         localStorage.setItem('b0_sidebar_expanded', 'true');
         localStorage.setItem('b0_sidebar_custom_width', DEFAULT_EXPANDED_WIDTH);
+        playHaptic('pop');
       });
     }
 
@@ -1241,15 +1454,48 @@
       } else {
         document.documentElement.classList.add('dark');
       }
+      updateSafariThemeColor(saved !== "light");
+      syncThemeToIframe();
+    }
+
+    function updateSafariThemeColor(isDark) {
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', isDark ? '#090a0d' : '#f8fafc');
     }
 
     function toggleTheme() {
+      playHaptic('click');
       const isDark = document.documentElement.classList.toggle('dark');
       localStorage.setItem('b0_theme', isDark ? 'dark' : 'light');
+      updateSafariThemeColor(isDark);
+      syncThemeToIframe();
+    }
+
+    function syncThemeToIframe() {
+      const iframe = document.getElementById('stageIframe');
+      const isDark = document.documentElement.classList.contains('dark');
+      if (iframe && iframe.contentWindow) {
+        try {
+          iframe.contentWindow.postMessage({ type: 'B0_THEME_CHANGE', theme: isDark ? 'dark' : 'light' }, '*');
+        } catch (e) {}
+      }
     }
 
     function toggleLangMenu() {
+      playHaptic('click');
       document.getElementById('langMenu').classList.toggle('hidden');
+    }
+
+    function applyI18n(lang) {
+      const dict = I18N[lang] || I18N['zh-CN'];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+      // Update dynamic hero copy for active filter
+      filterOverview(currentCategoryFilter, false);
     }
 
     function setLanguage(lang) {
@@ -1257,12 +1503,37 @@
       localStorage.setItem('b0_lang', lang);
       document.getElementById('currentLangLabel').textContent = labels[lang] || '简';
       document.getElementById('langMenu').classList.add('hidden');
+      applyI18n(lang);
+      playHaptic('pop');
     }
+
+    // Command Palette Pro Logic (Full Keyboard First)
+    let paletteItems = [];
+    let paletteActiveIndex = 0;
+
+    const COMMANDS = [
+      { id: 'icon', title: 'ArchIcons', category: 'APPS', badge: '⌘1', action: () => loadStage('icon') },
+      { id: 'ppt', title: 'SlideCraft', category: 'APPS', badge: '⌘2', action: () => loadStage('ppt') },
+      { id: 'console', title: 'AIConsole', category: 'APPS', badge: '⌘3', action: () => loadStage('console') },
+      { id: 'ambient', title: 'Ambient 4K', category: 'APPS', badge: '⌘4', action: () => loadStage('ambient') },
+      { id: 'population', title: '全球人口结构变迁 1950–2100', category: 'NOTES', badge: '⌘5', action: () => loadStage('population') },
+      { id: 'fund-cycle', title: '公募基金与产业周期全景', category: 'NOTES', badge: '⌘6', action: () => loadStage('fund-cycle') },
+      { id: 'fund-breakdown', title: '破位基金本质透视看板', category: 'NOTES', badge: '⌘7', action: () => loadStage('fund-breakdown') },
+      { id: 'teacher', title: '教师工作台', category: 'LABS', badge: '⌘8', action: () => loadStage('teacher') },
+      { id: 'overview', title: '返回工作台全景看板', category: 'ACTION', badge: '⌘H', action: () => loadStage('overview') },
+      { id: 'theme', title: '切换外观模式 (Dark / Light)', category: 'ACTION', badge: '⌘\\', action: () => toggleTheme() },
+      { id: 'sound', title: '切换微触感声效', category: 'ACTION', badge: 'Sound', action: () => toggleSound() },
+      { id: 'fullscreen', title: '切换全屏模式', category: 'ACTION', badge: '⌃⌘F', action: () => toggleFullscreen() },
+      { id: 'shortcuts', title: '查看快捷键全景帮助', category: 'ACTION', badge: '?', action: () => toggleShortcutModal(true) },
+    ];
 
     function toggleCommandPalette(show) {
       const modal = document.getElementById('cmdPalette');
       if (show) {
         modal.classList.remove('hidden');
+        playHaptic('pop');
+        document.getElementById('cmdInput').value = '';
+        filterPalette();
         setTimeout(() => document.getElementById('cmdInput').focus(), 50);
       } else {
         modal.classList.add('hidden');
@@ -1275,28 +1546,140 @@
 
     function filterPalette() {
       const q = document.getElementById('cmdInput').value.toLowerCase().trim();
-      document.querySelectorAll('.cmd-item').forEach(item => {
-        const t = (item.getAttribute('data-label') || '') + ' ' + item.textContent;
-        item.style.display = (!q || t.toLowerCase().includes(q)) ? 'flex' : 'none';
+      const listEl = document.getElementById('cmdList');
+      listEl.innerHTML = '';
+
+      paletteItems = COMMANDS.filter(cmd => {
+        return !q || cmd.title.toLowerCase().includes(q) || cmd.category.toLowerCase().includes(q) || cmd.id.toLowerCase().includes(q);
+      });
+
+      paletteActiveIndex = 0;
+
+      if (paletteItems.length === 0) {
+        listEl.innerHTML = '<div class="p-4 text-center text-zinc-400 font-mono text-xs">未找到匹配项</div>';
+        return;
+      }
+
+      paletteItems.forEach((cmd, idx) => {
+        const itemEl = document.createElement('div');
+        itemEl.className = `cmd-item flex items-center justify-between p-2.5 rounded-xl transition-colors cursor-pointer ${idx === 0 ? 'bg-sky-500/10 text-sky-400 font-bold' : 'hover:bg-black/[0.04] dark:hover:bg-white/[0.06]'}`;
+        itemEl.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-black/[0.04] dark:bg-white/[0.06] text-zinc-400 font-semibold">${cmd.category}</span>
+            <span class="text-xs font-semibold">${cmd.title}</span>
+          </div>
+          <span class="kbd">${cmd.badge}</span>
+        `;
+        itemEl.onmouseenter = () => {
+          paletteActiveIndex = idx;
+          updatePaletteActive();
+        };
+        itemEl.onclick = () => {
+          cmd.action();
+          toggleCommandPalette(false);
+        };
+        listEl.appendChild(itemEl);
       });
     }
 
+    function updatePaletteActive() {
+      const items = document.querySelectorAll('#cmdList .cmd-item');
+      items.forEach((item, idx) => {
+        if (idx === paletteActiveIndex) {
+          item.className = 'cmd-item flex items-center justify-between p-2.5 rounded-xl transition-colors cursor-pointer bg-sky-500/10 text-sky-400 font-bold';
+          item.scrollIntoView({ block: 'nearest' });
+        } else {
+          item.className = 'cmd-item flex items-center justify-between p-2.5 rounded-xl transition-colors cursor-pointer hover:bg-black/[0.04] dark:hover:bg-white/[0.06]';
+        }
+      });
+    }
+
+    function handlePaletteKeydown(e) {
+      if (e.key === 'ArrowDown' || (e.ctrlKey && e.key === 'n')) {
+        e.preventDefault();
+        if (paletteItems.length === 0) return;
+        paletteActiveIndex = (paletteActiveIndex + 1) % paletteItems.length;
+        updatePaletteActive();
+        playHaptic('click');
+      } else if (e.key === 'ArrowUp' || (e.ctrlKey && e.key === 'p')) {
+        e.preventDefault();
+        if (paletteItems.length === 0) return;
+        paletteActiveIndex = (paletteActiveIndex - 1 + paletteItems.length) % paletteItems.length;
+        updatePaletteActive();
+        playHaptic('click');
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (paletteItems[paletteActiveIndex]) {
+          paletteItems[paletteActiveIndex].action();
+          toggleCommandPalette(false);
+          playHaptic('pop');
+        }
+      }
+    }
+
+    function toggleShortcutModal(show) {
+      const modal = document.getElementById('shortcutModal');
+      if (show) {
+        modal.classList.remove('hidden');
+        playHaptic('pop');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    // Keyboard Shortcuts Listener
     window.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      const hasMeta = (e.metaKey || e.ctrlKey);
+      
+      if (hasMeta && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         toggleCommandPalette(document.getElementById('cmdPalette').classList.contains('hidden'));
+        return;
       }
-      if (e.key === 'Escape') toggleCommandPalette(false);
+      if (e.key === 'Escape') {
+        toggleCommandPalette(false);
+        toggleShortcutModal(false);
+        closeJumpMenus();
+        return;
+      }
       if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-      if (e.key.toLowerCase() === 't') toggleTheme();
-      if (e.key === '1') loadStage('icon');
-      if (e.key === '2') loadStage('ppt');
-      if (e.key === '3') loadStage('console');
-      if (e.key === '4') loadStage('ambient');
-      if (e.key === '5') loadStage('population');
-      if (e.key === '6') loadStage('fund-cycle');
-      if (e.key === '7') loadStage('fund-breakdown');
-      if (e.key === '8') loadStage('teacher');
+
+      if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+        e.preventDefault();
+        toggleShortcutModal(true);
+        return;
+      }
+      if (hasMeta && e.key === '0') {
+        e.preventDefault();
+        toggleSidebarState();
+        return;
+      }
+      if (hasMeta && (e.key === '\\' || e.key === 't')) {
+        e.preventDefault();
+        toggleTheme();
+        return;
+      }
+      if (hasMeta && e.key.toLowerCase() === 'h') {
+        e.preventDefault();
+        loadStage('overview');
+        return;
+      }
+      if (hasMeta && e.key.toLowerCase() === 'r') {
+        e.preventDefault();
+        reloadCurrentStage();
+        return;
+      }
+      if (hasMeta && e.key.toLowerCase() === 'o') {
+        e.preventDefault();
+        openCurrentStageExternal();
+        return;
+      }
+      // ⌘1 ~ ⌘8
+      if (hasMeta && e.key >= '1' && e.key <= '8') {
+        e.preventDefault();
+        const map = { '1':'icon', '2':'ppt', '3':'console', '4':'ambient', '5':'population', '6':'fund-cycle', '7':'fund-breakdown', '8':'teacher' };
+        if (map[e.key]) loadStage(map[e.key]);
+      }
     });
 
     function handleRoute() {
@@ -1332,9 +1715,42 @@
         sb.style.width = COLLAPSED_WIDTH + 'px';
       }
       initSidebarResizer();
+      
+      const savedLang = localStorage.getItem('b0_lang') || 'zh-CN';
+      setLanguage(savedLang);
+
       handleRoute();
       if (window.lucide) lucide.createIcons();
+      // Spatial Arrow Key Navigation on Bento Cards
+      document.querySelectorAll('.bento-card').forEach((card, idx, all) => {
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            card.click();
+          } else if (e.key === 'ArrowRight' && all[idx + 1]) {
+            e.preventDefault();
+            all[idx + 1].focus();
+          } else if (e.key === 'ArrowLeft' && all[idx - 1]) {
+            e.preventDefault();
+            all[idx - 1].focus();
+          } else if (e.key === 'ArrowDown' && all[idx + 4]) {
+            e.preventDefault();
+            all[idx + 4].focus();
+          } else if (e.key === 'ArrowUp' && all[idx - 4]) {
+            e.preventDefault();
+            all[idx - 4].focus();
+          }
+        });
+      });
+
+
+      // Initialize segmented thumb position
+      setTimeout(() => {
+        const activeBtn = document.querySelector('#overviewSegmented .mac-segmented-btn.active');
+        if (activeBtn) updateSegmentedThumb(activeBtn);
+      }, 100);
     });
+
   </script>
 </body>
 </html>

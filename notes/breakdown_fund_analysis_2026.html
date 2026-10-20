@@ -4,11 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>破位基金本质透视与常识分析看板</title>
-  <script>
-    if (window.top === window.self) {
-      window.location.replace('/#/fund-breakdown');
-    }
-  </script>
+  <script src="/shared/nav-pill.js" data-category="notes" data-title="破位基金本质透视看板" defer></script>
   <style>
     :root {
       --bg-primary: #0b0f19;
@@ -606,7 +602,30 @@
       font-size: 13px;
       color: var(--text-muted);
     }
-  </style>
+  
+/* Executive Research Memo Print Stylesheet (Apple HIG / Bloomberg Standard) */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+  }
+  #b0-nav-pill-host, button, .ctrls, .badge-live, input[type=range], .ticks {
+    display: none !important;
+  }
+  .card, .kpi, .pyrpanel, header {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    color: #0f172a !important;
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, .stitle, .val {
+    color: #0f172a !important;
+  }
+}
+
+</style>
 </head>
 <body>
 

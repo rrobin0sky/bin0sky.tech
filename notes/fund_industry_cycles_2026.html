@@ -4,11 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>超跌稳盘 → 右侧反弹：公募基金与产业周期全景数据可视化系统</title>
-  <script>
-    if (window.top === window.self) {
-      window.location.replace('/#/fund-cycle');
-    }
-  </script>
+  <script src="/shared/nav-pill.js" data-category="notes" data-title="公募基金与产业周期全景" defer></script>
   <style>
     :root {
       --bg: #0b0f19;
@@ -677,7 +673,30 @@
       font-weight: 600;
     }
 
-  </style>
+  
+/* Executive Research Memo Print Stylesheet (Apple HIG / Bloomberg Standard) */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+  }
+  #b0-nav-pill-host, button, .ctrls, .badge-live, input[type=range], .ticks {
+    display: none !important;
+  }
+  .card, .kpi, .pyrpanel, header {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    color: #0f172a !important;
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, .stitle, .val {
+    color: #0f172a !important;
+  }
+}
+
+</style>
 </head>
 <body>
   <div class="container">
