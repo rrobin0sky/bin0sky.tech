@@ -11,7 +11,22 @@
 <script>
   // 当在普通浏览器标签直接打开时，如需独立全屏使用直接运行；如需返回工作台可通过右上方返回
   window.__STANDALONE_WORKSPACE__ = (window.top === window.self);
+  // Instant FOUC-prevention Theme Init
+  (function() {
+    try {
+      var saved = localStorage.getItem('b0_theme');
+      var isDark = saved ? (saved === 'dark') : true;
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      }
+    } catch (e) {}
+  })();
 </script>
+<script src="/shared/nav-pill.js" data-category="labs" data-title="教师工作台" defer></script>
 <meta data-page-node-id="854fxzeDgYvFkBHB8s56mW" charset="utf-8">
 <meta data-page-node-id="F3DBFW7vIidRmMwlDEaEkI" content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport">
 <title data-page-node-id="LiQBNRhhHGs8kxKCU0wc36" data-pnid-children="lyONi2gGhUXflN1VRG4hze">教师工作台 · 高中日语教学空间</title>
@@ -53,6 +68,63 @@ body.mode-b{
   --radius:18px; --radius-btn:12px;
   --card-border:1px solid var(--line); --card-shadow:0 8px 30px rgba(96,72,48,.10);
   --font-head:var(--font-ui); --font-body:var(--font-ui); --head-weight:var(--weight-semibold);
+}
+/* ===== Pro 深色高质感模式（黑夜/暗色工作台统一风格） ===== */
+html.dark, html.dark body, body.dark, html.dark body.mode-a, html.dark body.mode-b, body.dark.mode-a, body.dark.mode-b {
+  --bg: #090c10;
+  --card: #121721;
+  --side-bg: #0d1118;
+  --ink: #f1f5f9;
+  --muted: #94a3b8;
+  --line: rgba(255, 255, 255, 0.09);
+  --brand: #10b981;
+  --brand-deep: #059669;
+  --brand-soft: rgba(16, 185, 129, 0.16);
+  --ok: #10b981;
+  --ok-soft: rgba(16, 185, 129, 0.16);
+  --ok-ink: #34d399;
+  --warn: #f59e0b;
+  --warn-soft: rgba(245, 158, 11, 0.16);
+  --warn-ink: #fbbf24;
+  --bad: #ef4444;
+  --bad-soft: rgba(239, 68, 68, 0.16);
+  --bad-ink: #f87171;
+  --accent: #f97316;
+  --accent-ink: #fb923c;
+  --accent-soft: rgba(249, 115, 22, 0.16);
+  --bad-line: rgba(239, 68, 68, 0.3);
+  --warn-line: rgba(245, 158, 11, 0.3);
+  --card-border: 1px solid var(--line);
+  --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+}
+html.dark .tile,
+html.dark .tile-wrap,
+html.dark .tile-pair button,
+html.dark .chips button,
+html.dark .pad button,
+html.dark .grades button,
+html.dark .btn.line,
+html.dark .btn.grey,
+html.dark .ghost,
+html.dark .sc-cell,
+html.dark .paper,
+html.dark .seat-cell,
+html.dark .seat-pool button,
+html.dark .del,
+html.dark .arrows button {
+  background: var(--card) !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+}
+html.dark .card {
+  background: var(--card) !important;
+  border-color: var(--line) !important;
+  color: var(--ink) !important;
+}
+html.dark input, html.dark select, html.dark textarea {
+  background: var(--card) !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 /* 键盘焦点看得见；按下去有反馈（顶替被关掉的系统高亮） */
