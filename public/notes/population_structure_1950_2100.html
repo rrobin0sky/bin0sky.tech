@@ -613,9 +613,12 @@ function drawTag(g, x, y, lines, o){
   w+=pad*2; const h=lines.length*lh+pad*1.5;
   let bx=x-w/2, by=y-h/2;
   if(o.anchor==="left") bx=x; else if(o.anchor==="right") bx=x-w;
-  g.fillStyle=o.bg||"rgba(14,20,29,.92)"; g.strokeStyle=o.border||"#2c3d50"; g.lineWidth=1;
+  const isDark = document.documentElement.classList.contains('dark');
+  g.fillStyle = o.bg || (isDark ? "rgba(14,20,29,.92)" : "rgba(255,255,255,.94)");
+  g.strokeStyle = o.border || (isDark ? "#2c3d50" : "rgba(0,0,0,.15)");
+  g.lineWidth = 1;
   roundRectPath(g,bx,by,w,h,7); g.fill(); g.stroke();
-  g.fillStyle=o.color||"#e8eef6"; g.textAlign="center"; g.textBaseline="middle";
+  g.fillStyle = o.color || (isDark ? "#e8eef6" : "#0f172a");
   lines.forEach((t,i)=>g.fillText(t, bx+w/2, by+pad*0.75+lh*(i+0.5)));
   return {x:bx,y:by,w,h};
 }
@@ -624,6 +627,7 @@ const overlayPlugin={
   afterDatasetsDraw(chart,args,opts){
     if(!opts) return;
     const g=chart.ctx, ca=chart.chartArea, sc=chart.scales;
+    const isDark = document.documentElement.classList.contains('dark');
     // x 轴可能是 category（年份作标签）也可能是 linear
     const xPix=function(v){
       const s=sc.x;
@@ -652,15 +656,16 @@ const overlayPlugin={
         g.textAlign = L.axis==="y" ? (L.labelPos==="end"?"right":"left") : "center";
         const tw=g.measureText(L.label).width;
         const bx = g.textAlign==="right"? lx-tw-7 : (g.textAlign==="center"? lx-tw/2-7 : lx-7);
-        g.fillStyle="rgba(9,13,20,.82)"; roundRectPath(g,bx,ly-9,tw+14,18,5); g.fill();
-        g.fillStyle=L.labelColor||"#c9d6e6"; g.fillText(L.label,lx,ly);
+        g.fillStyle = isDark ? "rgba(9,13,20,.82)" : "rgba(255,255,255,.92)";
+        roundRectPath(g,bx,ly-9,tw+14,18,5); g.fill();
+        g.fillStyle=L.labelColor||(isDark ? "#c9d6e6" : "#334155"); g.fillText(L.label,lx,ly);
       }
     });
     (opts.dots||[]).forEach(D=>{
       const x=xPix(D.x), y=sc.y.getPixelForValue(D.y);
       g.beginPath(); g.arc(x,y,D.r||5,0,Math.PI*2); g.lineWidth=1.5;
       g.fillStyle=D.color||"#fff"; g.fill();
-      g.strokeStyle="rgba(10,14,20,.9)"; g.stroke();
+      g.strokeStyle = isDark ? "rgba(10,14,20,.9)" : "rgba(255,255,255,.9)"; g.stroke();
       if(D.text) drawTag(g, x+(D.dx||14), y+(D.dy||-14), D.text,
         {bg:D.bg,border:D.border,color:D.color,fs:10.5,anchor:D.anchor,pad:4});
     });
@@ -674,7 +679,8 @@ const overlayPlugin={
   }
 };
 Chart.register(overlayPlugin);
-const GRID="rgba(255,255,255,.055)";
+const GRID = () => document.documentElement.classList.contains('dark') ? "rgba(255,255,255,.055)" : "rgba(0,0,0,.06)";
+const allCharts = [];
 
 /* =================================================================
    3. AGING LINE
@@ -698,7 +704,7 @@ const annAging = {
     {x:2035,y:43,text:["中国 2035","65+ ≈ 22.8%"],color:"#ffb4b4",bg:"rgba(239,68,68,.20)",border:"rgba(239,68,68,.65)"}
   ]
 };
-new Chart(document.getElementById("agingChart"),{
+allCharts.push(new Chart(document.getElementById("agingChart"),{
   type:"line",
   data:{ labels:yearsAll, datasets:COUNTRIES.map(c=>({
     label:CN[c], data:seriesOf(POP.aging[c]), borderColor:CO[c], backgroundColor:CO[c]+"18",
@@ -716,7 +722,7 @@ new Chart(document.getElementById("agingChart"),{
       y:{grid:{color:GRID},min:0,max:50,ticks:{callback:v=>v+"%"},title:{display:true,text:"65 岁以上人口占比",color:"#8a98ab"}}
     }
   }
-});
+}));
 
 /* =================================================================
    4. SCATTER
