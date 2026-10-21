@@ -762,7 +762,7 @@ const annScatter={
   lines:[{axis:"y",value:2.1,color:"rgba(255,255,255,.5)",dash:[6,5],label:"更替水平 2.1",labelColor:"#c9d6e6",labelPos:"end"}],
   dots:scatterDots
 };
-new Chart(document.getElementById("scatterChart"),{
+allCharts.push(new Chart(document.getElementById("scatterChart"),{
   type:"scatter",
   data:{ datasets:[
     ...INC_ORDER.map(g=>({
@@ -784,14 +784,14 @@ new Chart(document.getElementById("scatterChart"),{
       y:{min:0,max:6.5,grid:{color:GRID},title:{display:true,text:"总和生育率 TFR（每名妇女生育数）",color:"#8a98ab"}}
     }
   }
-});
+}));
 
 /* =================================================================
    5. DIVIDEND — working-age line + gantt
    ================================================================= */
 const DIV=POP.dividend;
 const divAnn={ lines:[{axis:"y",value:65,color:"rgba(126,231,135,.85)",dash:[7,5],label:"人口红利阈值 65%",labelColor:"#7ee787",labelPos:"end"}] };
-new Chart(document.getElementById("workChart"),{
+allCharts.push(new Chart(document.getElementById("workChart"),{
   type:"line",
   data:{ labels:yearsAll, datasets:COUNTRIES.map(c=>({
     label:CN[c], data:seriesOf(POP.work[c]), borderColor:CO[c], backgroundColor:CO[c]+"10",
@@ -809,7 +809,7 @@ new Chart(document.getElementById("workChart"),{
       y:{grid:{color:GRID},min:48,max:80,ticks:{callback:v=>v+"%"},title:{display:true,text:"15–64 岁劳动年龄人口占比",color:"#8a98ab"}}
     }
   }
-});
+}));
 // gantt
 (function(){
   const pct=y=>((y-1950)/(2100-1950))*100;
@@ -854,7 +854,7 @@ new Chart(document.getElementById("workChart"),{
   texts.push(Math.round(base+POP.world.delta).toLocaleString());
 
   const totalDelta=POP.world.delta;
-  new Chart(document.getElementById("waterfallChart"),{
+  allCharts.push(new Chart(document.getElementById("waterfallChart"),{
     type:"bar",
     data:{ labels, datasets:[{ data:bars, backgroundColor:colors.map(c=>c+"cc"), borderColor:colors,
       borderWidth:1, borderRadius:4, barPercentage:.72 }] },
@@ -877,8 +877,21 @@ new Chart(document.getElementById("workChart"),{
         y:{grid:{color:GRID},min:0,max:10600,ticks:{callback:v=>v.toLocaleString()},title:{display:true,text:"人口（百万）",color:"#8a98ab"}}
       }
     }
-  });
+  }));
 })();
+
+function updateAllCharts() {
+  const isDark = document.documentElement.classList.contains('dark');
+  Chart.defaults.color = isDark ? "#8a98ab" : "#64748b";
+  allCharts.forEach(ch => {
+    if (ch) ch.update('none');
+  });
+  renderPyramids();
+}
+window.addEventListener('b0-theme-change', updateAllCharts);
+window.addEventListener('storage', (e) => {
+  if (e.key === 'b0_theme') updateAllCharts();
+});
 
 /* ---- initial render (defer to ensure layout) ---- */
 requestAnimationFrame(()=>renderPyramids());
