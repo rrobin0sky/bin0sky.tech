@@ -320,18 +320,30 @@
         </svg>
       </button>
 
-      <a href="javascript:void(0)" onclick="loadStage('overview')" class="flex items-center gap-2.5 group cursor-pointer" title="返回工作台全景 (⌘H)">
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-zinc-900 to-zinc-950 dark:from-white dark:to-zinc-200 p-1 flex items-center justify-center shadow-xs transition-transform group-hover:scale-105 active:scale-95">
-          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 17L8 10L13 15L17 8L21 17" class="stroke-zinc-100 dark:stroke-zinc-900" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="17" cy="8" r="1.8" class="fill-rose-500 stroke-none"/>
-            <circle cx="8" cy="10" r="1.4" class="fill-sky-400 stroke-none"/>
+      <a href="javascript:void(0)" onclick="loadStage('overview')" class="flex items-center gap-2.5 group cursor-pointer" title="返回 BinOS 工作台全景 (⌘H)">
+        <!-- Apple 风格三色螺旋风车图标 -->
+        <div class="w-7 h-7 rounded-xl overflow-hidden flex items-center justify-center transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
+          <svg viewBox="0 0 64 64" class="w-full h-full" fill="none">
+            <defs>
+              <linearGradient id="brand-sky" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0284c7"/></linearGradient>
+              <linearGradient id="brand-sky-d" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0284c7"/><stop offset="100%" stop-color="#075985"/></linearGradient>
+              <linearGradient id="brand-rose" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fb7185"/><stop offset="100%" stop-color="#e11d48"/></linearGradient>
+              <linearGradient id="brand-rose-d" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e11d48"/><stop offset="100%" stop-color="#9f1239"/></linearGradient>
+              <linearGradient id="brand-emerald" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#059669"/></linearGradient>
+              <linearGradient id="brand-emerald-d" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#064e3b"/></linearGradient>
+            </defs>
+            <rect x="2" y="2" width="60" height="60" rx="16" fill="#12141a" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
+            <g transform="translate(32,32)">
+              <g><path d="M 0,0 C 0,-10 3,-18 0,-22 C 8,-21 16,-17 20,-11 Z" fill="url(#brand-sky)"/><path d="M 0,0 L 20,-11 C 18,-6 14,-1 8,0 Z" fill="url(#brand-sky-d)"/></g>
+              <g transform="rotate(120)"><path d="M 0,0 C 0,-10 3,-18 0,-22 C 8,-21 16,-17 20,-11 Z" fill="url(#brand-rose)"/><path d="M 0,0 L 20,-11 C 18,-6 14,-1 8,0 Z" fill="url(#brand-rose-d)"/></g>
+              <g transform="rotate(240)"><path d="M 0,0 C 0,-10 3,-18 0,-22 C 8,-21 16,-17 20,-11 Z" fill="url(#brand-emerald)"/><path d="M 0,0 L 20,-11 C 18,-6 14,-1 8,0 Z" fill="url(#brand-emerald-d)"/></g>
+              <circle cx="0" cy="0" r="4" fill="#ffffff"/>
+              <circle cx="0" cy="0" r="1.8" fill="#12141a"/>
+            </g>
           </svg>
         </div>
-        <div class="flex flex-col">
-          <span class="font-bold text-sm tracking-tight text-zinc-900 dark:text-white leading-none">bin0sky</span>
-          <span class="text-[9px] font-mono text-zinc-400 dark:text-zinc-500 leading-tight">STUDIO</span>
-        </div>
+        <!-- 品牌文字: BinOS -->
+        <span class="font-bold text-[15px] font-sans tracking-tight text-zinc-900 dark:text-white group-hover:text-sky-500 dark:group-hover:text-sky-400 transition-colors select-none leading-none">BinOS</span>
       </a>
     </div>
 
