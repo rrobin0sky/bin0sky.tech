@@ -463,37 +463,100 @@
           </button>
           <nav class="space-y-1" id="nav-group-apps">
             <button onclick="loadStage('icon')" id="nav-item-icon" data-tooltip="ArchIcons" class="sidebar-nav-item w-full flex items-center gap-2.5 p-2 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="ArchIcons">
-              <span class="icon-slot rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
-                <i data-lucide="network" class="w-3.5 h-3.5"></i>
+              <span class="icon-slot flex items-center justify-center flex-shrink-0">
+                <div class="w-[18px] h-[18px] rounded-[4.5px] overflow-hidden flex items-center justify-center shadow-xs">
+                  <svg viewBox="0 0 32 32" class="w-full h-full" fill="none">
+                    <defs>
+                      <linearGradient id="arch-side-g" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#1d4ed8"/><stop offset="50%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#7c3aed"/>
+                      </linearGradient>
+                    </defs>
+                    <rect width="32" height="32" rx="7.5" fill="url(#arch-side-g)"/>
+                    <path d="M16 5.5 L25 10.7 V21.3 L16 26.5 L7 21.3 V10.7 Z" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round"/>
+                    <path d="M16 5.5 V16 L25 10.7 M16 16 L7 10.7 M16 16 V26.5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                    <circle cx="16" cy="16" r="2.8" fill="#38bdf8"/>
+                  </svg>
+                </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-sky-400 flex items-center justify-between">
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-sky-400">
                 <span>ArchIcons</span>
               </span>
             </button>
 
             <button onclick="loadStage('ppt')" id="nav-item-ppt" data-tooltip="SlideCraft" class="sidebar-nav-item w-full flex items-center gap-2.5 p-2 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="SlideCraft">
-              <span class="icon-slot rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
-                <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
+              <span class="icon-slot flex items-center justify-center flex-shrink-0">
+                <div class="w-[18px] h-[18px] rounded-[4.5px] overflow-hidden flex items-center justify-center shadow-xs">
+                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                    <defs>
+                      <linearGradient id="slide-side-g" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#818cf8"/><stop offset="0.5" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/>
+                      </linearGradient>
+                      <linearGradient id="slide-side-i" x1="12" y1="12" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#38bdf8"/><stop offset="1" stop-color="#a855f7"/>
+                      </linearGradient>
+                    </defs>
+                    <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#slide-side-g)"/>
+                    <rect x="11" y="12" width="26" height="17" rx="3.5" fill="rgba(10, 12, 20, 0.7)" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1.2"/>
+                    <path d="M24 15L25.3 18.5L28.8 19.8L25.3 21.1L24 24.6L22.7 21.1L19.2 19.8L22.7 18.5L24 15Z" fill="url(#slide-side-i)"/>
+                    <path d="M24 31V37M19 37H29" stroke="rgba(255, 255, 255, 0.9)" stroke-width="2.5" stroke-linecap="round"/>
+                  </svg>
+                </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400 flex items-center justify-between">
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-amber-400">
                 <span>SlideCraft</span>
               </span>
             </button>
 
             <button onclick="loadStage('console')" id="nav-item-console" data-tooltip="AIConsole" class="sidebar-nav-item w-full flex items-center gap-2.5 p-2 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="AIConsole">
-              <span class="icon-slot rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
-                <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+              <span class="icon-slot flex items-center justify-center flex-shrink-0">
+                <div class="w-[18px] h-[18px] rounded-[4.5px] overflow-hidden flex items-center justify-center shadow-xs">
+                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                    <defs>
+                      <linearGradient id="aiconsole-side-g" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#181a22"/><stop offset="100%" stop-color="#0d0e14"/>
+                      </linearGradient>
+                      <linearGradient id="aiconsole-side-c" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00d2ff"/><stop offset="100%" stop-color="#a855f7"/>
+                      </linearGradient>
+                    </defs>
+                    <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#aiconsole-side-g)"/>
+                    <path d="M13 14L22 23L13 32" stroke="url(#aiconsole-side-c)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="24" y="29" width="11" height="4.5" rx="2.25" fill="#00f2fe"/>
+                  </svg>
+                </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-400 flex items-center justify-between">
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-400">
                 <span>AIConsole</span>
               </span>
             </button>
 
             <button onclick="loadStage('ambient')" id="nav-item-ambient" data-tooltip="Ambient 4K" class="sidebar-nav-item w-full flex items-center gap-2.5 p-2 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="Ambient 4K">
-              <span class="icon-slot rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              <span class="icon-slot flex items-center justify-center flex-shrink-0">
+                <div class="w-[18px] h-[18px] rounded-[4.5px] overflow-hidden flex items-center justify-center shadow-xs">
+                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                    <defs>
+                      <linearGradient id="amb-side-g" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#1e1b4b"/><stop offset="50%" stop-color="#31104b"/><stop offset="100%" stop-color="#0f0c1b"/>
+                      </linearGradient>
+                      <linearGradient id="amb-side-p" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#f472b6"/>
+                      </linearGradient>
+                      <clipPath id="amb-side-cp">
+                        <rect x="8" y="11" width="32" height="23" rx="4"/>
+                      </clipPath>
+                    </defs>
+                    <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#amb-side-g)"/>
+                    <rect x="8" y="11" width="32" height="23" rx="4" fill="#090a16"/>
+                    <g clip-path="url(#amb-side-cp)">
+                      <path d="M18 35L30 19L41 35Z" fill="#6366f1" opacity="0.75"/>
+                      <path d="M7 35L20 18L34 35Z" fill="url(#amb-side-p)"/>
+                    </g>
+                    <rect x="8" y="11" width="32" height="23" rx="4" stroke="#818cf8" stroke-width="1.8"/>
+                    <circle cx="34" cy="17" r="1.5" fill="#ffffff"/>
+                  </svg>
+                </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-purple-400 flex items-center justify-between">
+              <span class="expanded-content flex-1 truncate text-zinc-800 dark:text-zinc-200 group-hover:text-purple-400">
                 <span>Ambient 4K</span>
               </span>
             </button>
@@ -601,9 +664,23 @@
           <!-- ArchIcons -->
           <div tabindex="0" onclick="loadStage('icon')" data-category="apps" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
             <div>
-              <div class="flex items-center justify-between mb-3.5">
-                <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="network" class="w-5 h-5"></i>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-7 h-7 rounded-[7px] overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm transition-transform group-hover:scale-105">
+                  <svg viewBox="0 0 32 32" class="w-full h-full" fill="none">
+                    <defs>
+                      <linearGradient id="arch-card-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#1d4ed8"/>
+                        <stop offset="50%" stop-color="#3b82f6"/>
+                        <stop offset="100%" stop-color="#7c3aed"/>
+                      </linearGradient>
+                    </defs>
+                    <rect width="32" height="32" rx="7.5" fill="url(#arch-card-grad)"/>
+                    <rect width="32" height="32" rx="7.5" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25"/>
+                    <path d="M16 5.5 L25 10.7 V21.3 L16 26.5 L7 21.3 V10.7 Z" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M16 5.5 V16 L25 10.7 M16 16 L7 10.7 M16 16 V26.5" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+                    <circle cx="16" cy="16" r="2.6" fill="#38bdf8"/>
+                    <circle cx="16" cy="16" r="1.4" fill="#ffffff"/>
+                  </svg>
                 </div>
                 <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-400 font-semibold uppercase">APPS</span>
               </div>
@@ -622,9 +699,26 @@
           <!-- SlideCraft -->
           <div tabindex="0" onclick="loadStage('ppt')" data-category="apps" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
             <div>
-              <div class="flex items-center justify-between mb-3.5">
-                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="presentation" class="w-5 h-5"></i>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-7 h-7 rounded-[7px] overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm transition-transform group-hover:scale-105">
+                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                    <defs>
+                      <linearGradient id="slide-card-grad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#818cf8"/>
+                        <stop offset="0.5" stop-color="#6366f1"/>
+                        <stop offset="1" stop-color="#4f46e5"/>
+                      </linearGradient>
+                      <linearGradient id="slide-card-inner" x1="12" y1="12" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#38bdf8"/>
+                        <stop offset="1" stop-color="#a855f7"/>
+                      </linearGradient>
+                    </defs>
+                    <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#slide-card-grad)"/>
+                    <rect x="2.5" y="2.5" width="43" height="43" rx="10.5" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1"/>
+                    <rect x="11" y="12" width="26" height="17" rx="3.5" fill="rgba(10, 12, 20, 0.7)" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1"/>
+                    <path d="M24 15L25.3 18.5L28.8 19.8L25.3 21.1L24 24.6L22.7 21.1L19.2 19.8L22.7 18.5L24 15Z" fill="url(#slide-card-inner)"/>
+                    <path d="M24 31V37M19 37H29" stroke="rgba(255, 255, 255, 0.9)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
                 </div>
                 <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 font-semibold uppercase">APPS</span>
               </div>
@@ -643,9 +737,32 @@
           <!-- AIConsole -->
           <div tabindex="0" onclick="loadStage('console')" data-category="apps" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
             <div>
-              <div class="flex items-center justify-between mb-3.5">
-                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="terminal" class="w-5 h-5"></i>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-7 h-7 rounded-[7px] overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm transition-transform group-hover:scale-105">
+                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                    <defs>
+                      <linearGradient id="aiconsole-card-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#181a22"/>
+                        <stop offset="100%" stop-color="#0d0e14"/>
+                      </linearGradient>
+                      <linearGradient id="aiconsole-card-chev" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00d2ff"/>
+                        <stop offset="50%" stop-color="#3a7bd5"/>
+                        <stop offset="100%" stop-color="#a855f7"/>
+                      </linearGradient>
+                      <linearGradient id="aiconsole-card-cur" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00f2fe"/>
+                        <stop offset="100%" stop-color="#4facfe"/>
+                      </linearGradient>
+                    </defs>
+                    <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#aiconsole-card-bg)"/>
+                    <rect x="2.5" y="2.5" width="43" height="43" rx="10.5" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+                    <path d="M34 11L34.8 14.2L38 15L34.8 15.8L34 19L33.2 15.8L30 15L33.2 14.2Z" fill="#c084fc" opacity="0.9"/>
+                    <circle cx="29" cy="11" r="0.8" fill="#4ade80"/>
+                    <circle cx="38" cy="11" r="0.8" fill="#38bdf8"/>
+                    <path d="M14 15L21.5 22.5L14 30" stroke="url(#aiconsole-card-chev)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="24" y="28" width="9" height="3.5" rx="1.75" fill="url(#aiconsole-card-cur)"/>
+                  </svg>
                 </div>
                 <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold uppercase">APPS</span>
               </div>
@@ -664,9 +781,40 @@
           <!-- Ambient 4K -->
           <div tabindex="0" onclick="loadStage('ambient')" data-category="apps" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
             <div>
-              <div class="flex items-center justify-between mb-3.5">
-                <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="sparkles" class="w-5 h-5"></i>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-7 h-7 rounded-[7px] overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm transition-transform group-hover:scale-105">
+                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                    <defs>
+                      <linearGradient id="amb-card-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#1e1b4b"/>
+                        <stop offset="50%" stop-color="#31104b"/>
+                        <stop offset="100%" stop-color="#0f0c1b"/>
+                      </linearGradient>
+                      <linearGradient id="amb-card-frame" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#38bdf8"/>
+                        <stop offset="50%" stop-color="#818cf8"/>
+                        <stop offset="100%" stop-color="#e879f9"/>
+                      </linearGradient>
+                      <linearGradient id="amb-card-peak" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#38bdf8"/>
+                        <stop offset="50%" stop-color="#818cf8"/>
+                        <stop offset="100%" stop-color="#f472b6"/>
+                      </linearGradient>
+                      <clipPath id="amb-card-clip">
+                        <rect x="8" y="11" width="32" height="23" rx="4"/>
+                      </clipPath>
+                    </defs>
+                    <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#amb-card-bg)"/>
+                    <rect x="2.5" y="2.5" width="43" height="43" rx="10.5" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+                    <rect x="8" y="11" width="32" height="23" rx="4" fill="#090a16"/>
+                    <g clip-path="url(#amb-card-clip)">
+                      <path d="M18 35L30 19L41 35Z" fill="#6366f1" opacity="0.75"/>
+                      <path d="M7 35L20 18L34 35Z" fill="url(#amb-card-peak)"/>
+                    </g>
+                    <rect x="8" y="11" width="32" height="23" rx="4" stroke="url(#amb-card-frame)" stroke-width="1.8"/>
+                    <path d="M33 14L34 17L37 18L34 19L33 22L32 19L29 18L32 17Z" fill="#ffffff"/>
+                    <rect x="19" y="37.5" width="10" height="2" rx="1" fill="url(#amb-card-frame)"/>
+                  </svg>
                 </div>
                 <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 font-semibold uppercase">APPS</span>
               </div>
@@ -685,9 +833,9 @@
           <!-- Population Structure -->
           <div tabindex="0" onclick="loadStage('population')" data-category="notes" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
             <div>
-              <div class="flex items-center justify-between mb-3.5">
-                <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-7 h-7 rounded-[7px] bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center flex-shrink-0 shadow-xs">
+                  <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
                 </div>
                 <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 font-semibold uppercase">NOTES</span>
               </div>
@@ -706,9 +854,9 @@
           <!-- Fund Cycles -->
           <div tabindex="0" onclick="loadStage('fund-cycle')" data-category="notes" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
             <div>
-              <div class="flex items-center justify-between mb-3.5">
-                <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="trending-up" class="w-5 h-5"></i>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-7 h-7 rounded-[7px] bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center flex-shrink-0 shadow-xs">
+                  <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
                 </div>
                 <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 font-semibold uppercase">NOTES</span>
               </div>
@@ -727,9 +875,9 @@
           <!-- Fund Breakdown -->
           <div tabindex="0" onclick="loadStage('fund-breakdown')" data-category="notes" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
             <div>
-              <div class="flex items-center justify-between mb-3.5">
-                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="activity" class="w-5 h-5"></i>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-7 h-7 rounded-[7px] bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0 shadow-xs">
+                  <i data-lucide="activity" class="w-3.5 h-3.5"></i>
                 </div>
                 <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 font-semibold uppercase">NOTES</span>
               </div>
@@ -748,9 +896,9 @@
           <!-- Teacher Workspace -->
           <div tabindex="0" onclick="loadStage('teacher')" data-category="labs" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
             <div>
-              <div class="flex items-center justify-between mb-3.5">
-                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-7 h-7 rounded-[7px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center flex-shrink-0 shadow-xs">
+                  <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i>
                 </div>
                 <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold uppercase">LABS</span>
               </div>
