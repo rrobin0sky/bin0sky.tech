@@ -11,23 +11,69 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>超跌稳盘 → 右侧反弹：公募基金与产业周期全景数据可视化系统</title>
+  <!-- Instant FOUC-prevention Theme Init -->
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('b0_theme');
+        var isDark = saved ? (saved === 'dark') : true;
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light');
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script src="/shared/nav-pill.js" data-category="notes" data-title="公募基金与产业周期全景" defer></script>
   <style>
     :root {
-      --bg: #0b0f19;
-      --surface: #111827;
-      --surface-card: #1f2937;
-      --surface-hover: #374151;
-      --border: #374151;
-      --text: #f3f4f6;
-      --text-muted: #9ca3af;
-      --primary: #3b82f6;
-      --primary-hover: #2563eb;
+      /* Dark Theme (Default) */
+      --bg: #090a0f;
+      --surface: #11151f;
+      --surface-card: #171d2b;
+      --surface-hover: #222b3d;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --heading: #ffffff;
+      --primary: #38bdf8;
+      --primary-hover: #0ea5e9;
       --success: #10b981;
       --danger: #ef4444;
       --warning: #f59e0b;
-      --purple: #8b5cf6;
+      --purple: #a855f7;
       --cyan: #06b6d4;
+      --header-bg: linear-gradient(135deg, rgba(23, 29, 43, 0.9), rgba(17, 21, 31, 0.95));
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      --input-bg: #11151f;
+      --tooltip-bg: rgba(17, 21, 31, 0.96);
+    }
+    html:not(.dark), body:not(.dark), html.light, body.light {
+      /* Light Theme */
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-card: #f1f5f9;
+      --surface-hover: #e2e8f0;
+      --border: rgba(0, 0, 0, 0.08);
+      --border-strong: rgba(0, 0, 0, 0.16);
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --heading: #0f172a;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --success: #059669;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --purple: #7c3aed;
+      --cyan: #0891b2;
+      --header-bg: linear-gradient(135deg, #ffffff, #f1f5f9);
+      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+      --input-bg: #ffffff;
+      --tooltip-bg: rgba(255, 255, 255, 0.98);
     }
     * {
       box-sizing: border-box;
@@ -47,12 +93,12 @@
     }
     /* Header */
     header {
-      background: linear-gradient(135deg, rgba(31,41,55,0.8), rgba(17,24,39,0.95));
+      background: var(--header-bg);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 28px 36px;
       margin-bottom: 24px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -71,7 +117,7 @@
     h1 {
       font-size: 28px;
       font-weight: 800;
-      color: #ffffff;
+      color: var(--heading);
       letter-spacing: -0.5px;
     }
     .subtitle {
@@ -120,7 +166,7 @@
     .kpi-value {
       font-size: 30px;
       font-weight: 800;
-      color: #ffffff;
+      color: var(--heading);
       display: flex;
       align-items: baseline;
       gap: 4px;
@@ -166,7 +212,7 @@
     .viz-title {
       font-size: 16px;
       font-weight: 700;
-      color: #f9fafb;
+      color: var(--heading);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -192,15 +238,15 @@
     #chart-tooltip {
       position: absolute;
       display: none;
-      background: rgba(17, 24, 39, 0.95);
+      background: var(--tooltip-bg);
       border: 1px solid var(--border);
       padding: 12px 16px;
       border-radius: 8px;
       font-size: 12px;
-      color: #fff;
+      color: var(--text);
       pointer-events: none;
       z-index: 100;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
       max-width: 280px;
       line-height: 1.5;
     }
