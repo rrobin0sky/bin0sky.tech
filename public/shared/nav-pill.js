@@ -201,8 +201,8 @@
   host.id = 'b0-nav-pill-host';
   host.innerHTML = `
     <div class="b0-pill-bar">
-      <a href="/#/${category}" class="b0-pill-home" title="返回 bin0sky 工作台全景">
-        <span class="b0-pill-logo">b0</span>
+      <a href="/#/${category}" class="b0-pill-home" title="返回 BinOS 工作台全景">
+        <span class="b0-pill-logo">BinOS</span>
         <span>工作台</span>
       </a>
       <span class="b0-pill-sep"></span>
