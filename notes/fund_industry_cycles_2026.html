@@ -547,12 +547,12 @@
   
     /* Macro Strategy & Decision Blueprint Panel */
     .macro-strategy-panel {
-      background: linear-gradient(135deg, rgba(31, 41, 55, 0.75), rgba(17, 24, 39, 0.95));
+      background: var(--header-bg);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 24px 28px;
       margin-bottom: 24px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
       gap: 18px;
@@ -563,13 +563,13 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
-      border-bottom: 1px solid rgba(55, 65, 81, 0.6);
+      border-bottom: 1px solid var(--border);
       padding-bottom: 14px;
     }
     .msp-title {
       font-size: 18px;
       font-weight: 800;
-      color: #fff;
+      color: var(--heading);
       display: flex;
       align-items: center;
       gap: 10px;
@@ -593,7 +593,7 @@
       }
     }
     .macro-stage-card {
-      background: rgba(17, 24, 39, 0.7);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 18px;
@@ -623,7 +623,7 @@
     .msc-name {
       font-size: 15px;
       font-weight: 700;
-      color: #fff;
+      color: var(--heading);
     }
     .msc-count {
       font-size: 12px;
@@ -637,15 +637,15 @@
 
     .msc-desc {
       font-size: 12.5px;
-      color: #d1d5db;
+      color: var(--text-muted);
       line-height: 1.5;
     }
     .msc-rule {
-      background: rgba(31, 41, 55, 0.6);
+      background: var(--surface-card);
       border-radius: 6px;
       padding: 8px 10px;
       font-size: 12px;
-      color: #f3f4f6;
+      color: var(--text);
     }
     .msc-rule strong {
       color: #fbbf24;
@@ -653,7 +653,7 @@
 
     /* 3 Real-World Investment Rules Banner */
     .macro-rules-box {
-      background: rgba(17, 24, 39, 0.5);
+      background: var(--surface-card);
       border: 1px dashed var(--border);
       border-radius: 10px;
       padding: 14px 18px;
@@ -672,7 +672,7 @@
       align-items: flex-start;
       gap: 8px;
       font-size: 12px;
-      color: #d1d5db;
+      color: var(--text);
       line-height: 1.5;
     }
     .m-rule-icon {
@@ -1242,9 +1242,10 @@
       const minY = 15, maxY = 55;
 
       // Draw Grid & Axes
-      ctx.strokeStyle = "#374151";
+      const isDark = document.documentElement.classList.contains('dark');
+      ctx.strokeStyle = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.08)";
       ctx.lineWidth = 1;
-      ctx.fillStyle = "#9ca3af";
+      ctx.fillStyle = isDark ? "#9ca3af" : "#64748b";
       ctx.font = "11px sans-serif";
 
       // X grid
@@ -1294,7 +1295,7 @@
         ctx.stroke();
 
         // Label
-        ctx.fillStyle = "#e5e7eb";
+        ctx.fillStyle = isDark ? "#f1f5f9" : "#0f172a";
         ctx.font = "10.5px sans-serif";
         ctx.fillText(item.name.slice(0, 4), xPos + radius + 4, yPos + 3);
 
@@ -1397,6 +1398,7 @@
       const innerRadius = outerRadius * 0.55;
 
       let startAngle = -Math.PI / 2;
+      const isDark = document.documentElement.classList.contains('dark');
 
       // Draw Donut segments
       for (const [driver, count] of Object.entries(counts)) {
@@ -1407,7 +1409,7 @@
         ctx.closePath();
         ctx.fillStyle = colors[driver] || "#6b7280";
         ctx.fill();
-        ctx.strokeStyle = "#111827";
+        ctx.strokeStyle = isDark ? "#111827" : "#ffffff";
         ctx.lineWidth = 2;
         ctx.stroke();
 
@@ -1415,11 +1417,11 @@
       }
 
       // Center text
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = isDark ? "#ffffff" : "#0f172a";
       ctx.font = "bold 20px sans-serif";
       ctx.textAlign = "center";
       ctx.fillText(`${total}`, centerX, centerY + 2);
-      ctx.fillStyle = "#9ca3af";
+      ctx.fillStyle = isDark ? "#9ca3af" : "#64748b";
       ctx.font = "11px sans-serif";
       ctx.fillText("个赛道驱动", centerX, centerY + 18);
 
@@ -1440,13 +1442,21 @@
 
         ctx.fillStyle = color;
         ctx.fillRect(curX, curY - 8, 10, 10);
-        ctx.fillStyle = "#d1d5db";
+        ctx.fillStyle = isDark ? "#d1d5db" : "#334155";
         ctx.font = "11px sans-serif";
         ctx.fillText(`${driver} (${count}，${pct}%)`, curX + 16, curY + 1);
 
         idx++;
       }
     }
+
+    // Theme listener for real-time chart redraws
+    window.addEventListener('b0-theme-change', () => {
+      renderCharts();
+    });
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'b0_theme') renderCharts();
+    });
 
     // Kick off
     init();

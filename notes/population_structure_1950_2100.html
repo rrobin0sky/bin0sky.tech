@@ -11,21 +11,51 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>全球人口结构变迁 1950–2100 · UN WPP 2024</title>
+<!-- Instant FOUC-prevention Theme Init -->
+<script>
+  (function() {
+    try {
+      var saved = localStorage.getItem('b0_theme');
+      var isDark = saved ? (saved === 'dark') : true;
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      }
+    } catch (e) {}
+  })();
+</script>
 <script src="/shared/nav-pill.js" data-category="notes" data-title="全球人口结构变迁 1950–2100" defer></script>
 <style>
 :root{
-  --bg:#0a0e14; --bg2:#0e141d; --panel:#121a26; --panel2:#161f2e;
-  --border:#22303f; --border2:#2c3d50;
-  --text:#e8eef6; --muted:#8a98ab; --muted2:#6b7a8d;
-  --accent:#58a6ff; --accent2:#7ee787;
-  --china:#ef4444; --india:#f59e0b; --usa:#3b82f6; --japan:#a855f7;
+  /* Dark Mode Defaults */
+  --bg:#090a0f; --bg2:#0e141f; --panel:#121926; --panel2:#162030;
+  --border:rgba(255,255,255,0.08); --border2:rgba(255,255,255,0.14);
+  --text:#f1f5f9; --muted:#94a3b8; --muted2:#64748b;
+  --accent:#38bdf8; --accent2:#4ade80;
+  --china:#f43f5e; --india:#f59e0b; --usa:#38bdf8; --japan:#a855f7;
   --shadow:0 8px 30px rgba(0,0,0,.45);
+  --pyr-bg:rgba(10,17,26,.55);
+  --btn-bg:#1a2536; --btn-hover:#22314a;
+}
+html:not(.dark), body:not(.dark), html.light, body.light {
+  /* Light Mode */
+  --bg:#f8fafc; --bg2:#ffffff; --panel:#ffffff; --panel2:#f1f5f9;
+  --border:rgba(0,0,0,0.08); --border2:rgba(0,0,0,0.14);
+  --text:#0f172a; --muted:#475569; --muted2:#64748b;
+  --accent:#0284c7; --accent2:#16a34a;
+  --china:#e11d48; --india:#d97706; --usa:#0284c7; --japan:#7c3aed;
+  --shadow:0 8px 30px rgba(0,0,0,.06);
+  --pyr-bg:#f1f5f9;
+  --btn-bg:#f1f5f9; --btn-hover:#e2e8f0;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  background:radial-gradient(1200px 700px at 15% -10%, #16233a 0%, transparent 55%),
-             radial-gradient(1000px 600px at 90% 0%, #1c1630 0%, transparent 50%),
+  background:radial-gradient(1200px 700px at 15% -10%, rgba(56, 189, 248, 0.06) 0%, transparent 55%),
+             radial-gradient(1000px 600px at 90% 0%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
              var(--bg);
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Segoe UI,Roboto,Helvetica,Arial,sans-serif;
@@ -464,19 +494,20 @@ function drawPyramid(canvas, country, year){
 
   const fr = frameAt(country, year);
   const tot = fr.m.reduce((a,b)=>a+b,0)+fr.f.reduce((a,b)=>a+b,0) || 1;
+  const isDark = document.documentElement.classList.contains('dark');
 
   // country title
   g.fillStyle = CO[country]; g.font="700 15px -apple-system,PingFang SC,sans-serif";
   g.textAlign="left"; g.textBaseline="top";
   g.fillText(CN[country], padL+2, 4);
-  g.fillStyle="#8a98ab"; g.font="600 12px -apple-system,sans-serif"; g.textAlign="right";
+  g.fillStyle = isDark ? "#8a98ab" : "#64748b"; g.font="600 12px -apple-system,sans-serif"; g.textAlign="right";
   g.fillText((tot/1000).toFixed(tot/1000>=100?0:1)+"M", W-padR-2, 6);
 
   // center axis + faint gridlines
-  g.strokeStyle="rgba(255,255,255,.10)"; g.lineWidth=1;
+  g.strokeStyle = isDark ? "rgba(255,255,255,.10)" : "rgba(0,0,0,.10)"; g.lineWidth=1;
   g.beginPath(); g.moveTo(cx,padT-6); g.lineTo(cx,H-padB+4); g.stroke();
   for(let k=1;k<=3;k++){
-    const x=cx - (halfW*k/3); g.strokeStyle="rgba(255,255,255,.045)";
+    const x=cx - (halfW*k/3); g.strokeStyle = isDark ? "rgba(255,255,255,.045)" : "rgba(0,0,0,.045)";
     g.beginPath(); g.moveTo(x,padT); g.lineTo(x,H-padB); g.stroke();
     g.beginPath(); g.moveTo(cx+(halfW*k/3),padT); g.lineTo(cx+(halfW*k/3),H-padB); g.stroke();
   }
@@ -494,15 +525,15 @@ function drawPyramid(canvas, country, year){
   for(let i=0;i<NAGE;i++){
     const y = H-padB-(i+0.5)*rowH;
     if(i%2===0||i===NAGE-1){
-      g.fillStyle="#7d8b9e"; g.font="500 9px -apple-system,sans-serif";
+      g.fillStyle = isDark ? "#7d8b9e" : "#64748b"; g.font="500 9px -apple-system,sans-serif";
       g.fillText(AGES[i], cx, y);
     }
   }
   // 65+ marker line
   const y65 = H-padB-(13)*rowH;
-  g.strokeStyle="rgba(255,255,255,.28)"; g.setLineDash([3,4]); g.lineWidth=1;
+  g.strokeStyle = isDark ? "rgba(255,255,255,.28)" : "rgba(0,0,0,.25)"; g.setLineDash([3,4]); g.lineWidth=1;
   g.beginPath(); g.moveTo(padL,y65); g.lineTo(W-padR,y65); g.stroke(); g.setLineDash([]);
-  g.fillStyle="rgba(255,255,255,.42)"; g.font="600 9px -apple-system,sans-serif";
+  g.fillStyle = isDark ? "rgba(255,255,255,.42)" : "rgba(0,0,0,.55)"; g.font="600 9px -apple-system,sans-serif";
   g.textAlign="left"; g.textBaseline="bottom";
   g.fillText("65 岁", padL+1, y65-1);
 }

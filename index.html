@@ -769,28 +769,8 @@
         </section>
       </div>
 
-      <!-- 视图 B: 全屏纯净工作台 (Stage Iframe with Pro Toolstrip & Loader) -->
+      <!-- 视图 B: 全屏纯净工作台 (Stage Iframe & Loader) -->
       <div id="stageFrameContainer" class="flex-1 h-full hidden flex-col relative bg-slate-100 dark:bg-zinc-950">
-        <!-- Floating macOS Pro Stage HUD Toolstrip -->
-        <div class="stage-hud-bar absolute top-3 right-4 z-40 flex items-center gap-1.5 p-1 rounded-xl border border-black/[0.08] dark:border-white/[0.1] bg-white/90 dark:bg-[#12141a]/90 backdrop-blur-xl shadow-lg transition-opacity duration-200 opacity-70 hover:opacity-100 select-none">
-          <button onclick="reloadCurrentStage()" class="p-1.5 rounded-lg hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer" title="重新载入视窗 (⌘R)">
-            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-          </button>
-          <button onclick="openCurrentStageExternal()" class="p-1.5 rounded-lg hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer" title="在新标签页独立打开 (⌘O)">
-            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-          </button>
-          <button onclick="copyCurrentStageLink()" class="p-1.5 rounded-lg hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer" title="复制直达链接">
-            <i data-lucide="link" class="w-3.5 h-3.5"></i>
-          </button>
-          <div class="w-px h-3.5 bg-black/[0.08] dark:bg-white/[0.1] my-auto"></div>
-          <button onclick="toggleFullscreen()" class="p-1.5 rounded-lg hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer" title="切换全屏沉浸 (⌃⌘F)">
-            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
-          </button>
-          <button onclick="loadStage('overview')" class="p-1.5 rounded-lg hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer" title="返回总览看板 (ESC)">
-            <i data-lucide="x" class="w-3.5 h-3.5"></i>
-          </button>
-        </div>
-
         <!-- Stage Loading Skeleton Indicator -->
         <div id="stageLoadingOverlay" class="absolute inset-0 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md z-30 flex flex-col items-center justify-center gap-3 transition-opacity duration-300 opacity-0 pointer-events-none select-none">
           <div class="w-7 h-7 rounded-full border-2 border-zinc-300 dark:border-zinc-700 border-t-sky-500 animate-spin"></div>
