@@ -1,11 +1,38 @@
 /**
  * bin0sky Global Nav Pill Component (Apple Glassmorphism Edition)
  * A zero-dependency, self-contained glass floating navigation pill for standalone pages.
- * Automatically syncs theme (b0_theme) and allows instant navigation across all bin0sky tools.
+ * Automatically syncs theme (b0_theme) and language (b0_lang) across all bin0sky tools.
+ * In embedded mode (inside BinOS Workstation), automatically hides redundant buttons and stays transparent.
  */
 (function() {
   if (window.__b0_nav_pill_loaded) return;
   window.__b0_nav_pill_loaded = true;
+
+  // Root Domain Cookie Helper (.bin0sky.tech) for cross-subdomain sharing
+  function setRootDomainCookie(name, value) {
+    try {
+      const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      const domainStr = isLocal ? '' : '; domain=.bin0sky.tech';
+      document.cookie = `${name}=${encodeURIComponent(value)}; path=/${domainStr}; max-age=31536000; SameSite=Lax`;
+    } catch(e) {}
+  }
+
+  function getCookie(name) {
+    try {
+      const match = document.cookie.match(new RegExp('(^|;\\s*)' + name + '=([^;]*)'));
+      return match ? decodeURIComponent(match[2]) : null;
+    } catch(e) { return null; }
+  }
+
+  function normalizeLang(lang) {
+    if (!lang) return 'zh-CN';
+    const l = lang.toLowerCase();
+    if (l.startsWith('zh-tw') || l.startsWith('zh-hk')) return 'zh-TW';
+    if (l.startsWith('zh')) return 'zh-CN';
+    if (l.startsWith('ja')) return 'ja';
+    if (l.startsWith('en')) return 'en';
+    return lang;
+  }
 
   // Universal Theme Sync Engine
   function applyTheme(isDark) {
@@ -35,7 +62,12 @@
       sunIcon.style.display = isDark ? 'none' : 'block';
     }
 
-    // Dispatch event so host pages (charts, canvases, tables) update immediately
+    try {
+      localStorage.setItem('b0_theme', isDark ? 'dark' : 'light');
+    } catch(e) {}
+    setRootDomainCookie('b0_theme', isDark ? 'dark' : 'light');
+
+    // Dispatch event so host pages (charts, canvases, tables, sub-apps) update immediately
     try {
       const evt = new CustomEvent('b0-theme-change', { detail: { theme: isDark ? 'dark' : 'light', isDark: isDark } });
       window.dispatchEvent(evt);
@@ -43,36 +75,93 @@
     } catch(e) {}
   }
 
-  // Read saved theme from localStorage immediately
+  // Universal Language Sync Engine
+  function applyLang(lang) {
+    if (!lang) return;
+    document.documentElement.setAttribute('lang', lang);
+    try {
+      localStorage.setItem('b0_lang', lang);
+    } catch(e) {}
+    setRootDomainCookie('b0_lang', lang);
+
+    try {
+      const evt = new CustomEvent('b0-lang-change', {
+        detail: {
+          lang: lang,
+          normalizedLang: normalizeLang(lang)
+        }
+      });
+      window.dispatchEvent(evt);
+      document.dispatchEvent(evt);
+    } catch(e) {}
+  }
+
+  // Read saved theme & lang from localStorage or root cookies immediately
   let savedTheme = null;
   try {
-    savedTheme = localStorage.getItem('b0_theme');
+    savedTheme = localStorage.getItem('b0_theme') || getCookie('b0_theme');
   } catch(e) {}
   const initialDark = savedTheme ? (savedTheme === 'dark') : true;
   applyTheme(initialDark);
 
-  // Listen for parent theme bridge if embedded
+  let savedLang = null;
+  try {
+    savedLang = localStorage.getItem('b0_lang') || getCookie('b0_lang');
+  } catch(e) {}
+  if (savedLang) {
+    applyLang(savedLang);
+  }
+
+  // Inject Global Utility CSS (hides duplicate buttons inside workstation iframe)
+  const utilityStyle = document.createElement('style');
+  utilityStyle.id = 'b0-utility-style';
+  utilityStyle.textContent = `
+    html.b0-embedded .b0-hide-in-frame,
+    html.b0-embedded [data-b0-hide-in-frame] {
+      display: none !important;
+    }
+  `;
+  if (document.head) {
+    document.head.appendChild(utilityStyle);
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!document.getElementById('b0-utility-style')) {
+        document.head.appendChild(utilityStyle);
+      }
+    });
+  }
+
+  // Listen for parent theme & lang bridge in both embedded and top windows
   window.addEventListener('message', function(e) {
-    if (e.data && e.data.type === 'B0_THEME_CHANGE') {
+    if (!e.data) return;
+    if (e.data.type === 'B0_THEME_CHANGE') {
       applyTheme(e.data.theme === 'dark');
+    } else if (e.data.type === 'B0_LANG_CHANGE') {
+      applyLang(e.data.lang);
     }
   });
-
-  // Request theme from parent if embedded in iframe
-  if (window.top !== window.self) {
-    try {
-      window.parent.postMessage({ type: 'B0_REQUEST_THEME' }, '*');
-    } catch(e) {}
-    // If embedded in workstation iframe, parent workstation shell handles chrome & controls
-    return;
-  }
 
   // Listen for storage changes across tabs
   window.addEventListener('storage', function(e) {
     if (e.key === 'b0_theme' && e.newValue) {
       applyTheme(e.newValue === 'dark');
+    } else if (e.key === 'b0_lang' && e.newValue) {
+      applyLang(e.newValue);
     }
   });
+
+  // Check if running inside iframe (BinOS Workstation Stage)
+  const isEmbedded = (window.top !== window.self);
+  if (isEmbedded) {
+    document.documentElement.classList.add('b0-embedded');
+    // Request current theme and language from parent workstation shell
+    try {
+      window.parent.postMessage({ type: 'B0_REQUEST_THEME' }, '*');
+      window.parent.postMessage({ type: 'B0_REQUEST_LANG' }, '*');
+    } catch(e) {}
+    // If embedded, parent workstation shell handles chrome, controls, and pills
+    return;
+  }
 
   // Read config from script tag attributes
   const currentScript = document.currentScript || document.querySelector('script[src*="nav-pill.js"]');

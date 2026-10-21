@@ -1363,8 +1363,9 @@
               loadingOverlay.style.opacity = '0';
               loadingOverlay.style.pointerEvents = 'none';
             }, 300);
-            // Sync theme to iframe
+            // Sync theme and language to iframe
             syncThemeToIframe();
+            syncLangToIframe();
           };
         }
         if (updateHistory && location.hash !== stage.hash) {
@@ -1552,8 +1553,23 @@
       });
     }
 
+    function setRootDomainCookie(name, value) {
+      try {
+        const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        const domainStr = isLocal ? '' : '; domain=.bin0sky.tech';
+        document.cookie = `${name}=${encodeURIComponent(value)}; path=/${domainStr}; max-age=31536000; SameSite=Lax`;
+      } catch(e) {}
+    }
+
+    function getRootDomainCookie(name) {
+      try {
+        const match = document.cookie.match(new RegExp('(^|;\\s*)' + name + '=([^;]*)'));
+        return match ? decodeURIComponent(match[2]) : null;
+      } catch(e) { return null; }
+    }
+
     function initTheme() {
-      const saved = localStorage.getItem('b0_theme');
+      const saved = localStorage.getItem('b0_theme') || getRootDomainCookie('b0_theme');
       const isDark = saved ? (saved === 'dark') : true;
       if (isDark) {
         document.documentElement.classList.add('dark');
@@ -1570,6 +1586,8 @@
           document.body.classList.add('light');
         }
       }
+      try { localStorage.setItem('b0_theme', isDark ? 'dark' : 'light'); } catch(e) {}
+      setRootDomainCookie('b0_theme', isDark ? 'dark' : 'light');
       updateSafariThemeColor(isDark);
       syncThemeToIframe();
     }
@@ -1598,7 +1616,8 @@
           document.body.classList.add('light');
         }
       }
-      localStorage.setItem('b0_theme', isDark ? 'dark' : 'light');
+      try { localStorage.setItem('b0_theme', isDark ? 'dark' : 'light'); } catch(e) {}
+      setRootDomainCookie('b0_theme', isDark ? 'dark' : 'light');
       updateSafariThemeColor(isDark);
       syncThemeToIframe();
       setTimeout(() => {
@@ -1616,16 +1635,31 @@
       }
     }
 
-    // Cross-tab and embedded iframe theme sync listeners
+    function syncLangToIframe() {
+      const iframe = document.getElementById('stageIframe');
+      const currentLang = localStorage.getItem('b0_lang') || getRootDomainCookie('b0_lang') || 'zh-CN';
+      if (iframe && iframe.contentWindow) {
+        try {
+          iframe.contentWindow.postMessage({ type: 'B0_LANG_CHANGE', lang: currentLang }, '*');
+        } catch (e) {}
+      }
+    }
+
+    // Cross-tab and embedded iframe theme & lang sync listeners
     window.addEventListener('message', (e) => {
-      if (e.data && e.data.type === 'B0_REQUEST_THEME') {
+      if (!e.data) return;
+      if (e.data.type === 'B0_REQUEST_THEME') {
         syncThemeToIframe();
+      } else if (e.data.type === 'B0_REQUEST_LANG') {
+        syncLangToIframe();
       }
     });
 
     window.addEventListener('storage', (e) => {
       if (e.key === 'b0_theme') {
         initTheme();
+      } else if (e.key === 'b0_lang' && e.newValue) {
+        setLanguage(e.newValue);
       }
     });
 
@@ -1648,10 +1682,12 @@
 
     function setLanguage(lang) {
       const labels = { 'zh-CN': '简', 'en': 'EN', 'zh-TW': '繁', 'ja': 'JA' };
-      localStorage.setItem('b0_lang', lang);
+      try { localStorage.setItem('b0_lang', lang); } catch(e) {}
+      setRootDomainCookie('b0_lang', lang);
       document.getElementById('currentLangLabel').textContent = labels[lang] || '简';
       document.getElementById('langMenu').classList.add('hidden');
       applyI18n(lang);
+      syncLangToIframe();
       playHaptic('pop');
     }
 
@@ -1855,7 +1891,7 @@
       initSidebarResizer();
       initSidebarGroups();
       
-      const savedLang = localStorage.getItem('b0_lang') || 'zh-CN';
+      const savedLang = localStorage.getItem('b0_lang') || getRootDomainCookie('b0_lang') || 'zh-CN';
       setLanguage(savedLang);
 
       handleRoute();
