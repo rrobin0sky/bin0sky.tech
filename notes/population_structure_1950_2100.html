@@ -15,7 +15,9 @@
 <script>
   (function() {
     try {
-      var saved = localStorage.getItem('b0_theme');
+      var params = new URLSearchParams(window.location.search);
+      var urlTheme = params.get('b0_theme');
+      var saved = urlTheme || localStorage.getItem('b0_theme');
       var isDark = saved ? (saved === 'dark') : true;
       if (isDark) {
         document.documentElement.classList.add('dark');
@@ -23,6 +25,9 @@
       } else {
         document.documentElement.classList.remove('dark');
         document.documentElement.classList.add('light');
+      }
+      if (params.get('b0_embedded') === '1' || window.top !== window.self) {
+        document.documentElement.classList.add('b0-embedded');
       }
     } catch (e) {}
   })();

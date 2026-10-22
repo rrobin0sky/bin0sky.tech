@@ -96,18 +96,33 @@
     } catch(e) {}
   }
 
-  // Read saved theme & lang from localStorage or root cookies immediately
-  let savedTheme = null;
+  // Read URL search params (highest priority in iframe/embedded contexts)
+  let paramTheme = null;
+  let paramLang = null;
+  let paramEmbedded = false;
   try {
-    savedTheme = localStorage.getItem('b0_theme') || getCookie('b0_theme');
+    const urlParams = new URLSearchParams(window.location.search);
+    paramTheme = urlParams.get('b0_theme');
+    paramLang = urlParams.get('b0_lang');
+    paramEmbedded = (urlParams.get('b0_embedded') === '1');
   } catch(e) {}
+
+  // Read saved theme & lang from URL params, localStorage, or root cookies
+  let savedTheme = (paramTheme === 'dark' || paramTheme === 'light') ? paramTheme : null;
+  if (!savedTheme) {
+    try {
+      savedTheme = localStorage.getItem('b0_theme') || getCookie('b0_theme');
+    } catch(e) {}
+  }
   const initialDark = savedTheme ? (savedTheme === 'dark') : true;
   applyTheme(initialDark);
 
-  let savedLang = null;
-  try {
-    savedLang = localStorage.getItem('b0_lang') || getCookie('b0_lang');
-  } catch(e) {}
+  let savedLang = paramLang;
+  if (!savedLang) {
+    try {
+      savedLang = localStorage.getItem('b0_lang') || getCookie('b0_lang');
+    } catch(e) {}
+  }
   if (savedLang) {
     applyLang(savedLang);
   }
@@ -151,7 +166,7 @@
   });
 
   // Check if running inside iframe (BinOS Workstation Stage)
-  const isEmbedded = (window.top !== window.self);
+  const isEmbedded = (paramEmbedded || window.top !== window.self);
   if (isEmbedded) {
     document.documentElement.classList.add('b0-embedded');
     // Request current theme and language from parent workstation shell
