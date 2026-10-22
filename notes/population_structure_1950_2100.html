@@ -11,14 +11,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>全球人口结构变迁 1950–2100 · UN WPP 2024</title>
-<!-- Instant FOUC-prevention Theme Init -->
+<!-- Instant FOUC-prevention Theme Init & Runtime Bridge -->
 <script>
   (function() {
-    try {
-      var params = new URLSearchParams(window.location.search);
-      var urlTheme = params.get('b0_theme');
-      var saved = urlTheme || localStorage.getItem('b0_theme');
-      var isDark = saved ? (saved === 'dark') : true;
+    function applyTheme(isDark) {
       if (isDark) {
         document.documentElement.classList.add('dark');
         document.documentElement.classList.remove('light');
@@ -26,10 +22,33 @@
         document.documentElement.classList.remove('dark');
         document.documentElement.classList.add('light');
       }
+    }
+
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var urlTheme = params.get('b0_theme');
+      var saved = urlTheme || localStorage.getItem('b0_theme');
+      var isDark = saved ? (saved === 'dark') : true;
+      applyTheme(isDark);
       if (params.get('b0_embedded') === '1' || window.top !== window.self) {
         document.documentElement.classList.add('b0-embedded');
       }
     } catch (e) {}
+
+    window.addEventListener('message', function(e) {
+      if (!e.data) return;
+      if (e.data.type === 'B0_THEME_CHANGE') {
+        applyTheme(e.data.theme === 'dark');
+        if (typeof updateAllCharts === 'function') updateAllCharts();
+      }
+    });
+
+    window.addEventListener('b0-theme-change', function(e) {
+      if (e.detail) {
+        applyTheme(e.detail.theme === 'dark');
+        if (typeof updateAllCharts === 'function') updateAllCharts();
+      }
+    });
   })();
 </script>
 <script src="/shared/nav-pill.js" data-category="notes" data-title="全球人口结构变迁 1950–2100" defer></script>

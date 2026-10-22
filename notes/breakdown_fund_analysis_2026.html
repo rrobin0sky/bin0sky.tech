@@ -11,7 +11,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>破位基金本质透视与常识分析看板</title>
-  <!-- Instant FOUC-prevention Theme Init -->
+  <!-- Instant FOUC-prevention Theme Init & Runtime Bridge -->
   <script>
     (function() {
       try {
@@ -30,6 +30,26 @@
           document.documentElement.classList.add('b0-embedded');
         }
       } catch (e) {}
+
+      function applyTheme(isDark) {
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light');
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+        }
+      }
+
+      window.addEventListener('message', function(e) {
+        if (!e.data) return;
+        if (e.data.type === 'B0_THEME_CHANGE') {
+          applyTheme(e.data.theme === 'dark');
+        }
+      });
+      window.addEventListener('b0-theme-change', function(e) {
+        if (e.detail) applyTheme(e.detail.theme === 'dark');
+      });
     })();
   </script>
   <script src="/shared/nav-pill.js" data-category="notes" data-title="破位基金本质透视看板" defer></script>

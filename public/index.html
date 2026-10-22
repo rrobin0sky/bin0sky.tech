@@ -1171,40 +1171,50 @@
         card.style.display = (category === 'all' || cat === category) ? '' : 'none';
       });
 
-      // Dynamic Hero Copy (Safely guarded for slimmed UI)
+      // Dynamic Hero Copy (Bilingual & Responsive)
       const badge = document.getElementById('overviewHeroBadge');
       const title = document.getElementById('overviewHeroTitle');
       const subtitle = document.getElementById('overviewHeroSubtitle');
       const catBadge = document.getElementById('stageCategoryBadge');
       const titleBread = document.getElementById('stageTitleBreadcrumb');
 
+      const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
+
       if (category === 'apps') {
-        if (badge) badge.textContent = '⚡ 生产力工具矩阵';
-        if (title) title.textContent = '原生效率工具 • 开箱即用';
-        if (subtitle) subtitle.textContent = '涵盖网络拓扑、AI 演示文稿、智能终端与 4K 沉浸白噪音。原生流畅，开箱即用。';
+        if (badge) badge.textContent = isZh ? '⚡ 生产力工具矩阵' : '⚡ Productivity Tools Matrix';
+        if (title) title.textContent = isZh ? '原生效率工具 • 开箱即用' : 'Native Productivity Tools • Ready to Use';
+        if (subtitle) subtitle.textContent = isZh 
+          ? '涵盖网络拓扑、AI 演示文稿、智能终端与 4K 沉浸白噪音。原生流畅，开箱即用。' 
+          : 'Architecture icons, AI presentations, intelligent terminal, and 4K acoustic ambient soundscapes.';
         if (catBadge) catBadge.textContent = 'APPS';
-        if (titleBread) titleBread.textContent = '应用矩阵总览';
+        if (titleBread) titleBread.textContent = isZh ? '应用矩阵总览' : 'Apps Matrix';
         if (updateHash && location.hash !== '#/apps') history.pushState(null, '', '#/apps');
       } else if (category === 'notes') {
-        if (badge) badge.textContent = '📈 深度数据研报书架';
-        if (title) title.textContent = '宏观人口与公募产业周期';
-        if (subtitle) subtitle.textContent = '基于真实联合国宏观人口结构、公募基金出清与破位常识的交互量化研报专栏。';
+        if (badge) badge.textContent = isZh ? '📈 深度数据研报书架' : '📈 Quantitative Research Reports';
+        if (title) title.textContent = isZh ? '宏观人口与公募产业周期' : 'Global Demographics & Industry Cycles';
+        if (subtitle) subtitle.textContent = isZh 
+          ? '基于真实联合国宏观人口结构、公募基金出清与破位常识的交互量化研报专栏。' 
+          : 'Interactive macro demographic models, fund valuation clearing, and structural pivot analysis.';
         if (catBadge) catBadge.textContent = 'NOTES';
-        if (titleBread) titleBread.textContent = '深度研报总览';
+        if (titleBread) titleBread.textContent = isZh ? '深度研报总览' : 'Research Notes';
         if (updateHash && location.hash !== '#/notes') history.pushState(null, '', '#/notes');
       } else if (category === 'labs') {
-        if (badge) badge.textContent = '🧪 创新实验室与专属空间';
-        if (title) title.textContent = '前沿实验与高中日语教学空间';
-        if (subtitle) subtitle.textContent = '面向前沿实验与专用效率系统的创新试验场 • 包含教师工作台与 WebGPU 端侧计算沙盒。';
+        if (badge) badge.textContent = isZh ? '🧪 创新实验室与专属空间' : '🧪 Innovation Labs & Dedicated Spaces';
+        if (title) title.textContent = isZh ? '前沿实验与高中日语教学空间' : 'Frontier Experiments & Pedagogy Workspace';
+        if (subtitle) subtitle.textContent = isZh 
+          ? '面向前沿实验与专用效率系统的创新试验场 • 包含教师工作台与教学教案日程。' 
+          : 'Experimental sandbox for specialized tools, high school pedagogy, and interactive models.';
         if (catBadge) catBadge.textContent = 'LABS';
-        if (titleBread) titleBread.textContent = '创新实验总览';
+        if (titleBread) titleBread.textContent = isZh ? '创新实验总览' : 'Labs & Innovation';
         if (updateHash && location.hash !== '#/labs') history.pushState(null, '', '#/labs');
       } else {
-        if (badge) badge.textContent = 'bin0sky 统一工作台架构已激活';
+        if (badge) badge.textContent = isZh ? 'bin0sky 统一工作台架构已激活' : 'Unified Workstation Architecture Active';
         if (title) title.textContent = 'Tools for Focus. Notes for Depth.';
-        if (subtitle) subtitle.textContent = '原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。';
+        if (subtitle) subtitle.textContent = isZh 
+          ? '原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。' 
+          : 'Native minimalist tool matrix and interactive data models. Left sidebar navigation, direct stage interaction.';
         if (catBadge) catBadge.textContent = 'OVERVIEW';
-        if (titleBread) titleBread.textContent = '工作台全景';
+        if (titleBread) titleBread.textContent = isZh ? '工作台全景' : 'Workstation Overview';
         if (updateHash && location.hash !== '' && location.hash !== '#/') history.pushState(null, '', location.pathname);
       }
     }
@@ -1645,6 +1655,21 @@
           el.setAttribute('title', text);
         }
       });
+
+      // Update dynamic elements
+      const cmdInput = document.getElementById('cmdInput');
+      if (cmdInput) {
+        cmdInput.placeholder = (activeLang === 'en')
+          ? 'Search apps, notes, labs or commands (e.g. theme)...'
+          : '搜索应用、研报、实验或输入指令 (如: theme)...';
+      }
+      const loadingText = document.getElementById('stageLoadingText');
+      if (loadingText) {
+        loadingText.textContent = (activeLang === 'en')
+          ? 'Connecting to workspace stage...'
+          : '正在连接舞台工作区...';
+      }
+
       // Update dynamic hero copy for active filter
       filterOverview(currentCategoryFilter, false);
     }
@@ -1682,21 +1707,24 @@
     let paletteItems = [];
     let paletteActiveIndex = 0;
 
-    const COMMANDS = [
-      { id: 'icon', title: 'ArchIcons', category: 'APPS', badge: '', action: () => loadStage('icon') },
-      { id: 'ppt', title: 'SlideCraft', category: 'APPS', badge: '', action: () => loadStage('ppt') },
-      { id: 'console', title: 'AIConsole', category: 'APPS', badge: '', action: () => loadStage('console') },
-      { id: 'ambient', title: 'Ambient 4K', category: 'APPS', badge: '', action: () => loadStage('ambient') },
-      { id: 'population', title: '全球人口结构变迁 1950–2100', category: 'NOTES', badge: '', action: () => loadStage('population') },
-      { id: 'fund-cycle', title: '公募基金与产业周期全景', category: 'NOTES', badge: '', action: () => loadStage('fund-cycle') },
-      { id: 'fund-breakdown', title: '破位基金本质透视看板', category: 'NOTES', badge: '', action: () => loadStage('fund-breakdown') },
-      { id: 'teacher', title: '教师工作台', category: 'LABS', badge: '', action: () => loadStage('teacher') },
-      { id: 'overview', title: '返回工作台全景看板', category: 'ACTION', badge: '', action: () => loadStage('overview') },
-      { id: 'theme', title: '切换外观模式 (Dark / Light)', category: 'ACTION', badge: '⌘\\', action: () => toggleTheme() },
-      { id: 'sound', title: '切换微触感声效', category: 'ACTION', badge: 'Sound', action: () => toggleSound() },
-      { id: 'fullscreen', title: '切换全屏模式', category: 'ACTION', badge: '⌃⌘F', action: () => toggleFullscreen() },
-      { id: 'shortcuts', title: '查看快捷键全景帮助', category: 'ACTION', badge: '?', action: () => toggleShortcutModal(true) },
-    ];
+    function getCommands() {
+      const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
+      return [
+        { id: 'icon', title: 'ArchIcons', category: 'APPS', badge: '', action: () => loadStage('icon') },
+        { id: 'ppt', title: 'SlideCraft', category: 'APPS', badge: '', action: () => loadStage('ppt') },
+        { id: 'console', title: 'AIConsole', category: 'APPS', badge: '', action: () => loadStage('console') },
+        { id: 'ambient', title: 'Ambient 4K', category: 'APPS', badge: '', action: () => loadStage('ambient') },
+        { id: 'population', title: isZh ? '全球人口结构变迁 1950–2100' : 'Demographics 1950–2100', category: 'NOTES', badge: '', action: () => loadStage('population') },
+        { id: 'fund-cycle', title: isZh ? '公募基金与产业周期全景' : 'Industry Cycles 2026', category: 'NOTES', badge: '', action: () => loadStage('fund-cycle') },
+        { id: 'fund-breakdown', title: isZh ? '破位基金本质透视看板' : 'Breakdown Fund Analysis', category: 'NOTES', badge: '', action: () => loadStage('fund-breakdown') },
+        { id: 'teacher', title: isZh ? '教师工作台' : 'Teacher Workspace', category: 'LABS', badge: '', action: () => loadStage('teacher') },
+        { id: 'overview', title: isZh ? '返回工作台全景看板' : 'Return to Overview', category: 'ACTION', badge: '', action: () => loadStage('overview') },
+        { id: 'theme', title: isZh ? '切换外观模式 (Dark / Light)' : 'Toggle Theme (Dark / Light)', category: 'ACTION', badge: '⌘\\', action: () => toggleTheme() },
+        { id: 'sound', title: isZh ? '切换微触感声效' : 'Toggle Sound Effects', category: 'ACTION', badge: 'Sound', action: () => toggleSound() },
+        { id: 'fullscreen', title: isZh ? '切换全屏模式' : 'Toggle Fullscreen', category: 'ACTION', badge: '⌃⌘F', action: () => toggleFullscreen() },
+        { id: 'shortcuts', title: isZh ? '查看快捷键全景帮助' : 'View Keyboard Shortcuts', category: 'ACTION', badge: '?', action: () => toggleShortcutModal(true) },
+      ];
+    }
 
     function toggleCommandPalette(show) {
       const modal = document.getElementById('cmdPalette');
@@ -1718,16 +1746,17 @@
     function filterPalette() {
       const q = document.getElementById('cmdInput').value.toLowerCase().trim();
       const listEl = document.getElementById('cmdList');
+      const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
       listEl.innerHTML = '';
 
-      paletteItems = COMMANDS.filter(cmd => {
+      paletteItems = getCommands().filter(cmd => {
         return !q || cmd.title.toLowerCase().includes(q) || cmd.category.toLowerCase().includes(q) || cmd.id.toLowerCase().includes(q);
       });
 
       paletteActiveIndex = 0;
 
       if (paletteItems.length === 0) {
-        listEl.innerHTML = '<div class="p-4 text-center text-zinc-400 font-mono text-xs">未找到匹配项</div>';
+        listEl.innerHTML = `<div class="p-4 text-center text-zinc-400 font-mono text-xs">${isZh ? '未找到匹配项' : 'No matching results'}</div>`;
         return;
       }
 
