@@ -6,6 +6,7 @@
  *   bin0sky.tech/ppt/*         -> ppt.bin0sky.tech
  *   bin0sky.tech/console/*     -> console.bin0sky.tech
  *   bin0sky.tech/ambient/*     -> ambient.bin0sky.tech
+ *   bin0sky.tech/bom/*         -> bom.bin0sky.tech
  *   Everything else            -> bin0sky.tech (Main Portal, /notes/*, /labs/*)
  */
 
