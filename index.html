@@ -539,6 +539,37 @@
                 Ambient 4K
               </span>
             </button>
+
+            <button onclick="loadStage('bom')" id="nav-item-bom" data-tooltip="NetBOM" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="NetBOM">
+              <span class="icon-slot flex items-center justify-center flex-shrink-0">
+                <div class="w-5 h-5 rounded-[5px] overflow-hidden flex items-center justify-center shadow-xs shrink-0">
+                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                    <defs>
+                      <linearGradient id="bom-side-g" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#0284c7"/>
+                        <stop offset="100%" stop-color="#0369a1"/>
+                      </linearGradient>
+                      <linearGradient id="bom-side-line" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#38bdf8"/>
+                        <stop offset="100%" stop-color="#0ea5e9"/>
+                      </linearGradient>
+                    </defs>
+                    <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#bom-side-g)"/>
+                    <rect x="8" y="13" width="32" height="22" rx="4" fill="#070c18" stroke="url(#bom-side-line)" stroke-width="1.8"/>
+                    <circle cx="14" cy="20" r="1.8" fill="#38bdf8"/>
+                    <circle cx="20" cy="20" r="1.8" fill="#38bdf8"/>
+                    <circle cx="26" cy="20" r="1.8" fill="#38bdf8"/>
+                    <circle cx="14" cy="28" r="1.8" fill="#38bdf8"/>
+                    <circle cx="20" cy="28" r="1.8" fill="#38bdf8"/>
+                    <circle cx="26" cy="28" r="1.8" fill="#34d399"/>
+                    <rect x="31" y="18" width="5" height="12" rx="1.5" fill="#38bdf8"/>
+                  </svg>
+                </div>
+              </span>
+              <span class="expanded-content flex-1 truncate text-xs font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
+                NetBOM
+              </span>
+            </button>
           </nav>
         </div>
 
@@ -817,6 +848,49 @@
             </div>
           </div>
 
+          <!-- NetBOM -->
+          <div tabindex="0" onclick="loadStage('bom')" data-category="apps" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-7 h-7 rounded-[7px] overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm transition-transform group-hover:scale-105">
+                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                    <defs>
+                      <linearGradient id="bom-card-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#0369a1"/>
+                        <stop offset="50%" stop-color="#0284c7"/>
+                        <stop offset="100%" stop-color="#0c4a6e"/>
+                      </linearGradient>
+                      <linearGradient id="bom-card-frame" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#38bdf8"/>
+                        <stop offset="100%" stop-color="#0ea5e9"/>
+                      </linearGradient>
+                    </defs>
+                    <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#bom-card-bg)"/>
+                    <rect x="2.5" y="2.5" width="43" height="43" rx="10.5" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+                    <rect x="8" y="13" width="32" height="22" rx="4" fill="#080e1a" stroke="url(#bom-card-frame)" stroke-width="1.8"/>
+                    <circle cx="14" cy="20" r="1.8" fill="#38bdf8"/>
+                    <circle cx="20" cy="20" r="1.8" fill="#38bdf8"/>
+                    <circle cx="26" cy="20" r="1.8" fill="#38bdf8"/>
+                    <circle cx="14" cy="28" r="1.8" fill="#38bdf8"/>
+                    <circle cx="20" cy="28" r="1.8" fill="#38bdf8"/>
+                    <circle cx="26" cy="28" r="1.8" fill="#34d399"/>
+                    <rect x="31" y="18" width="5" height="12" rx="1.5" fill="#38bdf8" opacity="0.85"/>
+                  </svg>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-400 font-semibold uppercase">APPS</span>
+              </div>
+              <h3 class="font-bold text-sm text-zinc-900 dark:text-white tracking-tight group-hover:text-sky-400 transition-colors">NetBOM</h3>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed font-normal" data-i18n="card.bom.tag">
+                企业网络设备选型、参数对比与智能 BOM 报价工作台。
+              </p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-black/[0.04] dark:border-white/[0.06] flex items-center justify-end text-[11px] text-zinc-400 font-mono">
+              <span class="group-hover:translate-x-0.5 transition-transform text-zinc-700 dark:text-zinc-300 flex items-center gap-1 font-sans font-medium text-xs">
+                <span data-i18n="btn.enter">进入</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </span>
+            </div>
+          </div>
+
           <!-- Population Structure -->
           <div tabindex="0" onclick="loadStage('population')" data-category="notes" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
             <div>
@@ -988,6 +1062,7 @@
       'ppt': { title: 'SlideCraft', category: 'APPS', src: 'https://ppt.bin0sky.tech', hash: '#/ppt' },
       'console': { title: 'AIConsole', category: 'APPS', src: 'https://console.bin0sky.tech', hash: '#/console' },
       'ambient': { title: 'Ambient 4K', category: 'APPS', src: 'https://ambient.bin0sky.tech', hash: '#/ambient' },
+      'bom': { title: 'NetBOM', category: 'APPS', src: 'https://bom.bin0sky.tech', hash: '#/bom' },
       'population': { title: '全球人口结构变迁', category: 'NOTES', src: '/notes/population_structure_1950_2100.html', hash: '#/population' },
       'fund-cycle': { title: '公募基金与产业周期', category: 'NOTES', src: '/notes/fund_industry_cycles_2026.html', hash: '#/fund-cycle' },
       'fund-breakdown': { title: '破位基金透视看板', category: 'NOTES', src: '/notes/breakdown_fund_analysis_2026.html', hash: '#/fund-breakdown' }
@@ -999,14 +1074,15 @@
         'badge.overview': 'bin0sky 统一工作台架构已激活',
         'hero.title': 'Tools for Focus. Notes for Depth.',
         'hero.subtitle': '原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。',
-        'tab.all': '全部总览 (8)',
-        'tab.apps': 'APPS 应用 (4)',
+        'tab.all': '全部总览 (9)',
+        'tab.apps': 'APPS 应用 (5)',
         'tab.notes': 'NOTES 深度研报 (3)',
         'tab.labs': 'LABS 实验室 (1)',
         'nav.apps': '应用',
         'nav.notes': '研报',
         'nav.labs': '实验室',
         'nav.overview': '总览看板',
+        'item.bom': 'NetBOM 选型报价',
         'item.population': '人口结构变迁',
         'item.fund_cycle': '公募与产业周期',
         'item.breakdown': '破位基金透视',
@@ -1015,6 +1091,7 @@
         'card.slidecraft.tag': 'AI 演示文稿工作台，技术方案与汇报文档秒级生成。',
         'card.aiconsole.tag': '为 macOS 打造的原生 AI 智能终端，全协议 & 报错根因诊断。',
         'card.ambient.tag': '沉浸式 4K 视觉画廊与极简声学氛围工作空间。',
+        'card.bom.tag': '企业网络设备选型、参数对比与智能 BOM 报价工作台。',
         'card.population.tag': '中美印日 150 年人口年龄金字塔与老龄化拐点量化演化模型。',
         'card.fund_cycle.tag': '24 产业赛道周期量化、前期估值出清与商业常识反弹催化看板。',
         'card.breakdown.tag': '穿透技术性破位迷雾，基于底线常识识别真出清与结构性反转。',
@@ -1033,21 +1110,22 @@
         'shortcut.overview': '返回工作台总览全景',
         'shortcut.reload': '重新载入当前视窗舞台',
         'shortcut.fullscreen': '全屏沉浸视窗',
-        'shortcut.apps': '快速直达对应项 01 ~ 08',
+        'shortcut.apps': '快速直达对应项 01 ~ 09',
       },
       'en': {
         'breadcrumb.home': 'Home',
         'badge.overview': 'Unified Workstation Architecture Active',
         'hero.title': 'Tools for Focus. Notes for Depth.',
         'hero.subtitle': 'Native minimalist tool matrix and interactive data models. Left sidebar navigation, direct stage interaction.',
-        'tab.all': 'All Overview (8)',
-        'tab.apps': 'APPS Matrix (4)',
+        'tab.all': 'All Overview (9)',
+        'tab.apps': 'APPS Matrix (5)',
         'tab.notes': 'NOTES Reports (3)',
         'tab.labs': 'LABS Innovation (1)',
         'nav.apps': 'Apps',
         'nav.notes': 'Notes',
         'nav.labs': 'Labs',
         'nav.overview': 'Overview',
+        'item.bom': 'NetBOM Studio',
         'item.population': 'Demographics 1950–2100',
         'item.fund_cycle': 'Industry Cycles',
         'item.breakdown': 'Breakdown Fund Analysis',
@@ -1056,6 +1134,7 @@
         'card.slidecraft.tag': 'AI presentation workstation • Instant slide generation for tech architecture.',
         'card.aiconsole.tag': 'Native AI Terminal built for macOS • Full-protocol SSH & root-cause diagnostics.',
         'card.ambient.tag': 'Immersive 4K visual gallery with minimalist acoustic ambient soundscapes.',
+        'card.bom.tag': 'Enterprise network hardware sizing, spec diff & intelligent BOM CPQ studio.',
         'card.population.tag': 'Pyramid to inverted pyramid • 150-year age structures & fertility inflection of CN, IN, US, JP.',
         'card.fund_cycle.tag': '24 industry sector cycles, valuation clearing, and recovery catalysts.',
         'card.breakdown.tag': 'Breakdown fund anatomy: cut through technical traps to find structural pivots.',
@@ -1074,7 +1153,7 @@
         'shortcut.overview': 'Return to Workstation Overview',
         'shortcut.reload': 'Reload Current Stage Window',
         'shortcut.fullscreen': 'Toggle Fullscreen Mode',
-        'shortcut.apps': 'Jump to Apps & Reports 01 ~ 08',
+        'shortcut.apps': 'Jump to Apps & Reports 01 ~ 09',
       }
     };
 
@@ -1643,6 +1722,7 @@
         'nav-item-ppt': 'SlideCraft',
         'nav-item-console': 'AIConsole',
         'nav-item-ambient': 'Ambient 4K',
+        'nav-item-bom': 'NetBOM',
         'nav-item-population': dict['item.population'],
         'nav-item-fund-cycle': dict['item.fund_cycle'],
         'nav-item-fund-breakdown': dict['item.breakdown'],
@@ -1714,6 +1794,7 @@
         { id: 'ppt', title: 'SlideCraft', category: 'APPS', badge: '', action: () => loadStage('ppt') },
         { id: 'console', title: 'AIConsole', category: 'APPS', badge: '', action: () => loadStage('console') },
         { id: 'ambient', title: 'Ambient 4K', category: 'APPS', badge: '', action: () => loadStage('ambient') },
+        { id: 'bom', title: 'NetBOM', category: 'APPS', badge: '', action: () => loadStage('bom') },
         { id: 'population', title: isZh ? '全球人口结构变迁 1950–2100' : 'Demographics 1950–2100', category: 'NOTES', badge: '', action: () => loadStage('population') },
         { id: 'fund-cycle', title: isZh ? '公募基金与产业周期全景' : 'Industry Cycles 2026', category: 'NOTES', badge: '', action: () => loadStage('fund-cycle') },
         { id: 'fund-breakdown', title: isZh ? '破位基金本质透视看板' : 'Breakdown Fund Analysis', category: 'NOTES', badge: '', action: () => loadStage('fund-breakdown') },
@@ -1881,6 +1962,7 @@
       else if (h.includes('ppt') || p.endsWith('/ppt')) loadStage('ppt', false);
       else if (h.includes('console') || p.endsWith('/console')) loadStage('console', false);
       else if (h.includes('ambient') || p.endsWith('/ambient')) loadStage('ambient', false);
+      else if (h.includes('bom') || p.endsWith('/bom')) loadStage('bom', false);
       else if (h.includes('fund-cycle') || h.includes('cycle') || p.includes('cycle') || p.includes('%e5%85%ac%e5%8b%9f')) loadStage('fund-cycle', false);
       else if (h.includes('fund-breakdown') || h.includes('breakdown') || p.includes('breakdown') || p.includes('%e7%a0%b4%e4%bd%8d')) loadStage('fund-breakdown', false);
       else if (h.includes('teacher') || p.includes('teacher') || p.includes('%e6%95%99%e5%b8%88')) loadStage('teacher', false);
