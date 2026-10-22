@@ -27,11 +27,7 @@
   function normalizeLang(lang) {
     if (!lang) return 'zh-CN';
     const l = lang.toLowerCase();
-    if (l.startsWith('zh-tw') || l.startsWith('zh-hk')) return 'zh-TW';
-    if (l.startsWith('zh')) return 'zh-CN';
-    if (l.startsWith('ja')) return 'ja';
-    if (l.startsWith('en')) return 'en';
-    return lang;
+    return l.startsWith('zh') ? 'zh-CN' : 'en';
   }
 
   // Universal Theme Sync Engine
@@ -75,20 +71,23 @@
     } catch(e) {}
   }
 
-  // Universal Language Sync Engine
+  // Universal Language Sync Engine (Simplified: zh-CN & en only)
   function applyLang(lang) {
     if (!lang) return;
-    document.documentElement.setAttribute('lang', lang);
+    const normalized = normalizeLang(lang);
+    const shortLang = normalized.startsWith('zh') ? 'zh' : 'en';
+    document.documentElement.setAttribute('lang', shortLang);
     try {
-      localStorage.setItem('b0_lang', lang);
+      localStorage.setItem('b0_lang', normalized);
+      localStorage.setItem('archicons_lang', shortLang);
     } catch(e) {}
-    setRootDomainCookie('b0_lang', lang);
+    setRootDomainCookie('b0_lang', normalized);
 
     try {
       const evt = new CustomEvent('b0-lang-change', {
         detail: {
-          lang: lang,
-          normalizedLang: normalizeLang(lang)
+          lang: shortLang,
+          fullLang: normalized
         }
       });
       window.dispatchEvent(evt);

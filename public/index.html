@@ -402,18 +402,10 @@
 
     <!-- 区域 3: 功能按键 (仅保留语言与黑白模式) -->
     <div class="flex items-center gap-1.5 sm:gap-2">
-      <!-- Language dropdown -->
-      <div class="relative">
-        <button id="langBtn" onclick="toggleLangMenu()" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-xs font-semibold tracking-tight transition-all cursor-pointer">
-          <span id="currentLangLabel">简</span>
-          <i data-lucide="chevron-down" class="w-3 h-3 opacity-40"></i>
-        </button>
-        <div id="langMenu" class="hidden absolute right-0 mt-1.5 w-28 rounded-xl border border-black/[0.1] dark:border-white/[0.12] bg-white dark:bg-zinc-900 shadow-xl py-1 z-50 text-xs font-medium">
-          <button onclick="setLanguage('zh-CN')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] cursor-pointer">简体中文</button>
-          <button onclick="setLanguage('en')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] cursor-pointer">English</button>
-          <button onclick="setLanguage('zh-TW')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] cursor-pointer">繁體中文</button>
-          <button onclick="setLanguage('ja')" class="w-full text-left px-3 py-1.5 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] cursor-pointer">日本語</button>
-        </div>
+      <!-- 2-Language Segmented Switcher: 简 / EN -->
+      <div class="flex items-center rounded-lg border border-black/[0.08] dark:border-white/[0.1] p-0.5 text-xs select-none bg-black/[0.02] dark:bg-white/[0.03]">
+        <button id="langBtnZh" onclick="setLanguage('zh-CN')" class="px-2 py-0.5 rounded-md transition-all cursor-pointer text-xs font-bold bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs" title="切换至简体中文">简</button>
+        <button id="langBtnEn" onclick="setLanguage('en')" class="px-2 py-0.5 rounded-md transition-all cursor-pointer text-xs font-medium text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200" title="Switch to English">EN</button>
       </div>
 
       <!-- Theme Switcher -->
@@ -1019,11 +1011,14 @@
         'item.fund_cycle': '公募与产业周期',
         'item.breakdown': '破位基金透视',
         'item.teacher': '教师工作台',
-        'card.archicons.tag': '网络拓扑与云架构 2.5D/2D 矢量设备图标库',
-        'card.slidecraft.tag': 'AI 演示文稿工作台 • 技术方案与汇报秒级生成',
-        'card.aiconsole.tag': '为 macOS 打造的原生 AI 智能终端 • 全协议 & 报错根因诊断',
-        'card.ambient.tag': '沉浸式 4K 视觉画廊与极简声学氛围工作空间',
-        'card.population.tag': '从金字塔到倒金字塔 • 覆盖中国、印度、美国、日本 150 年人口年龄结构、生育率拐点与深度老龄化推演。',
+        'card.archicons.tag': '云架构与网络拓扑 2.5D/2D 矢量设备图标库。',
+        'card.slidecraft.tag': 'AI 演示文稿工作台，技术方案与汇报文档秒级生成。',
+        'card.aiconsole.tag': '为 macOS 打造的原生 AI 智能终端，全协议 & 报错根因诊断。',
+        'card.ambient.tag': '沉浸式 4K 视觉画廊与极简声学氛围工作空间。',
+        'card.population.tag': '中美印日 150 年人口年龄金字塔与老龄化拐点量化演化模型。',
+        'card.fund_cycle.tag': '24 产业赛道周期量化、前期估值出清与商业常识反弹催化看板。',
+        'card.breakdown.tag': '穿透技术性破位迷雾，基于底线常识识别真出清与结构性反转。',
+        'card.teacher.tag': '高中日语教学教案、排课打卡与学情综合管理工作台。',
         'btn.openLibrary': '打开图标库',
         'btn.createDeck': '立即生成',
         'btn.getApp': '下载 / 体验',
@@ -1053,15 +1048,18 @@
         'nav.notes': 'Notes',
         'nav.labs': 'Labs',
         'nav.overview': 'Overview',
-        'item.population': 'Demographics',
+        'item.population': 'Demographics 1950–2100',
         'item.fund_cycle': 'Industry Cycles',
-        'item.breakdown': 'Fund Analysis',
+        'item.breakdown': 'Breakdown Fund Analysis',
         'item.teacher': 'Teacher Space',
         'card.archicons.tag': 'Network topology & cloud architecture 2.5D/2D vector device icon library.',
         'card.slidecraft.tag': 'AI presentation workstation • Instant slide generation for tech architecture.',
         'card.aiconsole.tag': 'Native AI Terminal built for macOS • Full-protocol SSH & root-cause diagnostics.',
         'card.ambient.tag': 'Immersive 4K visual gallery with minimalist acoustic ambient soundscapes.',
         'card.population.tag': 'Pyramid to inverted pyramid • 150-year age structures & fertility inflection of CN, IN, US, JP.',
+        'card.fund_cycle.tag': '24 industry sector cycles, valuation clearing, and recovery catalysts.',
+        'card.breakdown.tag': 'Breakdown fund anatomy: cut through technical traps to find structural pivots.',
+        'card.teacher.tag': 'Teacher workspace: high school Japanese pedagogy, scheduling & analytics.',
         'btn.openLibrary': 'Open Library',
         'btn.createDeck': 'Create Deck',
         'btn.getApp': 'Download App',
@@ -1077,82 +1075,6 @@
         'shortcut.reload': 'Reload Current Stage Window',
         'shortcut.fullscreen': 'Toggle Fullscreen Mode',
         'shortcut.apps': 'Jump to Apps & Reports 01 ~ 08',
-      },
-      'zh-TW': {
-        'breadcrumb.home': '主頁',
-        'badge.overview': 'bin0sky 統一工作台架構已啟動',
-        'hero.title': 'Tools for Focus. Notes for Depth.',
-        'hero.subtitle': '原生極簡工具矩陣與交互數據模型。左側常駐導航，視窗直接交互。',
-        'tab.all': '全部總覽 (8)',
-        'tab.apps': 'APPS 應用 (4)',
-        'tab.notes': 'NOTES 深度研報 (3)',
-        'tab.labs': 'LABS 實驗室 (1)',
-        'nav.apps': '應用',
-        'nav.notes': '研報',
-        'nav.labs': '實驗室',
-        'nav.overview': '總覽看板',
-        'item.population': '人口結構變遷',
-        'item.fund_cycle': '公募與產業週期',
-        'item.breakdown': '破位基金透視',
-        'item.teacher': '教師工作台',
-        'card.archicons.tag': '網絡拓撲與雲架構 2.5D/2D 向量設備圖標庫',
-        'card.slidecraft.tag': 'AI 演示文稿工作台 • 技術方案與匯報秒級生成',
-        'card.aiconsole.tag': '為 macOS 打造的原生 AI 智能終端 • 全協議 & 報錯根因診斷',
-        'card.ambient.tag': '沉浸式 4K 視覺畫廊與極簡聲學氛圍工作空間',
-        'card.population.tag': '從金字塔到倒金字塔 • 覆蓋中、印、美、日 150 年人口年齡結構推演。',
-        'btn.openLibrary': '打開圖標庫',
-        'btn.createDeck': '立即生成',
-        'btn.getApp': '下載 / 體驗',
-        'btn.enterAmbient': '全屏沉浸',
-        'btn.readReport': '閱讀交互研報',
-        'btn.enter': '進入',
-        'btn.read': '閱讀',
-        'shortcut.title': 'macOS 工作台快捷鍵',
-        'shortcut.cmd_k': '呼出指令面板 / 快速檢索',
-        'shortcut.sidebar': '折疊 / 展開側邊欄',
-        'shortcut.theme': '切換外觀主題 (Dark / Light)',
-        'shortcut.overview': '返回工作台總覽全景',
-        'shortcut.reload': '重新載入當前視窗舞台',
-        'shortcut.fullscreen': '全屏沉浸視窗',
-        'shortcut.apps': '快速直達對應項 01 ~ 08',
-      },
-      'ja': {
-        'breadcrumb.home': 'ホーム',
-        'badge.overview': 'bin0sky 統合ワークステーションが起動しました',
-        'hero.title': 'Tools for Focus. Notes for Depth.',
-        'hero.subtitle': 'ネイティブなミニマルツール群とインタラクティブなデータモデル。',
-        'tab.all': 'すべて (8)',
-        'tab.apps': 'APPS アプリ (4)',
-        'tab.notes': 'NOTES レポート (3)',
-        'tab.labs': 'LABS 実験室 (1)',
-        'nav.apps': 'アプリ',
-        'nav.notes': 'レポート',
-        'nav.labs': '実験室',
-        'nav.overview': 'ダッシュボード',
-        'item.population': '人口動態推移',
-        'item.fund_cycle': '産業サイクル',
-        'item.breakdown': 'ファンド分析',
-        'item.teacher': '教育スペース',
-        'card.archicons.tag': 'ネットワークトポロジ＆クラウド構造 2.5D/2D ベクターアイコン集',
-        'card.slidecraft.tag': 'AI プレゼンテーションワークステーション • 技術提案書を瞬時に生成',
-        'card.aiconsole.tag': 'macOS向けネイティブAIターミナル • SSH＆エラー根本原因診断',
-        'card.ambient.tag': '没入型 4K ビジュアルギャラリー＆ミニマル音響アンビエント',
-        'card.population.tag': 'ピラミッドから逆ピラミッドへ • 150年間にわたる日・中・印・米の人口動態推移。',
-        'btn.openLibrary': 'アイコン集を開く',
-        'btn.createDeck': 'スライド生成',
-        'btn.getApp': 'アプリを入手',
-        'btn.enterAmbient': '全画面没入',
-        'btn.readReport': 'レポートを読む',
-        'btn.enter': '開く',
-        'btn.read': '読む',
-        'shortcut.title': 'macOS ショートカット一覧',
-        'shortcut.cmd_k': 'コマンドパレット / 検索',
-        'shortcut.sidebar': 'サイドバー開閉',
-        'shortcut.theme': '外観モード切り替え (Dark / Light)',
-        'shortcut.overview': 'ワークステーション全景へ戻る',
-        'shortcut.reload': '現在のステージを再読込',
-        'shortcut.fullscreen': '全画面表示切り替え',
-        'shortcut.apps': '01 〜 08 のアプリ・レポートへジャンプ',
       }
     };
 
@@ -1654,10 +1576,11 @@
 
     function syncLangToIframe() {
       const iframe = document.getElementById('stageIframe');
-      const currentLang = localStorage.getItem('b0_lang') || getRootDomainCookie('b0_lang') || 'zh-CN';
+      const savedLang = localStorage.getItem('b0_lang') || getRootDomainCookie('b0_lang') || 'zh-CN';
+      const targetLang = (savedLang === 'en') ? 'en' : 'zh-CN';
       if (iframe && iframe.contentWindow) {
         try {
-          iframe.contentWindow.postMessage({ type: 'B0_LANG_CHANGE', lang: currentLang }, '*');
+          iframe.contentWindow.postMessage({ type: 'B0_LANG_CHANGE', lang: targetLang }, '*');
         } catch (e) {}
       }
     }
@@ -1675,10 +1598,11 @@
         } catch(err) {}
         syncThemeToIframe();
       } else if (e.data.type === 'B0_REQUEST_LANG') {
-        const currentLang = localStorage.getItem('b0_lang') || getRootDomainCookie('b0_lang') || 'zh-CN';
+        const savedLang = localStorage.getItem('b0_lang') || getRootDomainCookie('b0_lang') || 'zh-CN';
+        const targetLang = (savedLang === 'en') ? 'en' : 'zh-CN';
         try {
           if (e.source && e.source.postMessage) {
-            e.source.postMessage({ type: 'B0_LANG_CHANGE', lang: currentLang }, '*');
+            e.source.postMessage({ type: 'B0_LANG_CHANGE', lang: targetLang }, '*');
           }
         } catch(err) {}
         syncLangToIframe();
@@ -1693,17 +1617,32 @@
       }
     });
 
-    function toggleLangMenu() {
-      playHaptic('click');
-      document.getElementById('langMenu').classList.toggle('hidden');
-    }
-
     function applyI18n(lang) {
-      const dict = I18N[lang] || I18N['zh-CN'];
+      const activeLang = (lang === 'en') ? 'en' : 'zh-CN';
+      document.documentElement.setAttribute('lang', activeLang);
+      const dict = I18N[activeLang] || I18N['zh-CN'];
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (dict[key]) {
           el.textContent = dict[key];
+        }
+      });
+      // Update sidebar tooltips for collapsed mode
+      const tooltips = {
+        'nav-item-icon': 'ArchIcons',
+        'nav-item-ppt': 'SlideCraft',
+        'nav-item-console': 'AIConsole',
+        'nav-item-ambient': 'Ambient 4K',
+        'nav-item-population': dict['item.population'],
+        'nav-item-fund-cycle': dict['item.fund_cycle'],
+        'nav-item-fund-breakdown': dict['item.breakdown'],
+        'nav-item-teacher': dict['item.teacher']
+      };
+      Object.entries(tooltips).forEach(([id, text]) => {
+        const el = document.getElementById(id);
+        if (el && text) {
+          el.setAttribute('data-tooltip', text);
+          el.setAttribute('title', text);
         }
       });
       // Update dynamic hero copy for active filter
@@ -1711,14 +1650,32 @@
     }
 
     function setLanguage(lang) {
-      const labels = { 'zh-CN': '简', 'en': 'EN', 'zh-TW': '繁', 'ja': 'JA' };
-      try { localStorage.setItem('b0_lang', lang); } catch(e) {}
-      setRootDomainCookie('b0_lang', lang);
-      document.getElementById('currentLangLabel').textContent = labels[lang] || '简';
-      document.getElementById('langMenu').classList.add('hidden');
-      applyI18n(lang);
+      const activeLang = (lang === 'en') ? 'en' : 'zh-CN';
+      try { localStorage.setItem('b0_lang', activeLang); } catch(e) {}
+      setRootDomainCookie('b0_lang', activeLang);
+
+      // Update [ 简 | EN ] segmented buttons
+      const btnZh = document.getElementById('langBtnZh');
+      const btnEn = document.getElementById('langBtnEn');
+      if (btnZh && btnEn) {
+        if (activeLang === 'zh-CN') {
+          btnZh.className = "px-2 py-0.5 rounded-md transition-all cursor-pointer text-xs font-bold bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs";
+          btnEn.className = "px-2 py-0.5 rounded-md transition-all cursor-pointer text-xs font-medium text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200";
+        } else {
+          btnEn.className = "px-2 py-0.5 rounded-md transition-all cursor-pointer text-xs font-bold bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs";
+          btnZh.className = "px-2 py-0.5 rounded-md transition-all cursor-pointer text-xs font-medium text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200";
+        }
+      }
+
+      applyI18n(activeLang);
       syncLangToIframe();
       playHaptic('pop');
+    }
+
+    function toggleLanguage() {
+      const current = localStorage.getItem('b0_lang') || getRootDomainCookie('b0_lang') || 'zh-CN';
+      const next = (current === 'en') ? 'zh-CN' : 'en';
+      setLanguage(next);
     }
 
     // Command Palette Pro Logic (Full Keyboard First)
