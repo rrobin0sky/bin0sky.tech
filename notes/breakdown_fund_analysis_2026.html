@@ -14,23 +14,6 @@
   <!-- Instant FOUC-prevention Theme Init & Runtime Bridge -->
   <script>
     (function() {
-      try {
-        var params = new URLSearchParams(window.location.search);
-        var urlTheme = params.get('b0_theme');
-        var saved = urlTheme || localStorage.getItem('b0_theme');
-        var isDark = saved ? (saved === 'dark') : true;
-        if (isDark) {
-          document.documentElement.classList.add('dark');
-          document.documentElement.classList.remove('light');
-        } else {
-          document.documentElement.classList.remove('dark');
-          document.documentElement.classList.add('light');
-        }
-        if (params.get('b0_embedded') === '1' || window.top !== window.self) {
-          document.documentElement.classList.add('b0-embedded');
-        }
-      } catch (e) {}
-
       function applyTheme(isDark) {
         if (isDark) {
           document.documentElement.classList.add('dark');
@@ -41,14 +24,40 @@
         }
       }
 
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var urlTheme = params.get('b0_theme');
+        var saved = urlTheme || localStorage.getItem('b0_theme');
+        var isDark = saved ? (saved === 'dark') : true;
+        applyTheme(isDark);
+
+        var urlLang = params.get('b0_lang');
+        var savedLang = urlLang || localStorage.getItem('b0_lang');
+        if (savedLang) {
+          var norm = savedLang.toLowerCase().startsWith('zh') ? 'zh-CN' : 'en';
+          document.documentElement.setAttribute('lang', norm);
+        }
+
+        if (params.get('b0_embedded') === '1' || window.top !== window.self) {
+          document.documentElement.classList.add('b0-embedded');
+        }
+      } catch (e) {}
+
       window.addEventListener('message', function(e) {
         if (!e.data) return;
         if (e.data.type === 'B0_THEME_CHANGE') {
           applyTheme(e.data.theme === 'dark');
+        } else if (e.data.type === 'B0_LANG_CHANGE') {
+          if (typeof window.applyLang === 'function') window.applyLang(e.data.lang);
         }
       });
       window.addEventListener('b0-theme-change', function(e) {
         if (e.detail) applyTheme(e.detail.theme === 'dark');
+      });
+      window.addEventListener('b0-lang-change', function(e) {
+        if (e.detail && typeof window.applyLang === 'function') {
+          window.applyLang(e.detail.lang);
+        }
       });
     })();
   </script>
@@ -713,55 +722,42 @@
   <!-- Header -->
   <header>
     <div class="title-group">
-      <h1>
-        破位基金本质透视与常识分析看板
-        <span class="badge-live">深度复盘 · 2026</span>
-      </h1>
-      <p>穿透“底外有底”的技术陷阱，基于 8-10 月公募深度分化与商业常识模型交互解析</p>
+      <h1><span data-i18n="h1Title">破位基金本质透视与常识分析看板</span> <span class="badge-live" data-i18n="h1Badge">深度复盘 · 2026</span></h1>
+      <p data-i18n="headerDesc">穿透“底外有底”的技术陷阱，基于 8-10 月公募深度分化与商业常识模型交互解析</p>
     </div>
-    <div class="header-time">
-      数据周期：2026年Q3 ~ 10月中旬 · 样本：A股公募及全行业ETF
-    </div>
+    <div class="header-time" data-i18n="headerTime">数据周期：2026年Q3 ~ 10月中旬 · 样本：A股公募及全行业ETF</div>
   </header>
 
   <!-- Top KPI Cards -->
   <div class="kpi-grid">
     <div class="kpi-card kpi-red">
-      <div class="kpi-title">年内“翻倍基”存活数</div>
+      <div class="kpi-title" data-i18n="kpi1Title">年内“翻倍基”存活数</div>
       <div class="kpi-value" id="kpi-double">2 <span style="font-size:16px; font-weight:normal; color:#9ca3af;">/ 246只</span></div>
-      <div class="kpi-sub">三季度末仅剩2只 <span class="down">↓ 99.2%</span></div>
+      <div class="kpi-sub" data-i18n="kpi1Sub">三季度末仅剩2只 <span class="down">↓ 99.2%</span></div>
     </div>
     <div class="kpi-card kpi-purple">
-      <div class="kpi-title">前三季度业绩极差</div>
+      <div class="kpi-title" data-i18n="kpi2Title">前三季度业绩极差</div>
       <div class="kpi-value">> 165%</div>
-      <div class="kpi-sub">14只主动基金亏损 <span class="down">> 40%</span></div>
+      <div class="kpi-sub" data-i18n="kpi2Sub">14只主动基金亏损 <span class="down">> 40%</span></div>
     </div>
     <div class="kpi-card kpi-blue">
-      <div class="kpi-title">债券 ETF 历史规模</div>
-      <div class="kpi-value">> 1.05 万亿</div>
-      <div class="kpi-sub">一年猛增 1.6 倍 <span class="up">↑ 虹吸权益流动性</span></div>
+      <div class="kpi-title" data-i18n="kpi3Title">债券 ETF 历史规模</div>
+      <div class="kpi-value" data-i18n="kpi3Val">> 1.05 万亿</div>
+      <div class="kpi-sub" data-i18n="kpi3Sub">一年猛增 1.6 倍 <span class="up">↑ 虹吸权益流动性</span></div>
     </div>
     <div class="kpi-card kpi-amber">
-      <div class="kpi-title">光伏前五巨头中报亏损</div>
-      <div class="kpi-value">> 148 亿元</div>
-      <div class="kpi-sub">组件招标跌破 <span class="down">0.7~0.8元/瓦</span> 现金成本</div>
+      <div class="kpi-title" data-i18n="kpi4Title">光伏前五巨头中报亏损</div>
+      <div class="kpi-value" data-i18n="kpi4Val">> 148 亿元</div>
+      <div class="kpi-sub" data-i18n="kpi4Sub">组件招标跌破 <span class="down">0.7~0.8元/瓦</span> 现金成本</div>
     </div>
   </div>
 
   <!-- Tab Bar -->
   <div class="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('tab-panorama')">
-      📊 市场全景与资金大迁徙
-    </button>
-    <button class="tab-btn" onclick="switchTab('tab-sectors')">
-      🔍 四大破位板块常识穿透
-    </button>
-    <button class="tab-btn" onclick="switchTab('tab-calculator')">
-      🧮 估值陷阱演算器与思维误区
-    </button>
-    <button class="tab-btn" onclick="switchTab('tab-radar')">
-      🚦 右侧企稳监测雷达清单
-    </button>
+    <button class="tab-btn active" onclick="switchTab(\'tab-panorama\')" data-i18n="tab1Btn">📊 市场全景与资金大迁徙</button>
+    <button class="tab-btn" onclick="switchTab(\'tab-sectors\')" data-i18n="tab2Btn">🔍 四大破位板块常识穿透</button>
+    <button class="tab-btn" onclick="switchTab(\'tab-calculator\')" data-i18n="tab3Btn">🧮 估值陷阱演算器与思维误区</button>
+    <button class="tab-btn" onclick="switchTab(\'tab-radar\')" data-i18n="tab4Btn">🚦 右侧企稳监测雷达清单</button>
   </div>
 
   <!-- TAB 1: Panorama & Capital Flow -->
@@ -1386,12 +1382,63 @@
 
   <!-- Footer -->
   <footer>
-    <p>破位下跌基金本质透视看板 · 自动分析与可视化系统 · 数据截至 2026 年 10 月中旬</p>
-    <p style="margin-top:4px; font-size:11px; color:#6b7280;">基于公募半年报、中报数据、ETF资金监测及商业常识逻辑模型综合呈现，不构成任何投资建议</p>
+    <p data-i18n="footerText1">破位下跌基金本质透视看板 · 自动分析与可视化系统 · 数据截至 2026 年 10 月中旬</p>
+    <p style="margin-top:4px; font-size:11px; color:#6b7280;" data-i18n="footerText2">基于公募半年报、中报数据、ETF资金监测及商业常识逻辑模型综合呈现，不构成任何投资建议</p>
   </footer>
 </div>
 
 <script>
+  let currentLang = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh') ? 'zh' : 'en';
+
+  const I18N_BD = {
+    'zh': {
+      docTitle: "破位基金本质透视与常识分析看板",
+      h1Title: "破位基金本质透视与常识分析看板",
+      h1Badge: "深度复盘 · 2026",
+      headerDesc: "穿透“底外有底”的技术陷阱，基于 8-10 月公募深度分化与商业常识模型交互解析",
+      headerTime: "数据周期：2026年Q3 ~ 10月中旬 · 样本：A股公募及全行业ETF",
+      kpi1Title: "年内“翻倍基”存活数",
+      kpi1Sub: "三季度末仅剩2只 <span class=\"down\">↓ 99.2%</span>",
+      kpi2Title: "前三季度业绩极差",
+      kpi2Sub: "14只主动基金亏损 <span class=\"down\">> 40%</span>",
+      kpi3Title: "债券 ETF 历史规模",
+      kpi3Val: "> 1.05 万亿",
+      kpi3Sub: "一年猛增 1.6 倍 <span class=\"up\">↑ 虹吸权益流动性</span>",
+      kpi4Title: "光伏前五巨头中报亏损",
+      kpi4Val: "> 148 亿元",
+      kpi4Sub: "组件招标跌破 <span class=\"down\">0.7~0.8元/瓦</span> 现金成本",
+      tab1Btn: "📊 市场全景与资金大迁徙",
+      tab2Btn: "🔍 四大破位板块常识穿透",
+      tab3Btn: "🧮 估值陷阱演算器与思维误区",
+      tab4Btn: "🚦 右侧企稳监测雷达清单",
+      footerText1: "破位下跌基金本质透视看板 · 自动分析与可视化系统 · 数据截至 2026 年 10 月中旬",
+      footerText2: "基于公募半年报、中报数据、ETF资金监测及商业常识逻辑模型综合呈现，不构成任何投资建议"
+    },
+    'en': {
+      docTitle: "Breakdown Fund Anatomy & Common Sense Analysis",
+      h1Title: "Breakdown Fund Anatomy & Common Sense Analysis",
+      h1Badge: "In-Depth Review · 2026",
+      headerDesc: "Penetrating the 'bottom below bottom' trap via mutual fund divergence & commercial common-sense models",
+      headerTime: "Data Period: 2026 Q3 ~ Mid-Oct · Universe: A-share Mutual Funds & Industry ETFs",
+      kpi1Title: "Surviving Doubler Funds (2026)",
+      kpi1Sub: "Only 2 left by Q3-end <span class=\"down\">↓ 99.2%</span>",
+      kpi2Title: "Q1-Q3 Max Spread",
+      kpi2Sub: "14 active funds lost <span class=\"down\">> 40%</span>",
+      kpi3Title: "Bond ETF Total AUM",
+      kpi3Val: "> 1.05 Trillion RMB",
+      kpi3Sub: "Surged 1.6x in 1 year <span class=\"up\">↑ Siphoning liquidity</span>",
+      kpi4Title: "Top 5 Solar H1 Loss",
+      kpi4Val: "> 14.8 Billion RMB",
+      kpi4Sub: "Bids fell below cash cost of <span class=\"down\">0.7~0.8 RMB/W</span>",
+      tab1Btn: "📊 Market Panorama & Capital Shifts",
+      tab2Btn: "🔍 4 Breakdown Sectors Anatomy",
+      tab3Btn: "🧮 Valuation Trap Simulator & Pitfalls",
+      tab4Btn: "🚦 Recovery Radar Checklist",
+      footerText1: "Breakdown Fund Anatomy & Common Sense Dashboard · Automated Analytical System · Data as of Mid-Oct 2026",
+      footerText2: "Synthesized from mutual fund financial reports, ETF capital flow metrics, and commercial models. Not investment advice."
+    }
+  };
+
   // Tab Switching
   function switchTab(tabId) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -1414,6 +1461,7 @@
   function updateCalc() {
     const priceDrop = parseInt(document.getElementById('input-price-drop').value);
     const profitDrop = parseInt(document.getElementById('input-profit-drop').value);
+    const isZh = currentLang === 'zh';
 
     document.getElementById('disp-price-drop').innerText = '-' + priceDrop + '%';
     document.getElementById('disp-profit-drop').innerText = '-' + profitDrop + '%';
@@ -1424,7 +1472,7 @@
     const remainingProfit = 1.0 - (profitDrop / 100.0);
 
     let newPE = basePE * (remainingPrice / remainingProfit);
-    let peText = newPE.toFixed(1) + ' 倍';
+    let peText = newPE.toFixed(1) + (isZh ? ' 倍' : 'x');
     let ratio = (newPE / basePE).toFixed(1);
 
     const peEl = document.getElementById('calc-res-pe');
@@ -1435,17 +1483,21 @@
     peEl.innerText = peText;
 
     if (newPE > basePE) {
-      statusEl.innerText = '反而贵了 ' + ratio + ' 倍';
+      statusEl.innerText = isZh ? ('反而贵了 ' + ratio + ' 倍') : ('More expensive by ' + ratio + 'x');
       statusEl.style.color = '#f43f5e';
       alertBox.style.background = 'rgba(244, 63, 94, 0.15)';
       alertBox.style.borderColor = 'rgba(244, 63, 94, 0.4)';
-      alertText.innerText = `虽然股价暴跌了 ${priceDrop}%，但由于利润大幅缩水 ${profitDrop}%，最新市盈率反而从 15 倍升到了 ${newPE.toFixed(1)} 倍！这就是最凶险的“越跌越贵的价值陷阱”！`;
+      alertText.innerText = isZh ?
+        `虽然股价暴跌了 ${priceDrop}%，但由于利润大幅缩水 ${profitDrop}%，最新市盈率反而从 15 倍升到了 ${newPE.toFixed(1)} 倍！这就是最凶险的“越跌越贵的价值陷阱”！` :
+        `Even though price dropped ${priceDrop}%, net profit collapsed by ${profitDrop}%. P/E actually surged from 15x to ${newPE.toFixed(1)}x! A classic 'value trap that gets pricier as it plunges'!`;
     } else {
-      statusEl.innerText = '相对便宜了 ' + (1 / ratio).toFixed(1) + ' 倍';
+      statusEl.innerText = isZh ? ('相对便宜了 ' + (1 / ratio).toFixed(1) + ' 倍') : ('Cheaper by ' + (1 / ratio).toFixed(1) + 'x');
       statusEl.style.color = '#10b981';
       alertBox.style.background = 'rgba(16, 185, 129, 0.15)';
       alertBox.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-      alertText.innerText = `此时利润下滑幅度小，股价回撤带来了真实的估值消化，具备一定的安全边际修复可能。`;
+      alertText.innerText = isZh ?
+        `此时利润下滑幅度小，股价回撤带来了真实的估值消化，具备一定的安全边际修复可能。` :
+        `Profit decline was limited; the price drawdown represents genuine valuation digestion with recovering margin of safety.`;
     }
   }
 
@@ -1463,26 +1515,72 @@
 
     const levelEl = document.getElementById('radar-level');
     const adviceEl = document.getElementById('radar-advice');
+    const isZh = currentLang === 'zh';
 
     if (percent < 30) {
-      levelEl.innerText = '阶段判定：处于左侧深水磨底期';
+      levelEl.innerText = isZh ? '阶段判定：处于左侧深水磨底期' : 'Stage Assessment: Deep Left-side Consolidation';
       levelEl.style.color = '#f43f5e';
-      adviceEl.innerText = '出清硬指标绝大多数尚未满足，盲目抄底极易接下落飞刀，建议保持防御观望。';
+      adviceEl.innerText = isZh ?
+        '出清硬指标绝大多数尚未满足，盲目抄底极易接下落飞刀，建议保持防御观望。' :
+        'Most clearing criteria remain unmet. Avoid premature bottom-fishing; maintain defensive cash stance.';
     } else if (percent < 65) {
-      levelEl.innerText = '阶段判定：局部出清，进入弱平衡试探期';
+      levelEl.innerText = isZh ? '阶段判定：局部出清，进入弱平衡试探期' : 'Stage Assessment: Partial Clearing & Tentative Equilibrium';
       levelEl.style.color = '#f59e0b';
-      adviceEl.innerText = '部分价格或流动性信号开始显现，但尚未形成合力，适合小仓位跟踪右侧信号。';
+      adviceEl.innerText = isZh ?
+        '部分价格或流动性信号开始显现，但尚未形成合力，适合小仓位跟踪右侧信号。' :
+        'Initial price and liquidity signals emerging, but synergy is pending. Suitable for cautious tracking.';
     } else {
-      levelEl.innerText = '阶段判定：右侧筑底成功率较高';
+      levelEl.innerText = isZh ? '阶段判定：右侧筑底成功率较高' : 'Stage Assessment: High Probability Right-Side Bottom';
       levelEl.style.color = '#10b981';
-      adviceEl.innerText = '供给出清与放量结构已基本齐备，具备较强安全边际与向上修复胜率。';
+      adviceEl.innerText = isZh ?
+        '供给出清与放量结构已基本齐备，具备较强安全边际与向上修复胜率。' :
+        'Supply contraction and volume structures mostly in place, offering strong margin of safety.';
     }
   }
+
+  function applyLang(lang) {
+    if (!lang) return;
+    const shortLang = lang.toLowerCase().startsWith('zh') ? 'zh' : 'en';
+    currentLang = shortLang;
+    const isZh = shortLang === 'zh';
+    const dict = I18N_BD[shortLang] || I18N_BD['zh'];
+
+    document.documentElement.setAttribute('lang', isZh ? 'zh-CN' : 'en');
+    if (dict.docTitle) document.title = dict.docTitle;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key]) el.innerHTML = dict[key];
+    });
+
+    // Update sector pills
+    const pills = document.querySelectorAll('.sector-pill');
+    const pillLabels = [
+      isZh ? '☀️ 光伏与新能源设备' : '☀️ Solar & Clean Tech',
+      isZh ? '🏢 房地产与消费链条' : '🏢 Real Estate & Value Chain',
+      isZh ? '🍶 传统白酒与核心资产' : '🍶 Consumer Staples & Spirits',
+      isZh ? '🚀 风格漂移追高类主动基' : '🚀 Style-Drifting Active Funds'
+    ];
+    pills.forEach((p, idx) => {
+      if (pillLabels[idx]) p.textContent = pillLabels[idx];
+    });
+
+    updateCalc();
+    calcRadar();
+  }
+  window.applyLang = applyLang;
 
   // Initialize
   window.onload = function() {
     updateCalc();
     calcRadar();
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const initL = p.get('b0_lang') || localStorage.getItem('b0_lang');
+      if (initL && !initL.toLowerCase().startsWith('zh')) {
+        applyLang('en');
+      }
+    } catch(e) {}
   };
 </script>
 

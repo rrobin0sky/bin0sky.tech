@@ -37,6 +37,14 @@
       var saved = urlTheme || localStorage.getItem('b0_theme');
       var isDark = saved ? (saved === 'dark') : true;
       applyTheme(isDark);
+
+      var urlLang = params.get('b0_lang');
+      var savedLang = urlLang || localStorage.getItem('b0_lang');
+      if (savedLang) {
+        var norm = savedLang.toLowerCase().startsWith('zh') ? 'zh-CN' : 'en';
+        document.documentElement.setAttribute('lang', norm);
+      }
+
       if (params.get('b0_embedded') === '1' || window.top !== window.self) {
         document.documentElement.classList.add('b0-embedded');
       }
@@ -46,11 +54,18 @@
       if (!e.data) return;
       if (e.data.type === 'B0_THEME_CHANGE') {
         applyTheme(e.data.theme === 'dark');
+      } else if (e.data.type === 'B0_LANG_CHANGE') {
+        if (typeof window.applyWorkspaceLang === 'function') window.applyWorkspaceLang(e.data.lang);
       }
     });
 
     window.addEventListener('b0-theme-change', function(e) {
       if (e.detail) applyTheme(e.detail.theme === 'dark');
+    });
+    window.addEventListener('b0-lang-change', function(e) {
+      if (e.detail && typeof window.applyWorkspaceLang === 'function') {
+        window.applyWorkspaceLang(e.detail.lang);
+      }
     });
   })();
 </script>
@@ -5163,58 +5178,117 @@ function icon(name){
 }
 // 菜单按使用频率分两组：每天要点的在上面，其余在下面（v11 康康拍板）
 var TABS = [
-  { id: 'today',      名: '今日',   icon: 'today', 组: 1 },
-  { id: 'quick',      名: '记一笔', icon: 'quick', 组: 1 },
-  { id: 'summary',    名: '汇总',   icon: 'summary', 组: 1 },
-  { id: 'todo',       名: '待办',   icon: 'todo', 组: 1 },
-  { id: 'schedule',   名: '课表',   icon: 'schedule', 组: 1 },
-  { id: 'attendance',名: '考勤',   icon: 'attendance', gate: 'attendance', 组: 1 },
-  { id: 'scores',     名: '成绩',   icon: 'scores', 组: 2 },
-  { id: 'report',     名: '报表',   icon: 'report', 组: 2 },
-  { id: 'roster',     名: '学生',   icon: 'roster', 组: 2 },
-  { id: 'comms',      名: '家校',   icon: 'comms', gate: 'comms', 组: 2 },
-  { id: 'duties',     名: '班务',   icon: 'duties', gate: 'duties', 组: 2 },
-  { id: 'seats',      名: '座位',   icon: 'seats', 组: 2 }
+  { id: 'today',      名: '今日',   nameEn: 'Today',      icon: 'today', 组: 1 },
+  { id: 'quick',      名: '记一笔', nameEn: 'Quick Log',  icon: 'quick', 组: 1 },
+  { id: 'summary',    名: '汇总',   nameEn: 'Summary',    icon: 'summary', 组: 1 },
+  { id: 'todo',       名: '待办',   nameEn: 'Tasks',      icon: 'todo', 组: 1 },
+  { id: 'schedule',   名: '课表',   nameEn: 'Timetable',  icon: 'schedule', 组: 1 },
+  { id: 'attendance',名: '考勤',   nameEn: 'Attendance', icon: 'attendance', gate: 'attendance', 组: 1 },
+  { id: 'scores',     名: '成绩',   nameEn: 'Grades',     icon: 'scores', 组: 2 },
+  { id: 'report',     名: '报表',   nameEn: 'Reports',    icon: 'report', 组: 2 },
+  { id: 'roster',     名: '学生',   nameEn: 'Roster',     icon: 'roster', 组: 2 },
+  { id: 'comms',      名: '家校',   nameEn: 'Comms',      icon: 'comms', gate: 'comms', 组: 2 },
+  { id: 'duties',     名: '班务',   nameEn: 'Duties',     icon: 'duties', gate: 'duties', 组: 2 },
+  { id: 'seats',      名: '座位',   nameEn: 'Seating',    icon: 'seats', 组: 2 }
 ];
 function visibleTabs(){
   return TABS.filter(function(t){ return !t.gate || moduleOn(t.gate); });
 }
 function renderTabs(){
   var vis = visibleTabs();
+  var isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
   // 待办的红色角标：没办完的件数（0 就不挂），两款皮肤同样展示。
   var openN = 0;
   try{ openN = openTodos(state.todos, todayStr()).length; }catch(e){}
   var btn = function(t){
     var on = ui.tab === t.id;
+    var name = isZh ? t.名 : (t.nameEn || t.名);
     var badge = (t.id === 'todo' && openN)
       ? '<span class="tab-badge" aria-label="' + openN + ' 件没办">' + openN + '</span>' : '';
-    return '<button data-tab="' + t.id + '" title="' + t.名 + '" aria-label="' + t.名 + '" class="' + (on ? 'on' : '') + '"' + (on ? ' aria-current="page"' : '') + '>' +
-      '<span class="tico">' + icon(t.icon) + '</span><span class="tname">' + t.名 + '</span>' + badge + '</button>';
+    return '<button data-tab="' + t.id + '" title="' + name + '" aria-label="' + name + '" class="' + (on ? 'on' : '') + '"' + (on ? ' aria-current="page"' : '') + '>' +
+      '<span class="tico">' + icon(t.icon) + '</span><span class="tname">' + name + '</span>' + badge + '</button>';
   };
   var g1 = vis.filter(function(t){ return t.组 === 1; });
   var g2 = vis.filter(function(t){ return t.组 !== 1; });
-  // 三种宽度均渲染完整分组；窄屏只改变呈现方式，不删入口。
-  var html = '<div class="nav-cap">常用功能</div>' + g1.map(btn).join('') +
-    (g2.length ? '<div class="nav-cap" style="margin-top:var(--sp-3)">班级管理</div>' + g2.map(btn).join('') : '');
+  var cap1 = isZh ? '常用功能' : 'Daily Essentials';
+  var cap2 = isZh ? '班级管理' : 'Class Management';
+  var html = '<div class="nav-cap">' + cap1 + '</div>' + g1.map(btn).join('') +
+    (g2.length ? '<div class="nav-cap" style="margin-top:var(--sp-3)">' + cap2 + '</div>' + g2.map(btn).join('') : '');
   $('#tabs').innerHTML = html;
   renderPhoneTabs();
   if(!$('#allNav').classList.contains('hidden')) renderAllNavGrid();
 }
 function renderPhoneTabs(){
+  var isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
   var primaryIds = ['today', 'quick', 'summary'];
   var primary = primaryIds.map(function(id){
     return TABS.filter(function(t){ return t.id === id; })[0];
   }).filter(Boolean);
   var btn = function(t){
     var on = ui.tab === t.id;
-    return '<button data-tab="' + t.id + '" title="' + t.名 + '" aria-label="' + t.名 + '" class="' + (on ? 'on' : '') + '"' +
-      (on ? ' aria-current="page"' : '') + '><span class="tico">' + icon(t.icon) + '</span><span>' + t.名 + '</span></button>';
+    var name = isZh ? t.名 : (t.nameEn || t.名);
+    return '<button data-tab="' + t.id + '" title="' + name + '" aria-label="' + name + '" class="' + (on ? 'on' : '') + '"' +
+      (on ? ' aria-current="page"' : '') + '><span class="tico">' + icon(t.icon) + '</span><span>' + name + '</span></button>';
   };
   var menuOpen = !$('#allNav').classList.contains('hidden');
-  var menu = '<button data-allnav="1" title="更多" aria-label="打开更多菜单" aria-haspopup="dialog" aria-expanded="' + menuOpen + '">' +
-    '<span class="tico">' + icon('menu') + '</span><span>更多</span></button>';
+  var moreTitle = isZh ? '更多' : 'More';
+  var moreAria = isZh ? '打开更多菜单' : 'Open more menu';
+  var menu = '<button data-allnav="1" title="' + moreTitle + '" aria-label="' + moreAria + '" aria-haspopup="dialog" aria-expanded="' + menuOpen + '">' +
+    '<span class="tico">' + icon('menu') + '</span><span>' + moreTitle + '</span></button>';
   $('#phoneTabs').innerHTML = primary.map(btn).join('') + menu;
 }
+
+function applyWorkspaceLang(lang) {
+  if (!lang) return;
+  var isZh = lang.toLowerCase().startsWith('zh');
+  document.documentElement.setAttribute('lang', isZh ? 'zh-CN' : 'en');
+  document.title = isZh ? '教师工作台 · 高中日语教学空间' : 'Teacher Space · High School Japanese Pedagogy';
+
+  var bn = $('#brandName'), an = $('#appName');
+  if (bn) bn.textContent = isZh ? '教师工作台' : 'Teacher Space';
+  if (an) an.textContent = isZh ? '教师工作台' : 'Teacher Space';
+
+  var sun = document.querySelector('.hd-sun');
+  if (sun) {
+    sun.innerHTML = '<svg aria-hidden="true" class="ic"><use href="#i-sun"/></svg>' + (isZh ? '今天也在一点点变好' : 'Getting better day by day');
+  }
+
+  var setBtn = $('#setBtn');
+  if (setBtn) {
+    setBtn.title = isZh ? '设置（界面风格在这里换）' : 'Settings (switch themes here)';
+    var setSpan = setBtn.querySelector('.bx-t');
+    if (setSpan) setSpan.textContent = isZh ? ' 设置' : ' Settings';
+  }
+
+  var foldText = $('#foldText');
+  if (foldText && typeof ui !== 'undefined' && !ui.导航收起) {
+    foldText.textContent = isZh ? ' 收起' : ' Collapse';
+  }
+
+  var syncBtn = $('#syncBtn');
+  if (syncBtn) {
+    syncBtn.title = isZh ? '同步' : 'Sync';
+    var syncSpan = syncBtn.querySelector('.bx-t');
+    if (syncSpan) syncSpan.textContent = isZh ? ' 同步' : ' Sync';
+  }
+
+  var hmWrap = $('#hmWrap');
+  if (hmWrap) {
+    hmWrap.title = isZh ? '班主任模式' : 'Homeroom Mode';
+    hmWrap.setAttribute('data-tip', isZh ? '班主任模式' : 'Homeroom Mode');
+    var hmInput = hmWrap.querySelector('input');
+    if (hmInput) hmInput.setAttribute('aria-label', isZh ? '班主任模式' : 'Homeroom Mode');
+    Array.from(hmWrap.childNodes).forEach(function(node) {
+      if (node.nodeType === 3 && node.textContent.trim()) {
+        node.textContent = isZh ? '班主任模式' : 'Homeroom Mode';
+      }
+    });
+  }
+
+  renderTabs();
+}
+window.applyWorkspaceLang = applyWorkspaceLang;
+window.applyLang = applyWorkspaceLang;
 // 左栏收起/展开：状态记在 tw:v1:ui，刷新还记得
 function applyNavMini(){
   // 只有桌面完整侧栏可手动收起；平板固定窄栏、手机不受这项状态影响。

@@ -30,6 +30,14 @@
       var saved = urlTheme || localStorage.getItem('b0_theme');
       var isDark = saved ? (saved === 'dark') : true;
       applyTheme(isDark);
+
+      var urlLang = params.get('b0_lang');
+      var savedLang = urlLang || localStorage.getItem('b0_lang');
+      if (savedLang) {
+        var norm = savedLang.toLowerCase().startsWith('zh') ? 'zh-CN' : 'en';
+        document.documentElement.setAttribute('lang', norm);
+      }
+
       if (params.get('b0_embedded') === '1' || window.top !== window.self) {
         document.documentElement.classList.add('b0-embedded');
       }
@@ -40,6 +48,8 @@
       if (e.data.type === 'B0_THEME_CHANGE') {
         applyTheme(e.data.theme === 'dark');
         if (typeof updateAllCharts === 'function') updateAllCharts();
+      } else if (e.data.type === 'B0_LANG_CHANGE') {
+        if (typeof window.applyLang === 'function') window.applyLang(e.data.lang);
       }
     });
 
@@ -47,6 +57,11 @@
       if (e.detail) {
         applyTheme(e.detail.theme === 'dark');
         if (typeof updateAllCharts === 'function') updateAllCharts();
+      }
+    });
+    window.addEventListener('b0-lang-change', function(e) {
+      if (e.detail && typeof window.applyLang === 'function') {
+        window.applyLang(e.detail.lang);
       }
     });
   })();
@@ -223,31 +238,30 @@ footer a{color:var(--accent);text-decoration:none}
 
   <!-- ============ HERO ============ -->
   <header class="hero">
-    <span class="eyebrow"><span class="dot"></span>全球人口结构变迁 · 1950 – 2100</span>
-    <h1>从<span class="g">金字塔</span>到<span class="g">倒金字塔</span><br>全球人口结构的世纪变迁与预测</h1>
-    <p class="lede">基于联合国经济和社会事务部人口司（UN DESA Population Division）<b>《世界人口展望 2024 年修订版》</b>的实测与预测数据。
-      覆盖四大人口国（中国、印度、美国、日本）的年龄结构、生育率与城市化，展示一场跨越 150 年、从年轻金字塔走向深度老龄化的结构性转变。</p>
+    <span class="eyebrow" data-i18n="heroEyebrow"><span class="dot"></span>全球人口结构变迁 · 1950 – 2100</span>
+    <h1 data-i18n="heroH1">从<span class="g">金字塔</span>到<span class="g">倒金字塔</span><br>全球人口结构的世纪变迁与预测</h1>
+    <p class="lede" data-i18n="heroLede">基于联合国经济和社会事务部人口司（UN DESA Population Division）<b>《世界人口展望 2024 年修订版》</b>的实测与预测数据。覆盖四大人口国（中国、印度、美国、日本）的年龄结构、生育率与城市化，展示一场跨越 150 年、从年轻金字塔走向深度老龄化的结构性转变。</p>
 
     <div class="kpis">
       <div class="kpi">
-        <div class="lbl">全球人口 2024 → 2050</div>
-        <div class="val">81.6<span class="u"> 亿</span> → 96.6<span class="u"> 亿</span></div>
-        <div class="sub">净增 +15.0 亿（+18.4%）</div>
+        <div class="lbl" data-i18n="kpi1Lbl">全球人口 2024 → 2050</div>
+        <div class="val" data-i18n="kpi1Val">81.6<span class="u"> 亿</span> → 96.6<span class="u"> 亿</span></div>
+        <div class="sub" data-i18n="kpi1Sub">净增 +15.0 亿（+18.4%）</div>
       </div>
       <div class="kpi k2">
-        <div class="lbl">中国 65+ 占比</div>
-        <div class="val">14.7<span class="u">%</span> → 30.9<span class="u">%</span></div>
-        <div class="sub">2024 → 2050，2100 达 45.8%</div>
+        <div class="lbl" data-i18n="kpi2Lbl">中国 65+ 占比</div>
+        <div class="val" data-i18n="kpi2Val">14.7<span class="u">%</span> → 30.9<span class="u">%</span></div>
+        <div class="sub" data-i18n="kpi2Sub">2024 → 2050，2100 达 45.8%</div>
       </div>
       <div class="kpi k3">
-        <div class="lbl">日本 65+ 占比（全球最高）</div>
-        <div class="val">29.8<span class="u">%</span></div>
-        <div class="sub">2005 年即进入「超老龄化」</div>
+        <div class="lbl" data-i18n="kpi3Lbl">日本 65+ 占比（全球最高）</div>
+        <div class="val" data-i18n="kpi3Val">29.8<span class="u">%</span></div>
+        <div class="sub" data-i18n="kpi3Sub">2005 年即进入「超老龄化」</div>
       </div>
       <div class="kpi k4">
-        <div class="lbl">非洲贡献全球新增人口</div>
-        <div class="val">63<span class="u">%</span></div>
-        <div class="sub">2024–2050 年 +9.5 亿 / +15.0 亿</div>
+        <div class="lbl" data-i18n="kpi4Lbl">非洲贡献全球新增人口</div>
+        <div class="val" data-i18n="kpi4Val">63<span class="u">%</span></div>
+        <div class="sub" data-i18n="kpi4Sub">2024–2050 年 +9.5 亿 / +15.0 亿</div>
       </div>
     </div>
   </header>
@@ -257,34 +271,34 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="shead">
       <div class="snum">01</div>
       <div>
-        <div class="stitle">数据来源与预测方法论</div>
-        <div class="sdesc">全部指标来自联合国人口司官方发布的数据集，本页数据为原始文件解析所得（非二手转述），可复现。</div>
+        <div class="stitle" data-i18n="sec1Title">数据来源与预测方法论</div>
+        <div class="sdesc" data-i18n="sec1Desc">全部指标来自联合国人口司官方发布的数据集，本页数据为原始文件解析所得（非二手转述），可复现。</div>
       </div>
     </div>
     <div class="card pad">
       <div class="mgrid">
         <div class="mcard">
-          <h4><span class="ic">🏛️</span>主数据源</h4>
-          <p>联合国经济和社会事务部人口司 · <b>World Population Prospects 2024</b>（第 28 版，2024 年 7 月发布），中方案（Medium variant）。</p>
+          <h4 data-i18n="mcard1H"><span class="ic">🏛️</span>主数据源</h4>
+          <p data-i18n="mcard1P">联合国经济和社会事务部人口司 · <b>World Population Prospects 2024</b>（第 28 版，2024 年 7 月发布），中方案（Medium variant）。</p>
           <div class="taglist">
             <span>WPP2024_Demographic_Indicators_Medium</span>
             <span>WPP2024_PopulationByAge5GroupSex_Medium</span>
           </div>
         </div>
         <div class="mcard">
-          <h4><span class="ic">🌐</span>城市化数据</h4>
-          <p>城市化率取自世界银行 WDI（源自联合国《世界城市化展望》）指标 <code>SP.URB.TOTL.IN.ZS</code>，并与 WPP 口径交叉核对。</p>
-          <div class="taglist"><span>1960 – 2024 实测</span><span>国家收入分组：世行 Atlas 法</span></div>
+          <h4 data-i18n="mcard2H"><span class="ic">🌐</span>城市化数据</h4>
+          <p data-i18n="mcard2P">城市化率取自世界银行 WDI（源自联合国《世界城市化展望》）指标 <code>SP.URB.TOTL.IN.ZS</code>，并与 WPP 口径交叉核对。</p>
+          <div class="taglist"><span data-i18n="mcard2Tag1">1960 – 2024 实测</span><span data-i18n="mcard2Tag2">国家收入分组：世行 Atlas 法</span></div>
         </div>
         <div class="mcard">
-          <h4><span class="ic">📐</span>预测方法论</h4>
-          <p>采用<b>队列成分法（cohort-component method）</b>：以 2022 年各国人口基线为起点，按分年龄生育率、分年龄死亡率与净迁移率的假定，逐岁、逐年向前递推至 2100 年。</p>
-          <div class="taglist"><span>TFR 收敛假定</span><span>预期寿命递增</span><span>迁移流估计</span></div>
+          <h4 data-i18n="mcard3H"><span class="ic">📐</span>预测方法论</h4>
+          <p data-i18n="mcard3P">采用<b>队列成分法（cohort-component method）</b>：以 2022 年各国人口基线为起点，按分年龄生育率、分年龄死亡率与净迁移率的假定，逐岁、逐年向前递推至 2100 年。</p>
+          <div class="taglist"><span data-i18n="mcard3Tag1">TFR 收敛假定</span><span data-i18n="mcard3Tag2">预期寿命递增</span><span data-i18n="mcard3Tag3">迁移流估计</span></div>
         </div>
         <div class="mcard">
-          <h4><span class="ic">⚠️</span>解读须知</h4>
-          <p>1950–2022 为<b>估计值</b>，2023–2100 为<b>预测值</b>。预测基于「中方案」——假定各国生育率最终收敛，<b>并非确定性结论</b>，应理解为条件情景而非预言。</p>
-          <div class="taglist"><span>含 90% 预测区间</span><span>不适用于单点确定性引用</span></div>
+          <h4 data-i18n="mcard4H"><span class="ic">⚠️</span>解读须知</h4>
+          <p data-i18n="mcard4P">1950–2022 为<b>估计值</b>，2023–2100 为<b>预测值</b>。预测基于「中方案」——假定各国生育率最终收敛，<b>并非确定性结论</b>，应理解为条件情景而非预言。</p>
+          <div class="taglist"><span data-i18n="mcard4Tag1">含 90% 预测区间</span><span data-i18n="mcard4Tag2">不适用于单点确定性引用</span></div>
         </div>
       </div>
       <div class="note">
@@ -299,8 +313,8 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="shead">
       <div class="snum">02</div>
       <div>
-        <div class="stitle">人口金字塔动画 · 四国并排（1950 → 2100）</div>
-        <div class="sdesc">每 10 年一个关键帧（1950/1960/…/2050/2100），播放时在关键帧之间平滑插值。观察底部「宽基座」如何逐层上移、最终反转为「倒金字塔」——这是人口结构的世纪级重塑。</div>
+        <div class="stitle" data-i18n="sec2Title">人口金字塔动画 · 四国并排（1950 → 2100）</div>
+        <div class="sdesc" data-i18n="sec2Desc">每 10 年一个关键帧（1950/1960/…/2050/2100），播放时在关键帧之间平滑插值。观察底部「宽基座」如何逐层上移、最终反转为「倒金字塔」——这是人口结构的世纪级重塑。</div>
       </div>
     </div>
     <div class="card pad">
@@ -328,13 +342,11 @@ footer a{color:var(--accent);text-decoration:none}
         <div class="pyrpanel"><canvas class="pyr" id="pc3"></canvas><div class="pyrfoot" id="pf3"></div></div>
       </div>
       <div class="legegend">
-        <span><i style="background:#7ea6d8"></i>男性（左）</span>
-        <span><i style="background:#e894ab"></i>女性（右）</span>
-        <span>横轴＝该年龄组占总人口比例（%），纵轴＝年龄组</span>
+        <span data-i18n="pyrLeg1"><i style="background:#7ea6d8"></i>男性（左）</span>
+        <span data-i18n="pyrLeg2"><i style="background:#e894ab"></i>女性（右）</span>
+        <span data-i18n="pyrLeg3">横轴＝该年龄组占总人口比例（%），纵轴＝年龄组</span>
       </div>
-      <div class="note">
-        <b>为什么用「占比」而非绝对人数？</b>四国人口体量相差近百倍（印度 14.5 亿 vs 日本 1.2 亿）。用组内占比可视化，方能公平比较<b>结构形态</b>；各面板底部另标注该国总人口量级。
-      </div>
+      <div class="note" data-i18n="sec2Note"><b>为什么用「占比」而非绝对人数？</b>四国人口体量相差近百倍（印度 14.5 亿 vs 日本 1.2 亿）。用组内占比可视化，方能公平比较<b>结构形态</b>；各面板底部另标注该国总人口量级。</div>
     </div>
   </section>
 
@@ -343,28 +355,24 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="shead">
       <div class="snum">03</div>
       <div>
-        <div class="stitle">老龄化率趋势 · 65 岁以上人口占比（1950–2100）</div>
-        <div class="sdesc">虚线为国际通用阈值：<b>7% 老龄化社会</b> · <b>14% 深度老龄化</b> · <b>20% 超老龄化</b>。可直观看到日本早已冲顶、中国正加速追赶，而印度尚有约 25 年缓冲期。</div>
+        <div class="stitle" data-i18n="sec3Title">老龄化率趋势 · 65 岁以上人口占比（1950–2100）</div>
+        <div class="sdesc" data-i18n="sec3Desc">虚线为国际通用阈值：<b>7% 老龄化社会</b> · <b>14% 深度老龄化</b> · <b>20% 超老龄化</b>。可直观看到日本早已冲顶、中国正加速追赶，而印度尚有约 25 年缓冲期。</div>
       </div>
     </div>
     <div class="card pad">
       <div class="chartwrap tall"><canvas id="agingChart"></canvas></div>
       <div class="insights">
         <div class="ins bad">
-          <h5>日本 · 全球老龄化「先行者」</h5>
-          <p>1969 年即越过 7%，2005 年前后突破 20% 进入「超老龄化」，2024 年达 29.8%，2050 年将逼近 37.5%。</p>
+          <h5 data-i18n="ins3_1H">日本 · 全球老龄化「先行者」</h5><p data-i18n="ins3_1P">1969 年即越过 7%，2005 年前后突破 20% 进入「超老龄化」，2024 年达 29.8%，2050 年将逼近 37.5%。</p>
         </div>
         <div class="ins warn">
-          <h5>中国 · 速度最快的老龄化</h5>
-          <p>2000 年步入老龄化，约 2022 年越过 14%（深度老龄化门槛），2035 年预计达 22.8%，2050 年 30.9%，2100 年可能高达 45.8%。</p>
+          <h5 data-i18n="ins3_2H">中国 · 速度最快的老龄化</h5><p data-i18n="ins3_2P">2000 年步入老龄化，约 2022 年越过 14%（深度老龄化门槛），2035 年预计达 22.8%，2050 年 30.9%，2100 年可能高达 45.8%。</p>
         </div>
         <div class="ins">
-          <h5>美国 · 靠移民「缓冲」</h5>
-          <p>2014 年越过 14%，但持续净迁入使曲线斜率平缓，2050 年约 23%，显著低于中日。</p>
+          <h5 data-i18n="ins3_3H">美国 · 靠移民「缓冲」</h5><p data-i18n="ins3_3P">2014 年越过 14%，但持续净迁入使曲线斜率平缓，2050 年约 23%，显著低于中日。</p>
         </div>
         <div class="ins good">
-          <h5>印度 · 最后的窗口</h5>
-          <p>2023 年才刚迈过 7%，2050 年约 14.7%，是本世纪中期全球最大的「年轻劳动力池」。</p>
+          <h5 data-i18n="ins3_4H">印度 · 最后的窗口</h5><p data-i18n="ins3_4P">2023 年才刚迈过 7%，2050 年约 14.7%，是本世纪中期全球最大的「年轻劳动力池」。</p>
         </div>
       </div>
     </div>
@@ -375,33 +383,28 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="shead">
       <div class="snum">04</div>
       <div>
-        <div class="stitle">生育率 × 城市化率 · 相关性分析（2024）</div>
-        <div class="sdesc">横轴：城市化率（%）；纵轴：总和生育率（TFR，每名妇女平均生育数）。按世界银行收入分组着色，虚线为 2.1 的人口更替水平。绿点＝高收入国家。</div>
+        <div class="stitle" data-i18n="sec4Title">生育率 × 城市化率 · 相关性分析（2024）</div>
+        <div class="sdesc" data-i18n="sec4Desc">横轴：城市化率（%）；纵轴：总和生育率（TFR，每名妇女平均生育数）。按世界银行收入分组着色，虚线为 2.1 的人口更替水平。绿点＝高收入国家。</div>
       </div>
     </div>
     <div class="card pad">
       <div class="chartwrap tall"><canvas id="scatterChart"></canvas></div>
       <div class="insights">
         <div class="ins good">
-          <h5>整体呈负相关</h5>
+          <h5 data-i18n="ins4_1H">整体呈负相关</h5>
           <p id="corrText">—</p>
         </div>
         <div class="ins warn">
-          <h5>异常样本 · 以色列</h5>
-          <p>高收入（HIC）却拥有 TFR ≈ 2.79，远高于同类国家均值，是图形右上方的显著离群点——宗教与族群结构使其逆势而行。</p>
+          <h5 data-i18n="ins4_2H">异常样本 · 以色列</h5><p data-i18n="ins4_2P">高收入（HIC）却拥有 TFR ≈ 2.79，远高于同类国家均值，是图形右上方的显著离群点——宗教与族群结构使其逆势而行。</p>
         </div>
         <div class="ins bad">
-          <h5>异常样本 · 东亚「极低生育」</h5>
-          <p>中国澳门 0.68、中国香港 0.73、韩国 0.73、中国台湾 0.86——城市化高 + 生育率全球最低，构成左下角的极端聚集带。</p>
+          <h5 data-i18n="ins4_3H">异常样本 · 东亚「极低生育」</h5><p data-i18n="ins4_3P">中国澳门 0.68、中国香港 0.73、韩国 0.73、中国台湾 0.86——城市化高 + 生育率全球最低，构成左下角的极端聚集带。</p>
         </div>
         <div class="ins">
-          <h5>异常样本 · 萨赫勒地带</h5>
-          <p>乍得 6.03、索马里 6.01、尼日尔 5.94——城市化率极低、生育率全球最高，与以色列形成「高生育」的两极。</p>
+          <h5 data-i18n="ins4_4H">异常样本 · 萨赫勒地带</h5><p data-i18n="ins4_4P">乍得 6.03、索马里 6.01、尼日尔 5.94——城市化率极低、生育率全球最高，与以色列形成「高生育」的两极。</p>
         </div>
       </div>
-      <div class="note">
-        <b>方法：</b>相关系数 r 由 216 个国家/地区的 2024 年数据点计算（Pearson）。图中个别国家因城市化率数据缺失被剔除。
-      </div>
+      <div class="note" data-i18n="sec4Note"><b>方法：</b>相关系数 r 由 216 个国家/地区的 2024 年数据点计算（Pearson）。图中个别国家因城市化率数据缺失被剔除。</div>
     </div>
   </section>
 
@@ -410,8 +413,8 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="shead">
       <div class="snum">05</div>
       <div>
-        <div class="stitle">人口红利窗口期 · 劳动年龄人口占比 &gt; 65%</div>
-        <div class="sdesc">定义：<b>15–64 岁劳动年龄人口占总人口比例 &gt; 65%</b> 即处于「人口红利窗口」。窗口开启意味着抚养负担最轻、增长潜力最大的黄金期；窗口关闭则标志红利消退。</div>
+        <div class="stitle" data-i18n="sec5Title">人口红利窗口期 · 劳动年龄人口占比 &gt; 65%</div>
+        <div class="sdesc" data-i18n="sec5Desc">定义：<b>15–64 岁劳动年龄人口占总人口比例 &gt; 65%</b> 即处于「人口红利窗口」。窗口开启意味着抚养负担最轻、增长潜力最大的黄金期；窗口关闭则标志红利消退。</div>
       </div>
     </div>
     <div class="card pad">
@@ -432,32 +435,29 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="shead">
       <div class="snum">06</div>
       <div>
-        <div class="stitle">区域人口增长贡献 · 瀑布图（2024 → 2050）</div>
-        <div class="sdesc">全球人口将从 81.6 亿增至 96.6 亿，净增 <b>+15.0 亿</b>。其中<b>非洲一洲贡献约 9.5 亿（占 63%）</b>，亚洲贡献 4.7 亿，而欧洲将成为唯一人口净减少的大洲。</div>
+        <div class="stitle" data-i18n="sec6Title">区域人口增长贡献 · 瀑布图（2024 → 2050）</div>
+        <div class="sdesc" data-i18n="sec6Desc">全球人口将从 81.6 亿增至 96.6 亿，净增 <b>+15.0 亿</b>。其中<b>非洲一洲贡献约 9.5 亿（占 63%）</b>，亚洲贡献 4.7 亿，而欧洲将成为唯一人口净减少的大洲。</div>
       </div>
     </div>
     <div class="card pad">
       <div class="chartwrap tall"><canvas id="waterfallChart"></canvas></div>
       <div class="insights">
         <div class="ins good">
-          <h5>非洲 · 增长的绝对引擎</h5>
-          <p>2024 年 15.2 亿 → 2050 年 24.7 亿，增量 9.5 亿，占全球新增人口的 63.3%。</p>
+          <h5 data-i18n="ins6_1H">非洲 · 增长的绝对引擎</h5><p data-i18n="ins6_1P">2024 年 15.2 亿 → 2050 年 24.7 亿，增量 9.5 亿，占全球新增人口的 63.3%。</p>
         </div>
         <div class="ins">
-          <h5>亚洲 · 基数仍最大，增速放缓</h5>
-          <p>2024 年 48.1 亿 → 2050 年 52.8 亿，增量 4.7 亿；2030 年代后期印度将超越中国成为第一人口大国。</p>
+          <h5 data-i18n="ins6_2H">亚洲 · 基数仍最大，增速放缓</h5><p data-i18n="ins6_2P">2024 年 48.1 亿 → 2050 年 52.8 亿，增量 4.7 亿；2030 年代后期印度将超越中国成为第一人口大国。</p>
         </div>
         <div class="ins bad">
-          <h5>欧洲 · 唯一负增长大洲</h5>
-          <p>2024 年 7.45 亿 → 2050 年 7.03 亿，减少约 4200 万，为全球唯一人口收缩的大洲。</p>
+          <h5 data-i18n="ins6_3H">欧洲 · 唯一负增长大洲</h5><p data-i18n="ins6_3P">2024 年 7.45 亿 → 2050 年 7.03 亿，减少约 4200 万，为全球唯一人口收缩的大洲。</p>
         </div>
       </div>
     </div>
   </section>
 
   <footer>
-    <p><b>数据来源</b>：联合国经济和社会事务部人口司，《世界人口展望 2024 年修订版》(World Population Prospects 2024, Medium variant) · <a href="https://population.un.org/wpp/" target="_blank">population.un.org/wpp</a>；城市化率：世界银行 WDI（源自《世界城市化展望》）。</p>
-    <p style="margin-top:8px">本页所有图表由上述官方原始数据集解析生成 · 生成日期 2026-10-10 · 1950–2022 为估计值，2023–2100 为中方案预测值，仅供研究参考。</p>
+    <p data-i18n="footerSource"><b>数据来源</b>：联合国经济和社会事务部人口司，《世界人口展望 2024 年修订版》(World Population Prospects 2024, Medium variant) · <a href="https://population.un.org/wpp/" target="_blank">population.un.org/wpp</a>；城市化率：世界银行 WDI（源自《世界城市化展望》）。</p>
+    <p data-i18n="footerNote" style="margin-top:8px">本页所有图表由上述官方原始数据集解析生成 · 生成日期 2026-10-10 · 1950–2022 为估计值，2023–2100 为中方案预测值，仅供研究参考。</p>
   </footer>
 </div>
 
@@ -473,7 +473,10 @@ footer a{color:var(--accent);text-decoration:none}
 "use strict";
 const POP = window.POP;
 const COUNTRIES = ["China","India","United States","Japan"];
-const CN = {China:"中国",India:"印度","United States":"美国",Japan:"日本"};
+const CN_ZH = {China:"中国",India:"印度","United States":"美国",Japan:"日本"};
+const CN_EN = {China:"China",India:"India","United States":"United States",Japan:"Japan"};
+let currentLang = (document.documentElement.getAttribute("lang") || "zh").startsWith("zh") ? "zh" : "en";
+const CN = new Proxy({}, { get: (t, p) => currentLang === "zh" ? CN_ZH[p] : CN_EN[p] });
 const CO = {China:"#ef4444",India:"#f59e0b","United States":"#3b82f6",Japan:"#a855f7"};
 const COF= {China:"#fca5a5",India:"#fcd34d","United States":"#93c5fd",Japan:"#d8b4fe"};
 
@@ -523,7 +526,7 @@ function drawPyramid(canvas, country, year){
   // country title
   g.fillStyle = CO[country]; g.font="700 15px -apple-system,PingFang SC,sans-serif";
   g.textAlign="left"; g.textBaseline="top";
-  g.fillText(CN[country], padL+2, 4);
+  g.fillText(currentLang === "zh" ? CN_ZH[country] : CN_EN[country], padL+2, 4);
   g.fillStyle = isDark ? "#8a98ab" : "#64748b"; g.font="600 12px -apple-system,sans-serif"; g.textAlign="right";
   g.fillText((tot/1000).toFixed(tot/1000>=100?0:1)+"M", W-padR-2, 6);
 
@@ -559,7 +562,7 @@ function drawPyramid(canvas, country, year){
   g.beginPath(); g.moveTo(padL,y65); g.lineTo(W-padR,y65); g.stroke(); g.setLineDash([]);
   g.fillStyle = isDark ? "rgba(255,255,255,.42)" : "rgba(0,0,0,.55)"; g.font="600 9px -apple-system,sans-serif";
   g.textAlign="left"; g.textBaseline="bottom";
-  g.fillText("65 岁", padL+1, y65-1);
+  g.fillText(currentLang === "zh" ? "65 岁" : "Age 65", padL+1, y65-1);
 }
 
 const pyCanv = [0,1,2,3].map(i=>document.getElementById("pc"+i));
@@ -570,10 +573,11 @@ const shapeLabel = document.getElementById("pyrShape");
 let curYear=1950, playing=false, rafId=null, lastTs=0;
 
 function shapeType(old){
-  if(old<7) return ["年轻型 · 金字塔","#22c55e",0];
-  if(old<14) return ["成年型 · 钟形","#eab308",0];
-  if(old<20) return ["老龄型 · 收缩型","#f97316",0];
-  return ["超老龄型 · 倒金字塔","#ef4444",0];
+  const isZh = currentLang === "zh";
+  if(old<7) return [isZh ? "年轻型 · 金字塔" : "Youth · Expansive","#22c55e",0];
+  if(old<14) return [isZh ? "成年型 · 钟形" : "Mature · Stationary","#eab308",0];
+  if(old<20) return [isZh ? "老龄型 · 收缩型" : "Aged · Constrictive","#f97316",0];
+  return [isZh ? "超老龄型 · 倒金字塔" : "Super-Aged · Inverted","#ef4444",0];
 }
 function agingAt(country,year){
   const s=POP.aging[country];
@@ -583,15 +587,16 @@ function agingAt(country,year){
 }
 function renderPyramids(){
   yrLabel.textContent = Math.round(curYear);
+  const isZh = currentLang === "zh";
   for(let i=0;i<4;i++){
     const c=COUNTRIES[i];
     drawPyramid(pyCanv[i], c, curYear);
     const old=agingAt(c,curYear);
-    pyFoot[i].innerHTML = "65+ 占 "+old.toFixed(1)+"%";
+    pyFoot[i].innerHTML = (isZh ? "65+ 占 " : "65+ Share: ") + old.toFixed(1) + "%";
   }
   const oldCN = agingAt("China", curYear);
   const st = shapeType(oldCN);
-  shapeLabel.textContent = "中国 · "+st[0];
+  shapeLabel.textContent = (isZh ? "中国 · " : "China · ") + st[0];
   shapeLabel.style.color = st[1];
   shapeLabel.style.borderColor = st[1]+"66";
 }
@@ -605,7 +610,7 @@ function tick(ts){
   renderPyramids();
   if(playing) rafId=requestAnimationFrame(tick);
 }
-function setPlayUI(){ const b=document.getElementById("playBtn"); b.textContent = playing?"❚❚ 暂停":"▶ 播放变迁"; }
+function setPlayUI(){ const b=document.getElementById("playBtn"); const isZh = currentLang === "zh"; b.textContent = playing ? (isZh ? "❚❚ 暂停" : "❚❚ Pause") : (isZh ? "▶ 播放变迁" : "▶ Play Animation"); }
 document.getElementById("playBtn").addEventListener("click",()=>{
   if(playing){ playing=false; cancelAnimationFrame(rafId); lastTs=0; }
   else { if(curYear>=2100) curYear=1950; playing=true; lastTs=0; rafId=requestAnimationFrame(tick); }
@@ -755,14 +760,20 @@ const INC_ORDER=["HIC","UMC","LMC","LIC"];
 const INC_COLOR={HIC:"#22c55e",UMC:"#3b82f6",LMC:"#f59e0b",LIC:"#ef4444"};
 const pts=POP.scatter;
 // correlation
+function renderCorrText(){
+  const reg = window.__reg;
+  if(!reg) return;
+  const isZh = currentLang === "zh";
+  document.getElementById("corrText").innerHTML = isZh ?
+    ("Pearson 相关系数 <b style='color:#7ee787'>r = " + reg.r.toFixed(2) + "</b>（n=" + reg.n + "）——城市化率越高，生育率系统性越低。回归拟合显示：城市化率每提高 <b>10 个百分点</b>，总和生育率平均下降约 <b>" + Math.abs(reg.b*10).toFixed(2) + "</b>。") :
+    ("Pearson correlation <b style='color:#7ee787'>r = " + reg.r.toFixed(2) + "</b> (n=" + reg.n + ") — higher urbanization systematically correlates with lower fertility. Linear fit indicates TFR drops ~<b>" + Math.abs(reg.b*10).toFixed(2) + "</b> for every <b>10%</b> increase in urbanization.");
+}
 (function(){ const n=pts.length; let sx=0,sy=0,sxy=0,sx2=0,sy2=0;
   pts.forEach(p=>{sx+=p.urb;sy+=p.tfr;sxy+=p.urb*p.tfr;sx2+=p.urb*p.urb;sy2+=p.tfr*p.tfr;});
   const r=(n*sxy-sx*sy)/Math.sqrt((n*sx2-sx*sx)*(n*sy2-sy*sy));
-  // regression
   const b=(n*sxy-sx*sy)/(n*sx2-sx*sx), a=(sy-b*sx)/n;
   window.__reg={a,b,r,n};
-  document.getElementById("corrText").innerHTML =
-    "Pearson 相关系数 <b style='color:#7ee787'>r = "+r.toFixed(2)+"</b>（n="+n+"）——城市化率越高，生育率系统性越低。回归拟合显示：城市化率每提高 <b>10 个百分点</b>，总和生育率平均下降约 <b>"+Math.abs(b*10).toFixed(2)+"</b>。";
+  renderCorrText();
 })();
 const regLine=[ ...Array(11).keys() ].map(i=>{ const x=i*10; return {x, y:window.__reg.a+window.__reg.b*x}; });
 const SC_LABELS={
@@ -835,27 +846,34 @@ allCharts.push(new Chart(document.getElementById("workChart"),{
   }
 }));
 // gantt
-(function(){
+function renderGantt(){
   const pct=y=>((y-1950)/(2100-1950))*100;
+  const isZh = currentLang === "zh";
   COUNTRIES.forEach((c,i)=>{
     const d=DIV[c], track=document.getElementById("gt"+i);
+    if (!track) return;
+    track.innerHTML = "";
     const open=d.open||1950, close=d.close||2100;
     const bar=document.createElement("div"); bar.className="gbar";
     bar.style.left=pct(open)+"%"; bar.style.width=Math.max(1,(pct(close)-pct(open)))+"%";
     bar.style.background="linear-gradient(90deg,"+CO[c]+","+CO[c]+"99)";
     bar.textContent = open+" – "+close;
     track.appendChild(bar);
-    const pill=document.createElement("span");
+
+    const gnameEl = document.getElementById("gr"+i).querySelector(".gname");
+    const countryName = isZh ? CN_ZH[c] : CN_EN[c];
     const isOpen = d.c2024>65;
-    pill.className="pill "+(isOpen?"open":"closed");
-    pill.textContent = isOpen?"窗口进行中":"窗口已关闭";
-    document.getElementById("gr"+i).querySelector(".gname").appendChild(pill);
+    gnameEl.innerHTML = `<span class="sw" style="background:${CO[c]}"></span>${countryName} <span class="pill ${isOpen?'open':'closed'}">${isOpen ? (isZh ? "窗口进行中" : "Window Active") : (isZh ? "窗口已关闭" : "Window Closed")}</span>`;
   });
-  document.getElementById("divNote").innerHTML =
-    "<b>窗口解读：</b>日本窗口 <b>1961–2007</b>（峰值 70.0%，1992）——红利早已结束，如今 65+ 高达 29.8%；"+
+  document.getElementById("divNote").innerHTML = isZh ?
+    ("<b>窗口解读：</b>日本窗口 <b>1961–2007</b>（峰值 70.0%，1992）——红利早已结束，如今 65+ 高达 29.8%；"+
     "美国窗口 <b>1976–2023</b>（2024 年刚好滑落至 64.8%）；中国窗口 <b>1987–2039</b>（峰值 72.9%，2009，已是历史最高点）；"+
-    "印度窗口 <b>2014–2060</b> 仍在延续（峰值 69.2%，2034），是四国中唯一尚处红利期的经济体。";
-})();
+    "印度窗口 <b>2014–2060</b> 仍在延续（峰值 69.2%，2034），是四国中唯一尚处红利期的经济体。") :
+    ("<b>Window Analysis:</b> Japan window <b>1961–2007</b> (peak 70.0%, 1992) — dividend expired, 65+ now 29.8%; "+
+    "US window <b>1976–2023</b> (fell to 64.8% in 2024); China window <b>1987–2039</b> (peak 72.9%, 2009, historical high); "+
+    "India window <b>2014–2060</b> active (peak 69.2%, 2034), the only economy among the four still inside its demographic dividend.");
+}
+renderGantt();
 
 /* =================================================================
    6. WATERFALL
@@ -904,6 +922,276 @@ allCharts.push(new Chart(document.getElementById("workChart"),{
   }));
 })();
 
+
+const I18N_DICT = {
+  'zh': {
+    docTitle: "全球人口结构变迁 1950–2100 · UN WPP 2024",
+    heroEyebrow: '<span class="dot"></span>全球人口结构变迁 · 1950 – 2100',
+    heroH1: '从<span class="g">金字塔</span>到<span class="g">倒金字塔</span><br>全球人口结构的世纪变迁与预测',
+    heroLede: '基于联合国经济和社会事务部人口司（UN DESA Population Division）<b>《世界人口展望 2024 年修订版》</b>的实测与预测数据。覆盖四大人口国（中国、印度、美国、日本）的年龄结构、生育率与城市化，展示一场跨越 150 年、从年轻金字塔走向深度老龄化的结构性转变。',
+    kpi1Lbl: '全球人口 2024 → 2050',
+    kpi1Val: '81.6<span class="u"> 亿</span> → 96.6<span class="u"> 亿</span>',
+    kpi1Sub: '净增 +15.0 亿（+18.4%）',
+    kpi2Lbl: '中国 65+ 占比',
+    kpi2Val: '14.7<span class="u">%</span> → 30.9<span class="u">%</span>',
+    kpi2Sub: '2024 → 2050，2100 达 45.8%',
+    kpi3Lbl: '日本 65+ 占比（全球最高）',
+    kpi3Val: '29.8<span class="u">%</span>',
+    kpi3Sub: '2005 年即进入「超老龄化」',
+    kpi4Lbl: '非洲贡献全球新增人口',
+    kpi4Val: '63<span class="u">%</span>',
+    kpi4Sub: '2024–2050 年 +9.5 亿 / +15.0 亿',
+
+    sec1Title: '数据来源与预测方法论',
+    sec1Desc: '全部指标来自联合国人口司官方发布的数据集，本页数据为原始文件解析所得（非二手转述），可复现。',
+    mcard1H: '<span class="ic">🏛️</span>主数据源',
+    mcard1P: '联合国经济和社会事务部人口司 · <b>World Population Prospects 2024</b>（第 28 版，2024 年 7 月发布），中方案（Medium variant）。',
+    mcard2H: '<span class="ic">🌐</span>城市化数据',
+    mcard2P: '城市化率取自世界银行 WDI（源自联合国《世界城市化展望》）指标 <code>SP.URB.TOTL.IN.ZS</code>，并与 WPP 口径交叉核对。',
+    mcard2Tag1: '1960 – 2024 实测',
+    mcard2Tag2: '国家收入分组：世行 Atlas 法',
+    mcard3H: '<span class="ic">📐</span>预测方法论',
+    mcard3P: '采用<b>队列成分法（cohort-component method）</b>：以 2022 年各国人口基线为起点，按分年龄生育率、分年龄死亡率与净迁移率的假定，逐岁、逐年向前递推至 2100 年。',
+    mcard3Tag1: 'TFR 收敛假定',
+    mcard3Tag2: '预期寿命递增',
+    mcard3Tag3: '迁移流估计',
+    mcard4H: '<span class="ic">⚠️</span>解读须知',
+    mcard4P: '1950–2022 为<b>估计值</b>，2023–2100 为<b>预测值</b>。预测基于「中方案」——假定各国生育率最终收敛，<b>并非确定性结论</b>，应理解为条件情景而非预言。',
+    mcard4Tag1: '含 90% 预测区间',
+    mcard4Tag2: '不适用于单点确定性引用',
+    sec1Note: '<b>数据抓取记录：</b>年龄结构 / 生育率 / 中位年龄来自 <code>population.un.org/wpp</code> 官方 CSV 原始文件（1950–2100）；城市化率来自 <code>api.worldbank.org</code>。所有数值以原始文件为准，本页仅做聚合与可视化。全量指标说明见 WPP 2024 官方方法论报告。',
+
+    sec2Title: '人口金字塔动画 · 四国并排（1950 → 2100）',
+    sec2Desc: '每 10 年一个关键帧（1950/1960/…/2050/2100），播放时在关键帧之间平滑插值。观察底部「宽基座」如何逐层上移、最终反转为「倒金字塔」——这是人口结构的世纪级重塑。',
+    pyrLeg1: '<i style="background:#7ea6d8"></i>男性（左）',
+    pyrLeg2: '<i style="background:#e894ab"></i>女性（右）',
+    pyrLeg3: '横轴＝该年龄组占总人口比例（%），纵轴＝年龄组',
+    sec2Note: '<b>为什么用「占比」而非绝对人数？</b>四国人口体量相差近百倍（印度 14.5 亿 vs 日本 1.2 亿）。用组内占比可视化，方能公平比较<b>结构形态</b>；各面板底部另标注该国总人口量级。',
+
+    sec3Title: '老龄化率趋势 · 65 岁以上人口占比（1950–2100）',
+    sec3Desc: '虚线为国际通用阈值：<b>7% 老龄化社会</b> · <b>14% 深度老龄化</b> · <b>20% 超老龄化</b>。可直观看到日本早已冲顶、中国正加速追赶，而印度尚有约 25 年缓冲期。',
+    ins3_1H: '日本 · 全球老龄化「先行者」',
+    ins3_1P: '1969 年即越过 7%，2005 年前后突破 20% 进入「超老龄化」，2024 年达 29.8%，2050 年将逼近 37.5%。',
+    ins3_2H: '中国 · 速度最快的老龄化',
+    ins3_2P: '2000 年步入老龄化，约 2022 年越过 14%（深度老龄化门槛），2035 年预计达 22.8%，2050 年 30.9%，2100 年可能高达 45.8%。',
+    ins3_3H: '美国 · 靠移民「缓冲」',
+    ins3_3P: '2014 年越过 14%，但持续净迁入使曲线斜率平缓，2050 年约 23%，显著低于中日。',
+    ins3_4H: '印度 · 最后的窗口',
+    ins3_4P: '2023 年才刚迈过 7%，2050 年约 14.7%，是本世纪中期全球最大的「年轻劳动力池」。',
+
+    sec4Title: '生育率 × 城市化率 · 相关性分析（2024）',
+    sec4Desc: '横轴：城市化率（%）；纵轴：总和生育率（TFR，每名妇女平均生育数）。按世界银行收入分组着色，虚线为 2.1 的人口更替水平。绿点＝高收入国家。',
+    ins4_1H: '整体呈负相关',
+    ins4_2H: '异常样本 · 以色列',
+    ins4_2P: '高收入（HIC）却拥有 TFR ≈ 2.79，远高于同类国家均值，是图形右上方的显著离群点——宗教与族群结构使其逆势而行。',
+    ins4_3H: '异常样本 · 东亚「极低生育」',
+    ins4_3P: '中国澳门 0.68、中国香港 0.73、韩国 0.73、中国台湾 0.86——城市化高 + 生育率全球最低，构成左下角的极端聚集带。',
+    ins4_4H: '异常样本 · 萨赫勒地带',
+    ins4_4P: '乍得 6.03、索马里 6.01、尼日尔 5.94——城市化率极低、生育率全球最高，与以色列形成「高生育」的两极。',
+    sec4Note: '<b>方法：</b>相关系数 r 由 216 个国家/地区的 2024 年数据点计算（Pearson）。图中个别国家因城市化率数据缺失被剔除。',
+
+    sec5Title: '人口红利窗口期 · 劳动年龄人口占比 &gt; 65%',
+    sec5Desc: '定义：<b>15–64 岁劳动年龄人口占总人口比例 &gt; 65%</b> 即处于「人口红利窗口」。窗口开启意味着抚养负担最轻、增长潜力最大的黄金期；窗口关闭则标志红利消退。',
+
+    sec6Title: '区域人口增长贡献 · 瀑布图（2024 → 2050）',
+    sec6Desc: '全球人口将从 81.6 亿增至 96.6 亿，净增 <b>+15.0 亿</b>。其中<b>非洲一洲贡献约 9.5 亿（占 63%）</b>，亚洲贡献 4.7 亿，而欧洲将成为唯一人口净减少的大洲。',
+    ins6_1H: '非洲 · 增长的绝对引擎',
+    ins6_1P: '2024 年 15.2 亿 → 2050 年 24.7 亿，增量 9.5 亿，占全球新增人口的 63.3%。',
+    ins6_2H: '亚洲 · 基数仍最大，增速放缓',
+    ins6_2P: '2024 年 48.1 亿 → 2050 年 52.8 亿，增量 4.7 亿；2030 年代后期印度将超越中国成为第一人口大国。',
+    ins6_3H: '欧洲 · 唯一负增长大洲',
+    ins6_3P: '2024 年 7.45 亿 → 2050 年 7.03 亿，减少约 4200 万，为全球唯一人口收缩的大洲。',
+
+    footerSource: '<b>数据来源</b>：联合国经济和社会事务部人口司，《世界人口展望 2024 年修订版》(World Population Prospects 2024, Medium variant) · <a href="https://population.un.org/wpp/" target="_blank">population.un.org/wpp</a>；城市化率：世界银行 WDI（源自《世界城市化展望》）。',
+    footerNote: '本页所有图表由上述官方原始数据集解析生成 · 生成日期 2026-10-10 · 1950–2022 为估计值，2023–2100 为中方案预测值，仅供研究参考。'
+  },
+  'en': {
+    docTitle: "Global Demographic Shifts 1950–2100 · UN WPP 2024",
+    heroEyebrow: '<span class="dot"></span>Global Demographic Shifts · 1950 – 2100',
+    heroH1: 'From <span class="g">Pyramids</span> to <span class="g">Inverted Pyramids</span><br>A Century of Demographic Transformation & Projection',
+    heroLede: 'Based on empirical records and Medium Variant projections from UN DESA Population Division <b>World Population Prospects 2024</b>. Spanning China, India, US, and Japan, revealing a 150-year structural shift toward deeply aged societies.',
+    kpi1Lbl: 'Global Population 2024 → 2050',
+    kpi1Val: '8.16<span class="u"> B</span> → 9.66<span class="u"> B</span>',
+    kpi1Sub: 'Net Growth +1.50 Billion (+18.4%)',
+    kpi2Lbl: 'China 65+ Share',
+    kpi2Val: '14.7<span class="u">%</span> → 30.9<span class="u">%</span>',
+    kpi2Sub: '2024 → 2050, Reaching 45.8% by 2100',
+    kpi3Lbl: 'Japan 65+ Share (Global Peak)',
+    kpi3Val: '29.8<span class="u">%</span>',
+    kpi3Sub: 'Crossed "Super-Aged" threshold in 2005',
+    kpi4Lbl: 'Africa Share of Pop Growth',
+    kpi4Val: '63<span class="u">%</span>',
+    kpi4Sub: '2024–2050: +950 Million / +1.50 Billion',
+
+    sec1Title: 'Data Sources & Projection Methodology',
+    sec1Desc: 'All indicators are parsed directly from official primary UN Population Division datasets, fully reproducible.',
+    mcard1H: '<span class="ic">🏛️</span> Primary Source',
+    mcard1P: 'UN DESA Population Division · <b>World Population Prospects 2024</b> (28th revision, July 2024), Medium variant.',
+    mcard2H: '<span class="ic">🌐</span> Urbanization Data',
+    mcard2P: 'Urbanization rates from World Bank WDI (UN World Urbanization Prospects) indicator <code>SP.URB.TOTL.IN.ZS</code>, cross-verified with WPP standards.',
+    mcard2Tag1: '1960 – 2024 Historical',
+    mcard2Tag2: 'Income Groups: WB Atlas Method',
+    mcard3H: '<span class="ic">📐</span> Projection Methodology',
+    mcard3P: 'Adopts the <b>cohort-component method</b>: taking 2022 baseline demographics, projecting forward age-by-age to 2100 under fertility, mortality, and migration assumptions.',
+    mcard3Tag1: 'TFR Convergence',
+    mcard3Tag2: 'Rising Life Expectancy',
+    mcard3Tag3: 'Net Migration Flows',
+    mcard4H: '<span class="ic">⚠️</span> Interpretation Notes',
+    mcard4P: '1950–2022 are <b>historical estimates</b>; 2023–2100 are <b>projections</b> based on Medium Variant assumptions. They represent conditional scenarios rather than prophecies.',
+    mcard4Tag1: 'Includes 90% Confidence Interval',
+    mcard4Tag2: 'Not for Single-Point Determinism',
+    sec1Note: '<b>Data Extraction:</b> Age structures / TFR / median age parsed from <code>population.un.org/wpp</code> raw CSVs (1950–2100); urbanization from <code>api.worldbank.org</code>. Visualized directly from official datasets.',
+
+    sec2Title: 'Population Pyramid Animation · 4 Nations (1950 → 2100)',
+    sec2Desc: 'Decadal keyframes (1950/1960/…/2050/2100) with smooth linear interpolation. Observe how the wide base ascends and inverts into an upside-down pyramid over a century.',
+    pyrLeg1: '<i style="background:#7ea6d8"></i>Male (Left)',
+    pyrLeg2: '<i style="background:#e894ab"></i>Female (Right)',
+    pyrLeg3: 'X-axis = Age group share of total population (%), Y-axis = Age Cohorts',
+    sec2Note: '<b>Why use percentages rather than absolute counts?</b> The four populations vary nearly 100-fold (India 1.45B vs Japan 120M). Percent shares enable equitable structural comparison.',
+
+    sec3Title: 'Aging Trajectory · 65+ Population Share (1950–2100)',
+    sec3Desc: 'Dashed reference lines mark international standards: <b>7% Aging Society</b> · <b>14% Deeply Aged</b> · <b>20% Super-Aged</b>. Highlights Japan peaking earliest, China accelerating, and India retaining a 25-year demographic window.',
+    ins3_1H: 'Japan · Global Aging Pioneer',
+    ins3_1P: 'Crossed 7% in 1969, exceeded 20% (Super-Aged) by 2005, reached 29.8% in 2024, and will approach 37.5% by 2050.',
+    ins3_2H: 'China · Fastest Rate of Aging',
+    ins3_2P: 'Entered aging in 2000, crossed 14% around 2022, projected to reach 22.8% by 2035, 30.9% by 2050, and potentially 45.8% by 2100.',
+    ins3_3H: 'United States · Cushioned by Migration',
+    ins3_3P: 'Crossed 14% in 2014, but continuous net immigration flattens the curve slope, projecting ~23% by 2050, significantly lower than China and Japan.',
+    ins3_4H: 'India · The Last Demographic Window',
+    ins3_4P: 'Only crossed 7% in 2023 and projected at 14.7% by 2050, acting as the world’s largest reservoir of young labor through mid-century.',
+
+    sec4Title: 'Fertility vs. Urbanization · Correlation Analysis (2024)',
+    sec4Desc: 'X-axis: Urbanization Rate (%); Y-axis: Total Fertility Rate (TFR). Colored by World Bank income classifications; dashed line marks replacement level at 2.1. Green dots = High Income Countries.',
+    ins4_1H: 'Systemic Negative Correlation',
+    ins4_2H: 'Outlier · Israel',
+    ins4_2P: 'High-income economy yet maintains TFR ≈ 2.79, far above peer averages due to strong cultural and pro-natal social dynamics.',
+    ins4_3H: 'Outliers · East Asian Ultra-Low Fertility',
+    ins4_3P: 'Macau 0.68, Hong Kong 0.73, South Korea 0.73, Taiwan 0.86 — high urbanization coupled with lowest global TFR forms an extreme cluster.',
+    ins4_4H: 'Outliers · The Sahel Belt',
+    ins4_4P: 'Chad 6.03, Somalia 6.01, Niger 5.94 — minimal urbanization coupled with highest global fertility, forming the opposite pole to East Asia.',
+    sec4Note: '<b>Methodology:</b> Pearson correlation r calculated across 216 countries/territories using 2024 data points. Isolated territories with missing urbanization data were excluded.',
+
+    sec5Title: 'Demographic Dividend Window · Working-Age Share &gt; 65%',
+    sec5Desc: 'Definition: <b>Working-age cohort (15–64) exceeding 65% of total population</b> constitutes the demographic dividend window—minimal dependency burden and peak growth potential.',
+
+    sec6Title: 'Regional Population Contribution · Waterfall (2024 → 2050)',
+    sec6Desc: 'Global population grows from 8.16B to 9.66B, a net gain of <b>+1.50 Billion</b>. <b>Africa alone contributes ~950 Million (63%)</b>, Asia +470 Million, while Europe is the only continent facing net contraction.',
+    ins6_1H: 'Africa · Absolute Growth Engine',
+    ins6_1P: '1.52B in 2024 → 2.47B in 2050 (+950 Million gain), driving 63.3% of total global population additions.',
+    ins6_2H: 'Asia · Largest Base, Decelerating',
+    ins6_2P: '4.81B in 2024 → 5.28B in 2050 (+470 Million gain); India will cement its lead over China as the most populous country.',
+    ins6_3H: 'Europe · The Only Contracting Continent',
+    ins6_3P: '745M in 2024 → 703M in 2050 (loss of ~42 Million), the only major geographical division facing absolute demographic shrinkage.',
+
+    footerSource: '<b>Data Sources</b>: UN DESA Population Division, World Population Prospects 2024 (Medium variant) · <a href="https://population.un.org/wpp/" target="_blank">population.un.org/wpp</a>; Urbanization: World Bank WDI (UN World Urbanization Prospects).',
+    footerNote: 'All charts generated from official primary datasets · Generated 2026-10-10 · 1950–2022 historical estimates, 2023–2100 Medium Variant projections. For research purposes only.'
+  }
+};
+
+function applyLang(lang) {
+  if (!lang) return;
+  const shortLang = lang.toLowerCase().startsWith('zh') ? 'zh' : 'en';
+  currentLang = shortLang;
+  const dict = I18N_DICT[shortLang] || I18N_DICT['zh'];
+  const isZh = shortLang === 'zh';
+
+  document.documentElement.setAttribute('lang', isZh ? 'zh-CN' : 'en');
+  if (dict.docTitle) document.title = dict.docTitle;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) {
+      el.innerHTML = dict[key];
+    }
+  });
+
+  setPlayUI();
+  renderPyramids();
+  renderCorrText();
+  renderGantt();
+
+  // Aging Chart
+  if (allCharts[0]) {
+    const ch = allCharts[0];
+    ch.data.datasets.forEach((ds, i) => {
+      ds.label = isZh ? CN_ZH[COUNTRIES[i]] : CN_EN[COUNTRIES[i]];
+    });
+    if (ch.options.scales && ch.options.scales.y && ch.options.scales.y.title) {
+      ch.options.scales.y.title.text = isZh ? "65 岁以上人口占比" : "65+ Population Share";
+    }
+    annAging.lines[0].label = isZh ? "7% 老龄化社会" : "7% Aging Society";
+    annAging.lines[1].label = isZh ? "14% 深度老龄化" : "14% Deeply Aged";
+    annAging.lines[2].label = isZh ? "20% 超老龄化" : "20% Super-Aged";
+    annAging.tags[0].text = isZh ? ["日本 2005 · 超老龄化","65+ 突破 20%"] : ["Japan 2005 · Super-Aged","65+ Exceeds 20%"];
+    annAging.tags[1].text = isZh ? ["中国 2035","65+ ≈ 22.8%"] : ["China 2035","65+ ≈ 22.8%"];
+    ch.update('none');
+  }
+
+  // Scatter Chart
+  if (allCharts[1]) {
+    const ch = allCharts[1];
+    const INC_EN_LABELS = { HIC: "High Income", UMC: "Upper Middle", LMC: "Lower Middle", LIC: "Low Income" };
+    INC_ORDER.forEach((g, idx) => {
+      if (ch.data.datasets[idx]) {
+        ch.data.datasets[idx].label = isZh ? POP.incLabels[g] : INC_EN_LABELS[g];
+      }
+    });
+    if (ch.data.datasets[4]) {
+      ch.data.datasets[4].label = isZh ? "趋势线" : "Trendline";
+    }
+    if (ch.options.scales) {
+      if (ch.options.scales.x && ch.options.scales.x.title) {
+        ch.options.scales.x.title.text = isZh ? "城市化率（%）" : "Urbanization Rate (%)";
+      }
+      if (ch.options.scales.y && ch.options.scales.y.title) {
+        ch.options.scales.y.title.text = isZh ? "总和生育率 TFR（每名妇女生育数）" : "Total Fertility Rate (TFR)";
+      }
+    }
+    annScatter.lines[0].label = isZh ? "更替水平 2.1" : "Replacement 2.1";
+    ch.update('none');
+  }
+
+  // Dividend Chart
+  if (allCharts[2]) {
+    const ch = allCharts[2];
+    ch.data.datasets.forEach((ds, i) => {
+      ds.label = isZh ? CN_ZH[COUNTRIES[i]] : CN_EN[COUNTRIES[i]];
+    });
+    if (ch.options.scales && ch.options.scales.y && ch.options.scales.y.title) {
+      ch.options.scales.y.title.text = isZh ? "15–64 岁劳动年龄人口占比" : "Working-Age Share 15–64 (%)";
+    }
+    divAnn.lines[0].label = isZh ? "人口红利阈值 65%" : "Dividend Threshold 65%";
+    ch.update('none');
+  }
+
+  // Waterfall Chart
+  if (allCharts[3]) {
+    const ch = allCharts[3];
+    const wf = POP.waterfall;
+    const order = ["Africa","Asia","Latin America & Caribbean","Northern America","Oceania","Europe"];
+    const sorted = order.map(r => wf.find(w => w.region === r));
+    const labels = [isZh ? "2024 全球" : "2024 Global"];
+    const RC_NAMES_EN = {"Africa":"Africa","Asia":"Asia","Latin America & Caribbean":"Latin America","Northern America":"North America","Oceania":"Oceania","Europe":"Europe"};
+    sorted.forEach(w => {
+      const regName = isZh ? w.cn : RC_NAMES_EN[w.region];
+      labels.push(regName + (w.delta >= 0 ? " +" : " "));
+    });
+    labels.push(isZh ? "2050 全球" : "2050 Global");
+    ch.data.labels = labels;
+    if (ch.options.scales && ch.options.scales.y && ch.options.scales.y.title) {
+      ch.options.scales.y.title.text = isZh ? "人口（百万）" : "Population (Millions)";
+    }
+    if (ch.options.plugins && ch.options.plugins.overlay && ch.options.plugins.overlay.tags) {
+      const tags = ch.options.plugins.overlay.tags;
+      if (tags[tags.length - 1]) {
+        tags[tags.length - 1].text = isZh ? ["净增 +15.0 亿","非洲一洲贡献 63%"] : ["Net +1.50B","Africa Adds 63%"];
+      }
+    }
+    ch.update('none');
+  }
+}
+window.applyLang = applyLang;
+
 function updateAllCharts() {
   const isDark = document.documentElement.classList.contains('dark');
   Chart.defaults.color = isDark ? "#8a98ab" : "#64748b";
@@ -916,6 +1204,15 @@ window.addEventListener('b0-theme-change', updateAllCharts);
 window.addEventListener('storage', (e) => {
   if (e.key === 'b0_theme') updateAllCharts();
 });
+
+
+try {
+  var p = new URLSearchParams(window.location.search);
+  var initL = p.get('b0_lang') || localStorage.getItem('b0_lang');
+  if (initL && !initL.toLowerCase().startsWith('zh')) {
+    applyLang('en');
+  }
+} catch(e) {}
 
 /* ---- initial render (defer to ensure layout) ---- */
 requestAnimationFrame(()=>renderPyramids());
