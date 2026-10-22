@@ -12,6 +12,7 @@
 | `bin0sky.tech/ppt/*` | `https://ppt.bin0sky.tech` | `AiPPT-Web` | SlideCraft AI 演示文稿工作台 |
 | `bin0sky.tech/console/*` | `https://console.bin0sky.tech` | `AIconsole/web` | macOS 原生 AI 终端 Web 版 |
 | `bin0sky.tech/ambient/*` | `https://ambient.bin0sky.tech` | `Ambient4K-Web` | 4K 视觉画廊与声学专注空间 |
+| `bin0sky.tech/bom/*` | `https://bom.bin0sky.tech` | `online-ai-netbom` | NetBOM 网络设备智能物料与报价工作台 |
 
 ## 🚀 Cloudflare 部署步骤（3 步）
 

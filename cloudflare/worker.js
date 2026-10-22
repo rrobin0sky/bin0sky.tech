@@ -26,6 +26,7 @@ export default {
       '/ppt': '#/ppt',
       '/console': '#/console',
       '/ambient': '#/ambient',
+      '/bom': '#/bom',
       '/apps': '#/apps',
       '/notes': '#/notes',
       '/labs': '#/labs',
@@ -46,6 +47,7 @@ export default {
       { prefix: '/ppt', target: 'https://ppt.bin0sky.tech' },
       { prefix: '/console', target: 'https://console.bin0sky.tech' },
       { prefix: '/ambient', target: 'https://ambient.bin0sky.tech' },
+      { prefix: '/bom', target: 'https://bom.bin0sky.tech' },
     ];
 
     for (const route of routes) {
