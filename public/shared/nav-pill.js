@@ -485,9 +485,18 @@
           </div>
         </div>
       </a>
+      <a href="/#/bom" class="b0-menu-item">
+        <div class="b0-menu-item-left">
+          <span class="b0-menu-icon" style="background: rgba(14,165,233,0.15); color: #0ea5e9;">05</span>
+          <div>
+            <div class="b0-menu-name">NetBOM</div>
+            <div class="b0-menu-desc">网络设备选型与智能物料报价工作台</div>
+          </div>
+        </div>
+      </a>
       <a href="/notes/population_structure_1950_2100.html" class="b0-menu-item">
         <div class="b0-menu-item-left">
-          <span class="b0-menu-icon" style="background: rgba(244,63,94,0.15); color: #f43f5e;">05</span>
+          <span class="b0-menu-icon" style="background: rgba(244,63,94,0.15); color: #f43f5e;">06</span>
           <div>
             <div class="b0-menu-name">人口结构变迁 1950–2100</div>
             <div class="b0-menu-desc">联合国数据四国动态推演模型</div>
@@ -496,7 +505,7 @@
       </a>
       <a href="/notes/fund_industry_cycles_2026.html" class="b0-menu-item">
         <div class="b0-menu-item-left">
-          <span class="b0-menu-icon" style="background: rgba(59,130,246,0.15); color: #3b82f6;">06</span>
+          <span class="b0-menu-icon" style="background: rgba(59,130,246,0.15); color: #3b82f6;">07</span>
           <div>
             <div class="b0-menu-name">公募基金与产业周期全景</div>
             <div class="b0-menu-desc">24 赛道周期量化与估值出清模型</div>
@@ -505,7 +514,7 @@
       </a>
       <a href="/notes/breakdown_fund_analysis_2026.html" class="b0-menu-item">
         <div class="b0-menu-item-left">
-          <span class="b0-menu-icon" style="background: rgba(245,158,11,0.15); color: #f59e0b;">07</span>
+          <span class="b0-menu-icon" style="background: rgba(245,158,11,0.15); color: #f59e0b;">08</span>
           <div>
             <div class="b0-menu-name">破位基金本质透视看板</div>
             <div class="b0-menu-desc">穿透技术陷阱与常识归因系统</div>
@@ -514,7 +523,7 @@
       </a>
       <a href="/labs/teacher_workspace.html" class="b0-menu-item">
         <div class="b0-menu-item-left">
-          <span class="b0-menu-icon" style="background: rgba(16,185,129,0.15); color: #10b981;">08</span>
+          <span class="b0-menu-icon" style="background: rgba(16,185,129,0.15); color: #10b981;">09</span>
           <div>
             <div class="b0-menu-name">教师工作台</div>
             <div class="b0-menu-desc">高中日语教学空间与学情分析</div>
