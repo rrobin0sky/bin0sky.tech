@@ -957,23 +957,9 @@
       </div>
 
       <!-- 视图 B: 全屏纯净工作台 (Stage Iframe & Loader) -->
-      <div id="stageFrameContainer" class="flex-1 h-full hidden flex-col relative bg-slate-100 dark:bg-zinc-950 overflow-hidden">
-        <!-- Floating Stage Control HUD Toolstrip (Top-Right Glass Pill) -->
-        <div id="stageFloatingHud" class="absolute top-3 right-4 z-30 flex items-center gap-1.5 p-1 rounded-full border border-black/[0.08] dark:border-white/[0.12] bg-white/85 dark:bg-[#12141a]/85 backdrop-blur-xl shadow-lg transition-all duration-300 opacity-60 hover:opacity-100 select-none">
-          <button onclick="adjustStageZoom(-0.05)" class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer" title="缩小视窗 (Zoom Out)">−</button>
-          <button onclick="resetStageZoom()" id="stageZoomLabel" class="px-1 text-[11px] font-mono font-semibold text-zinc-700 dark:text-zinc-300 hover:text-sky-500 transition-colors cursor-pointer" title="点击重置为 100% 缩放">100%</button>
-          <button onclick="adjustStageZoom(0.05)" class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer" title="放大视窗 (Zoom In)">+</button>
-          <div class="h-3 w-[1px] bg-black/10 dark:bg-white/15 mx-0.5"></div>
-          <button onclick="reloadCurrentStage()" class="w-6 h-6 rounded-full flex items-center justify-center text-zinc-600 dark:text-zinc-300 hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer" title="刷新舞台 (⌘R)">
-            <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
-          </button>
-          <button onclick="openCurrentStageExternal()" class="w-6 h-6 rounded-full flex items-center justify-center text-zinc-600 dark:text-zinc-300 hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer" title="新标签页独立全屏打开">
-            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-          </button>
-        </div>
-
+      <div id="stageFrameContainer" class="flex-1 h-full hidden flex-col relative bg-slate-100 dark:bg-zinc-950">
         <!-- Stage Loading Skeleton Indicator -->
-        <div id="stageLoadingOverlay" class="absolute inset-0 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md z-20 flex flex-col items-center justify-center gap-3 transition-opacity duration-300 opacity-0 pointer-events-none select-none">
+        <div id="stageLoadingOverlay" class="absolute inset-0 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md z-30 flex flex-col items-center justify-center gap-3 transition-opacity duration-300 opacity-0 pointer-events-none select-none">
           <div class="w-7 h-7 rounded-full border-2 border-zinc-300 dark:border-zinc-700 border-t-sky-500 animate-spin"></div>
           <span class="font-mono text-xs text-zinc-600 dark:text-zinc-400" id="stageLoadingText">正在连接舞台工作区...</span>
         </div>
@@ -1411,37 +1397,6 @@
       playHaptic('click');
       if (iframe && iframe.src && iframe.src !== 'about:blank') {
         window.open(iframe.src, '_blank');
-      }
-    }
-
-    let currentStageZoom = 1.0;
-    function adjustStageZoom(delta) {
-      playHaptic('click');
-      currentStageZoom = Math.min(Math.max(Math.round((currentStageZoom + delta) * 100) / 100, 0.70), 1.30);
-      applyStageZoom();
-    }
-
-    function resetStageZoom() {
-      playHaptic('click');
-      currentStageZoom = 1.0;
-      applyStageZoom();
-    }
-
-    function applyStageZoom() {
-      const iframe = document.getElementById('stageIframe');
-      const label = document.getElementById('stageZoomLabel');
-      if (label) label.textContent = Math.round(currentStageZoom * 100) + '%';
-      if (iframe) {
-        if (Math.abs(currentStageZoom - 1.0) < 0.01) {
-          iframe.style.width = '100%';
-          iframe.style.height = '100%';
-          iframe.style.transform = 'none';
-        } else {
-          iframe.style.width = (100 / currentStageZoom) + '%';
-          iframe.style.height = (100 / currentStageZoom) + '%';
-          iframe.style.transformOrigin = '0 0';
-          iframe.style.transform = `scale(${currentStageZoom})`;
-        }
       }
     }
 
