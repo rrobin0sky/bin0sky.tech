@@ -86,6 +86,37 @@
   /* 间距阶梯：4/8 栅格 */
   --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px;
 }
+/* Smooth font rendering & custom sleek scrollbar */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+html:not(.dark) ::-webkit-scrollbar-thumb, html.light ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+}
+/* Embedded in BinOS Workstation Iframe */
+html.b0-embedded {
+  font-size: 14.5px;
+}
+html.b0-embedded:not(.dark) body.mode-a,
+html.b0-embedded:not(.dark) body.mode-b {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --side-bg: #f1f5f9;
+  --line: rgba(0, 0, 0, 0.08);
+}
 /* ===== 双皮肤变量整包：body.mode-a=青竹绿 · body.mode-b=温暖晨光（默认）。
    语义色 token（--ok/--warn/--bad 及 -ink）两套同名同义，业务组件只认 token 不认风格 ===== */
 body.mode-a{

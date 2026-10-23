@@ -98,10 +98,33 @@ body{
              var(--bg);
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  line-height:1.6; -webkit-font-smoothing:antialiased;
+  line-height:1.6; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility;
   min-height:100vh;
+  transition:background-color 0.2s ease, color 0.2s ease;
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+html:not(.dark) ::-webkit-scrollbar-thumb, html.light ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
 }
 .wrap{max-width:1360px;margin:0 auto;padding:0 22px 90px}
+
+/* Embedded in BinOS Workstation */
+html.b0-embedded .wrap { padding: 0 16px 40px; }
+html.b0-embedded .hero { padding: 20px 0 16px; }
+html.b0-embedded h1 { font-size: clamp(22px, 3vw, 32px); margin: 10px 0 8px; }
+html.b0-embedded .lede { font-size: 14px; }
+html.b0-embedded .kpis { margin: 18px 0 8px; gap: 10px; }
+html.b0-embedded section { margin-top: 32px; }
 
 /* ---------- hero ---------- */
 .hero{padding:64px 0 30px;text-align:left}
@@ -139,7 +162,7 @@ section{margin-top:60px;scroll-margin-top:20px}
   border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-top:18px}
 .card.pad{padding:26px}
 .note{font-size:13px;color:var(--muted);border-left:2px solid var(--border2);padding:2px 0 2px 13px;margin-top:14px}
-.note b{color:#c9d6e6}
+.note b{color:var(--text);font-weight:650;}
 
 /* ---------- pyramid ---------- */
 .pyr-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}

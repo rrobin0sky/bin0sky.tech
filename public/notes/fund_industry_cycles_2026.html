@@ -120,12 +120,44 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
     body {
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.6;
       padding: 24px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+    }
+    html:not(.dark) ::-webkit-scrollbar-thumb, html.light ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.18);
+    }
+    /* Embedded in BinOS Workstation Iframe */
+    html.b0-embedded body {
+      padding: 16px 20px;
+    }
+    html.b0-embedded header {
+      padding: 18px 24px;
+      margin-bottom: 16px;
+    }
+    html.b0-embedded h1 {
+      font-size: 22px;
+    }
+    html.b0-embedded .subtitle {
+      font-size: 13px;
     }
     .container {
       max-width: 1440px;
@@ -153,6 +185,11 @@
       color: #60a5fa;
       border: 1px solid rgba(59, 130, 246, 0.3);
       width: fit-content;
+    }
+    html:not(.dark) .badge, html.light .badge {
+      background: rgba(2, 132, 199, 0.1);
+      color: #0284c7;
+      border-color: rgba(2, 132, 199, 0.25);
     }
     h1 {
       font-size: 28px;
@@ -447,7 +484,7 @@
       gap: 2px;
     }
     .ms-label {
-      font-size: 11px;
+      font-size: 11.5px;
       color: var(--text-muted);
     }
     .ms-val {
@@ -457,6 +494,9 @@
     .val-down { color: #f87171; }
     .val-up { color: #34d399; }
     .val-neutral { color: #fbbf24; }
+    html:not(.dark) .val-down, html.light .val-down { color: #dc2626 !important; font-weight: 700; }
+    html:not(.dark) .val-up, html.light .val-up { color: #059669 !important; font-weight: 700; }
+    html:not(.dark) .val-neutral, html.light .val-neutral { color: #b45309 !important; font-weight: 700; }
 
     /* ETF tags */
     .etf-tag-wrap {
