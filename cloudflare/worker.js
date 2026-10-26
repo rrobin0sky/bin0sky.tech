@@ -263,6 +263,57 @@ async function handleBomApi(request, env) {
   try {
     const hasKV = !!(env && env.TEACHER_KV);
 
+    // 1. Get Global Official Default Catalog
+    if (path === '/api/bom/default' && request.method === 'GET') {
+      if (!hasKV) {
+        return new Response(JSON.stringify({ success: false, error: 'KV服务未就绪' }), { status: 503, headers: corsHeaders });
+      }
+      const defaultRecord = await env.TEACHER_KV.get('bom:global:default', 'json');
+      return new Response(JSON.stringify({
+        success: true,
+        record: defaultRecord || null,
+        serverTime: Date.now(),
+      }), { headers: corsHeaders });
+    }
+
+    // 2. Publish as Global Official Default (Master Password Protected)
+    if (path === '/api/bom/publish-default' && request.method === 'POST') {
+      const body = await request.json().catch(() => ({}));
+      const { adminKey, payload } = body;
+
+      if (!adminKey || String(adminKey).trim() !== 'bin0sky.tech') {
+        return new Response(JSON.stringify({ error: '管理员口令不正确' }), { status: 401, headers: corsHeaders });
+      }
+
+      if (!payload) {
+        return new Response(JSON.stringify({ error: '发布数据不能为空' }), { status: 400, headers: corsHeaders });
+      }
+
+      if (!hasKV) {
+        return new Response(JSON.stringify({ error: '云端存储服务未就绪' }), { status: 503, headers: corsHeaders });
+      }
+
+      const existing = await env.TEACHER_KV.get('bom:global:default', 'json');
+      const version = (existing && existing.version ? existing.version : 0) + 1;
+
+      const record = {
+        payload,
+        version,
+        updatedAt: Date.now(),
+        publishedBy: 'admin',
+      };
+
+      await env.TEACHER_KV.put('bom:global:default', JSON.stringify(record));
+
+      return new Response(JSON.stringify({
+        success: true,
+        version,
+        updatedAt: record.updatedAt,
+        serverTime: Date.now(),
+        message: '已成功发布为全网默认！全球所有访问者将直接看到此版本。',
+      }), { headers: corsHeaders });
+    }
+
     if (path === '/api/bom/sync') {
       if (request.method === 'GET') {
         const code = (url.searchParams.get('code') || '').trim().toUpperCase();
