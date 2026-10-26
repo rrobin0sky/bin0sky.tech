@@ -20,6 +20,11 @@ export default {
       return handleTeacherApi(request, env);
     }
 
+    // Edge API: NetBOM Cloud Sync (Save & Load by Project Code)
+    if (pathname.startsWith('/api/bom/')) {
+      return handleBomApi(request, env);
+    }
+
     // Direct app routes: Redirect to App Shell workstation hash navigation
     // This preserves App Shell (Zones 1-11) and loads the app seamlessly in Zone 12
     const hashRoutes = {
@@ -226,6 +231,111 @@ async function handleTeacherApi(request, env) {
         kvAvailable: hasKV,
         message: '云端同步成功'
       }), { headers: corsHeaders });
+    }
+
+    return new Response(JSON.stringify({ error: 'Not Found' }), { status: 404, headers: corsHeaders });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: 'Server Error: ' + err.message }), { status: 500, headers: corsHeaders });
+  }
+}
+
+/**
+ * NetBOM Cloud Sync Edge API Handler
+ * Supports:
+ * - GET  /api/bom/sync?code=XXXX[&pass=YYYY] (Pull cloud state by project code)
+ * - POST /api/bom/sync                       (Push cloud state with project code & optional password)
+ */
+async function handleBomApi(request, env) {
+  const url = new URL(request.url);
+  const path = url.pathname.replace(/\/+$/, '');
+
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Content-Type': 'application/json; charset=utf-8',
+  };
+
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { status: 204, headers: corsHeaders });
+  }
+
+  try {
+    const hasKV = !!(env && env.TEACHER_KV);
+
+    if (path === '/api/bom/sync') {
+      if (request.method === 'GET') {
+        const code = (url.searchParams.get('code') || '').trim().toUpperCase();
+        const pass = (url.searchParams.get('pass') || '').trim();
+
+        if (!code) {
+          return new Response(JSON.stringify({ error: '请提供项目同步码' }), { status: 400, headers: corsHeaders });
+        }
+
+        if (!hasKV) {
+          return new Response(JSON.stringify({ error: '云端存储服务未就绪' }), { status: 503, headers: corsHeaders });
+        }
+
+        const dataKey = `bom:code:${code}`;
+        const record = await env.TEACHER_KV.get(dataKey, 'json');
+
+        if (!record) {
+          return new Response(JSON.stringify({ error: '未找到该同步码对应的云端报价记录' }), { status: 404, headers: corsHeaders });
+        }
+
+        if (record.passHash && record.passHash !== pass) {
+          return new Response(JSON.stringify({ error: '访问口令不正确', needPass: true }), { status: 401, headers: corsHeaders });
+        }
+
+        return new Response(JSON.stringify({
+          success: true,
+          code,
+          payload: record.payload,
+          updatedAt: record.updatedAt,
+          serverTime: Date.now(),
+        }), { headers: corsHeaders });
+      }
+
+      if (request.method === 'POST') {
+        const body = await request.json().catch(() => ({}));
+        const { code, pass, payload } = body;
+
+        const cleanCode = String(code || '').trim().toUpperCase();
+        if (!cleanCode || cleanCode.length < 3) {
+          return new Response(JSON.stringify({ error: '同步码至少需要3位字符' }), { status: 400, headers: corsHeaders });
+        }
+
+        if (!payload) {
+          return new Response(JSON.stringify({ error: '数据载荷不能为空' }), { status: 400, headers: corsHeaders });
+        }
+
+        if (!hasKV) {
+          return new Response(JSON.stringify({ error: '云端存储服务未就绪' }), { status: 503, headers: corsHeaders });
+        }
+
+        const dataKey = `bom:code:${cleanCode}`;
+        const existing = await env.TEACHER_KV.get(dataKey, 'json');
+        if (existing && existing.passHash && existing.passHash !== (pass || '')) {
+          return new Response(JSON.stringify({ error: '该同步码已被口令保护，请输入正确口令' }), { status: 401, headers: corsHeaders });
+        }
+
+        const record = {
+          code: cleanCode,
+          passHash: pass ? String(pass).trim() : (existing ? existing.passHash : ''),
+          payload,
+          updatedAt: Date.now(),
+        };
+
+        await env.TEACHER_KV.put(dataKey, JSON.stringify(record));
+
+        return new Response(JSON.stringify({
+          success: true,
+          code: cleanCode,
+          updatedAt: record.updatedAt,
+          serverTime: Date.now(),
+          message: '保存成功',
+        }), { headers: corsHeaders });
+      }
     }
 
     return new Response(JSON.stringify({ error: 'Not Found' }), { status: 404, headers: corsHeaders });
