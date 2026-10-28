@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>金鹅自由实验室 — 《小狗钱钱》动态财富自由沙盒 | bin0sky LABS</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=binos2026">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=binos2026">
+  <script>
+    (function() {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var urlTheme = params.get("b0_theme");
+        var saved = urlTheme || localStorage.getItem("b0_theme");
+        var isDark = saved ? (saved === "dark") : true;
+        if (isDark) {
+          document.documentElement.classList.add("dark");
+          document.documentElement.classList.remove("light");
+        } else {
+          document.documentElement.classList.remove("dark");
+          document.documentElement.classList.add("light");
+        }
+        if (params.get("b0_embedded") === "1" || window.top !== window.self) {
+          document.documentElement.classList.add("b0-embedded");
+        }
+      } catch(e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["-apple-system", "BlinkMacSystemFont", ""SF Pro Text"", ""SF Pro Display"", ""PingFang SC"", "system-ui", "sans-serif"],
+            mono: [""SF Mono"", ""JetBrains Mono"", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+  <script src="/shared/lucide.min.js"></script>
+  <script>if (!window.lucide) { document.write('<scr' + 'ipt src="https://unpkg.com/lucide@latest"></scr' + 'ipt>'); }</script>
+  <script src="/shared/nav-pill.js" data-category="labs" data-title="金鹅自由实验室" defer></script>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-card: #f1f5f9;
+      --border: rgba(0, 0, 0, 0.08);
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --gold: #f59e0b;
+    }
+    .dark {
+      --bg: #090a0d;
+      --surface: #11141a;
+      --surface-card: #171b23;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --gold: #fbbf24;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-feature-settings: "tnum";
+    }
+    /* 自定义拟物高光与滑块 */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      height: 6px;
+    }
+    .light input[type=range] {
+      background: rgba(0, 0, 0, 0.08);
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      background: #fbbf24;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+      border: 2px solid #ffffff;
+      transition: transform 0.1s;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-amber-500/20 selection:text-amber-400">
+  <div id="app" class="max-w-6xl mx-auto px-4 py-6 md:py-10 space-y-8">
+    
+    <!-- 顶部导航与预设场景 -->
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-black/[0.06] dark:border-white/[0.08]">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center text-lg shadow-sm">
+            🪿
+          </div>
+          <h1 class="text-xl md:text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">金鹅自由实验室</h1>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">4% 永续法则</span>
+        </div>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">《小狗钱钱》动态财富自由沙盒：绝不杀鹅，只吃鹅蛋，对抗通胀，复利生金。</p>
+      </div>
+
+      <!-- 一键场景预设 -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
+        <button onclick="applyPreset('salary')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-medium border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 transition-all flex items-center gap-1.5 shrink-0">
+          <span>⚖️</span> 工薪定投
+        </button>
+        <button onclick="applyPreset('fire')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-medium border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02] text-zinc-700 dark:text-zinc-300 hover:border-amber-500/30 hover:text-amber-400 transition-all flex items-center gap-1.5 shrink-0">
+          <span>🚀</span> 极速 FIRE
+        </button>
+        <button onclick="applyPreset('youth')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-medium border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02] text-zinc-700 dark:text-zinc-300 hover:border-amber-500/30 hover:text-amber-400 transition-all flex items-center gap-1.5 shrink-0">
+          <span>🌱</span> 青年初航
+        </button>
+        <button onclick="applyPreset('defense')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-medium border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02] text-zinc-700 dark:text-zinc-300 hover:border-amber-500/30 hover:text-amber-400 transition-all flex items-center gap-1.5 shrink-0">
+          <span>🛡️</span> 稳健防御
+        </button>
+      </div>
+    </header>
+
+    <!-- 视觉圣殿：双轮廓金鹅 + 动态金蛋 + 自由生活篮子 -->
+    <div class="relative rounded-3xl p-6 md:p-8 border border-amber-500/20 bg-gradient-to-b from-amber-500/[0.04] via-[#11141a]/40 to-transparent dark:from-amber-500/[0.08] dark:to-[#11141a]/80 shadow-2xl overflow-hidden backdrop-blur-md">
+      <!-- 自由觉醒全屏微光特效 -->
+      <div id="freedomAura" class="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-700 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-400/15 via-emerald-500/10 to-transparent"></div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
+        
+        <!-- 左侧：金鹅体态与通胀虚影 (7列) -->
+        <div class="md:col-span-7 flex flex-col items-center justify-center min-h-[280px] relative">
+          <div class="relative w-64 h-64 flex items-center justify-center">
+            
+            <!-- 外层虚影光晕鹅 (通胀吃钱产生的名义账面虚影) -->
+            <div id="ghostGooseWrapper" class="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-out pointer-events-none opacity-40">
+              <svg viewBox="0 0 200 200" class="w-full h-full text-amber-300 filter drop-shadow-[0_0_12px_rgba(251,191,36,0.3)]">
+                <path d="M140,75 C145,55 130,35 110,38 C95,40 85,55 88,70 C70,72 50,85 40,105 C30,125 35,150 55,165 C80,180 130,180 155,155 C175,135 170,100 150,85 C145,80 142,78 140,75 Z" 
+                      fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="6,4" />
+                <path d="M125,48 Q135,46 142,52" fill="none" stroke="currentColor" stroke-width="2" />
+                <circle cx="118" cy="46" r="3" fill="currentColor" />
+              </svg>
+            </div>
+
+            <!-- 内层真实实体金鹅 (抗通胀真实购买力实体) -->
+            <div id="solidGooseWrapper" class="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-300 ease-out filter drop-shadow-[0_15px_30px_rgba(245,158,11,0.4)]">
+              <svg viewBox="0 0 200 200" class="w-full h-full">
+                <defs>
+                  <linearGradient id="goldGleam" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fef08a" />
+                    <stop offset="35%" stop-color="#fbbf24" />
+                    <stop offset="70%" stop-color="#f59e0b" />
+                    <stop offset="100%" stop-color="#b45309" />
+                  </linearGradient>
+                  <radialGradient id="wingShadow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.8" />
+                    <stop offset="100%" stop-color="#92400e" stop-opacity="1" />
+                  </radialGradient>
+                </defs>
+                <!-- 鹅身 -->
+                <path d="M140,75 C145,55 130,35 110,38 C95,40 85,55 88,70 C70,72 50,85 40,105 C30,125 35,150 55,165 C80,180 130,180 155,155 C175,135 170,100 150,85 C145,80 142,78 140,75 Z" 
+                      fill="url(#goldGleam)" stroke="#fef08a" stroke-width="1.5" />
+                <!-- 鹅翅羽翼 -->
+                <path d="M85,95 C110,95 135,115 130,140 C110,150 80,145 70,125 C65,110 75,98 85,95 Z" 
+                      fill="url(#wingShadow)" opacity="0.85" />
+                <!-- 鹅嘴 -->
+                <polygon points="135,46 155,50 138,56" fill="#ea580c" />
+                <!-- 鹅眼 -->
+                <circle cx="118" cy="46" r="3.5" fill="#1e1b4b" />
+                <circle cx="117" cy="45" r="1.2" fill="#ffffff" />
+                <!-- 金色胸羽高光 -->
+                <path d="M95,65 Q105,75 100,90" fill="none" stroke="#fef9c3" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+              </svg>
+            </div>
+
+          </div>
+
+          <!-- 金鹅体量与通胀剥离标牌 -->
+          <div class="mt-2 flex flex-wrap items-center justify-center gap-2 text-center">
+            <div class="px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20">
+              <span class="text-[10px] text-zinc-400 block font-medium">真实金鹅购买力</span>
+              <span id="labelRealGoose" class="text-sm font-mono font-bold text-amber-500 dark:text-amber-400">¥ 90.4 万</span>
+            </div>
+            <div class="px-3 py-1 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08]">
+              <span class="text-[10px] text-zinc-400 block font-medium">通胀后账面虚影</span>
+              <span id="labelNominalGoose" class="text-sm font-mono font-bold text-zinc-500 dark:text-zinc-400">¥ 118.6 万</span>
+            </div>
+            <div class="px-3 py-1 rounded-xl bg-rose-500/10 border border-rose-500/20">
+              <span class="text-[10px] text-rose-400 block font-medium">通胀吞噬水分</span>
+              <span id="labelInflationLoss" class="text-sm font-mono font-bold text-rose-500 dark:text-rose-400">-¥ 28.2 万</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧：金蛋产出与自由生活篮子 (5列) -->
+        <div class="md:col-span-5 flex flex-col items-center justify-center p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] relative">
+          
+          <div class="text-center mb-2">
+            <span class="text-[11px] font-medium tracking-wider text-zinc-400 uppercase">Monthly Passive Cashflow</span>
+            <div class="flex items-center justify-center gap-1.5 mt-0.5">
+              <span class="text-xs text-amber-500 font-bold">🥚 每月金蛋</span>
+              <span id="labelEggMonthly" class="text-2xl font-mono font-black text-amber-500 dark:text-amber-400">¥ 3,013</span>
+              <span class="text-[11px] text-zinc-500">/ 月</span>
+            </div>
+          </div>
+
+          <!-- 动态金蛋容器 -->
+          <div class="h-28 flex items-center justify-center relative my-2">
+            <div id="goldenEggWrapper" class="transition-transform duration-300 ease-out flex items-center justify-center filter drop-shadow-[0_8px_20px_rgba(251,191,36,0.5)]">
+              <div class="w-16 h-22 rounded-[50%_50%_50%_50%/62%_62%_38%_38%] bg-gradient-to-br from-yellow-100 via-amber-400 to-amber-600 flex items-center justify-center relative overflow-hidden border border-amber-200/50">
+                <div class="absolute top-2 left-3 w-5 h-8 rounded-full bg-white/40 blur-[1px] transform -rotate-15"></div>
+                <span class="text-base">✨</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 生活篮子容器 (自由生活标准线) -->
+          <div class="w-full max-w-[240px] mt-2 flex flex-col items-center">
+            <div id="freedomBasketBox" class="w-full relative rounded-2xl p-3 border-2 border-dashed border-amber-500/30 bg-amber-500/[0.03] transition-all duration-300 text-center">
+              <div class="flex items-center justify-between text-xs mb-1.5">
+                <span class="flex items-center gap-1 text-zinc-400">
+                  <span>🧺</span> 生活成本篮子
+                </span>
+                <span id="labelMonthlyExpense" class="font-mono font-bold text-zinc-800 dark:text-zinc-200">¥ 8,000</span>
+              </div>
+
+              <!-- 填充进度条 -->
+              <div class="w-full h-2 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden relative">
+                <div id="basketFillBar" class="h-full rounded-full bg-gradient-to-r from-amber-500 to-emerald-400 transition-all duration-300" style="width: 37.7%;"></div>
+              </div>
+
+              <div class="mt-2 flex items-center justify-between text-[11px] font-mono">
+                <span class="text-zinc-400">自由覆盖率</span>
+                <span id="labelFreedomRatio" class="font-bold text-amber-500 dark:text-amber-400">37.7%</span>
+              </div>
+            </div>
+
+            <!-- 达成自由状态标签 -->
+            <div id="freedomBadge" class="mt-2 py-1 px-3 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-300 text-zinc-500 dark:text-zinc-400 bg-black/[0.04] dark:bg-white/[0.04]">
+              <span>⏳</span> <span id="labelFreedomHint">尚需孵化，离自由还差 ¥4,987/月</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- 核心大时间轴控制器 -->
+      <div class="mt-8 pt-6 border-t border-black/[0.06] dark:border-white/[0.08]">
+        <div class="flex items-center justify-between gap-4 mb-2">
+          <div class="flex items-center gap-2">
+            <button id="btnPlayTimeline" onclick="togglePlayTimeline()" class="w-8 h-8 rounded-full bg-amber-500 text-slate-950 font-bold flex items-center justify-center hover:scale-105 active:scale-95 transition-transform shadow-md text-xs cursor-pointer">
+              ▶
+            </button>
+            <span class="text-xs font-medium text-zinc-400">推演流转时间</span>
+          </div>
+          <div class="flex items-center gap-2 font-mono">
+            <span class="text-xs text-zinc-400">第</span>
+            <span id="labelCurrentYears" class="text-xl font-black text-amber-500 dark:text-amber-400">10.0</span>
+            <span class="text-xs text-zinc-400">年</span>
+          </div>
+        </div>
+        <input type="range" id="inputYears" min="1" max="35" step="0.5" value="10" oninput="handleParamChange()" class="w-full cursor-pointer accent-amber-500">
+        <div class="flex justify-between text-[10px] font-mono text-zinc-400 mt-1">
+          <span>1 年 (破土)</span>
+          <span>10 年 (强健)</span>
+          <span>20 年 (爆发)</span>
+          <span>35 年 (无垠)</span>
+        </div>
+      </div>
+
+    </div>
+
+    
+    <!-- 6 大极简参数滑块控制台 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      
+      <!-- 1. 每月喂食 (定投) -->
+      <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] hover:border-amber-500/30 transition-colors">
+        <div class="flex items-center justify-between mb-2">
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+            <span class="text-base">🌾</span> 每月喂食 (定投)
+          </span>
+          <span id="valMonthlySaving" class="text-xs font-mono font-bold text-amber-500">¥ 5,000</span>
+        </div>
+        <input type="range" id="inputSaving" min="500" max="30000" step="500" value="5000" oninput="handleParamChange()" class="w-full">
+        <div class="flex justify-between text-[10px] text-zinc-400 mt-1 font-mono">
+          <span>¥500</span>
+          <span>¥15,000</span>
+          <span>¥30,000</span>
+        </div>
+      </div>
+
+      <!-- 2. 指数基金肥力 (年化收益) -->
+      <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] hover:border-amber-500/30 transition-colors">
+        <div class="flex items-center justify-between mb-2">
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+            <span class="text-base">📈</span> 基金肥力 (年化收益)
+          </span>
+          <span id="valAnnualReturn" class="text-xs font-mono font-bold text-emerald-500">8.0%</span>
+        </div>
+        <input type="range" id="inputReturn" min="3" max="15" step="0.5" value="8.0" oninput="handleParamChange()" class="w-full">
+        <div class="flex justify-between text-[10px] text-zinc-400 mt-1 font-mono">
+          <span>3.0% (纯债)</span>
+          <span>8.0% (宽基指数)</span>
+          <span>15.0% (高增长)</span>
+        </div>
+      </div>
+
+      <!-- 3. 通胀怪兽吞噬速度 -->
+      <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] hover:border-amber-500/30 transition-colors">
+        <div class="flex items-center justify-between mb-2">
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+            <span class="text-base">💨</span> 通胀蚕食速度
+          </span>
+          <span id="valInflation" class="text-xs font-mono font-bold text-rose-500">2.8%</span>
+        </div>
+        <input type="range" id="inputInflation" min="0" max="8" step="0.2" value="2.8" oninput="handleParamChange()" class="w-full">
+        <div class="flex justify-between text-[10px] text-zinc-400 mt-1 font-mono">
+          <span>0.0% (零通胀)</span>
+          <span>2.8% (温和)</span>
+          <span>8.0% (剧烈贬值)</span>
+        </div>
+      </div>
+
+      <!-- 4. 每月生活篮子 (自由门槛) -->
+      <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] hover:border-amber-500/30 transition-colors">
+        <div class="flex items-center justify-between mb-2">
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+            <span class="text-base">🧺</span> 生活开销篮子
+          </span>
+          <span id="valMonthlyExpense" class="text-xs font-mono font-bold text-blue-500">¥ 8,000</span>
+        </div>
+        <input type="range" id="inputExpense" min="3000" max="30000" step="500" value="8000" oninput="handleParamChange()" class="w-full">
+        <div class="flex justify-between text-[10px] text-zinc-400 mt-1 font-mono">
+          <span>¥3,000 (极简)</span>
+          <span>¥8,000 (舒适)</span>
+          <span>¥30,000 (丰盛)</span>
+        </div>
+      </div>
+
+      <!-- 5. 鹅蛋提取率 (4%法则) -->
+      <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] hover:border-amber-500/30 transition-colors">
+        <div class="flex items-center justify-between mb-2">
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+            <span class="text-base">🥚</span> 鹅蛋提取率 (SWR)
+          </span>
+          <span id="valSWR" class="text-xs font-mono font-bold text-amber-500">4.0%</span>
+        </div>
+        <input type="range" id="inputSWR" min="2.5" max="6.0" step="0.25" value="4.0" oninput="handleParamChange()" class="w-full">
+        <div class="flex justify-between text-[10px] text-zinc-400 mt-1 font-mono">
+          <span>2.5% (超稳)</span>
+          <span>4.0% (经典永续)</span>
+          <span>6.0% (激进)</span>
+        </div>
+      </div>
+
+      <!-- 6. 资产自由解剖速览 -->
+      <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-zinc-400 flex items-center gap-1">
+            <span>🎯</span> 自由门槛资产 (300倍月开销)
+          </span>
+          <span id="valFreedomTarget" class="text-xs font-mono font-bold text-emerald-500">¥ 240 万</span>
+        </div>
+        <div class="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
+          达成自由预计在：<strong id="valCrossoverYearText" class="text-amber-500 dark:text-amber-400 font-mono font-bold">第 18.5 年</strong>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 资产成分解剖条 -->
+    <div class="p-5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08]">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+        <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+          <span>🧬</span> 金鹅资产成分解剖 (Asset Anatomy)
+        </span>
+        <div class="flex items-center gap-4 text-[11px] font-mono">
+          <span class="flex items-center gap-1 text-blue-500"><span class="w-2 h-2 rounded-full bg-blue-500"></span> 本金投入</span>
+          <span class="flex items-center gap-1 text-amber-500"><span class="w-2 h-2 rounded-full bg-amber-500"></span> 复利繁衍</span>
+          <span class="flex items-center gap-1 text-rose-400"><span class="w-2 h-2 rounded-full bg-rose-400"></span> 通胀差额</span>
+        </div>
+      </div>
+      <div class="w-full h-4 rounded-xl bg-black/10 dark:bg-white/10 overflow-hidden flex relative">
+        <div id="barInvested" class="h-full bg-blue-500 transition-all duration-300" style="width: 50.6%;" title="本金投入"></div>
+        <div id="barReturn" class="h-full bg-amber-500 transition-all duration-300" style="width: 25.6%;" title="复利繁衍"></div>
+        <div id="barInflation" class="h-full bg-rose-500/60 transition-all duration-300" style="width: 23.8%;" title="通胀吃掉"></div>
+      </div>
+    </div>
+
+    <!-- 35年全景生长曲线与自由交叉点 Canvas 图表 -->
+    <div class="p-5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] space-y-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+            <span>📈</span> 35 年财富推演与自由交叉点
+          </span>
+          <span class="text-[10px] text-zinc-400 hidden sm:inline">(点击或滑动图表任意位置瞬移年份)</span>
+        </div>
+        <div id="chartMilestoneBadge" class="text-xs font-mono font-bold text-amber-500">
+          🎯 自由交叉点: 第 18.5 年
+        </div>
+      </div>
+      <div class="relative w-full h-64 md:h-72">
+        <canvas id="trajectoryCanvas" class="w-full h-full cursor-crosshair block rounded-xl"></canvas>
+      </div>
+    </div>
+
+    <!-- 《小狗钱钱》精髓三心法 -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+      <div class="p-4 rounded-2xl bg-amber-500/[0.04] border border-amber-500/15">
+        <div class="text-base mb-1">🪿 <span class="font-bold text-sm text-amber-500 dark:text-amber-400">绝不杀鹅</span></div>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+          金鹅是神圣不可侵犯的资产底座。无论何时，不动用本金，它才能在时间长河中持续为你生下金蛋。
+        </p>
+      </div>
+      <div class="p-4 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/15">
+        <div class="text-base mb-1">🥚 <span class="font-bold text-sm text-emerald-500 dark:text-emerald-400">只吃鹅蛋</span></div>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+          4% 安全提取法则经过百年周期验证。只要每年只吃 4% 的蛋，金鹅繁衍速度就能战胜通胀，永生不死。
+        </p>
+      </div>
+      <div class="p-4 rounded-2xl bg-blue-500/[0.04] border border-blue-500/15">
+        <div class="text-base mb-1">🌾 <span class="font-bold text-sm text-blue-500 dark:text-blue-400">持续喂食</span></div>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+          初期依靠每月稳定喂食定投，后期复利飞轮转起时，基金自身的肉量增生将数十倍超越你喂食的粮食。
+        </p>
+      </div>
+    </div>
+
+  <script>
+    // 预设配置库
+    const PRESETS = {
+      salary: { saving: 5000, years: 10, ret: 8.0, inf: 2.8, expense: 8000, swr: 4.0 },
+      fire: { saving: 15000, years: 8, ret: 8.0, inf: 2.8, expense: 6000, swr: 4.0 },
+      youth: { saving: 2000, years: 18, ret: 8.5, inf: 2.8, expense: 5000, swr: 4.0 },
+      defense: { saving: 10000, years: 12, ret: 6.0, inf: 3.5, expense: 8000, swr: 3.5 }
+    };
+
+    let isPlaying = false;
+    let playTimer = null;
+
+    function applyPreset(key) {
+      const p = PRESETS[key];
+      if (!p) return;
+      document.getElementById("inputSaving").value = p.saving;
+      document.getElementById("inputYears").value = p.years;
+      document.getElementById("inputReturn").value = p.ret;
+      document.getElementById("inputInflation").value = p.inf;
+      document.getElementById("inputExpense").value = p.expense;
+      document.getElementById("inputSWR").value = p.swr;
+      handleParamChange();
+    }
+
+    function togglePlayTimeline() {
+      isPlaying = !isPlaying;
+      const btn = document.getElementById("btnPlayTimeline");
+      if (isPlaying) {
+        btn.textContent = "⏸";
+        btn.classList.add("ring-4", "ring-amber-500/40");
+        playTimer = setInterval(() => {
+          let y = parseFloat(document.getElementById("inputYears").value);
+          y += 0.5;
+          if (y > 35) y = 1;
+          document.getElementById("inputYears").value = y;
+          handleParamChange();
+        }, 180);
+      } else {
+        btn.textContent = "▶";
+        btn.classList.remove("ring-4", "ring-amber-500/40");
+        clearInterval(playTimer);
+      }
+    }
+
+    function calculateState(saving, years, retPct, infPct, expense, swrPct) {
+      const months = Math.round(years * 12);
+      const rNominalMonth = Math.pow(1 + retPct / 100, 1 / 12) - 1;
+      const rRealAnnual = (1 + retPct / 100) / (1 + infPct / 100) - 1;
+      const rRealMonth = Math.pow(1 + rRealAnnual, 1 / 12) - 1;
+      const swrRatio = swrPct / 100;
+
+      const totalInvested = saving * months;
+      const nominalGoose = rNominalMonth > 0 
+        ? saving * ((Math.pow(1 + rNominalMonth, months) - 1) / rNominalMonth) * (1 + rNominalMonth)
+        : totalInvested;
+      const realGoose = rRealMonth > 0
+        ? saving * ((Math.pow(1 + rRealMonth, months) - 1) / rRealMonth) * (1 + rRealMonth)
+        : totalInvested;
+
+      const monthlyEggReal = (realGoose * swrRatio) / 12;
+      const freedomRatio = (monthlyEggReal / expense) * 100;
+      const freedomTarget = (expense * 12) / swrRatio;
+
+      // 测算自由交叉年份
+      let crossoverYear = null;
+      for (let y = 0.5; y <= 50; y += 0.25) {
+        const m = Math.round(y * 12);
+        const rg = rRealMonth > 0 
+          ? saving * ((Math.pow(1 + rRealMonth, m) - 1) / rRealMonth) * (1 + rRealMonth)
+          : saving * m;
+        if ((rg * swrRatio) / 12 >= expense) {
+          crossoverYear = y;
+          break;
+        }
+      }
+
+      return {
+        totalInvested,
+        nominalGoose,
+        realGoose,
+        inflationLoss: Math.max(0, nominalGoose - realGoose),
+        monthlyEggReal,
+        freedomRatio,
+        freedomTarget,
+        crossoverYear,
+        isFree: monthlyEggReal >= expense
+      };
+    }
+
+    function formatMoney(num) {
+      if (num >= 100000000) return (num / 100000000).toFixed(2) + " 亿";
+      if (num >= 10000) return (num / 10000).toFixed(1) + " 万";
+      return Math.round(num).toLocaleString();
+    }
+
+    function handleParamChange() {
+      const saving = parseFloat(document.getElementById("inputSaving").value);
+      const years = parseFloat(document.getElementById("inputYears").value);
+      const retPct = parseFloat(document.getElementById("inputReturn").value);
+      const infPct = parseFloat(document.getElementById("inputInflation").value);
+      const expense = parseFloat(document.getElementById("inputExpense").value);
+      const swrPct = parseFloat(document.getElementById("inputSWR").value);
+
+      // 更新标签显示
+      document.getElementById("valMonthlySaving").textContent = "¥ " + saving.toLocaleString();
+      document.getElementById("labelCurrentYears").textContent = years.toFixed(1);
+      document.getElementById("valAnnualReturn").textContent = retPct.toFixed(1) + "%";
+      document.getElementById("valInflation").textContent = infPct.toFixed(1) + "%";
+      document.getElementById("valMonthlyExpense").textContent = "¥ " + expense.toLocaleString();
+      document.getElementById("labelMonthlyExpense").textContent = "¥ " + expense.toLocaleString();
+      document.getElementById("valSWR").textContent = swrPct.toFixed(2) + "%";
+
+      const state = calculateState(saving, years, retPct, infPct, expense, swrPct);
+
+      // 圣殿数值
+      document.getElementById("labelRealGoose").textContent = "¥ " + formatMoney(state.realGoose);
+      document.getElementById("labelNominalGoose").textContent = "¥ " + formatMoney(state.nominalGoose);
+      document.getElementById("labelInflationLoss").textContent = "-¥ " + formatMoney(state.inflationLoss);
+      document.getElementById("labelEggMonthly").textContent = "¥ " + Math.round(state.monthlyEggReal).toLocaleString();
+      document.getElementById("valFreedomTarget").textContent = "¥ " + formatMoney(state.freedomTarget);
+
+      // 自由进度与觉醒
+      const ratioClamped = Math.min(100, state.freedomRatio);
+      document.getElementById("basketFillBar").style.width = ratioClamped + "%";
+      document.getElementById("labelFreedomRatio").textContent = state.freedomRatio.toFixed(1) + "%";
+
+      const aura = document.getElementById("freedomAura");
+      const badge = document.getElementById("freedomBadge");
+      const hint = document.getElementById("labelFreedomHint");
+      const basketBox = document.getElementById("freedomBasketBox");
+
+      if (state.isFree) {
+        aura.classList.remove("opacity-0");
+        aura.classList.add("opacity-100");
+        basketBox.classList.add("border-emerald-500", "bg-emerald-500/10", "shadow-[0_0_20px_rgba(16,185,129,0.3)]");
+        badge.className = "mt-2 py-1 px-3 rounded-full text-xs font-semibold flex items-center gap-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+        hint.textContent = "✨ 自由达成！无需杀鹅，永续生活 (覆盖 " + state.freedomRatio.toFixed(0) + "%)";
+      } else {
+        aura.classList.add("opacity-0");
+        aura.classList.remove("opacity-100");
+        basketBox.classList.remove("border-emerald-500", "bg-emerald-500/10", "shadow-[0_0_20px_rgba(16,185,129,0.3)]");
+        badge.className = "mt-2 py-1 px-3 rounded-full text-xs font-semibold flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400 bg-black/[0.04] dark:bg-white/[0.04]";
+        const diff = Math.max(0, expense - state.monthlyEggReal);
+        hint.textContent = "尚需积累，离自由还差 ¥" + Math.round(diff).toLocaleString() + "/月";
+      }
+
+      if (state.crossoverYear) {
+        document.getElementById("valCrossoverYearText").textContent = "第 " + state.crossoverYear.toFixed(1) + " 年";
+        document.getElementById("chartMilestoneBadge").textContent = "🎯 自由交叉点: 第 " + state.crossoverYear.toFixed(1) + " 年";
+      } else {
+        document.getElementById("valCrossoverYearText").textContent = "> 50 年 (需调高投喂或收益)";
+        document.getElementById("chartMilestoneBadge").textContent = "🎯 暂未达标，需加强定投";
+      }
+
+      // 金鹅与金蛋尺寸动态映射 (平滑开方缩放)
+      const baseScale = 0.55;
+      const realScale = baseScale + 0.55 * Math.min(1.5, Math.pow(state.realGoose / 2500000, 0.45));
+      const nominalScale = baseScale + 0.55 * Math.min(1.8, Math.pow(state.nominalGoose / 2500000, 0.45));
+      document.getElementById("solidGooseWrapper").style.transform = "scale(" + realScale.toFixed(3) + ")";
+      document.getElementById("ghostGooseWrapper").style.transform = "scale(" + nominalScale.toFixed(3) + ")";
+
+      const eggScale = 0.6 + 0.6 * Math.min(1.4, Math.pow(state.monthlyEggReal / expense, 0.5));
+      document.getElementById("goldenEggWrapper").style.transform = "scale(" + eggScale.toFixed(3) + ")";
+
+      // 资产解剖成分条
+      const denom = Math.max(state.nominalGoose, state.totalInvested + 1);
+      const pctInvested = (state.totalInvested / denom) * 100;
+      const pctReturn = (Math.max(0, state.realGoose - state.totalInvested) / denom) * 100;
+      const pctInflation = (state.inflationLoss / denom) * 100;
+
+      document.getElementById("barInvested").style.width = pctInvested.toFixed(1) + "%";
+      document.getElementById("barReturn").style.width = pctReturn.toFixed(1) + "%";
+      document.getElementById("barInflation").style.width = pctInflation.toFixed(1) + "%";
+
+      // 绘制轨迹图
+      drawChart(saving, years, retPct, infPct, expense, swrPct, state.crossoverYear);
+    }
+
+    // Canvas 轨迹曲线绘制器
+    function drawChart(saving, currentYear, retPct, infPct, expense, swrPct, crossoverYear) {
+      const canvas = document.getElementById("trajectoryCanvas");
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+
+      const ctx = canvas.getContext("2d");
+      ctx.scale(dpr, dpr);
+      const w = rect.width;
+      const h = rect.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // 计算 0 ~ 35 年点
+      const points = [];
+      const swrRatio = swrPct / 100;
+      const freedomCap = (expense * 12) / swrRatio;
+      let maxVal = freedomCap * 1.5;
+
+      for (let y = 0; y <= 35; y += 0.5) {
+        const m = y * 12;
+        const rRealMonth = Math.pow(1 + ((1 + retPct / 100) / (1 + infPct / 100) - 1), 1 / 12) - 1;
+        const realVal = rRealMonth > 0 ? saving * ((Math.pow(1 + rRealMonth, m) - 1) / rRealMonth) * (1 + rRealMonth) : saving * m;
+        const invested = saving * m;
+        if (realVal > maxVal) maxVal = realVal;
+        points.push({ y, realVal, invested });
+      }
+
+      const padX = 40;
+      const padY = 24;
+      const chartW = w - padX * 1.5;
+      const chartH = h - padY * 2;
+
+      const getX = (year) => padX + (year / 35) * chartW;
+      const getY = (val) => h - padY - (val / maxVal) * chartH;
+
+      // 1. 绘制网格与时间刻度
+      ctx.strokeStyle = document.documentElement.classList.contains("dark") ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
+      ctx.lineWidth = 1;
+      [0, 10, 20, 30, 35].forEach(yr => {
+        const x = getX(yr);
+        ctx.beginPath();
+        ctx.moveTo(x, padY);
+        ctx.lineTo(x, h - padY);
+        ctx.stroke();
+
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "10px monospace";
+        ctx.fillText(yr + "y", x - 8, h - 8);
+      });
+
+      // 2. 自由门槛及格线
+      const targetY = getY(freedomCap);
+      if (targetY >= padY && targetY <= h - padY) {
+        ctx.save();
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = "#10b981";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(padX, targetY);
+        ctx.lineTo(w - padX * 0.5, targetY);
+        ctx.stroke();
+
+        ctx.fillStyle = "#10b981";
+        ctx.font = "10px monospace";
+        ctx.fillText("自由门槛 ¥" + formatMoney(freedomCap), padX + 8, targetY - 6);
+        ctx.restore();
+      }
+
+      // 3. 累计本金曲线
+      ctx.beginPath();
+      points.forEach((pt, i) => {
+        const x = getX(pt.y);
+        const y = getY(pt.invested);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = "rgba(59, 130, 246, 0.7)";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // 4. 真实金鹅净值面积渐变
+      const grad = ctx.createLinearGradient(0, padY, 0, h - padY);
+      grad.addColorStop(0, "rgba(251, 191, 36, 0.4)");
+      grad.addColorStop(1, "rgba(251, 191, 36, 0.0)");
+
+      ctx.beginPath();
+      ctx.moveTo(getX(0), h - padY);
+      points.forEach(pt => ctx.lineTo(getX(pt.y), getY(pt.realVal)));
+      ctx.lineTo(getX(35), h - padY);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // 金鹅曲线上层描边
+      ctx.beginPath();
+      points.forEach((pt, i) => {
+        const x = getX(pt.y);
+        const y = getY(pt.realVal);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = "#fbbf24";
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // 5. 标定当前选择的年份游标
+      const curX = getX(currentYear);
+      ctx.save();
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(curX, padY);
+      ctx.lineTo(curX, h - padY);
+      ctx.stroke();
+      ctx.restore();
+
+      // 6. 标定自由交叉点
+      if (crossoverYear && crossoverYear <= 35) {
+        const crossX = getX(crossoverYear);
+        const crossY = getY(freedomCap);
+        ctx.save();
+        ctx.fillStyle = "#10b981";
+        ctx.beginPath();
+        ctx.arc(crossX, crossY, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    // 点击/拖动画布交互
+    function bindCanvasInteraction() {
+      const canvas = document.getElementById("trajectoryCanvas");
+      if (!canvas) return;
+      function setYearFromEvent(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const x = clientX - rect.left;
+        const padX = 40;
+        const chartW = rect.width - padX * 1.5;
+        let ratio = (x - padX) / chartW;
+        ratio = Math.max(0, Math.min(1, ratio));
+        const yr = Math.round((ratio * 35) * 2) / 2;
+        document.getElementById("inputYears").value = Math.max(1, yr);
+        handleParamChange();
+      }
+
+      canvas.addEventListener("click", setYearFromEvent);
+      let isDragging = false;
+      canvas.addEventListener("mousedown", () => isDragging = true);
+      window.addEventListener("mouseup", () => isDragging = false);
+      canvas.addEventListener("mousemove", (e) => { if (isDragging) setYearFromEvent(e); });
+      canvas.addEventListener("touchmove", (e) => { setYearFromEvent(e); }, { passive: true });
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      if (window.lucide) lucide.createIcons();
+      bindCanvasInteraction();
+      handleParamChange();
+      window.addEventListener("resize", () => handleParamChange());
+    });
+
+    window.addEventListener("b0-theme-change", () => {
+      setTimeout(() => handleParamChange(), 50);
+    });
+  </script>
+
+  </div>
+</body>
+</html>

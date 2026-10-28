@@ -638,6 +638,19 @@
             </svg>
           </button>
           <nav class="space-y-1" id="nav-group-labs">
+            <button onclick="loadStage('golden-goose')" id="nav-item-golden-goose" data-tooltip="金鹅自由实验室" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="金鹅自由实验室">
+              <span class="icon-slot flex items-center justify-center flex-shrink-0">
+                <div class="w-5 h-5 rounded-[5px] bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/25 flex items-center justify-center shadow-xs shrink-0">
+                  <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 8c.5-1.5 0-3-1.5-3.5-1.5-.5-3 .5-3.5 2L12 8C9 8 7 10 6 12c-1.5 3-1 6.5 1 9h11c2.5-2 3.5-6 1-9z"/>
+                    <circle cx="16" cy="6" r="0.75" fill="currentColor"/>
+                  </svg>
+                </div>
+              </span>
+              <span class="expanded-content flex-1 truncate text-xs font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.golden-goose">
+                金鹅自由实验室
+              </span>
+            </button>
             <button onclick="loadStage('teacher')" id="nav-item-teacher" data-tooltip="教师工作台" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="教师工作台">
               <span class="icon-slot flex items-center justify-center flex-shrink-0">
                 <div class="w-5 h-5 rounded-[5px] bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border border-emerald-500/25 flex items-center justify-center shadow-xs shrink-0">
@@ -932,6 +945,27 @@
             </div>
           </div>
 
+          <!-- Golden Goose Freedom Lab -->
+          <div tabindex="0" onclick="loadStage('golden-goose')" data-category="labs" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-7 h-7 rounded-[7px] bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0 shadow-xs text-sm">
+                  🪿
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 font-semibold uppercase">LABS</span>
+              </div>
+              <h3 class="font-bold text-sm text-zinc-900 dark:text-white tracking-tight group-hover:text-amber-400 transition-colors" data-i18n="item.golden-goose">金鹅自由实验室</h3>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed font-normal" data-i18n="card.golden-goose.tag">
+                《小狗钱钱》动态财富自由沙盒：4%法则、复利抗通胀与被动现金流推演。
+              </p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-black/[0.04] dark:border-white/[0.06] flex items-center justify-end text-[11px] text-zinc-400 font-mono">
+              <span class="group-hover:translate-x-0.5 transition-transform text-amber-500 flex items-center gap-1 font-sans font-medium text-xs">
+                <span>进入实验</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </span>
+            </div>
+          </div>
+
           <!-- Teacher Workspace -->
           <div tabindex="0" onclick="loadStage('teacher')" data-category="labs" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
             <div>
@@ -1036,6 +1070,7 @@
       'notes': { title: '深度研报总览', category: 'NOTES', src: null, hash: '#/notes' },
       'labs': { title: '前沿实验总览', category: 'LABS', src: null, hash: '#/labs' },
       'teacher': { title: '教师工作台', category: 'LABS', src: '/labs/teacher_workspace.html', hash: '#/teacher' },
+      'golden-goose': { title: '金鹅自由实验室', category: 'LABS', src: '/labs/golden_goose.html', hash: '#/golden-goose' },
       'icon': { title: 'ArchIcons', category: 'APPS', src: 'https://icon.bin0sky.tech', hash: '#/icon' },
       'ppt': { title: 'SlideCraft', category: 'APPS', src: 'https://ppt.bin0sky.tech', hash: '#/ppt' },
       'console': { title: 'AIConsole', category: 'APPS', src: 'https://console.bin0sky.tech', hash: '#/console' },
@@ -1064,6 +1099,8 @@
         'item.population': '人口结构变迁',
         'item.fund_cycle': '公募与产业周期',
         'item.breakdown': '破位基金透视',
+        'item.golden-goose': '金鹅自由实验室',
+        'card.golden-goose.tag': '《小狗钱钱》动态财富自由沙盒：4%法则、复利抗通胀与被动现金流推演。',
         'item.teacher': '教师工作台',
         'card.archicons.tag': '云架构与网络拓扑 2.5D/2D 矢量设备图标库。',
         'card.slidecraft.tag': 'AI 演示文稿工作台，技术方案与汇报文档秒级生成。',
@@ -1107,6 +1144,8 @@
         'item.population': 'Demographics 1950–2100',
         'item.fund_cycle': 'Industry Cycles',
         'item.breakdown': 'Breakdown Fund Analysis',
+        'item.golden-goose': 'Golden Goose Lab',
+        'card.golden-goose.tag': 'Dog Named Money FIRE Sandbox: 4% rule, inflation hedge & passive cashflow.',
         'item.teacher': 'Teacher Space',
         'card.archicons.tag': 'Network topology & cloud architecture 2.5D/2D vector device icon library.',
         'card.slidecraft.tag': 'AI presentation workstation • Instant slide generation for tech architecture.',
@@ -1704,6 +1743,7 @@
         'nav-item-population': dict['item.population'],
         'nav-item-fund-cycle': dict['item.fund_cycle'],
         'nav-item-fund-breakdown': dict['item.breakdown'],
+        'nav-item-golden-goose': dict['item.golden-goose'] || '金鹅自由实验室',
         'nav-item-teacher': dict['item.teacher']
       };
       Object.entries(tooltips).forEach(([id, text]) => {

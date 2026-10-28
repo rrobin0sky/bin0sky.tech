@@ -521,6 +521,15 @@
           </div>
         </div>
       </a>
+      <a href="/labs/golden_goose.html" class="b0-menu-item">
+        <div class="b0-menu-item-left">
+          <span class="b0-menu-icon" style="background: rgba(245,158,11,0.15); color: #f59e0b;">🪿</span>
+          <div>
+            <div class="b0-menu-name">金鹅自由实验室</div>
+            <div class="b0-menu-desc">小狗钱钱动态复利与财富自由沙盒</div>
+          </div>
+        </div>
+      </a>
       <a href="/labs/teacher_workspace.html" class="b0-menu-item">
         <div class="b0-menu-item-left">
           <span class="b0-menu-icon" style="background: rgba(16,185,129,0.15); color: #10b981;">09</span>
