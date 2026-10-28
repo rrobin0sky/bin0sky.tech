@@ -154,42 +154,125 @@
             
             <!-- 外层虚影光晕鹅 (通胀吃钱产生的名义账面虚影) -->
             <div id="ghostGooseWrapper" class="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-out pointer-events-none opacity-40">
-              <svg viewBox="0 0 200 200" class="w-full h-full text-amber-300 filter drop-shadow-[0_0_12px_rgba(251,191,36,0.3)]">
-                <path d="M140,75 C145,55 130,35 110,38 C95,40 85,55 88,70 C70,72 50,85 40,105 C30,125 35,150 55,165 C80,180 130,180 155,155 C175,135 170,100 150,85 C145,80 142,78 140,75 Z" 
-                      fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="6,4" />
-                <path d="M125,48 Q135,46 142,52" fill="none" stroke="currentColor" stroke-width="2" />
-                <circle cx="118" cy="46" r="3" fill="currentColor" />
+              <svg viewBox="0 0 240 240" class="w-full h-full text-amber-300 filter drop-shadow-[0_0_12px_rgba(251,191,36,0.3)]">
+                <path d="
+                  M 186,48 
+                  C 183,40 172,36 160,38
+                  C 148,40 142,50 142,62
+                  C 142,80 148,102 144,124
+                  C 140,138 125,142 105,143
+                  C 75,145 52,142 32,130
+                  C 26,126 22,132 25,138
+                  C 32,154 45,172 65,188
+                  C 88,204 125,208 155,200
+                  C 182,192 196,170 192,146
+                  C 188,126 178,110 182,88
+                  C 184,78 188,68 188,62
+                  Z" 
+                  fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="6,4" />
+                <polygon points="186,48 216,55 188,62" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4,3" />
+                <path d="M 125,175 C 95,185 62,176 38,154 C 55,160 88,166 118,162 Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3" />
+                <circle cx="168" cy="48" r="3.5" fill="currentColor" />
               </svg>
             </div>
 
-            <!-- 内层真实实体金鹅 (抗通胀真实购买力实体) -->
+                        <!-- 内层真实实体金鹅 (抗通胀真实购买力实体) -->
             <div id="solidGooseWrapper" class="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-300 ease-out filter drop-shadow-[0_15px_30px_rgba(245,158,11,0.4)]">
-              <svg viewBox="0 0 200 200" class="w-full h-full">
+              <svg viewBox="0 0 240 240" class="w-full h-full">
                 <defs>
                   <linearGradient id="goldGleam" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#fef08a" />
-                    <stop offset="35%" stop-color="#fbbf24" />
-                    <stop offset="70%" stop-color="#f59e0b" />
+                    <stop offset="0%" stop-color="#fffbeb" />
+                    <stop offset="18%" stop-color="#fef08a" />
+                    <stop offset="45%" stop-color="#fbbf24" />
+                    <stop offset="75%" stop-color="#f59e0b" />
                     <stop offset="100%" stop-color="#b45309" />
                   </linearGradient>
-                  <radialGradient id="wingShadow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.8" />
-                    <stop offset="100%" stop-color="#92400e" stop-opacity="1" />
+                  <linearGradient id="beakGrad" x1="0%" y1="0%" x2="100%" y2="50%">
+                    <stop offset="0%" stop-color="#f97316" />
+                    <stop offset="100%" stop-color="#ea580c" />
+                  </linearGradient>
+                  <linearGradient id="wingGrad" x1="20%" y1="0%" x2="80%" y2="100%">
+                    <stop offset="0%" stop-color="#fde047" />
+                    <stop offset="50%" stop-color="#d97706" />
+                    <stop offset="100%" stop-color="#78350f" />
+                  </linearGradient>
+                  <linearGradient id="featherDark" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#78350f" />
+                    <stop offset="100%" stop-color="#b45309" />
+                  </linearGradient>
+                  <linearGradient id="featherMid" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#92400e" />
+                    <stop offset="100%" stop-color="#d97706" />
+                  </linearGradient>
+                  <linearGradient id="featherLight" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#b45309" />
+                    <stop offset="100%" stop-color="#f59e0b" />
+                  </linearGradient>
+                  <radialGradient id="pedestalGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.6" />
+                    <stop offset="70%" stop-color="#f59e0b" stop-opacity="0.2" />
+                    <stop offset="100%" stop-color="#b45309" stop-opacity="0" />
+                  </radialGradient>
+                  <radialGradient id="pedestalGradInner" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#fffbeb" stop-opacity="0.8" />
+                    <stop offset="100%" stop-color="#fbbf24" stop-opacity="0" />
                   </radialGradient>
                 </defs>
-                <!-- 鹅身 -->
-                <path d="M140,75 C145,55 130,35 110,38 C95,40 85,55 88,70 C70,72 50,85 40,105 C30,125 35,150 55,165 C80,180 130,180 155,155 C175,135 170,100 150,85 C145,80 142,78 140,75 Z" 
-                      fill="url(#goldGleam)" stroke="#fef08a" stroke-width="1.5" />
-                <!-- 鹅翅羽翼 -->
-                <path d="M85,95 C110,95 135,115 130,140 C110,150 80,145 70,125 C65,110 75,98 85,95 Z" 
-                      fill="url(#wingShadow)" opacity="0.85" />
-                <!-- 鹅嘴 -->
-                <polygon points="135,46 155,50 138,56" fill="#ea580c" />
-                <!-- 鹅眼 -->
-                <circle cx="118" cy="46" r="3.5" fill="#1e1b4b" />
-                <circle cx="117" cy="45" r="1.2" fill="#ffffff" />
-                <!-- 金色胸羽高光 -->
-                <path d="M95,65 Q105,75 100,90" fill="none" stroke="#fef9c3" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+
+                <!-- 底部微光水波光晕底座 -->
+                <ellipse cx="115" cy="208" rx="80" ry="7" fill="url(#pedestalGrad)" />
+                <ellipse cx="115" cy="208" rx="50" ry="4" fill="url(#pedestalGradInner)" />
+
+                <!-- 主体长颈金鹅身躯 -->
+                <path d="
+                  M 186,48 
+                  C 183,40 172,36 160,38
+                  C 148,40 142,50 142,62
+                  C 142,80 148,102 144,124
+                  C 140,138 125,142 105,143
+                  C 75,145 52,142 32,130
+                  C 26,126 22,132 25,138
+                  C 32,154 45,172 65,188
+                  C 88,204 125,208 155,200
+                  C 182,192 196,170 192,146
+                  C 188,126 178,110 182,88
+                  C 184,78 188,68 188,62
+                  Z" 
+                  fill="url(#goldGleam)" stroke="#fef08a" stroke-width="1.5" />
+
+                <!-- 强壮而优雅的鹅喙 (长扁锥形) -->
+                <polygon points="186,48 216,55 188,62" fill="url(#beakGrad)" stroke="#c2410c" stroke-width="0.8" />
+                <polygon points="186,48 202,51 187,54" fill="#fed7aa" opacity="0.6" />
+
+                <!-- 鹅翅初级与次级飞羽 (层叠羽翼) -->
+                <path d="M 148,138 C 172,142 178,162 168,178 C 150,192 110,192 82,178 C 70,165 95,140 130,136 Z" 
+                      fill="url(#wingGrad)" opacity="0.9" />
+                <!-- 初级飞羽 1 (向尾羽伸展) -->
+                <path d="M 125,175 C 95,185 62,176 38,154 C 55,160 88,166 118,162 Z" 
+                      fill="url(#featherDark)" stroke="#fef08a" stroke-width="0.75" />
+                <!-- 初级飞羽 2 -->
+                <path d="M 135,165 C 105,172 75,164 48,146 C 65,152 98,156 128,152 Z" 
+                      fill="url(#featherMid)" stroke="#fef08a" stroke-width="0.75" />
+                <!-- 初级飞羽 3 -->
+                <path d="M 142,152 C 118,158 88,152 62,138 C 78,142 108,146 135,142 Z" 
+                      fill="url(#featherLight)" stroke="#fef08a" stroke-width="0.75" />
+
+                <!-- 覆羽鳞状波纹羽鳞 -->
+                <path d="M 146,144 Q 138,154 130,146 Q 122,156 114,148 Q 106,158 98,150" 
+                      fill="none" stroke="#fef9c3" stroke-width="1.2" stroke-linecap="round" opacity="0.75" />
+                <path d="M 152,154 Q 144,164 136,156 Q 128,166 120,158 Q 112,168 104,160" 
+                      fill="none" stroke="#fef9c3" stroke-width="1.2" stroke-linecap="round" opacity="0.6" />
+
+                <!-- 眼神明亮自信 (英武灵动的金鹅之眸) -->
+                <circle cx="168" cy="48" r="4.2" fill="#0f172a" />
+                <circle cx="168" cy="48" r="3" fill="#451a03" />
+                <circle cx="166.8" cy="46.8" r="1.3" fill="#ffffff" />
+                <path d="M 163,44 Q 168,41.5 174,44" fill="none" stroke="#78350f" stroke-width="1.2" stroke-linecap="round" />
+
+                <!-- 优雅修长鹅颈 S 形流光高光 -->
+                <path d="M 180,82 C 183,98 178,114 184,132" fill="none" stroke="#fffbeb" stroke-width="2.5" stroke-linecap="round" opacity="0.55" />
+                <!-- 丰满挺拔胸膛轮廓光 -->
+                <path d="M 184,138 C 188,152 182,170 162,185" fill="none" stroke="#fef08a" stroke-width="1.8" stroke-linecap="round" opacity="0.45" />
               </svg>
             </div>
 
