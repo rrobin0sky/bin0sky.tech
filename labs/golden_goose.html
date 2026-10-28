@@ -150,155 +150,18 @@
         
         <!-- 左侧：金鹅体态与通胀虚影 (7列) -->
         <div class="md:col-span-7 flex flex-col items-center justify-center min-h-[280px] relative">
-          <div class="relative w-64 h-64 flex items-center justify-center">
+                    <div class="relative w-64 h-72 md:w-72 md:h-80 flex items-center justify-center">
             
             <!-- 外层虚影光晕鹅 (通胀吃钱产生的名义账面虚影) -->
             <div id="ghostGooseWrapper" class="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-out pointer-events-none opacity-40">
-              <svg viewBox="0 0 240 240" class="w-full h-full text-amber-300 filter drop-shadow-[0_0_12px_rgba(251,191,36,0.3)]">
-                <path d="
-                  M 186,48 
-                  C 183,40 172,36 160,38
-                  C 148,40 142,50 142,62
-                  C 142,80 148,102 144,124
-                  C 140,138 125,142 105,143
-                  C 75,145 52,142 32,130
-                  C 26,126 22,132 25,138
-                  C 32,154 45,172 65,188
-                  C 88,204 125,208 155,200
-                  C 182,192 196,170 192,146
-                  C 188,126 178,110 182,88
-                  C 184,78 188,68 188,62
-                  Z" 
-                  fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="6,4" />
-                <polygon points="186,48 216,55 188,62" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4,3" />
-                <path d="M 125,175 C 95,185 62,176 38,154 C 55,160 88,166 118,162 Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3" />
-                <circle cx="168" cy="48" r="3.5" fill="currentColor" />
-              </svg>
+              <img src="/labs/assets/golden_goose.png" alt="通胀虚影金鹅" class="w-full h-full object-contain filter drop-shadow-[0_0_25px_rgba(251,191,36,0.85)] brightness-125 select-none" />
             </div>
 
-                                    <!-- 内层真实实体金鹅 (抗通胀真实购买力实体 - 卡通大金鹅) -->
-            <div id="solidGooseWrapper" class="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-300 ease-out filter drop-shadow-[0_15px_30px_rgba(245,158,11,0.4)]">
-              <svg viewBox="0 0 240 240" class="w-full h-full">
-                <defs>
-                  <linearGradient id="goldBody" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#fffbeb" />
-                    <stop offset="25%" stop-color="#fef08a" />
-                    <stop offset="60%" stop-color="#fbbf24" />
-                    <stop offset="90%" stop-color="#f59e0b" />
-                    <stop offset="100%" stop-color="#d97706" />
-                  </linearGradient>
-                  <linearGradient id="orangeKnob" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#fed7aa" />
-                    <stop offset="30%" stop-color="#fb923c" />
-                    <stop offset="85%" stop-color="#ea580c" />
-                    <stop offset="100%" stop-color="#9a3412" />
-                  </linearGradient>
-                  <linearGradient id="orangeBeak" x1="0%" y1="0%" x2="100%" y2="50%">
-                    <stop offset="0%" stop-color="#fb923c" />
-                    <stop offset="60%" stop-color="#ea580c" />
-                    <stop offset="100%" stop-color="#c2410c" />
-                  </linearGradient>
-                  <linearGradient id="goldWing" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#fde047" />
-                    <stop offset="50%" stop-color="#f59e0b" />
-                    <stop offset="100%" stop-color="#b45309" />
-                  </linearGradient>
-                  <radialGradient id="pedestalRipples" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.5" />
-                    <stop offset="60%" stop-color="#f59e0b" stop-opacity="0.2" />
-                    <stop offset="100%" stop-color="#b45309" stop-opacity="0" />
-                  </radialGradient>
-                </defs>
-
-                <!-- 底部微光水波/金币光晕 -->
-                <ellipse cx="115" cy="216" rx="85" ry="9" fill="url(#pedestalRipples)" />
-                <ellipse cx="115" cy="216" rx="55" ry="5" fill="#fef08a" opacity="0.4" />
-
-                <!-- 可爱的橘黄色大鹅脚蹼 (自信站立) -->
-                <g id="leftFoot">
-                  <path d="M 96,182 L 94,204" stroke="#ea580c" stroke-width="6" stroke-linecap="round" />
-                  <path d="M 80,216 C 85,208 92,204 95,204 C 98,204 105,208 110,216 C 104,213 96,213 95,214 C 94,213 86,213 80,216 Z" 
-                        fill="url(#orangeBeak)" stroke="#9a3412" stroke-width="1.2" />
-                </g>
-                <g id="rightFoot">
-                  <path d="M 126,182 L 128,206" stroke="#ea580c" stroke-width="6" stroke-linecap="round" />
-                  <path d="M 114,218 C 119,210 126,206 129,206 C 132,206 139,210 144,218 C 138,215 130,215 129,216 C 128,215 120,215 114,218 Z" 
-                        fill="url(#orangeBeak)" stroke="#9a3412" stroke-width="1.2" />
-                </g>
-
-                <!-- 卡通大金鹅主体身躯 (经典长颈 + 胖嘟嘟梨形身材 + 俏皮微翘小尾巴) -->
-                <path d="
-                  M 150,62
-                  C 156,82 158,106 166,128
-                  C 176,150 168,178 144,188
-                  C 120,196 82,192 60,174
-                  C 42,160 30,140 26,125
-                  C 24,118 32,120 40,126
-                  C 48,133 58,135 70,136
-                  C 92,137 110,132 122,120
-                  C 118,100 115,74 124,50
-                  C 128,40 138,36 150,38
-                  C 160,40 162,50 150,62
-                  Z" 
-                  fill="url(#goldBody)" stroke="#fef08a" stroke-width="1.8" />
-
-                <!-- 鹅头顶标志性的大脑门肉瘤 (额冠/鹅冠 - 大鹅100%标志特征，彻底区别于鸭子) -->
-                <ellipse cx="164" cy="40" rx="10" ry="8.5" fill="url(#orangeKnob)" stroke="#9a3412" stroke-width="1.2" transform="rotate(10 164 40)" />
-                <ellipse cx="162" cy="37" rx="4" ry="2.5" fill="#fff" opacity="0.6" transform="rotate(-15 162 37)" />
-
-                <!-- 经典大鹅嘴 (下弯弧度，附在额冠下方，自信微笑) -->
-                <path d="M 158,45 C 168,46 182,50 196,56 C 198,59 196,64 190,65 C 176,67 162,65 152,60 Z" 
-                      fill="url(#orangeBeak)" stroke="#9a3412" stroke-width="1.2" />
-                <path d="M 156,54 Q 175,56 193,59" fill="none" stroke="#7c2d12" stroke-width="1.2" stroke-linecap="round" />
-                <ellipse cx="166" cy="50" rx="1.5" ry="0.8" fill="#7c2d12" transform="rotate(10 166 50)" />
-
-                <!-- 卡通可爱大眼睛 (自信、灵动、友善) -->
-                <ellipse cx="144" cy="46" rx="5.5" ry="7" fill="#0f172a" />
-                <ellipse cx="144" cy="47" rx="4.5" ry="5.5" fill="#1e293b" />
-                <circle cx="142" cy="43.5" r="2.2" fill="#ffffff" />
-                <circle cx="146" cy="49" r="1.1" fill="#ffffff" />
-                <path d="M 138,38 Q 144,35 150,38" fill="none" stroke="#78350f" stroke-width="1.8" stroke-linecap="round" />
-
-                <!-- 胖乎乎的卡通金翅羽翼 (圆润波浪飞羽) -->
-                <g id="gooseWing">
-                  <path d="
-                    M 125,124
-                    C 148,128 158,145 150,162
-                    C 142,176 115,182 92,174
-                    C 75,168 70,154 74,142
-                    C 82,126 102,122 125,124 Z" 
-                    fill="url(#goldWing)" stroke="#fef08a" stroke-width="1.5" />
-                  <path d="M 142,142 Q 134,152 124,144 Q 114,154 104,146 Q 94,154 84,146" 
-                        fill="none" stroke="#fef9c3" stroke-width="1.5" stroke-linecap="round" opacity="0.8" />
-                  <path d="M 146,152 Q 138,162 128,154 Q 118,164 108,156 Q 98,164 88,156" 
-                        fill="none" stroke="#fef9c3" stroke-width="1.5" stroke-linecap="round" opacity="0.6" />
-                  <path d="M 80,166 C 72,174 62,176 54,170 C 60,162 70,160 78,162 Z" fill="#b45309" stroke="#fef08a" stroke-width="1" />
-                  <path d="M 88,172 C 80,180 70,182 62,176 C 68,168 78,166 86,168 Z" fill="#92400e" stroke="#fef08a" stroke-width="1" />
-                </g>
-
-                <!-- 挺拔长脖子上的流光反光 -->
-                <path d="M 148,72 C 150,90 152,108 156,124" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.5" />
-                <!-- 胸脯圆润可爱反光 -->
-                <path d="M 160,135 C 165,148 160,165 146,176" fill="none" stroke="#fffbeb" stroke-width="2" stroke-linecap="round" opacity="0.45" />
-              </svg>
+            <!-- 内层真实实体金鹅 (3D童话大金鹅) -->
+            <div id="solidGooseWrapper" class="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-300 ease-out filter drop-shadow-[0_20px_35px_rgba(245,158,11,0.45)]">
+              <img src="/labs/assets/golden_goose.png" alt="真实金鹅" class="w-full h-full object-contain select-none pointer-events-none" />
             </div>
 
-          </div>
-
-          <!-- 金鹅体量与通胀剥离标牌 -->
-          <div class="mt-2 flex flex-wrap items-center justify-center gap-2 text-center">
-            <div class="px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20">
-              <span class="text-[10px] text-zinc-400 block font-medium">真实金鹅购买力</span>
-              <span id="labelRealGoose" class="text-sm font-mono font-bold text-amber-500 dark:text-amber-400">¥ 90.4 万</span>
-            </div>
-            <div class="px-3 py-1 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08]">
-              <span class="text-[10px] text-zinc-400 block font-medium">通胀后账面虚影</span>
-              <span id="labelNominalGoose" class="text-sm font-mono font-bold text-zinc-500 dark:text-zinc-400">¥ 118.6 万</span>
-            </div>
-            <div class="px-3 py-1 rounded-xl bg-rose-500/10 border border-rose-500/20">
-              <span class="text-[10px] text-rose-400 block font-medium">通胀吞噬水分</span>
-              <span id="labelInflationLoss" class="text-sm font-mono font-bold text-rose-500 dark:text-rose-400">-¥ 28.2 万</span>
-            </div>
           </div>
         </div>
 
@@ -694,7 +557,7 @@
       }
 
       // 金鹅与金蛋尺寸动态映射 (平滑开方缩放)
-      const baseScale = 0.55;
+      const baseScale = 0.65;
       const realScale = baseScale + 0.55 * Math.min(1.5, Math.pow(state.realGoose / 2500000, 0.45));
       const nominalScale = baseScale + 0.55 * Math.min(1.8, Math.pow(state.nominalGoose / 2500000, 0.45));
       document.getElementById("solidGooseWrapper").style.transform = "scale(" + realScale.toFixed(3) + ")";
