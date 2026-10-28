@@ -9,6 +9,18 @@
   <script>
     (function() {
       try {
+        function getAuthCookie(name) {
+          try {
+            var match = document.cookie.match(new RegExp('(^|;\\s*)' + name + '=([^;]*)'));
+            return match ? decodeURIComponent(match[2]) : null;
+          } catch(e) { return null; }
+        }
+        var isAdm = (localStorage.getItem("b0_auth_role") === "admin") || (getAuthCookie("b0_auth_role") === "admin");
+        if (!isAdm) {
+          window.location.replace("/#/golden-goose");
+          return;
+        }
+
         var params = new URLSearchParams(window.location.search);
         var urlTheme = params.get("b0_theme");
         var saved = urlTheme || localStorage.getItem("b0_theme");

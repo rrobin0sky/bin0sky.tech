@@ -400,7 +400,7 @@
       </a>
     </div>
 
-    <!-- 区域 3: 功能按键 (仅保留语言与黑白模式) -->
+    <!-- 区域 3: 功能按键 (语言、黑白模式与登录) -->
     <div class="flex items-center gap-1.5 sm:gap-2">
       <!-- 2-Language Segmented Switcher: 简 / EN -->
       <div class="flex items-center rounded-lg border border-black/[0.08] dark:border-white/[0.1] p-0.5 text-xs select-none bg-black/[0.02] dark:bg-white/[0.03]">
@@ -412,6 +412,11 @@
       <button onclick="toggleTheme()" aria-label="Toggle theme" class="p-2 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 text-zinc-700 dark:text-zinc-200 transition-all cursor-pointer" title="切换外观主题 (⌘\)">
         <i data-lucide="moon" class="w-3.5 h-3.5 hidden dark:block"></i>
         <i data-lucide="sun" class="w-3.5 h-3.5 block dark:hidden"></i>
+      </button>
+
+      <!-- Auth Action Button (仅纯文字：登录 / 退出，保持极致克制与当前风格一致) -->
+      <button id="authBtn" onclick="handleAuthBtnClick()" class="px-2.5 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-700 dark:text-zinc-200 text-xs font-medium transition-all cursor-pointer select-none" title="管理员登录 / 退出">
+        登录
       </button>
     </div>
   </header>
@@ -638,7 +643,7 @@
             </svg>
           </button>
           <nav class="space-y-1" id="nav-group-labs">
-            <button onclick="loadStage('golden-goose')" id="nav-item-golden-goose" data-tooltip="金鹅自由实验室" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="金鹅自由实验室">
+            <button onclick="loadStage('golden-goose')" id="nav-item-golden-goose" data-tooltip="金鹅自由实验室" class="sidebar-nav-item hidden w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="金鹅自由实验室">
               <span class="icon-slot flex items-center justify-center flex-shrink-0">
                 <div class="w-5 h-5 rounded-[5px] bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/25 flex items-center justify-center shadow-xs shrink-0">
                   <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -945,8 +950,8 @@
             </div>
           </div>
 
-          <!-- Golden Goose Freedom Lab -->
-          <div tabindex="0" onclick="loadStage('golden-goose')" data-category="labs" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
+          <!-- Golden Goose Freedom Lab (受控展示：仅管理员可见) -->
+          <div id="card-golden-goose" tabindex="0" onclick="loadStage('golden-goose')" data-category="labs" class="bento-card hidden group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
             <div>
               <div class="flex items-center justify-between mb-3">
                 <div class="w-7 h-7 rounded-[7px] bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center flex-shrink-0 shadow-xs text-sm">
@@ -1060,6 +1065,31 @@
           <span class="kbd">⌃⌘F</span>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Auth Modal (管理员登录) -->
+  <div id="authModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-4" onclick="toggleAuthModal(false)">
+    <div class="w-full max-w-sm rounded-2xl border border-black/[0.1] dark:border-white/[0.12] bg-white/95 dark:bg-[#12141a]/95 backdrop-blur-2xl shadow-2xl p-5" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between mb-3 border-b border-black/[0.06] dark:border-white/[0.08] pb-3">
+        <h3 id="authModalTitle" class="font-bold text-sm text-zinc-900 dark:text-white">管理员登录</h3>
+        <button onclick="toggleAuthModal(false)" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-white cursor-pointer" aria-label="Close">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p id="authModalSubtitle" class="text-xs text-zinc-500 dark:text-zinc-400 mb-4 leading-relaxed">
+        请输入管理员口令以解锁受限项目与全局编辑权限。
+      </p>
+      <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+        <div>
+          <input id="authPasswordInput" type="password" placeholder="请输入管理员口令..." autocomplete="current-password" class="w-full h-9 px-3 rounded-lg border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.03] dark:bg-white/[0.05] text-xs font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-sky-500">
+          <p id="authErrorMsg" class="hidden text-rose-500 text-[11px] mt-1.5 font-medium"></p>
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-black/[0.06] dark:border-white/[0.08]">
+          <button type="button" onclick="toggleAuthModal(false)" class="px-3 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-xs font-medium text-zinc-600 dark:text-zinc-300 cursor-pointer">取消</button>
+          <button type="submit" id="authSubmitBtn" class="px-3.5 py-1.5 rounded-lg bg-zinc-900 dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-100 text-white dark:text-zinc-950 text-xs font-semibold shadow-xs cursor-pointer transition-all">登录</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -1354,6 +1384,14 @@
       }
       playHaptic('click');
 
+      // 金鹅自由实验室：仅管理员可访问
+      if (key === 'golden-goose' && !checkIsAdmin()) {
+        pendingStageAfterLogin = 'golden-goose';
+        const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
+        openLoginModal(isZh ? '「金鹅自由实验室」为管理员专属内容，请先登录管理员权限' : 'Golden Goose Lab is restricted to admin. Please login first.');
+        return;
+      }
+
       const stage = STAGES[key] || STAGES['overview'];
       const viewOverview = document.getElementById('stageOverview');
       const viewFrame = document.getElementById('stageFrameContainer');
@@ -1406,9 +1444,10 @@
               loadingOverlay.style.opacity = '0';
               loadingOverlay.style.pointerEvents = 'none';
             }, 300);
-            // Sync theme and language to iframe
+            // Sync theme, language and auth state to iframe
             syncThemeToIframe();
             syncLangToIframe();
+            syncAuthToIframe();
           };
         }
         if (updateHistory && location.hash !== stage.hash) {
@@ -1691,7 +1730,164 @@
       }
     }
 
-    // Cross-tab and embedded iframe theme & lang sync listeners
+    // ==================== AUTH & ROLE CONTROL ====================
+    function checkIsAdmin() {
+      try {
+        const local = localStorage.getItem('b0_auth_role');
+        const cookie = getRootDomainCookie('b0_auth_role');
+        return local === 'admin' || cookie === 'admin';
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function syncAuthToIframe() {
+      const iframe = document.getElementById('stageIframe');
+      const isAdmin = checkIsAdmin();
+      if (iframe && iframe.contentWindow) {
+        try {
+          iframe.contentWindow.postMessage({ type: 'B0_AUTH_CHANGE', role: isAdmin ? 'admin' : 'guest', isAdmin }, '*');
+        } catch (e) {}
+      }
+    }
+
+    function updateAuthUI() {
+      const isAdmin = checkIsAdmin();
+      const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
+      
+      // 1. Auth Button (纯文字保持极致克制，与当前风格完全一致)
+      const authBtn = document.getElementById('authBtn');
+      if (authBtn) {
+        if (isAdmin) {
+          authBtn.textContent = isZh ? '退出' : 'Logout';
+          authBtn.title = isZh ? '当前为管理员身份，点击退出' : 'Admin active, click to logout';
+          authBtn.classList.add('text-sky-600', 'dark:text-sky-400', 'border-sky-500/30');
+        } else {
+          authBtn.textContent = isZh ? '登录' : 'Login';
+          authBtn.title = isZh ? '管理员登录' : 'Admin Login';
+          authBtn.classList.remove('text-sky-600', 'dark:text-sky-400', 'border-sky-500/30');
+        }
+      }
+
+      // 2. 金鹅入口受控展示 (仅管理员可见)
+      const navGolden = document.getElementById('nav-item-golden-goose');
+      if (navGolden) {
+        if (isAdmin) {
+          navGolden.classList.remove('hidden');
+        } else {
+          navGolden.classList.add('hidden');
+        }
+      }
+
+      const cardGolden = document.getElementById('card-golden-goose');
+      if (cardGolden) {
+        if (isAdmin) {
+          cardGolden.classList.remove('hidden');
+        } else {
+          cardGolden.classList.add('hidden');
+        }
+      }
+
+      // 3. 实时向内嵌 iframe 广播身份变更
+      syncAuthToIframe();
+    }
+
+    let pendingStageAfterLogin = null;
+
+    function openLoginModal(reason) {
+      const subtitle = document.getElementById('authModalSubtitle');
+      const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
+      if (subtitle) {
+        subtitle.textContent = reason || (isZh ? '请输入管理员口令以解锁受限项目与全局编辑权限。' : 'Please enter admin password to unlock restricted projects and edit capabilities.');
+      }
+      toggleAuthModal(true);
+    }
+
+    function toggleAuthModal(show) {
+      const modal = document.getElementById('authModal');
+      const input = document.getElementById('authPasswordInput');
+      const err = document.getElementById('authErrorMsg');
+      if (!modal) return;
+      if (show) {
+        modal.classList.remove('hidden');
+        if (err) err.classList.add('hidden');
+        if (input) {
+          input.value = '';
+          setTimeout(() => input.focus(), 80);
+        }
+      } else {
+        modal.classList.add('hidden');
+        pendingStageAfterLogin = null;
+      }
+    }
+
+    function handleAuthBtnClick() {
+      if (checkIsAdmin()) {
+        const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
+        if (confirm(isZh ? '确定退出管理员登录吗？' : 'Confirm logout admin?')) {
+          logoutAdmin();
+        }
+      } else {
+        openLoginModal();
+      }
+    }
+
+    function logoutAdmin() {
+      try {
+        localStorage.removeItem('b0_auth_role');
+        setRootDomainCookie('b0_auth_role', '');
+      } catch (e) {}
+      updateAuthUI();
+
+      // 如果当前正处于金鹅页面，退出登录后返回 overview
+      const iframe = document.getElementById('stageIframe');
+      const curKey = iframe ? iframe.getAttribute('data-key') : null;
+      if (curKey === 'golden-goose' || location.hash.includes('golden-goose') || location.hash.includes('goose')) {
+        loadStage('overview');
+      }
+    }
+
+    async function handleAuthSubmit(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('authPasswordInput');
+      const err = document.getElementById('authErrorMsg');
+      const pwd = (input ? input.value : '').trim();
+      const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
+
+      if (!pwd) {
+        if (err) {
+          err.textContent = isZh ? '请输入口令' : 'Please enter password';
+          err.classList.remove('hidden');
+        }
+        return;
+      }
+
+      // 验证管理员口令 (与 NetBOM 及 Edge API 保持一致的 master key)
+      if (pwd === 'bin0sky.tech') {
+        try {
+          localStorage.setItem('b0_auth_role', 'admin');
+          setRootDomainCookie('b0_auth_role', 'admin');
+        } catch(e) {}
+
+        toggleAuthModal(false);
+        updateAuthUI();
+
+        // 如果用户刚才因为访问受限页面而触发登录，登录成功后直接载入
+        if (pendingStageAfterLogin) {
+          const target = pendingStageAfterLogin;
+          pendingStageAfterLogin = null;
+          loadStage(target);
+        }
+      } else {
+        if (err) {
+          err.textContent = isZh ? '管理员口令不正确，请重新输入' : 'Invalid admin password';
+          err.classList.remove('hidden');
+        }
+        if (input) input.select();
+      }
+    }
+
+    // Cross-tab and embedded iframe theme, lang & auth sync listeners
     window.addEventListener('message', (e) => {
       if (!e.data) return;
       if (e.data.type === 'B0_REQUEST_THEME') {
@@ -1712,6 +1908,8 @@
           }
         } catch(err) {}
         syncLangToIframe();
+      } else if (e.data.type === 'B0_REQUEST_AUTH') {
+        syncAuthToIframe();
       }
     });
 
@@ -1792,6 +1990,7 @@
 
       applyI18n(activeLang);
       syncLangToIframe();
+      updateAuthUI();
       playHaptic('pop');
     }
 
@@ -1807,7 +2006,8 @@
 
     function getCommands() {
       const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
-      return [
+      const isAdmin = checkIsAdmin();
+      const list = [
         { id: 'icon', title: 'ArchIcons', category: 'APPS', badge: '', action: () => loadStage('icon') },
         { id: 'ppt', title: 'SlideCraft', category: 'APPS', badge: '', action: () => loadStage('ppt') },
         { id: 'console', title: 'AIConsole', category: 'APPS', badge: '', action: () => loadStage('console') },
@@ -1817,12 +2017,23 @@
         { id: 'fund-cycle', title: isZh ? '公募基金与产业周期全景' : 'Industry Cycles 2026', category: 'NOTES', badge: '', action: () => loadStage('fund-cycle') },
         { id: 'fund-breakdown', title: isZh ? '破位基金本质透视看板' : 'Breakdown Fund Analysis', category: 'NOTES', badge: '', action: () => loadStage('fund-breakdown') },
         { id: 'teacher', title: isZh ? '教师工作台' : 'Teacher Workspace', category: 'LABS', badge: '', action: () => loadStage('teacher') },
+      ];
+
+      // 金鹅自由实验室：仅管理员在搜索列表中可见
+      if (isAdmin) {
+        list.push({ id: 'golden-goose', title: isZh ? '金鹅自由实验室' : 'Golden Goose Lab', category: 'LABS', badge: '', action: () => loadStage('golden-goose') });
+      }
+
+      list.push(
+        { id: 'auth', title: isAdmin ? (isZh ? '退出管理员身份' : 'Logout Admin') : (isZh ? '管理员登录' : 'Admin Login'), category: 'ACTION', badge: '', action: () => handleAuthBtnClick() },
         { id: 'overview', title: isZh ? '返回工作台全景看板' : 'Return to Overview', category: 'ACTION', badge: '', action: () => loadStage('overview') },
         { id: 'theme', title: isZh ? '切换外观模式 (Dark / Light)' : 'Toggle Theme (Dark / Light)', category: 'ACTION', badge: '⌘\\', action: () => toggleTheme() },
         { id: 'sound', title: isZh ? '切换微触感声效' : 'Toggle Sound Effects', category: 'ACTION', badge: 'Sound', action: () => toggleSound() },
         { id: 'fullscreen', title: isZh ? '切换全屏模式' : 'Toggle Fullscreen', category: 'ACTION', badge: '⌃⌘F', action: () => toggleFullscreen() },
         { id: 'shortcuts', title: isZh ? '查看快捷键全景帮助' : 'View Keyboard Shortcuts', category: 'ACTION', badge: '?', action: () => toggleShortcutModal(true) },
-      ];
+      );
+
+      return list;
     }
 
     function toggleCommandPalette(show) {
@@ -1984,6 +2195,7 @@
       else if (h.includes('fund-cycle') || h.includes('cycle') || p.includes('cycle') || p.includes('%e5%85%ac%e5%8b%9f')) loadStage('fund-cycle', false);
       else if (h.includes('fund-breakdown') || h.includes('breakdown') || p.includes('breakdown') || p.includes('%e7%a0%b4%e4%bd%8d')) loadStage('fund-breakdown', false);
       else if (h.includes('teacher') || p.includes('teacher') || p.includes('%e6%95%99%e5%b8%88')) loadStage('teacher', false);
+      else if (h.includes('golden-goose') || h.includes('goose') || p.includes('golden_goose')) loadStage('golden-goose', false);
       else if (h.includes('population') || h.includes('popul') || p.includes('popul')) loadStage('population', false);
       else loadStage('overview', false);
     }
@@ -1993,6 +2205,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
+      updateAuthUI();
       const sb = document.getElementById('appSidebar');
       const storedExpanded = localStorage.getItem('b0_sidebar_expanded');
       const isExpanded = storedExpanded !== null ? (storedExpanded === 'true') : (window.innerWidth >= 1024);

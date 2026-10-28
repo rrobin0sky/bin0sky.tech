@@ -37,6 +37,7 @@ export default {
       '/notes': '#/notes',
       '/labs': '#/labs',
       '/teacher': '#/teacher',
+      '/golden-goose': '#/golden-goose',
       '/population': '#/population',
       '/fund-cycle': '#/fund-cycle',
       '/fund-breakdown': '#/fund-breakdown',
@@ -45,6 +46,15 @@ export default {
     const cleanPath = pathname.replace(/\/+$/, '');
     if (hashRoutes[cleanPath]) {
       return Response.redirect(`${url.origin}/${hashRoutes[cleanPath]}`, 302);
+    }
+
+    // Edge Security: Protect Golden Goose Lab (Admin only)
+    if (pathname.includes('golden_goose')) {
+      const cookieHeader = request.headers.get('Cookie') || '';
+      const isAdmin = /(^|;\s*)b0_auth_role=admin(;|$)/.test(cookieHeader);
+      if (!isAdmin) {
+        return Response.redirect(`${url.origin}/#/golden-goose`, 302);
+      }
     }
 
     // Sub-apps route mapping for deep assets
