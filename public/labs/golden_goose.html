@@ -48,8 +48,8 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ["-apple-system", "BlinkMacSystemFont", ""SF Pro Text"", ""SF Pro Display"", ""PingFang SC"", "system-ui", "sans-serif"],
-            mono: [""SF Mono"", ""JetBrains Mono"", "monospace"]
+            sans: ["-apple-system", "BlinkMacSystemFont", 'SF Pro Text', 'SF Pro Display', 'PingFang SC', "system-ui", "sans-serif"],
+            mono: ['SF Mono', 'JetBrains Mono', "monospace"]
           }
         }
       }
@@ -230,8 +230,8 @@
       <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
         
         <!-- 左侧：金鹅体态与通胀虚影 (7列) -->
-        <div class="md:col-span-7 flex flex-col items-center justify-center min-h-[280px] relative">
-                    <div class="relative w-64 h-72 md:w-72 md:h-80 flex items-center justify-center">
+        <div class="md:col-span-7 flex flex-col items-center justify-center min-h-[320px] relative">
+          <div class="relative w-64 h-72 md:w-72 md:h-80 flex items-center justify-center">
             
             <!-- 脚底光晕水波涟漪 (动态呼吸律动) -->
             <div class="absolute bottom-2 inset-x-8 h-8 pointer-events-none flex items-center justify-center">
@@ -261,7 +261,24 @@
 
           </div>
 
-        <!-- 右侧：金蛋产出与自由生活篮子 (5列) -->
+          <!-- 金鹅体量与通胀剥离标牌 -->
+          <div class="mt-4 flex flex-wrap items-center justify-center gap-2 text-center">
+            <div class="px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20 shadow-xs">
+              <span class="text-[10px] text-zinc-400 block font-medium">真实金鹅购买力</span>
+              <span id="labelRealGoose" class="text-sm font-mono font-bold text-amber-500 dark:text-amber-400">¥ 90.4 万</span>
+            </div>
+            <div class="px-3 py-1.5 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08] shadow-xs">
+              <span class="text-[10px] text-zinc-400 block font-medium">通胀后账面虚影</span>
+              <span id="labelNominalGoose" class="text-sm font-mono font-bold text-zinc-500 dark:text-zinc-400">¥ 118.6 万</span>
+            </div>
+            <div class="px-3 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/20 shadow-xs">
+              <span class="text-[10px] text-rose-400 block font-medium">通胀吞噬水分</span>
+              <span id="labelInflationLoss" class="text-sm font-mono font-bold text-rose-500 dark:text-rose-400">-¥ 28.2 万</span>
+            </div>
+          </div>
+        </div>
+
+                <!-- 右侧：金蛋产出与自由生活篮子 (5列) -->
         <div class="md:col-span-5 flex flex-col items-center justify-center p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] relative">
           
           <div class="text-center mb-2">
@@ -589,6 +606,11 @@
       };
     }
 
+    function safeSetText(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
+
     function formatMoney(num) {
       if (num >= 100000000) return (num / 100000000).toFixed(2) + " 亿";
       if (num >= 10000) return (num / 10000).toFixed(1) + " 万";
@@ -615,16 +637,16 @@
       const state = calculateState(saving, years, retPct, infPct, expense, swrPct);
 
       // 圣殿数值
-      document.getElementById("labelRealGoose").textContent = "¥ " + formatMoney(state.realGoose);
-      document.getElementById("labelNominalGoose").textContent = "¥ " + formatMoney(state.nominalGoose);
-      document.getElementById("labelInflationLoss").textContent = "-¥ " + formatMoney(state.inflationLoss);
-      document.getElementById("labelEggMonthly").textContent = "¥ " + Math.round(state.monthlyEggReal).toLocaleString();
-      document.getElementById("valFreedomTarget").textContent = "¥ " + formatMoney(state.freedomTarget);
+      safeSetText("labelRealGoose", "¥ " + formatMoney(state.realGoose));
+      safeSetText("labelNominalGoose", "¥ " + formatMoney(state.nominalGoose));
+      safeSetText("labelInflationLoss", "-¥ " + formatMoney(state.inflationLoss));
+      safeSetText("labelEggMonthly", "¥ " + Math.round(state.monthlyEggReal).toLocaleString());
+      safeSetText("valFreedomTarget", "¥ " + formatMoney(state.freedomTarget));
 
       // 自由进度与觉醒
       const ratioClamped = Math.min(100, state.freedomRatio);
       document.getElementById("basketFillBar").style.width = ratioClamped + "%";
-      document.getElementById("labelFreedomRatio").textContent = state.freedomRatio.toFixed(1) + "%";
+      safeSetText("labelFreedomRatio", state.freedomRatio.toFixed(1) + "%");
 
       const aura = document.getElementById("freedomAura");
       const badge = document.getElementById("freedomBadge");
@@ -647,11 +669,11 @@
       }
 
       if (state.crossoverYear) {
-        document.getElementById("valCrossoverYearText").textContent = "第 " + state.crossoverYear.toFixed(1) + " 年";
-        document.getElementById("chartMilestoneBadge").textContent = "🎯 自由交叉点: 第 " + state.crossoverYear.toFixed(1) + " 年";
+        safeSetText("valCrossoverYearText", "第 " + state.crossoverYear.toFixed(1) + " 年");
+        safeSetText("chartMilestoneBadge", "🎯 自由交叉点: 第 " + state.crossoverYear.toFixed(1) + " 年");
       } else {
-        document.getElementById("valCrossoverYearText").textContent = "> 50 年 (需调高投喂或收益)";
-        document.getElementById("chartMilestoneBadge").textContent = "🎯 暂未达标，需加强定投";
+        safeSetText("valCrossoverYearText", "> 50 年 (需调高投喂或收益)");
+        safeSetText("chartMilestoneBadge", "🎯 暂未达标，需加强定投");
       }
 
       // 金鹅与金蛋尺寸动态映射 (平滑开方缩放)
@@ -684,6 +706,7 @@
       if (!canvas) return;
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
 
@@ -842,6 +865,8 @@
       if (window.lucide) lucide.createIcons();
       bindCanvasInteraction();
       handleParamChange();
+      setTimeout(handleParamChange, 100);
+      setTimeout(handleParamChange, 350);
       window.addEventListener("resize", () => handleParamChange());
     });
 
