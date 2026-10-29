@@ -231,6 +231,12 @@
         
         <!-- 左侧：金鹅体态与通胀虚影 (7列) -->
         <div class="md:col-span-7 flex flex-col items-center justify-center min-h-[320px] relative">
+          <!-- 成长形态徽章 -->
+          <div class="absolute top-0 left-2 md:left-4 z-20 flex items-center gap-2">
+            <span id="gooseStageBadge" class="px-2.5 py-1 rounded-full text-xs font-mono font-bold border transition-all duration-300 text-amber-500 bg-amber-500/10 border-amber-500/20 shadow-xs flex items-center gap-1.5 backdrop-blur-md">
+              🌱 破壳初生
+            </span>
+          </div>
           <div class="relative w-64 h-72 md:w-72 md:h-80 flex items-center justify-center">
             
             <!-- 脚底光晕水波涟漪 (动态呼吸律动) -->
@@ -248,14 +254,14 @@
             <!-- 外层虚影光晕鹅 (通胀吃钱产生的名义账面虚影 - 独立受缩放控制) -->
             <div id="ghostGooseWrapper" class="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-out pointer-events-none">
               <div class="ghost-anim-container w-full h-full flex items-center justify-center">
-                <img src="/labs/assets/golden_goose.png?v=perfect2026" alt="通胀虚影金鹅" class="w-full h-full object-contain filter drop-shadow-[0_0_28px_rgba(251,191,36,0.9)] brightness-125 select-none" />
+                <img id="ghostGooseImg" src="/labs/assets/goose_stage1.png?v=stages2026" alt="通胀虚影金鹅" class="w-full h-full object-contain filter drop-shadow-[0_0_28px_rgba(251,191,36,0.9)] brightness-125 select-none transition-opacity duration-300" />
               </div>
             </div>
 
             <!-- 内层真实实体金鹅 (3D童话大金鹅 - 独立缩放 + 呼吸动效双层嵌套) -->
             <div id="solidGooseWrapper" class="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-500 ease-out">
               <div class="goose-anim-container w-full h-full flex items-center justify-center filter drop-shadow-[0_20px_35px_rgba(245,158,11,0.45)]">
-                <img src="/labs/assets/golden_goose.png?v=perfect2026" alt="真实金鹅" class="w-full h-full object-contain select-none pointer-events-none" />
+                <img id="solidGooseImg" data-stage="0" src="/labs/assets/goose_stage1.png?v=stages2026" alt="真实金鹅" class="w-full h-full object-contain select-none pointer-events-none transition-opacity duration-300" />
               </div>
             </div>
 
@@ -554,6 +560,18 @@
     </div>
 
   <script>
+    // 预加载 4 阶段成长金鹅形象，确保滑块交互零延迟丝滑切换
+    const PRELOAD_STAGES = [
+      "/labs/assets/goose_stage1.png?v=stages2026",
+      "/labs/assets/goose_stage2.png?v=stages2026",
+      "/labs/assets/goose_stage3.png?v=stages2026",
+      "/labs/assets/goose_stage4.png?v=stages2026"
+    ];
+    PRELOAD_STAGES.forEach(url => {
+      const img = new Image();
+      img.src = url;
+    });
+
     // 预设配置库
     const PRESETS = {
       salary: { saving: 5000, years: 10, ret: 8.0, inf: 2.8, expense: 8000, swr: 4.0 },
@@ -736,6 +754,41 @@
       const compoundPct = state.realGoose > 0 ? ((compoundGain / state.realGoose) * 100) : 0;
       safeSetText("valCompoundShare", compoundPct.toFixed(1) + "% 资产来自纯复利");
 
+
+            // 动态形态进化 (4个阶梯形态)
+      let stageIndex = 0;
+      if (state.freedomRatio >= 100) {
+        stageIndex = 3; // 👑 永续金鹅
+      } else if (state.freedomRatio >= 60) {
+        stageIndex = 2; // 🪿 振翅英姿
+      } else if (state.freedomRatio >= 25) {
+        stageIndex = 1; // 🌿 茁壮拔节
+      } else {
+        stageIndex = 0; // 🌱 破壳初生
+      }
+
+      const STAGES = [
+        { name: "🌱 破壳初生", img: "/labs/assets/goose_stage1.png?v=stages2026", color: "text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/20" },
+        { name: "🌿 茁壮拔节", img: "/labs/assets/goose_stage2.png?v=stages2026", color: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
+        { name: "🪿 振翅英姿", img: "/labs/assets/goose_stage3.png?v=stages2026", color: "text-blue-600 dark:text-blue-400 bg-blue-500/10 border-blue-500/20" },
+        { name: "👑 永续金鹅", img: "/labs/assets/goose_stage4.png?v=stages2026", color: "text-amber-500 dark:text-amber-300 bg-amber-500/20 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.25)]" }
+      ];
+
+      const curStage = STAGES[stageIndex];
+      const solidImg = document.getElementById("solidGooseImg");
+      const ghostImg = document.getElementById("ghostGooseImg");
+      const stageBadge = document.getElementById("gooseStageBadge");
+
+      if (stageBadge) {
+        stageBadge.textContent = curStage.name;
+        stageBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold border transition-all duration-300 " + curStage.color;
+      }
+
+      if (solidImg && solidImg.getAttribute("data-stage") !== String(stageIndex)) {
+        solidImg.setAttribute("data-stage", String(stageIndex));
+        solidImg.src = curStage.img;
+        if (ghostImg) ghostImg.src = curStage.img;
+      }
 
       // 金鹅与金蛋尺寸动态映射 (平滑开方缩放)
       const baseScale = 0.65;
