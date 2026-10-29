@@ -106,6 +106,87 @@
     input[type=range]::-webkit-slider-thumb:hover {
       transform: scale(1.15);
     }
+
+    /* ========== 金鹅与金蛋专属多维动效系统 ========== */
+    @keyframes gooseBreathe {
+      0%, 100% {
+        transform: translateY(0px) scale(1) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-7px) scale(1.02) rotate(0.6deg);
+      }
+    }
+
+    @keyframes ghostPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.35;
+        filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.7)) brightness(1.25);
+      }
+      50% {
+        transform: scale(1.035);
+        opacity: 0.55;
+        filter: drop-shadow(0 0 35px rgba(251, 191, 36, 0.95)) brightness(1.45);
+      }
+    }
+
+    @keyframes eggFloat {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-6px) rotate(-1.5deg);
+      }
+    }
+
+    @keyframes rippleExpand {
+      0%, 100% {
+        transform: scale(0.9);
+        opacity: 0.6;
+      }
+      50% {
+        transform: scale(1.12);
+        opacity: 0.25;
+      }
+    }
+
+    @keyframes sparkleFloat {
+      0% {
+        transform: translateY(12px) scale(0.5);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.85;
+      }
+      100% {
+        transform: translateY(-20px) scale(1.1);
+        opacity: 0;
+      }
+    }
+
+    .goose-anim-container {
+      animation: gooseBreathe 4s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+
+    .ghost-anim-container {
+      animation: ghostPulse 3s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+
+    .egg-anim-container {
+      animation: eggFloat 3.2s ease-in-out infinite;
+      transform-origin: center center;
+    }
+
+    .pedestal-ripple {
+      animation: rippleExpand 3.8s ease-in-out infinite;
+    }
+
+    .sparkle-1 { animation: sparkleFloat 2.6s ease-in-out infinite 0.2s; }
+    .sparkle-2 { animation: sparkleFloat 3.1s ease-in-out infinite 1.1s; }
+    .sparkle-3 { animation: sparkleFloat 2.9s ease-in-out infinite 1.8s; }
+
   </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-amber-500/20 selection:text-amber-400">
@@ -152,18 +233,33 @@
         <div class="md:col-span-7 flex flex-col items-center justify-center min-h-[280px] relative">
                     <div class="relative w-64 h-72 md:w-72 md:h-80 flex items-center justify-center">
             
-            <!-- 外层虚影光晕鹅 (通胀吃钱产生的名义账面虚影) -->
-            <div id="ghostGooseWrapper" class="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-out pointer-events-none opacity-40">
-              <img src="/labs/assets/golden_goose.png?v=perfect2026" alt="通胀虚影金鹅" class="w-full h-full object-contain filter drop-shadow-[0_0_25px_rgba(251,191,36,0.85)] brightness-125 select-none" />
+            <!-- 脚底光晕水波涟漪 (动态呼吸律动) -->
+            <div class="absolute bottom-2 inset-x-8 h-8 pointer-events-none flex items-center justify-center">
+              <div class="pedestal-ripple w-48 h-6 rounded-[50%] bg-gradient-to-r from-amber-500/20 via-yellow-300/40 to-amber-500/20 blur-[6px]"></div>
             </div>
 
-            <!-- 内层真实实体金鹅 (3D童话大金鹅) -->
-            <div id="solidGooseWrapper" class="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-300 ease-out filter drop-shadow-[0_20px_35px_rgba(245,158,11,0.45)]">
-              <img src="/labs/assets/golden_goose.png?v=perfect2026" alt="真实金鹅" class="w-full h-full object-contain select-none pointer-events-none" />
+            <!-- 漂浮金光微粒子 (环绕金粉) -->
+            <div class="absolute inset-0 pointer-events-none overflow-hidden">
+              <div class="sparkle-1 absolute left-8 top-16 text-amber-400 text-xs">✨</div>
+              <div class="sparkle-2 absolute right-10 top-24 text-amber-300 text-sm">✨</div>
+              <div class="sparkle-3 absolute left-14 bottom-20 text-yellow-200 text-xs">⭐</div>
+            </div>
+
+            <!-- 外层虚影光晕鹅 (通胀吃钱产生的名义账面虚影 - 独立受缩放控制) -->
+            <div id="ghostGooseWrapper" class="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-out pointer-events-none">
+              <div class="ghost-anim-container w-full h-full flex items-center justify-center">
+                <img src="/labs/assets/golden_goose.png?v=perfect2026" alt="通胀虚影金鹅" class="w-full h-full object-contain filter drop-shadow-[0_0_28px_rgba(251,191,36,0.9)] brightness-125 select-none" />
+              </div>
+            </div>
+
+            <!-- 内层真实实体金鹅 (3D童话大金鹅 - 独立缩放 + 呼吸动效双层嵌套) -->
+            <div id="solidGooseWrapper" class="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-500 ease-out">
+              <div class="goose-anim-container w-full h-full flex items-center justify-center filter drop-shadow-[0_20px_35px_rgba(245,158,11,0.45)]">
+                <img src="/labs/assets/golden_goose.png?v=perfect2026" alt="真实金鹅" class="w-full h-full object-contain select-none pointer-events-none" />
+              </div>
             </div>
 
           </div>
-        </div>
 
         <!-- 右侧：金蛋产出与自由生活篮子 (5列) -->
         <div class="md:col-span-5 flex flex-col items-center justify-center p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] relative">
@@ -177,12 +273,14 @@
             </div>
           </div>
 
-          <!-- 动态金蛋容器 -->
+          <!-- 动态金蛋容器 (带悬浮浮动动效) -->
           <div class="h-28 flex items-center justify-center relative my-2">
-            <div id="goldenEggWrapper" class="transition-transform duration-300 ease-out flex items-center justify-center filter drop-shadow-[0_8px_20px_rgba(251,191,36,0.5)]">
+            <div id="goldenEggWrapper" class="transition-transform duration-500 ease-out flex items-center justify-center filter drop-shadow-[0_8px_20px_rgba(251,191,36,0.5)]">
+              <div class="egg-anim-container flex items-center justify-center">
               <div class="w-16 h-22 rounded-[50%_50%_50%_50%/62%_62%_38%_38%] bg-gradient-to-br from-yellow-100 via-amber-400 to-amber-600 flex items-center justify-center relative overflow-hidden border border-amber-200/50">
                 <div class="absolute top-2 left-3 w-5 h-8 rounded-full bg-white/40 blur-[1px] transform -rotate-15"></div>
                 <span class="text-base">✨</span>
+              </div>
               </div>
             </div>
           </div>
