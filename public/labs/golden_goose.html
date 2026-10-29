@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>金鹅自由实验室 — 《小狗钱钱》动态财富自由沙盒 | bin0sky LABS</title>
+  <title>金鹅自由实验室 — 动态财富自由与4%复利沙盒 | bin0sky LABS</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=binos2026">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=binos2026">
   <script>
@@ -202,7 +202,7 @@
           <h1 class="text-xl md:text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">金鹅自由实验室</h1>
           <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">4% 永续法则</span>
         </div>
-        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">《小狗钱钱》动态财富自由沙盒：绝不杀鹅，只吃鹅蛋，对抗通胀，复利生金。</p>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">动态财富自由与4%永续现金流沙盒：本金永续，只享蛋利，对抗通胀，复利生金。</p>
       </div>
 
       <!-- 一键场景预设 -->
@@ -290,14 +290,20 @@
             </div>
           </div>
 
-          <!-- 动态金蛋容器 (带悬浮浮动动效) -->
+          <!-- 动态金蛋容器 (带悬浮浮动动效与超额溢出蛋) -->
           <div class="h-28 flex items-center justify-center relative my-2">
-            <div id="goldenEggWrapper" class="transition-transform duration-500 ease-out flex items-center justify-center filter drop-shadow-[0_8px_20px_rgba(251,191,36,0.5)]">
-              <div class="egg-anim-container flex items-center justify-center">
-              <div class="w-16 h-22 rounded-[50%_50%_50%_50%/62%_62%_38%_38%] bg-gradient-to-br from-yellow-100 via-amber-400 to-amber-600 flex items-center justify-center relative overflow-hidden border border-amber-200/50">
-                <div class="absolute top-2 left-3 w-5 h-8 rounded-full bg-white/40 blur-[1px] transform -rotate-15"></div>
-                <span class="text-base">✨</span>
-              </div>
+            <div id="goldenEggWrapper" class="transition-transform duration-500 ease-out flex items-center justify-center filter drop-shadow-[0_8px_20px_rgba(251,191,36,0.5)] relative">
+              <div class="egg-anim-container flex items-center justify-center relative">
+                <div class="w-16 h-22 rounded-[50%_50%_50%_50%/62%_62%_38%_38%] bg-gradient-to-br from-yellow-100 via-amber-400 to-amber-600 flex items-center justify-center relative overflow-hidden border border-amber-200/50">
+                  <div class="absolute top-2 left-3 w-5 h-8 rounded-full bg-white/40 blur-[1px] transform -rotate-15"></div>
+                  <span class="text-base">✨</span>
+                </div>
+                <!-- 超额自由溢出额外金蛋 -->
+                <div id="extraEgg" class="absolute -right-4 -bottom-1 opacity-0 transition-all duration-500 pointer-events-none transform rotate-12 scale-75">
+                  <div class="w-10 h-14 rounded-[50%_50%_50%_50%/62%_62%_38%_38%] bg-gradient-to-br from-yellow-100 via-amber-300 to-amber-600 shadow-lg border border-amber-200/60 flex items-center justify-center text-xs">
+                    ✨
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -443,16 +449,17 @@
         </div>
       </div>
 
-      <!-- 6. 资产自由解剖速览 -->
+      <!-- 6. 永续自由目标资产 -->
       <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] flex flex-col justify-between">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold text-zinc-400 flex items-center gap-1">
-            <span>🎯</span> 自由门槛资产 (300倍月开销)
+          <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+            <span class="text-base">🎯</span> 永续自由所需金库
           </span>
           <span id="valFreedomTarget" class="text-xs font-mono font-bold text-emerald-500">¥ 240 万</span>
         </div>
-        <div class="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
-          达成自由预计在：<strong id="valCrossoverYearText" class="text-amber-500 dark:text-amber-400 font-mono font-bold">第 18.5 年</strong>
+        <div class="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed flex items-center justify-between">
+          <span>预计达成年限：</span>
+          <strong id="valCrossoverYearText" class="text-amber-500 dark:text-amber-400 font-mono font-bold text-xs">第 18.5 年</strong>
         </div>
       </div>
 
@@ -495,24 +502,53 @@
       </div>
     </div>
 
-    <!-- 《小狗钱钱》精髓三心法 -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-      <div class="p-4 rounded-2xl bg-amber-500/[0.04] border border-amber-500/15">
-        <div class="text-base mb-1">🪿 <span class="font-bold text-sm text-amber-500 dark:text-amber-400">绝不杀鹅</span></div>
-        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-          金鹅是神圣不可侵犯的资产底座。无论何时，不动用本金，它才能在时间长河中持续为你生下金蛋。
+    <!-- 3 维核心洞察看板 (直观量化，替代冗余文字) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+      <!-- 1. 自由退休倒计时 -->
+      <div class="p-4 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/15 flex flex-col justify-between">
+        <div class="flex items-center justify-between text-xs text-zinc-400 mb-1">
+          <span class="flex items-center gap-1.5 font-medium text-emerald-500 dark:text-emerald-400">
+            <span>⏳</span> 自由辞职倒计时
+          </span>
+          <span class="font-mono text-[10px]">COUNTDOWN</span>
+        </div>
+        <div id="valCountdownYears" class="text-base font-bold font-mono text-zinc-900 dark:text-white my-1">
+          还需奋斗 8 年 6 个月
+        </div>
+        <p class="text-[11px] text-zinc-400 font-normal leading-relaxed" id="valCountdownDesc">
+          每月稳健喂养，加速跨越自由临界线
         </p>
       </div>
-      <div class="p-4 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/15">
-        <div class="text-base mb-1">🥚 <span class="font-bold text-sm text-emerald-500 dark:text-emerald-400">只吃鹅蛋</span></div>
-        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-          4% 安全提取法则经过百年周期验证。只要每年只吃 4% 的蛋，金鹅繁衍速度就能战胜通胀，永生不死。
+
+      <!-- 2. 通胀吞噬量化换算 -->
+      <div class="p-4 rounded-2xl bg-rose-500/[0.04] border border-rose-500/15 flex flex-col justify-between">
+        <div class="flex items-center justify-between text-xs text-zinc-400 mb-1">
+          <span class="flex items-center gap-1.5 font-medium text-rose-500 dark:text-rose-400">
+            <span>💨</span> 通胀侵蚀当量
+          </span>
+          <span class="font-mono text-[10px]">INFLATION</span>
+        </div>
+        <div id="valInflationYears" class="text-base font-bold font-mono text-rose-500 dark:text-rose-400 my-1">
+          约吞噬 4.7 年 存钱心血
+        </div>
+        <p class="text-[11px] text-zinc-400 font-normal leading-relaxed">
+          指数基金生肉速度必须跑赢通胀吞噬
         </p>
       </div>
-      <div class="p-4 rounded-2xl bg-blue-500/[0.04] border border-blue-500/15">
-        <div class="text-base mb-1">🌾 <span class="font-bold text-sm text-blue-500 dark:text-blue-400">持续喂食</span></div>
-        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-          初期依靠每月稳定喂食定投，后期复利飞轮转起时，基金自身的肉量增生将数十倍超越你喂食的粮食。
+
+      <!-- 3. 钱生钱复利飞轮 -->
+      <div class="p-4 rounded-2xl bg-amber-500/[0.04] border border-amber-500/15 flex flex-col justify-between">
+        <div class="flex items-center justify-between text-xs text-zinc-400 mb-1">
+          <span class="flex items-center gap-1.5 font-medium text-amber-500 dark:text-amber-400">
+            <span>🚀</span> 复利增生飞轮
+          </span>
+          <span class="font-mono text-[10px]">COMPOUND</span>
+        </div>
+        <div id="valCompoundShare" class="text-base font-bold font-mono text-amber-500 dark:text-amber-400 my-1">
+          33.6% 资产来自纯收益
+        </div>
+        <p class="text-[11px] text-zinc-400 font-normal leading-relaxed">
+          金鹅自身繁衍增量将逐步超越人工投喂
         </p>
       </div>
     </div>
@@ -652,29 +688,54 @@
       const badge = document.getElementById("freedomBadge");
       const hint = document.getElementById("labelFreedomHint");
       const basketBox = document.getElementById("freedomBasketBox");
+      const extraEgg = document.getElementById("extraEgg");
 
       if (state.isFree) {
-        aura.classList.remove("opacity-0");
-        aura.classList.add("opacity-100");
-        basketBox.classList.add("border-emerald-500", "bg-emerald-500/10", "shadow-[0_0_20px_rgba(16,185,129,0.3)]");
-        badge.className = "mt-2 py-1 px-3 rounded-full text-xs font-semibold flex items-center gap-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
-        hint.textContent = "✨ 自由达成！无需杀鹅，永续生活 (覆盖 " + state.freedomRatio.toFixed(0) + "%)";
+        if (aura) { aura.classList.remove("opacity-0"); aura.classList.add("opacity-100"); }
+        if (basketBox) basketBox.classList.add("border-emerald-500", "bg-emerald-500/10", "shadow-[0_0_20px_rgba(16,185,129,0.3)]");
+        if (badge) badge.className = "mt-2 py-1 px-3 rounded-full text-xs font-semibold flex items-center gap-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+        if (hint) hint.textContent = "✨ 自由达成！无需杀鹅，永续生活 (覆盖 " + state.freedomRatio.toFixed(0) + "%)";
+        if (extraEgg) { extraEgg.classList.remove("opacity-0"); extraEgg.classList.add("opacity-100"); }
       } else {
-        aura.classList.add("opacity-0");
-        aura.classList.remove("opacity-100");
-        basketBox.classList.remove("border-emerald-500", "bg-emerald-500/10", "shadow-[0_0_20px_rgba(16,185,129,0.3)]");
-        badge.className = "mt-2 py-1 px-3 rounded-full text-xs font-semibold flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400 bg-black/[0.04] dark:bg-white/[0.04]";
+        if (aura) { aura.classList.add("opacity-0"); aura.classList.remove("opacity-100"); }
+        if (basketBox) basketBox.classList.remove("border-emerald-500", "bg-emerald-500/10", "shadow-[0_0_20px_rgba(16,185,129,0.3)]");
+        if (badge) badge.className = "mt-2 py-1 px-3 rounded-full text-xs font-semibold flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400 bg-black/[0.04] dark:bg-white/[0.04]";
         const diff = Math.max(0, expense - state.monthlyEggReal);
-        hint.textContent = "尚需积累，离自由还差 ¥" + Math.round(diff).toLocaleString() + "/月";
+        if (hint) hint.textContent = "尚需积累，离自由还差 ¥" + Math.round(diff).toLocaleString() + "/月";
+        if (extraEgg) { extraEgg.classList.add("opacity-0"); extraEgg.classList.remove("opacity-100"); }
       }
 
+      // 实时计算倒计时牌
       if (state.crossoverYear) {
+        const remainYears = state.crossoverYear - years;
+        if (remainYears <= 0) {
+          safeSetText("valCountdownYears", "✨ 已提前达成财务自由！");
+          safeSetText("valCountdownDesc", "金蛋现金流已完全覆盖生活，永续自转");
+        } else {
+          const wholeY = Math.floor(remainYears);
+          const remainM = Math.round((remainYears - wholeY) * 12);
+          safeSetText("valCountdownYears", "还需奋斗 " + wholeY + " 年 " + remainM + " 个月");
+          safeSetText("valCountdownDesc", "第 " + state.crossoverYear.toFixed(1) + " 年将跨过自由门槛");
+        }
         safeSetText("valCrossoverYearText", "第 " + state.crossoverYear.toFixed(1) + " 年");
         safeSetText("chartMilestoneBadge", "🎯 自由交叉点: 第 " + state.crossoverYear.toFixed(1) + " 年");
       } else {
-        safeSetText("valCrossoverYearText", "> 50 年 (需调高投喂或收益)");
+        safeSetText("valCountdownYears", "⏳ 需调高投喂或收益");
+        safeSetText("valCountdownDesc", "当前速度50年内未达标，建议加大定投");
+        safeSetText("valCrossoverYearText", "> 50 年 (需调高投喂)");
         safeSetText("chartMilestoneBadge", "🎯 暂未达标，需加强定投");
       }
+
+      // 通胀当量换算：通胀损失 / 年定投额
+      const annualSaving = saving * 12;
+      const inflationYearsLost = annualSaving > 0 ? (state.inflationLoss / annualSaving) : 0;
+      safeSetText("valInflationYears", "约吞噬 " + inflationYearsLost.toFixed(1) + " 年 存钱心血");
+
+      // 复利占比
+      const compoundGain = Math.max(0, state.realGoose - state.totalInvested);
+      const compoundPct = state.realGoose > 0 ? ((compoundGain / state.realGoose) * 100) : 0;
+      safeSetText("valCompoundShare", compoundPct.toFixed(1) + "% 资产来自纯复利");
+
 
       // 金鹅与金蛋尺寸动态映射 (平滑开方缩放)
       const baseScale = 0.65;
