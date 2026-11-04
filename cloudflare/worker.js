@@ -86,6 +86,18 @@ export default {
       }
     }
 
+    // Next.js static asset fallback (powers ArchIcons when proxied or deep linked)
+    if (pathname.startsWith('/_next/')) {
+      const targetUrl = `https://icon.bin0sky.tech${pathname}${search}`;
+      const newHeaders = new Headers(request.headers);
+      newHeaders.set('X-Forwarded-Host', url.host);
+      return fetch(new Request(targetUrl, {
+        method: request.method,
+        headers: newHeaders,
+        redirect: 'follow',
+      }));
+    }
+
     // Default: pass through to main site
     return fetch(request);
   },

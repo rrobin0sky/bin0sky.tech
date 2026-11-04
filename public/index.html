@@ -678,11 +678,11 @@
     <!-- ==================== MAIN STAGE ==================== -->
     <main class="flex-1 h-full overflow-hidden relative flex flex-col bg-zinc-50/50 dark:bg-[#090a0d]">
       
-      <!-- 视图 A: 矩阵总览看板 (极简 Pro 紧凑流 · 零多余标语) -->
-      <div id="stageOverview" class="flex-1 h-full overflow-y-auto px-5 sm:px-8 py-8 max-w-7xl w-full mx-auto">
+      <!-- 视图 A: 矩阵总览看板 (极简 Pro 紧凑流 · 零多余标语 · 宽屏自适应) -->
+      <div id="stageOverview" class="flex-1 h-full overflow-y-auto px-5 sm:px-8 py-8 max-w-[1920px] 2xl:max-w-[2100px] w-full mx-auto">
         
         <!-- 8 Compact Bento Cards Grid (一目了然，无冗余假图，无01/02编号) -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="overviewCardsGrid">
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 min-[2100px]:grid-cols-6 gap-4" id="overviewCardsGrid">
           
           <!-- ArchIcons -->
           <div tabindex="0" onclick="loadStage('icon')" data-category="apps" class="bento-card group p-5 rounded-2xl flex flex-col justify-between cursor-pointer border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#13161c]">
