@@ -31,11 +31,8 @@
     </linearGradient>
   </defs>
 
-  <!-- Apple Dark Squircle Canvas -->
-  <rect x="2" y="2" width="60" height="60" rx="16" fill="#12141a" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
-
-  <!-- Three-Color Spiral Pinwheel Geometry -->
-  <g transform="translate(32,32)">
+  <!-- Three-Color Spiral Pinwheel Geometry (Enlarged & Transparent) -->
+  <g transform="translate(32,32) scale(1.32)">
     <!-- Blade 1: Sky (APPS) -->
     <g>
       <path d="M 0,0 C 0,-10 3,-18 0,-22 C 8,-21 16,-17 20,-11 Z" fill="url(#fav-sky)"/>
@@ -55,7 +52,7 @@
     </g>
 
     <!-- Center Hub Pin -->
-    <circle cx="0" cy="0" r="4" fill="#ffffff"/>
-    <circle cx="0" cy="0" r="1.8" fill="#12141a"/>
+    <circle cx="0" cy="0" r="3.8" fill="#ffffff"/>
+    <circle cx="0" cy="0" r="1.8" fill="#0f172a"/>
   </g>
 </svg>
