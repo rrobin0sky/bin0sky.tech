@@ -13,5 +13,8 @@
       "binding": "TEACHER_KV",
       "id": "4e056b115bba403cb2366494ac715371"
     }
-  ]
+  ],
+  "vars": {
+    "ENVIRONMENT": "production"
+  }
 }
