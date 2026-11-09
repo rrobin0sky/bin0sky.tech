@@ -1068,26 +1068,56 @@
     </div>
   </div>
 
-  <!-- Auth Modal (管理员登录) -->
+  <!-- Auth Modal (用户登录 / 注册) -->
   <div id="authModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-4" onclick="toggleAuthModal(false)">
     <div class="w-full max-w-sm rounded-2xl border border-black/[0.1] dark:border-white/[0.12] bg-white/95 dark:bg-[#12141a]/95 backdrop-blur-2xl shadow-2xl p-5" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between mb-3 border-b border-black/[0.06] dark:border-white/[0.08] pb-3">
-        <h3 id="authModalTitle" class="font-bold text-sm text-zinc-900 dark:text-white">管理员登录</h3>
+        <div class="flex items-center gap-2">
+          <button id="authTabLogin" type="button" onclick="switchAuthTab('login')" class="text-xs font-semibold px-2.5 py-1 rounded-md bg-black/[0.06] dark:bg-white/[0.1] text-zinc-900 dark:text-white transition-all cursor-pointer">
+            登录
+          </button>
+          <button id="authTabRegister" type="button" onclick="switchAuthTab('register')" class="text-xs font-medium px-2.5 py-1 rounded-md text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all cursor-pointer">
+            极速注册
+          </button>
+        </div>
         <button onclick="toggleAuthModal(false)" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-white cursor-pointer" aria-label="Close">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
-      <p id="authModalSubtitle" class="text-xs text-zinc-500 dark:text-zinc-400 mb-4 leading-relaxed">
-        请输入管理员口令以解锁受限项目与全局编辑权限。
+
+      <p id="authModalSubtitle" class="text-xs text-zinc-500 dark:text-zinc-400 mb-3.5 leading-relaxed">
+        登录后可享受个人 NetBOM 云端工程多端漫游与持久保存。
       </p>
-      <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+
+      <form onsubmit="handleAuthSubmit(event)" class="space-y-3">
         <div>
-          <input id="authPasswordInput" type="password" placeholder="请输入管理员口令..." autocomplete="current-password" class="w-full h-9 px-3 rounded-lg border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.03] dark:bg-white/[0.05] text-xs font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-sky-500">
-          <p id="authErrorMsg" class="hidden text-rose-500 text-[11px] mt-1.5 font-medium"></p>
+          <label class="block text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mb-1">用户名</label>
+          <input id="authUsernameInput" type="text" placeholder="输入用户名 (3-24位)" autocomplete="username" class="w-full h-9 px-3 rounded-lg border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.03] dark:bg-white/[0.05] text-xs font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-sky-500">
         </div>
-        <div class="flex items-center justify-end gap-2 pt-2 border-t border-black/[0.06] dark:border-white/[0.08]">
-          <button type="button" onclick="toggleAuthModal(false)" class="px-3 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-xs font-medium text-zinc-600 dark:text-zinc-300 cursor-pointer">取消</button>
-          <button type="submit" id="authSubmitBtn" class="px-3.5 py-1.5 rounded-lg bg-zinc-900 dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-100 text-white dark:text-zinc-950 text-xs font-semibold shadow-xs cursor-pointer transition-all">登录</button>
+
+        <div>
+          <label class="block text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mb-1">密码</label>
+          <input id="authPasswordInput" type="password" placeholder="输入登录密码 (至少6位)" autocomplete="current-password" class="w-full h-9 px-3 rounded-lg border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.03] dark:bg-white/[0.05] text-xs font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-sky-500">
+        </div>
+
+        <div id="authAdminKeyGroup" class="hidden">
+          <div class="flex items-center justify-between mb-1">
+            <label class="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">管理员激活码 (可选)</label>
+            <span class="text-[10px] text-zinc-400">仅用于激活 Admin</span>
+          </div>
+          <input id="authAdminKeyInput" type="password" placeholder="普通用户无需填写..." class="w-full h-9 px-3 rounded-lg border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.03] dark:bg-white/[0.05] text-xs font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-sky-500">
+        </div>
+
+        <p id="authErrorMsg" class="hidden text-rose-500 text-[11px] font-medium"></p>
+
+        <div class="flex items-center justify-between pt-2 border-t border-black/[0.06] dark:border-white/[0.08]">
+          <button type="button" id="authSwitchTipBtn" onclick="toggleAuthModeSwitch()" class="text-[11px] text-zinc-400 hover:text-sky-500 cursor-pointer transition-colors">
+            还没有账号？去注册
+          </button>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="toggleAuthModal(false)" class="px-3 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-xs font-medium text-zinc-600 dark:text-zinc-300 cursor-pointer">取消</button>
+            <button type="submit" id="authSubmitBtn" class="px-3.5 py-1.5 rounded-lg bg-zinc-900 dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-100 text-white dark:text-zinc-950 text-xs font-semibold shadow-xs cursor-pointer transition-all">登录</button>
+          </div>
         </div>
       </form>
     </div>
@@ -1731,8 +1761,18 @@
     }
 
     // ==================== AUTH & ROLE CONTROL ====================
+    let currentAuthUser = {
+      authenticated: false,
+      role: 'guest',
+      username: '',
+      uid: '',
+    };
+    let currentAuthTab = 'login'; // 'login' | 'register'
+    let pendingStageAfterLogin = null;
+
     function checkIsAdmin() {
       try {
+        if (currentAuthUser && currentAuthUser.role === 'admin') return true;
         const local = localStorage.getItem('b0_auth_role');
         const cookie = getRootDomainCookie('b0_auth_role');
         return local === 'admin' || cookie === 'admin';
@@ -1741,31 +1781,50 @@
       }
     }
 
+    function checkIsLoggedIn() {
+      return !!(currentAuthUser && currentAuthUser.authenticated);
+    }
+
     function syncAuthToIframe() {
       const iframe = document.getElementById('stageIframe');
       const isAdmin = checkIsAdmin();
+      const isUser = (currentAuthUser && currentAuthUser.role === 'user') || isAdmin;
       if (iframe && iframe.contentWindow) {
         try {
-          iframe.contentWindow.postMessage({ type: 'B0_AUTH_CHANGE', role: isAdmin ? 'admin' : 'guest', isAdmin }, '*');
+          iframe.contentWindow.postMessage({
+            type: 'B0_AUTH_CHANGE',
+            role: currentAuthUser.role || (isAdmin ? 'admin' : 'guest'),
+            isAdmin,
+            isUser,
+            username: currentAuthUser.username || '',
+            uid: currentAuthUser.uid || '',
+          }, '*');
         } catch (e) {}
       }
     }
 
     function updateAuthUI() {
       const isAdmin = checkIsAdmin();
+      const isLogged = checkIsLoggedIn();
       const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
       
-      // 1. Auth Button (纯文字保持极致克制，与当前风格完全一致)
+      // 1. Auth Button
       const authBtn = document.getElementById('authBtn');
       if (authBtn) {
         if (isAdmin) {
-          authBtn.textContent = isZh ? '退出' : 'Logout';
-          authBtn.title = isZh ? '当前为管理员身份，点击退出' : 'Admin active, click to logout';
-          authBtn.classList.add('text-sky-600', 'dark:text-sky-400', 'border-sky-500/30');
+          const name = currentAuthUser.username || 'Admin';
+          authBtn.textContent = isZh ? `⚡ ${name}` : `⚡ ${name}`;
+          authBtn.title = isZh ? `管理员身份 [${name}]，点击退出` : `Admin active [${name}], click to logout`;
+          authBtn.className = "px-2.5 py-1.5 rounded-lg border border-sky-500/30 hover:border-sky-500/50 hover:bg-sky-500/10 text-sky-600 dark:text-sky-400 text-xs font-semibold transition-all cursor-pointer select-none";
+        } else if (isLogged) {
+          const name = currentAuthUser.username || 'User';
+          authBtn.textContent = `👤 ${name}`;
+          authBtn.title = isZh ? `已登录用户 [${name}]，点击退出` : `User [${name}], click to logout`;
+          authBtn.className = "px-2.5 py-1.5 rounded-lg border border-black/[0.1] dark:border-white/[0.15] hover:border-black/30 dark:hover:border-white/30 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-800 dark:text-zinc-200 text-xs font-medium transition-all cursor-pointer select-none";
         } else {
           authBtn.textContent = isZh ? '登录' : 'Login';
-          authBtn.title = isZh ? '管理员登录' : 'Admin Login';
-          authBtn.classList.remove('text-sky-600', 'dark:text-sky-400', 'border-sky-500/30');
+          authBtn.title = isZh ? '登录 / 注册' : 'Login / Register';
+          authBtn.className = "px-2.5 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 dark:hover:border-white/20 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-700 dark:text-zinc-200 text-xs font-medium transition-all cursor-pointer select-none";
         }
       }
 
@@ -1792,29 +1851,64 @@
       syncAuthToIframe();
     }
 
-    let pendingStageAfterLogin = null;
+    function switchAuthTab(tab) {
+      currentAuthTab = tab;
+      const tabLogin = document.getElementById('authTabLogin');
+      const tabRegister = document.getElementById('authTabRegister');
+      const adminGroup = document.getElementById('authAdminKeyGroup');
+      const submitBtn = document.getElementById('authSubmitBtn');
+      const switchTip = document.getElementById('authSwitchTipBtn');
+      const subtitle = document.getElementById('authModalSubtitle');
+      const err = document.getElementById('authErrorMsg');
+      if (err) err.classList.add('hidden');
+
+      const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
+
+      if (tab === 'register') {
+        if (tabLogin) tabLogin.className = "text-xs font-medium px-2.5 py-1 rounded-md text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all cursor-pointer";
+        if (tabRegister) tabRegister.className = "text-xs font-semibold px-2.5 py-1 rounded-md bg-black/[0.06] dark:bg-white/[0.1] text-zinc-900 dark:text-white transition-all cursor-pointer";
+        if (adminGroup) adminGroup.classList.remove('hidden');
+        if (submitBtn) submitBtn.textContent = isZh ? '注册并登录' : 'Register';
+        if (switchTip) switchTip.textContent = isZh ? '已有账号？去登录' : 'Have an account? Login';
+        if (subtitle) subtitle.textContent = isZh ? '注册即享个人 NetBOM 云端工程自动多端同步与保存。' : 'Register to enjoy multi-device cloud sync for NetBOM.';
+      } else {
+        if (tabLogin) tabLogin.className = "text-xs font-semibold px-2.5 py-1 rounded-md bg-black/[0.06] dark:bg-white/[0.1] text-zinc-900 dark:text-white transition-all cursor-pointer";
+        if (tabRegister) tabRegister.className = "text-xs font-medium px-2.5 py-1 rounded-md text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all cursor-pointer";
+        if (adminGroup) adminGroup.classList.add('hidden');
+        if (submitBtn) submitBtn.textContent = isZh ? '登录' : 'Login';
+        if (switchTip) switchTip.textContent = isZh ? '还没有账号？去注册' : 'No account? Register';
+        if (subtitle) subtitle.textContent = isZh ? '登录后可享受个人 NetBOM 云端工程多端漫游与持久保存。' : 'Login to access your personal NetBOM projects anywhere.';
+      }
+    }
+
+    function toggleAuthModeSwitch() {
+      switchAuthTab(currentAuthTab === 'login' ? 'register' : 'login');
+    }
 
     function openLoginModal(reason) {
       const subtitle = document.getElementById('authModalSubtitle');
       const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
-      if (subtitle) {
-        subtitle.textContent = reason || (isZh ? '请输入管理员口令以解锁受限项目与全局编辑权限。' : 'Please enter admin password to unlock restricted projects and edit capabilities.');
+      if (subtitle && reason) {
+        subtitle.textContent = reason;
       }
+      switchAuthTab('login');
       toggleAuthModal(true);
     }
 
     function toggleAuthModal(show) {
       const modal = document.getElementById('authModal');
-      const input = document.getElementById('authPasswordInput');
+      const userInput = document.getElementById('authUsernameInput');
+      const passInput = document.getElementById('authPasswordInput');
       const err = document.getElementById('authErrorMsg');
       if (!modal) return;
       if (show) {
         modal.classList.remove('hidden');
         if (err) err.classList.add('hidden');
-        if (input) {
-          input.value = '';
-          setTimeout(() => input.focus(), 80);
+        if (userInput) {
+          userInput.value = '';
+          setTimeout(() => userInput.focus(), 80);
         }
+        if (passInput) passInput.value = '';
       } else {
         modal.classList.add('hidden');
         pendingStageAfterLogin = null;
@@ -1822,19 +1916,26 @@
     }
 
     function handleAuthBtnClick() {
-      if (checkIsAdmin()) {
+      if (checkIsLoggedIn()) {
         const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
-        if (confirm(isZh ? '确定退出管理员登录吗？' : 'Confirm logout admin?')) {
-          logoutAdmin();
+        const roleLabel = checkIsAdmin() ? (isZh ? '管理员' : 'Admin') : (isZh ? '普通用户' : 'User');
+        if (confirm(isZh ? `确定退出当前 [${roleLabel}] 账号吗？` : `Confirm logout current [${roleLabel}] account?`)) {
+          logoutUser();
         }
       } else {
         openLoginModal();
       }
     }
 
-    function logoutAdmin() {
+    async function logoutUser() {
+      try {
+        await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+      } catch (e) {}
+
+      currentAuthUser = { authenticated: false, role: 'guest', username: '', uid: '' };
       try {
         localStorage.removeItem('b0_auth_role');
+        localStorage.removeItem('b0_auth_username');
         setRootDomainCookie('b0_auth_role', '');
       } catch (e) {}
       updateAuthUI();
@@ -1849,42 +1950,142 @@
 
     async function handleAuthSubmit(e) {
       if (e) e.preventDefault();
-      const input = document.getElementById('authPasswordInput');
+      const userInput = document.getElementById('authUsernameInput');
+      const passInput = document.getElementById('authPasswordInput');
+      const adminKeyInput = document.getElementById('authAdminKeyInput');
       const err = document.getElementById('authErrorMsg');
-      const pwd = (input ? input.value : '').trim();
+      const submitBtn = document.getElementById('authSubmitBtn');
+
+      const username = (userInput ? userInput.value : '').trim();
+      const password = (passInput ? passInput.value : '').trim();
+      const adminKey = (adminKeyInput ? adminKeyInput.value : '').trim();
       const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
 
-      if (!pwd) {
+      if (!username) {
         if (err) {
-          err.textContent = isZh ? '请输入口令' : 'Please enter password';
+          err.textContent = isZh ? '请输入用户名' : 'Please enter username';
           err.classList.remove('hidden');
         }
+        if (userInput) userInput.focus();
         return;
       }
 
-      // 验证管理员口令 (与 NetBOM 及 Edge API 保持一致的 master key)
-      if (pwd === 'bin0sky.tech') {
-        try {
-          localStorage.setItem('b0_auth_role', 'admin');
-          setRootDomainCookie('b0_auth_role', 'admin');
-        } catch(e) {}
+      if (!password) {
+        if (err) {
+          err.textContent = isZh ? '请输入密码' : 'Please enter password';
+          err.classList.remove('hidden');
+        }
+        if (passInput) passInput.focus();
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-50');
+      }
+
+      try {
+        const isRegister = currentAuthTab === 'register';
+        const url = isRegister ? '/api/auth/register' : '/api/auth/login';
+        const payload = isRegister ? { username, password, adminKey } : { username, password };
+
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          credentials: 'include'
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || !data.success) {
+          // 向后兼容：若是旧口令直接输入为管理员
+          if (password === 'bin0sky.tech' && !isRegister) {
+            currentAuthUser = { authenticated: true, role: 'admin', username: username || 'Admin', uid: 'legacy_admin' };
+            localStorage.setItem('b0_auth_role', 'admin');
+            localStorage.setItem('b0_auth_username', username || 'Admin');
+            setRootDomainCookie('b0_auth_role', 'admin');
+            toggleAuthModal(false);
+            updateAuthUI();
+            if (pendingStageAfterLogin) {
+              const target = pendingStageAfterLogin;
+              pendingStageAfterLogin = null;
+              loadStage(target);
+            }
+            return;
+          }
+
+          if (err) {
+            err.textContent = data.error || (isZh ? '认证失败，请重试' : 'Authentication failed');
+            err.classList.remove('hidden');
+          }
+          return;
+        }
+
+        // 成功登录 / 注册
+        currentAuthUser = {
+          authenticated: true,
+          role: data.user.role,
+          username: data.user.username,
+          uid: data.user.uid
+        };
+
+        localStorage.setItem('b0_auth_role', data.user.role);
+        localStorage.setItem('b0_auth_username', data.user.username);
+        setRootDomainCookie('b0_auth_role', data.user.role);
 
         toggleAuthModal(false);
         updateAuthUI();
 
-        // 如果用户刚才因为访问受限页面而触发登录，登录成功后直接载入
         if (pendingStageAfterLogin) {
           const target = pendingStageAfterLogin;
           pendingStageAfterLogin = null;
           loadStage(target);
         }
-      } else {
+      } catch (ex) {
         if (err) {
-          err.textContent = isZh ? '管理员口令不正确，请重新输入' : 'Invalid admin password';
+          err.textContent = isZh ? '网络请求失败，请稍后重试' : 'Network error, please retry';
           err.classList.remove('hidden');
         }
-        if (input) input.select();
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-50');
+        }
       }
+    }
+
+    async function fetchCurrentAuth() {
+      try {
+        const res = await fetch('/api/auth/me', { credentials: 'include' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.authenticated && data.user) {
+            currentAuthUser = {
+              authenticated: true,
+              role: data.user.role,
+              username: data.user.username,
+              uid: data.user.uid
+            };
+            localStorage.setItem('b0_auth_role', data.user.role);
+            localStorage.setItem('b0_auth_username', data.user.username);
+            updateAuthUI();
+            return;
+          }
+        }
+      } catch (e) {}
+
+      // Fallback: 检查本地缓存
+      const savedRole = localStorage.getItem('b0_auth_role') || getRootDomainCookie('b0_auth_role');
+      const savedUser = localStorage.getItem('b0_auth_username') || '';
+      if (savedRole === 'admin') {
+        currentAuthUser = { authenticated: true, role: 'admin', username: savedUser || 'Admin', uid: 'cached_admin' };
+      } else if (savedRole === 'user') {
+        currentAuthUser = { authenticated: true, role: 'user', username: savedUser || 'User', uid: 'cached_user' };
+      } else {
+        currentAuthUser = { authenticated: false, role: 'guest', username: '', uid: '' };
+      }
+      updateAuthUI();
     }
 
     // Cross-tab and embedded iframe theme, lang & auth sync listeners
@@ -1910,6 +2111,8 @@
         syncLangToIframe();
       } else if (e.data.type === 'B0_REQUEST_AUTH') {
         syncAuthToIframe();
+      } else if (e.data.type === 'B0_OPEN_LOGIN') {
+        openLoginModal(e.data.reason || '');
       }
     });
 
@@ -2206,6 +2409,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
       updateAuthUI();
+      fetchCurrentAuth();
       const sb = document.getElementById('appSidebar');
       const storedExpanded = localStorage.getItem('b0_sidebar_expanded');
       const isExpanded = storedExpanded !== null ? (storedExpanded === 'true') : (window.innerWidth >= 1024);
