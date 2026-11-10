@@ -123,6 +123,27 @@ function getJwtSecret(env) {
   return (env && env.JWT_SECRET) ? String(env.JWT_SECRET).trim() : 'bin0sky-jwt-secret-2024-unified';
 }
 
+// 🛡️ 静默管理员白名单判定 (支持用户名列表与邮箱列表)
+function checkIsAdminUser(username, email, env) {
+  const cleanU = String(username || '').trim().toLowerCase();
+  const cleanE = String(email || '').trim().toLowerCase();
+
+  const adminUsers = ((env && env.ADMIN_USERNAMES) || 'robin,admin,bin0sky')
+    .split(',')
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
+
+  const adminEmails = ((env && env.ADMIN_EMAILS) || '')
+    .split(',')
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (cleanU && adminUsers.includes(cleanU)) return true;
+  if (cleanE && adminEmails.includes(cleanE)) return true;
+
+  return false;
+}
+
 // 🛡️ 登录频控保护 (防暴力破解)
 async function checkLoginRateLimit(request, env) {
   if (!env || !env.TEACHER_KV) return true;
@@ -313,14 +334,20 @@ async function handleAuthApi(request, env) {
       }), { headers: corsHeaders });
     }
 
-    // 2. POST /api/auth/register - 极速注册 (支持输入管理员密钥激活 Admin)
+    // 2. POST /api/auth/register - 极速注册 (包含密保邮箱，静默白名单判定 Admin)
     if (path === '/api/auth/register' && request.method === 'POST') {
       const body = await request.json().catch(() => ({}));
-      const { username, password, adminKey } = body;
+      const { username, email, password, adminKey } = body;
 
       const cleanUser = String(username || '').trim().toLowerCase();
+      const cleanEmail = String(email || '').trim().toLowerCase();
+
       if (!cleanUser || cleanUser.length < 3 || cleanUser.length > 24) {
         return new Response(JSON.stringify({ error: '用户名需为 3-24 位字符' }), { status: 400, headers: corsHeaders });
+      }
+
+      if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+        return new Response(JSON.stringify({ error: '请提供有效的密保邮箱（用于忘记密码时安全找回）' }), { status: 400, headers: corsHeaders });
       }
 
       if (!password || String(password).length < 6) {
@@ -333,9 +360,17 @@ async function handleAuthApi(request, env) {
         return new Response(JSON.stringify({ error: '该用户名已被注册，请直接登录' }), { status: 409, headers: corsHeaders });
       }
 
-      // 角色判断：若提供有效管理员密钥，则激活为 admin
-      const isMakeAdmin = adminKey && String(adminKey).trim() === getAdminInitKey(env);
-      const role = isMakeAdmin ? 'admin' : 'user';
+      // 检查密保邮箱是否已被占用
+      const emailIndexKey = `auth:email:${cleanEmail}`;
+      const existingEmailOwner = await env.TEACHER_KV.get(emailIndexKey);
+      if (existingEmailOwner && existingEmailOwner !== cleanUser) {
+        return new Response(JSON.stringify({ error: '该密保邮箱已被其他账号使用，请更换' }), { status: 409, headers: corsHeaders });
+      }
+
+      // 角色判断：优先走隐蔽的静默白名单，向后兼容保留可选 adminKey
+      const isWhitelistAdmin = checkIsAdminUser(cleanUser, cleanEmail, env);
+      const isKeyAdmin = adminKey && String(adminKey).trim() === getAdminInitKey(env);
+      const role = (isWhitelistAdmin || isKeyAdmin) ? 'admin' : 'user';
 
       const salt = crypto.randomUUID().slice(0, 8);
       const hash = await sha256Hex(`${password}:${salt}`);
@@ -344,6 +379,7 @@ async function handleAuthApi(request, env) {
       const userRecord = {
         uid,
         username: cleanUser,
+        email: cleanEmail,
         salt,
         hash,
         role,
@@ -352,6 +388,7 @@ async function handleAuthApi(request, env) {
       };
 
       await env.TEACHER_KV.put(userKey, JSON.stringify(userRecord));
+      await env.TEACHER_KV.put(emailIndexKey, cleanUser);
 
       // 签发 Token 并写入统一 Cookie
       const token = await signToken({ uid, username: cleanUser, role }, getJwtSecret(env));
@@ -366,7 +403,7 @@ async function handleAuthApi(request, env) {
       }), { headers });
     }
 
-    // 3. POST /api/auth/login - 登录 (带失败防撞库保护)
+    // 3. POST /api/auth/login - 登录 (支持用户名或密保邮箱，带防撞库频控)
     if (path === '/api/auth/login' && request.method === 'POST') {
       const canAttempt = await checkLoginRateLimit(request, env);
       if (!canAttempt) {
@@ -376,12 +413,21 @@ async function handleAuthApi(request, env) {
       const body = await request.json().catch(() => ({}));
       const { username, password } = body;
 
-      const cleanUser = String(username || '').trim().toLowerCase();
-      if (!cleanUser || !password) {
-        return new Response(JSON.stringify({ error: '请输入用户名和密码' }), { status: 400, headers: corsHeaders });
+      const cleanInput = String(username || '').trim().toLowerCase();
+      if (!cleanInput || !password) {
+        return new Response(JSON.stringify({ error: '请输入用户名或密保邮箱' }), { status: 400, headers: corsHeaders });
       }
 
-      const userKey = `auth:user:${cleanUser}`;
+      let targetUser = cleanInput;
+      // 若输入的是邮箱格式，先反查对应的用户名
+      if (cleanInput.includes('@')) {
+        const mappedUser = await env.TEACHER_KV.get(`auth:email:${cleanInput}`);
+        if (mappedUser) {
+          targetUser = mappedUser;
+        }
+      }
+
+      const userKey = `auth:user:${targetUser}`;
       const existing = await env.TEACHER_KV.get(userKey, 'json');
 
       if (!existing) {
@@ -401,19 +447,74 @@ async function handleAuthApi(request, env) {
       existing.lastLoginAt = Date.now();
       await env.TEACHER_KV.put(userKey, JSON.stringify(existing));
 
-      const token = await signToken({ uid: existing.uid, username: cleanUser, role: existing.role || 'user' }, getJwtSecret(env));
+      const token = await signToken({ uid: existing.uid, username: existing.username, role: existing.role || 'user' }, getJwtSecret(env));
       const headers = new Headers(corsHeaders);
       appendAuthCookies(headers, token, existing.role || 'user', request.url);
 
       return new Response(JSON.stringify({
         success: true,
-        user: { uid: existing.uid, username: cleanUser, role: existing.role || 'user' },
+        user: { uid: existing.uid, username: existing.username, role: existing.role || 'user' },
         token,
         message: '登录成功',
       }), { headers });
     }
 
-    // 4. POST /api/auth/logout - 退出登录
+    // 4. POST /api/auth/reset-password - 凭密保邮箱重置密码
+    if (path === '/api/auth/reset-password' && request.method === 'POST') {
+      const canAttempt = await checkLoginRateLimit(request, env);
+      if (!canAttempt) {
+        return new Response(JSON.stringify({ error: '尝试次数过多，请稍候 5 分钟后再试' }), { status: 429, headers: corsHeaders });
+      }
+
+      const body = await request.json().catch(() => ({}));
+      const { username, email, newPassword } = body;
+
+      const cleanUser = String(username || '').trim().toLowerCase();
+      const cleanEmail = String(email || '').trim().toLowerCase();
+
+      if (!cleanUser || !cleanEmail || !newPassword) {
+        return new Response(JSON.stringify({ error: '请完整输入用户名、密保邮箱与新密码' }), { status: 400, headers: corsHeaders });
+      }
+
+      if (String(newPassword).length < 6) {
+        return new Response(JSON.stringify({ error: '新密码长度至少需为 6 位' }), { status: 400, headers: corsHeaders });
+      }
+
+      const userKey = `auth:user:${cleanUser}`;
+      const existing = await env.TEACHER_KV.get(userKey, 'json');
+
+      if (!existing) {
+        await recordLoginFailure(request, env);
+        return new Response(JSON.stringify({ error: '未找到该用户，请检查用户名是否正确' }), { status: 404, headers: corsHeaders });
+      }
+
+      if (!existing.email) {
+        return new Response(JSON.stringify({ error: '该早期账号未设定密保邮箱，请联系管理员处理' }), { status: 400, headers: corsHeaders });
+      }
+
+      if (existing.email.toLowerCase() !== cleanEmail) {
+        await recordLoginFailure(request, env);
+        return new Response(JSON.stringify({ error: '用户名与绑定的密保邮箱不匹配，请核对后重试' }), { status: 403, headers: corsHeaders });
+      }
+
+      await clearLoginFailure(request, env);
+
+      const newSalt = crypto.randomUUID().slice(0, 8);
+      const newHash = await sha256Hex(`${newPassword}:${newSalt}`);
+
+      existing.salt = newSalt;
+      existing.hash = newHash;
+      existing.passwordResetAt = Date.now();
+
+      await env.TEACHER_KV.put(userKey, JSON.stringify(existing));
+
+      return new Response(JSON.stringify({
+        success: true,
+        message: '密码重置成功！请使用新密码重新登录。',
+      }), { headers: corsHeaders });
+    }
+
+    // 5. POST /api/auth/logout - 退出登录
     if (path === '/api/auth/logout' && request.method === 'POST') {
       const headers = new Headers(corsHeaders);
       appendClearCookies(headers, request.url);

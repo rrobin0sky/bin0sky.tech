@@ -1068,11 +1068,12 @@
     </div>
   </div>
 
-  <!-- Auth Modal (用户登录 / 注册) -->
+  <!-- Auth Modal (用户登录 / 注册 / 找回密码) -->
   <div id="authModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-4" onclick="toggleAuthModal(false)">
     <div class="w-full max-w-sm rounded-2xl border border-black/[0.1] dark:border-white/[0.12] bg-white/95 dark:bg-[#12141a]/95 backdrop-blur-2xl shadow-2xl p-5" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between mb-3 border-b border-black/[0.06] dark:border-white/[0.08] pb-3">
-        <div class="flex items-center gap-2">
+        <!-- Login / Register Tabs -->
+        <div id="authModalTabs" class="flex items-center gap-2">
           <button id="authTabLogin" type="button" onclick="switchAuthTab('login')" class="text-xs font-semibold px-2.5 py-1 rounded-md bg-black/[0.06] dark:bg-white/[0.1] text-zinc-900 dark:text-white transition-all cursor-pointer">
             登录
           </button>
@@ -1080,6 +1081,15 @@
             极速注册
           </button>
         </div>
+
+        <!-- Reset Password Header (仅在找回密码模式下展示) -->
+        <div id="authResetHeader" class="hidden flex items-center gap-2">
+          <button type="button" onclick="switchAuthTab('login')" class="p-1 rounded-md hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer" title="返回登录">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          </button>
+          <span class="text-xs font-bold text-zinc-900 dark:text-white">找回登录密码</span>
+        </div>
+
         <button onclick="toggleAuthModal(false)" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-white cursor-pointer" aria-label="Close">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
@@ -1091,24 +1101,28 @@
 
       <form onsubmit="handleAuthSubmit(event)" class="space-y-3">
         <div>
-          <label class="block text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mb-1">用户名</label>
-          <input id="authUsernameInput" type="text" placeholder="输入用户名 (3-24位)" autocomplete="username" class="w-full h-9 px-3 rounded-lg border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.03] dark:bg-white/[0.05] text-xs font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-sky-500">
+          <label id="authUsernameLabel" class="block text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mb-1">用户名 / 密保邮箱</label>
+          <input id="authUsernameInput" type="text" placeholder="输入用户名或绑定的密保邮箱" autocomplete="username" class="w-full h-9 px-3 rounded-lg border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.03] dark:bg-white/[0.05] text-xs font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-sky-500">
+        </div>
+
+        <!-- 密保邮箱输入组 (注册与找回密码时显示) -->
+        <div id="authEmailGroup" class="hidden">
+          <label id="authEmailLabel" class="block text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mb-1">密保邮箱</label>
+          <input id="authEmailInput" type="email" placeholder="输入安全邮箱 (用于忘记密码时自救)" autocomplete="email" class="w-full h-9 px-3 rounded-lg border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.03] dark:bg-white/[0.05] text-xs font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-sky-500">
         </div>
 
         <div>
-          <label class="block text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mb-1">密码</label>
+          <div class="flex items-center justify-between mb-1">
+            <label id="authPasswordLabel" class="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">登录密码</label>
+            <button type="button" id="authForgotPwdBtn" onclick="switchAuthTab('reset')" class="text-[11px] text-zinc-400 hover:text-sky-500 transition-colors cursor-pointer">
+              忘记密码？
+            </button>
+          </div>
           <input id="authPasswordInput" type="password" placeholder="输入登录密码 (至少6位)" autocomplete="current-password" class="w-full h-9 px-3 rounded-lg border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.03] dark:bg-white/[0.05] text-xs font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-sky-500">
         </div>
 
-        <div id="authAdminKeyGroup" class="hidden">
-          <div class="flex items-center justify-between mb-1">
-            <label class="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">管理员激活码 (可选)</label>
-            <span class="text-[10px] text-zinc-400">仅用于激活 Admin</span>
-          </div>
-          <input id="authAdminKeyInput" type="password" placeholder="普通用户无需填写..." class="w-full h-9 px-3 rounded-lg border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.03] dark:bg-white/[0.05] text-xs font-mono text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-sky-500">
-        </div>
-
         <p id="authErrorMsg" class="hidden text-rose-500 text-[11px] font-medium"></p>
+        <p id="authSuccessMsg" class="hidden text-emerald-500 text-[11px] font-medium"></p>
 
         <div class="flex items-center justify-between pt-2 border-t border-black/[0.06] dark:border-white/[0.08]">
           <button type="button" id="authSwitchTipBtn" onclick="toggleAuthModeSwitch()" class="text-[11px] text-zinc-400 hover:text-sky-500 cursor-pointer transition-colors">
@@ -1853,36 +1867,85 @@
 
     function switchAuthTab(tab) {
       currentAuthTab = tab;
+      const modalTabs = document.getElementById('authModalTabs');
+      const resetHeader = document.getElementById('authResetHeader');
       const tabLogin = document.getElementById('authTabLogin');
       const tabRegister = document.getElementById('authTabRegister');
-      const adminGroup = document.getElementById('authAdminKeyGroup');
+      const emailGroup = document.getElementById('authEmailGroup');
+      const userLabel = document.getElementById('authUsernameLabel');
+      const userInput = document.getElementById('authUsernameInput');
+      const passLabel = document.getElementById('authPasswordLabel');
+      const passInput = document.getElementById('authPasswordInput');
+      const forgotBtn = document.getElementById('authForgotPwdBtn');
       const submitBtn = document.getElementById('authSubmitBtn');
       const switchTip = document.getElementById('authSwitchTipBtn');
       const subtitle = document.getElementById('authModalSubtitle');
       const err = document.getElementById('authErrorMsg');
+      const successMsg = document.getElementById('authSuccessMsg');
+
       if (err) err.classList.add('hidden');
+      if (successMsg) successMsg.classList.add('hidden');
 
       const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
 
-      if (tab === 'register') {
+      if (tab === 'reset') {
+        if (modalTabs) modalTabs.classList.add('hidden');
+        if (resetHeader) resetHeader.classList.remove('hidden');
+        if (emailGroup) emailGroup.classList.remove('hidden');
+        if (forgotBtn) forgotBtn.classList.add('hidden');
+
+        if (userLabel) userLabel.textContent = isZh ? '用户名' : 'Username';
+        if (userInput) userInput.placeholder = isZh ? '输入需要重置密码的用户名' : 'Enter registered username';
+        if (passLabel) passLabel.textContent = isZh ? '设置新密码' : 'New Password';
+        if (passInput) passInput.placeholder = isZh ? '输入新密码 (至少6位)' : 'Enter new password (min 6 chars)';
+        if (submitBtn) submitBtn.textContent = isZh ? '重置密码' : 'Reset Password';
+        if (switchTip) switchTip.textContent = isZh ? '想起密码了？返回登录' : 'Remembered? Back to login';
+        if (subtitle) subtitle.textContent = isZh ? '通过注册时绑定的密保邮箱快速自救重置登录密码。' : 'Reset your password with your verified security email.';
+      } else if (tab === 'register') {
+        if (modalTabs) modalTabs.classList.remove('hidden');
+        if (resetHeader) resetHeader.classList.add('hidden');
+        if (emailGroup) emailGroup.classList.remove('hidden');
+        if (forgotBtn) forgotBtn.classList.add('hidden');
+
         if (tabLogin) tabLogin.className = "text-xs font-medium px-2.5 py-1 rounded-md text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all cursor-pointer";
         if (tabRegister) tabRegister.className = "text-xs font-semibold px-2.5 py-1 rounded-md bg-black/[0.06] dark:bg-white/[0.1] text-zinc-900 dark:text-white transition-all cursor-pointer";
-        if (adminGroup) adminGroup.classList.remove('hidden');
+
+        if (userLabel) userLabel.textContent = isZh ? '设置用户名' : 'Username';
+        if (userInput) userInput.placeholder = isZh ? '输入用户名 (3-24位)' : 'Username (3-24 chars)';
+        if (passLabel) passLabel.textContent = isZh ? '设置登录密码' : 'Password';
+        if (passInput) passInput.placeholder = isZh ? '输入密码 (至少6位)' : 'Password (min 6 chars)';
         if (submitBtn) submitBtn.textContent = isZh ? '注册并登录' : 'Register';
         if (switchTip) switchTip.textContent = isZh ? '已有账号？去登录' : 'Have an account? Login';
-        if (subtitle) subtitle.textContent = isZh ? '注册即享个人 NetBOM 云端工程自动多端同步与保存。' : 'Register to enjoy multi-device cloud sync for NetBOM.';
+        if (subtitle) subtitle.textContent = isZh ? '注册即享个人 NetBOM 云端工程自动多端同步与漫游。' : 'Register to enjoy multi-device cloud sync for NetBOM.';
       } else {
+        if (modalTabs) modalTabs.classList.remove('hidden');
+        if (resetHeader) resetHeader.classList.add('hidden');
+        if (emailGroup) emailGroup.classList.add('hidden');
+        if (forgotBtn) forgotBtn.classList.remove('hidden');
+
         if (tabLogin) tabLogin.className = "text-xs font-semibold px-2.5 py-1 rounded-md bg-black/[0.06] dark:bg-white/[0.1] text-zinc-900 dark:text-white transition-all cursor-pointer";
         if (tabRegister) tabRegister.className = "text-xs font-medium px-2.5 py-1 rounded-md text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all cursor-pointer";
-        if (adminGroup) adminGroup.classList.add('hidden');
+
+        if (userLabel) userLabel.textContent = isZh ? '用户名 / 密保邮箱' : 'Username / Email';
+        if (userInput) userInput.placeholder = isZh ? '输入用户名或绑定的密保邮箱' : 'Enter username or registered email';
+        if (passLabel) passLabel.textContent = isZh ? '登录密码' : 'Password';
+        if (passInput) passInput.placeholder = isZh ? '输入登录密码 (至少6位)' : 'Enter password (min 6 chars)';
         if (submitBtn) submitBtn.textContent = isZh ? '登录' : 'Login';
         if (switchTip) switchTip.textContent = isZh ? '还没有账号？去注册' : 'No account? Register';
         if (subtitle) subtitle.textContent = isZh ? '登录后可享受个人 NetBOM 云端工程多端漫游与持久保存。' : 'Login to access your personal NetBOM projects anywhere.';
       }
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
     }
 
     function toggleAuthModeSwitch() {
-      switchAuthTab(currentAuthTab === 'login' ? 'register' : 'login');
+      if (currentAuthTab === 'reset') {
+        switchAuthTab('login');
+      } else {
+        switchAuthTab(currentAuthTab === 'login' ? 'register' : 'login');
+      }
     }
 
     function openLoginModal(reason) {
@@ -1898,16 +1961,20 @@
     function toggleAuthModal(show) {
       const modal = document.getElementById('authModal');
       const userInput = document.getElementById('authUsernameInput');
+      const emailInput = document.getElementById('authEmailInput');
       const passInput = document.getElementById('authPasswordInput');
       const err = document.getElementById('authErrorMsg');
+      const successMsg = document.getElementById('authSuccessMsg');
       if (!modal) return;
       if (show) {
         modal.classList.remove('hidden');
         if (err) err.classList.add('hidden');
+        if (successMsg) successMsg.classList.add('hidden');
         if (userInput) {
           userInput.value = '';
           setTimeout(() => userInput.focus(), 80);
         }
+        if (emailInput) emailInput.value = '';
         if (passInput) passInput.value = '';
       } else {
         modal.classList.add('hidden');
@@ -1951,23 +2018,38 @@
     async function handleAuthSubmit(e) {
       if (e) e.preventDefault();
       const userInput = document.getElementById('authUsernameInput');
+      const emailInput = document.getElementById('authEmailInput');
       const passInput = document.getElementById('authPasswordInput');
-      const adminKeyInput = document.getElementById('authAdminKeyInput');
       const err = document.getElementById('authErrorMsg');
+      const successMsg = document.getElementById('authSuccessMsg');
       const submitBtn = document.getElementById('authSubmitBtn');
 
       const username = (userInput ? userInput.value : '').trim();
+      const email = (emailInput ? emailInput.value : '').trim();
       const password = (passInput ? passInput.value : '').trim();
-      const adminKey = (adminKeyInput ? adminKeyInput.value : '').trim();
       const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
+
+      if (err) err.classList.add('hidden');
+      if (successMsg) successMsg.classList.add('hidden');
 
       if (!username) {
         if (err) {
-          err.textContent = isZh ? '请输入用户名' : 'Please enter username';
+          err.textContent = isZh ? '请输入用户名或邮箱' : 'Please enter username or email';
           err.classList.remove('hidden');
         }
         if (userInput) userInput.focus();
         return;
+      }
+
+      if (currentAuthTab === 'register' || currentAuthTab === 'reset') {
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          if (err) {
+            err.textContent = isZh ? '请输入有效的密保邮箱（用于忘记密码时自救）' : 'Please enter valid security email';
+            err.classList.remove('hidden');
+          }
+          if (emailInput) emailInput.focus();
+          return;
+        }
       }
 
       if (!password) {
@@ -1985,9 +2067,41 @@
       }
 
       try {
+        // 分支 1: 找回并重置密码
+        if (currentAuthTab === 'reset') {
+          const res = await fetch('/api/auth/reset-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, newPassword: password }),
+            credentials: 'include'
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data.success) {
+            if (err) {
+              err.textContent = data.error || (isZh ? '重置失败，请核对信息' : 'Reset failed');
+              err.classList.remove('hidden');
+            }
+            return;
+          }
+          if (successMsg) {
+            successMsg.textContent = isZh ? '密码重置成功！正在返回登录...' : 'Password reset successful! Returning to login...';
+            successMsg.classList.remove('hidden');
+          }
+          setTimeout(() => {
+            switchAuthTab('login');
+            if (userInput) userInput.value = username;
+            if (passInput) {
+              passInput.value = '';
+              passInput.focus();
+            }
+          }, 1200);
+          return;
+        }
+
+        // 分支 2: 极速注册 或 登录
         const isRegister = currentAuthTab === 'register';
         const url = isRegister ? '/api/auth/register' : '/api/auth/login';
-        const payload = isRegister ? { username, password, adminKey } : { username, password };
+        const payload = isRegister ? { username, email, password } : { username, password };
 
         const res = await fetch(url, {
           method: 'POST',
@@ -1999,7 +2113,7 @@
         const data = await res.json().catch(() => ({}));
 
         if (!res.ok || !data.success) {
-          // 向后兼容：若是旧口令直接输入为管理员
+          // 向后兼容：旧管理员口令直接提权
           if (password === 'bin0sky.tech' && !isRegister) {
             currentAuthUser = { authenticated: true, role: 'admin', username: username || 'Admin', uid: 'legacy_admin' };
             localStorage.setItem('b0_auth_role', 'admin');
@@ -2048,6 +2162,12 @@
           err.classList.remove('hidden');
         }
       } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-50');
+        }
+      }
+    }
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.classList.remove('opacity-50');
