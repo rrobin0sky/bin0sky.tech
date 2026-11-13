@@ -40,7 +40,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -48,8 +48,8 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ["-apple-system", "BlinkMacSystemFont", 'SF Pro Text', 'SF Pro Display', 'PingFang SC', "system-ui", "sans-serif"],
-            mono: ['SF Mono', 'JetBrains Mono', "monospace"]
+            sans: ['Inter', 'Geist', '-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Hiragino Sans GB"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', '"Fira Code"', 'monospace']
           }
         }
       }
@@ -60,51 +60,54 @@
   <script src="/shared/nav-pill.js" data-category="labs" data-title="金鹅自由实验室" defer></script>
   <style>
     :root {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --surface-card: #f1f5f9;
-      --border: rgba(0, 0, 0, 0.08);
-      --text: #0f172a;
-      --text-muted: #64748b;
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-card: #F1F5F9;
+      --border: rgba(15, 23, 42, 0.08);
+      --text: #0F172A;
+      --text-muted: #64748B;
+      --accent: #5E6AD2;
       --gold: #f59e0b;
     }
     .dark {
-      --bg: #090a0d;
-      --surface: #11141a;
-      --surface-card: #171b23;
+      --bg: #08090A;
+      --surface: #111214;
+      --surface-card: #18191C;
       --border: rgba(255, 255, 255, 0.08);
-      --text: #f1f5f9;
-      --text-muted: #94a3b8;
+      --text: #F7F8F8;
+      --text-muted: #8A8F98;
+      --accent: #5E6AD2;
       --gold: #fbbf24;
     }
     body {
-      background-color: var(--bg);
+      background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, 0.15), transparent), var(--bg);
+      background-repeat: no-repeat;
       color: var(--text);
       font-feature-settings: "tnum";
+      transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    /* 自定义拟物高光与滑块 */
+    /* Hairline Linear Slider */
     input[type=range] {
       -webkit-appearance: none;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.12);
       border-radius: 9999px;
-      height: 6px;
+      height: 5px;
     }
     .light input[type=range] {
-      background: rgba(0, 0, 0, 0.08);
+      background: rgba(15, 23, 42, 0.1);
     }
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      height: 18px;
-      width: 18px;
+      height: 16px;
+      width: 16px;
       border-radius: 50%;
       background: #fbbf24;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
-      border: 2px solid #ffffff;
-      transition: transform 0.1s;
+      border: 2px solid var(--bg);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     input[type=range]::-webkit-slider-thumb:hover {
-      transform: scale(1.15);
+      transform: scale(1.12);
     }
 
     /* ========== 金鹅与金蛋专属多维动效系统 ========== */
@@ -193,37 +196,37 @@
   <div id="app" class="max-w-6xl mx-auto px-4 py-6 md:py-10 space-y-8">
     
     <!-- 顶部导航与预设场景 -->
-    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-black/[0.06] dark:border-white/[0.08]">
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-black/[0.08] dark:border-white/[0.08]">
       <div>
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center text-lg shadow-sm">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center text-lg">
             🪿
           </div>
-          <h1 class="text-xl md:text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">金鹅自由实验室</h1>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">4% 永续法则</span>
+          <h1 class="text-xl md:text-2xl font-semibold tracking-[-0.02em] text-zinc-900 dark:text-[#F7F8F8]">金鹅自由实验室</h1>
+          <span class="px-2 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">4% 永续法则</span>
         </div>
-        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">动态财富自由与4%永续现金流沙盒：本金永续，只享蛋利，对抗通胀，复利生金。</p>
+        <p class="text-xs text-zinc-500 dark:text-[#8A8F98] mt-1.5 leading-relaxed">动态财富自由与4%永续现金流沙盒：本金永续，只享蛋利，对抗通胀，复利生金。</p>
       </div>
 
       <!-- 一键场景预设 -->
       <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
-        <button onclick="applyPreset('salary')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-medium border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 transition-all flex items-center gap-1.5 shrink-0">
+        <button onclick="applyPreset('salary')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-medium border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 transition-all duration-200 flex items-center gap-1.5 shrink-0">
           <span>⚖️</span> 工薪定投
         </button>
-        <button onclick="applyPreset('fire')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-medium border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02] text-zinc-700 dark:text-zinc-300 hover:border-amber-500/30 hover:text-amber-400 transition-all flex items-center gap-1.5 shrink-0">
+        <button onclick="applyPreset('fire')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-medium border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111214] text-zinc-700 dark:text-[#D0D6E0] hover:border-amber-500/30 hover:text-amber-400 transition-all duration-200 flex items-center gap-1.5 shrink-0">
           <span>🚀</span> 极速 FIRE
         </button>
-        <button onclick="applyPreset('youth')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-medium border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02] text-zinc-700 dark:text-zinc-300 hover:border-amber-500/30 hover:text-amber-400 transition-all flex items-center gap-1.5 shrink-0">
+        <button onclick="applyPreset('youth')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-medium border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111214] text-zinc-700 dark:text-[#D0D6E0] hover:border-amber-500/30 hover:text-amber-400 transition-all duration-200 flex items-center gap-1.5 shrink-0">
           <span>🌱</span> 青年初航
         </button>
-        <button onclick="applyPreset('defense')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-medium border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02] text-zinc-700 dark:text-zinc-300 hover:border-amber-500/30 hover:text-amber-400 transition-all flex items-center gap-1.5 shrink-0">
+        <button onclick="applyPreset('defense')" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-medium border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111214] text-zinc-700 dark:text-[#D0D6E0] hover:border-amber-500/30 hover:text-amber-400 transition-all duration-200 flex items-center gap-1.5 shrink-0">
           <span>🛡️</span> 稳健防御
         </button>
       </div>
     </header>
 
     <!-- 视觉圣殿：双轮廓金鹅 + 动态金蛋 + 自由生活篮子 -->
-    <div class="relative rounded-3xl p-6 md:p-8 border border-amber-500/20 bg-gradient-to-b from-amber-500/[0.04] via-[#11141a]/40 to-transparent dark:from-amber-500/[0.08] dark:to-[#11141a]/80 shadow-2xl overflow-hidden backdrop-blur-md">
+    <div class="relative rounded-xl p-6 md:p-8 border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#111214] overflow-hidden">
       <!-- 自由觉醒全屏微光特效 -->
       <div id="freedomAura" class="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-700 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-400/15 via-emerald-500/10 to-transparent"></div>
 
@@ -376,9 +379,9 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       
       <!-- 1. 每月喂食 (定投) -->
-      <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] hover:border-amber-500/30 transition-colors">
+      <div class="p-4 rounded-xl bg-white dark:bg-[#111214] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/[0.16] dark:hover:border-white/[0.16] transition-all duration-200">
         <div class="flex items-center justify-between mb-2">
-          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-[#D0D6E0]">
             <span class="text-base">🌾</span> 每月喂食 (定投)
           </span>
           <span id="valMonthlySaving" class="text-xs font-mono font-bold text-amber-500">¥ 5,000</span>
@@ -392,9 +395,9 @@
       </div>
 
       <!-- 2. 指数基金肥力 (年化收益) -->
-      <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] hover:border-amber-500/30 transition-colors">
+      <div class="p-4 rounded-xl bg-white dark:bg-[#111214] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/[0.16] dark:hover:border-white/[0.16] transition-all duration-200">
         <div class="flex items-center justify-between mb-2">
-          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-[#D0D6E0]">
             <span class="text-base">📈</span> 基金肥力 (年化收益)
           </span>
           <span id="valAnnualReturn" class="text-xs font-mono font-bold text-emerald-500">8.0%</span>
@@ -408,9 +411,9 @@
       </div>
 
       <!-- 3. 通胀怪兽吞噬速度 -->
-      <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] hover:border-amber-500/30 transition-colors">
+      <div class="p-4 rounded-xl bg-white dark:bg-[#111214] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/[0.16] dark:hover:border-white/[0.16] transition-all duration-200">
         <div class="flex items-center justify-between mb-2">
-          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-[#D0D6E0]">
             <span class="text-base">💨</span> 通胀蚕食速度
           </span>
           <span id="valInflation" class="text-xs font-mono font-bold text-rose-500">2.8%</span>
@@ -424,12 +427,12 @@
       </div>
 
       <!-- 4. 每月生活篮子 (自由门槛) -->
-      <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] hover:border-amber-500/30 transition-colors">
+      <div class="p-4 rounded-xl bg-white dark:bg-[#111214] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/[0.16] dark:hover:border-white/[0.16] transition-all duration-200">
         <div class="flex items-center justify-between mb-2">
-          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-[#D0D6E0]">
             <span class="text-base">🧺</span> 生活开销篮子
           </span>
-          <span id="valMonthlyExpense" class="text-xs font-mono font-bold text-blue-500">¥ 8,000</span>
+          <span id="valMonthlyExpense" class="text-xs font-mono font-bold text-[#5E6AD2]">¥ 8,000</span>
         </div>
         <input type="range" id="inputExpense" min="3000" max="30000" step="500" value="8000" oninput="handleParamChange()" class="w-full">
         <div class="flex justify-between text-[10px] text-zinc-400 mt-1 font-mono">
@@ -440,9 +443,9 @@
       </div>
 
       <!-- 5. 鹅蛋提取率 (4%法则) -->
-      <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] hover:border-amber-500/30 transition-colors">
+      <div class="p-4 rounded-xl bg-white dark:bg-[#111214] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/[0.16] dark:hover:border-white/[0.16] transition-all duration-200">
         <div class="flex items-center justify-between mb-2">
-          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+          <span class="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 dark:text-[#D0D6E0]">
             <span class="text-base">🥚</span> 鹅蛋提取率 (SWR)
           </span>
           <span id="valSWR" class="text-xs font-mono font-bold text-amber-500">4.0%</span>
@@ -456,14 +459,14 @@
       </div>
 
       <!-- 6. 永续自由目标资产 -->
-      <div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] flex flex-col justify-between">
+      <div class="p-4 rounded-xl bg-white dark:bg-[#111214] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/[0.16] dark:hover:border-white/[0.16] transition-all duration-200 flex flex-col justify-between">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+          <span class="text-xs font-semibold text-zinc-700 dark:text-[#D0D6E0] flex items-center gap-1.5">
             <span class="text-base">🎯</span> 永续自由所需金库
           </span>
           <span id="valFreedomTarget" class="text-xs font-mono font-bold text-emerald-500">¥ 240 万</span>
         </div>
-        <div class="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed flex items-center justify-between">
+        <div class="mt-2 text-[11px] text-zinc-500 dark:text-[#8A8F98] leading-relaxed flex items-center justify-between">
           <span>预计达成年限：</span>
           <strong id="valCrossoverYearText" class="text-amber-500 dark:text-amber-400 font-mono font-bold text-xs">第 18.5 年</strong>
         </div>
@@ -472,29 +475,29 @@
     </div>
 
     <!-- 资产成分解剖条 -->
-    <div class="p-5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08]">
+    <div class="p-5 rounded-xl bg-white dark:bg-[#111214] border border-black/[0.08] dark:border-white/[0.08]">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-        <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+        <span class="text-xs font-semibold text-zinc-700 dark:text-[#D0D6E0] flex items-center gap-1.5">
           <span>🧬</span> 金鹅资产成分解剖 (Asset Anatomy)
         </span>
         <div class="flex items-center gap-4 text-[11px] font-mono">
-          <span class="flex items-center gap-1 text-blue-500"><span class="w-2 h-2 rounded-full bg-blue-500"></span> 本金投入</span>
+          <span class="flex items-center gap-1 text-[#5E6AD2]"><span class="w-2 h-2 rounded-full bg-[#5E6AD2]"></span> 本金投入</span>
           <span class="flex items-center gap-1 text-amber-500"><span class="w-2 h-2 rounded-full bg-amber-500"></span> 复利繁衍</span>
           <span class="flex items-center gap-1 text-rose-400"><span class="w-2 h-2 rounded-full bg-rose-400"></span> 通胀差额</span>
         </div>
       </div>
-      <div class="w-full h-4 rounded-xl bg-black/10 dark:bg-white/10 overflow-hidden flex relative">
-        <div id="barInvested" class="h-full bg-blue-500 transition-all duration-300" style="width: 50.6%;" title="本金投入"></div>
+      <div class="w-full h-4 rounded-lg bg-black/10 dark:bg-white/10 overflow-hidden flex relative">
+        <div id="barInvested" class="h-full bg-[#5E6AD2] transition-all duration-300" style="width: 50.6%;" title="本金投入"></div>
         <div id="barReturn" class="h-full bg-amber-500 transition-all duration-300" style="width: 25.6%;" title="复利繁衍"></div>
         <div id="barInflation" class="h-full bg-rose-500/60 transition-all duration-300" style="width: 23.8%;" title="通胀吃掉"></div>
       </div>
     </div>
 
     <!-- 35年全景生长曲线与自由交叉点 Canvas 图表 -->
-    <div class="p-5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] space-y-3">
+    <div class="p-5 rounded-xl bg-white dark:bg-[#111214] border border-black/[0.08] dark:border-white/[0.08] space-y-3">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+          <span class="text-xs font-semibold text-zinc-700 dark:text-[#D0D6E0] flex items-center gap-1.5">
             <span>📈</span> 35 年财富推演与自由交叉点
           </span>
           <span class="text-[10px] text-zinc-400 hidden sm:inline">(点击或滑动图表任意位置瞬移年份)</span>
@@ -504,30 +507,30 @@
         </div>
       </div>
       <div class="relative w-full h-64 md:h-72">
-        <canvas id="trajectoryCanvas" class="w-full h-full cursor-crosshair block rounded-xl"></canvas>
+        <canvas id="trajectoryCanvas" class="w-full h-full cursor-crosshair block rounded-lg"></canvas>
       </div>
     </div>
 
     <!-- 3 维核心洞察看板 (直观量化，替代冗余文字) -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
       <!-- 1. 自由退休倒计时 -->
-      <div class="p-4 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/15 flex flex-col justify-between">
+      <div class="p-4 rounded-xl bg-white dark:bg-[#111214] border border-emerald-500/20 flex flex-col justify-between">
         <div class="flex items-center justify-between text-xs text-zinc-400 mb-1">
           <span class="flex items-center gap-1.5 font-medium text-emerald-500 dark:text-emerald-400">
             <span>⏳</span> 自由辞职倒计时
           </span>
           <span class="font-mono text-[10px]">COUNTDOWN</span>
         </div>
-        <div id="valCountdownYears" class="text-base font-bold font-mono text-zinc-900 dark:text-white my-1">
+        <div id="valCountdownYears" class="text-base font-bold font-mono text-zinc-900 dark:text-[#F7F8F8] my-1">
           还需奋斗 8 年 6 个月
         </div>
-        <p class="text-[11px] text-zinc-400 font-normal leading-relaxed" id="valCountdownDesc">
+        <p class="text-[11px] text-zinc-500 dark:text-[#8A8F98] font-normal leading-relaxed" id="valCountdownDesc">
           每月稳健喂养，加速跨越自由临界线
         </p>
       </div>
 
       <!-- 2. 通胀吞噬量化换算 -->
-      <div class="p-4 rounded-2xl bg-rose-500/[0.04] border border-rose-500/15 flex flex-col justify-between">
+      <div class="p-4 rounded-xl bg-white dark:bg-[#111214] border border-rose-500/20 flex flex-col justify-between">
         <div class="flex items-center justify-between text-xs text-zinc-400 mb-1">
           <span class="flex items-center gap-1.5 font-medium text-rose-500 dark:text-rose-400">
             <span>💨</span> 通胀侵蚀当量
@@ -537,13 +540,13 @@
         <div id="valInflationYears" class="text-base font-bold font-mono text-rose-500 dark:text-rose-400 my-1">
           约吞噬 4.7 年 存钱心血
         </div>
-        <p class="text-[11px] text-zinc-400 font-normal leading-relaxed">
+        <p class="text-[11px] text-zinc-500 dark:text-[#8A8F98] font-normal leading-relaxed">
           指数基金生肉速度必须跑赢通胀吞噬
         </p>
       </div>
 
       <!-- 3. 钱生钱复利飞轮 -->
-      <div class="p-4 rounded-2xl bg-amber-500/[0.04] border border-amber-500/15 flex flex-col justify-between">
+      <div class="p-4 rounded-xl bg-white dark:bg-[#111214] border border-amber-500/20 flex flex-col justify-between">
         <div class="flex items-center justify-between text-xs text-zinc-400 mb-1">
           <span class="flex items-center gap-1.5 font-medium text-amber-500 dark:text-amber-400">
             <span>🚀</span> 复利增生飞轮
@@ -553,7 +556,7 @@
         <div id="valCompoundShare" class="text-base font-bold font-mono text-amber-500 dark:text-amber-400 my-1">
           33.6% 资产来自纯收益
         </div>
-        <p class="text-[11px] text-zinc-400 font-normal leading-relaxed">
+        <p class="text-[11px] text-zinc-500 dark:text-[#8A8F98] font-normal leading-relaxed">
           金鹅自身繁衍增量将逐步超越人工投喂
         </p>
       </div>
