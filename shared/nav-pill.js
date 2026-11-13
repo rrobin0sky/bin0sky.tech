@@ -349,6 +349,68 @@
     .b0-menu-name { font-weight: 600; font-size: 12px; letter-spacing: -0.01em; }
     .b0-menu-desc { font-size: 10px; color: #8A8F98; margin-top: 2px; }
 
+    /* SSO Auth Pill Slot */
+    .b0-pill-auth {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .b0-pill-user {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #E2E8F0;
+      max-width: 110px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .b0-pill-role {
+      font-size: 9px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 9999px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .b0-pill-role.admin {
+      background: rgba(245, 158, 11, 0.16);
+      color: #FBBF24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .b0-pill-role.pro {
+      background: rgba(16, 185, 129, 0.16);
+      color: #34D399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .b0-pill-role.member {
+      background: rgba(94, 106, 210, 0.18);
+      color: #A5B4FC;
+      border: 1px solid rgba(94, 106, 210, 0.3);
+    }
+    .b0-pill-login-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 9px;
+      border-radius: 9999px;
+      background: rgba(94, 106, 210, 0.22);
+      border: 1px solid rgba(94, 106, 210, 0.42);
+      color: #C7D2FE;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .b0-pill-login-btn:hover {
+      background: rgba(94, 106, 210, 0.36);
+      color: #FFFFFF;
+    }
+
     /* Light Mode Overrides */
     html:not(.dark) .b0-pill-bar,
     html.light .b0-pill-bar {
@@ -415,15 +477,33 @@
     html.light .b0-menu-desc {
       color: #64748B;
     }
+    html:not(.dark) .b0-pill-user,
+    html.light .b0-pill-user {
+      color: #0F172A;
+    }
+    html:not(.dark) .b0-pill-login-btn,
+    html.light .b0-pill-login-btn {
+      background: rgba(94, 106, 210, 0.12);
+      color: #4338CA;
+      border-color: rgba(94, 106, 210, 0.28);
+    }
+    html:not(.dark) .b0-pill-login-btn:hover,
+    html.light .b0-pill-login-btn:hover {
+      background: rgba(94, 106, 210, 0.2);
+      color: #312E81;
+    }
   `;
   document.head.appendChild(style);
+
+  const isBin0skyHost = /(^|\.)bin0sky\.tech$/i.test(window.location.hostname);
+  const authBase = isBin0skyHost ? 'https://bin0sky.tech' : '';
 
   // Build DOM
   const host = document.createElement('div');
   host.id = 'b0-nav-pill-host';
   host.innerHTML = `
     <div class="b0-pill-bar">
-      <a href="/#/${category}" class="b0-pill-home" title="返回 BinOS 工作台全景">
+      <a href="${authBase}/#/${category}" class="b0-pill-home" title="返回 BinOS 工作台全景">
         <span class="b0-pill-logo">BinOS</span>
         <span>工作台</span>
       </a>
@@ -431,6 +511,7 @@
       <span class="b0-pill-badge">${catInfo.icon} ${catInfo.label}</span>
       <span class="b0-pill-title">${title}</span>
       <span class="b0-pill-sep"></span>
+      <div id="b0-pill-auth-slot" class="b0-pill-auth"></div>
       <button id="b0-pill-theme-btn" class="b0-pill-btn" title="切换深色/浅色模式 (Dark/Light)" aria-label="Toggle Theme">
         <svg id="b0-pill-moon-icon" style="display:${initialDark ? 'block' : 'none'};" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
         <svg id="b0-pill-sun-icon" style="display:${initialDark ? 'none' : 'block'};" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
@@ -572,4 +653,68 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') menu.classList.remove('open');
   });
+
+  // SSO Auth Status Loader (Cross-Subdomain Credentials)
+  const authSlot = document.getElementById('b0-pill-auth-slot');
+  function escapeText(str) {
+    return String(str || '').replace(/[&<>"']/g, function(ch) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+    });
+  }
+
+  function renderPillAuth(data) {
+    if (!authSlot) return;
+    if (data && data.authenticated) {
+      const role = data.role || 'user';
+      const scopes = Array.isArray(data.scopes) ? data.scopes : [];
+      let badgeLabel = 'Member';
+      let badgeCls = 'member';
+      if (role === 'admin') {
+        badgeLabel = 'Admin';
+        badgeCls = 'admin';
+      } else if (scopes.length > 0) {
+        badgeLabel = 'Pro';
+        badgeCls = 'pro';
+      }
+
+      authSlot.innerHTML = `
+        <span class="b0-pill-user" title="已登录: ${escapeText(data.username)} (${escapeText(scopes.join(', ') || role)})">
+          <span>${escapeText(data.username)}</span>
+          <span class="b0-pill-role ${badgeCls}">${badgeLabel}</span>
+        </span>
+        <button id="b0-pill-logout-btn" class="b0-pill-btn" title="退出统一账号" aria-label="Logout" style="font-size:11px;padding:3px 6px;">退出</button>
+      `;
+      const logoutBtn = document.getElementById('b0-pill-logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async function(e) {
+          e.stopPropagation();
+          try {
+            await fetch(`${authBase}/api/auth/logout`, {
+              method: 'POST',
+              credentials: 'include'
+            });
+          } catch (err) {}
+          window.location.reload();
+        });
+      }
+    } else {
+      const loginHref = `${authBase}/#login?redirect_uri=${encodeURIComponent(window.location.href)}`;
+      authSlot.innerHTML = `<a href="${loginHref}" class="b0-pill-login-btn" title="前往统一认证中心登录">登录</a>`;
+    }
+  }
+
+  async function refreshPillAuth() {
+    renderPillAuth(null);
+    try {
+      const res = await fetch(`${authBase}/api/auth/me`, { credentials: 'include' });
+      const data = await res.json();
+      renderPillAuth(data);
+      window.__b0AuthUser = data;
+      window.dispatchEvent(new CustomEvent('b0-auth-loaded', { detail: data }));
+    } catch (err) {
+      renderPillAuth(null);
+    }
+  }
+
+  refreshPillAuth();
 })();

@@ -6,12 +6,22 @@
     "enabled": true
   },
   "assets": {
-    "directory": "./public"
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/labs/*", "/api/*"]
   },
   "kv_namespaces": [
     {
       "binding": "TEACHER_KV",
       "id": "4e056b115bba403cb2366494ac715371"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "bin0sky-auth-db",
+      "database_id": "b9f4a3f1-a642-4ca4-b261-249dc3af31bf",
+      "migrations_dir": "migrations"
     }
   ],
   "vars": {

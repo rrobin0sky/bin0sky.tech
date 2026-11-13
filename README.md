@@ -30,3 +30,43 @@
 ## 🌐 边缘路由代理 (Cloudflare Worker)
 
 详见 [cloudflare/README.md](cloudflare/README.md) 了解如何通过几行边缘 Worker 实现全站统一主域名无缝访问。
+
+---
+
+## 🔐 生产环境密钥配置 (`wrangler secret put`)
+
+为防止代码仓库中硬编码敏感凭证，边缘 Worker 强制依赖 Cloudflare Secret 环境变量（未配置时鉴权接口将安全降级/拒绝响应）：
+
+- **主站网关 (`bin0sky-tech`)**：
+  ```bash
+  npx wrangler secret put JWT_SECRET
+  # 可选：自定义管理员静默白名单与应急初始化密钥
+  npx wrangler secret put ADMIN_USERNAMES
+  npx wrangler secret put ADMIN_EMAILS
+  npx wrangler secret put ADMIN_INIT_KEY
+  ```
+- **Ambient 4K (`online-ai-ambient`)**：
+  ```bash
+  npx wrangler secret put VIP_PASSCODE
+  # 可选：覆盖内置 Wallhaven Key
+  npx wrangler secret put VIP_WALLHAVEN_KEY
+  ```
+
+---
+
+## 🗄️ Cloudflare D1 统一身份与业务数据库初始化
+
+1. 创建 D1 数据库并获取输出的 `database_id`：
+   ```bash
+   npx wrangler d1 create bin0sky-auth-db
+   ```
+2. 将输出中的 `database_id` 填入 `wrangler.json` 中 `d1_databases[0].database_id`。
+3. 执行表结构初始化迁移：
+   ```bash
+   npx wrangler d1 migrations apply bin0sky-auth-db --remote
+   ```
+4. 部署后，使用管理员身份调用一次性幂等迁移接口将存量 `TEACHER_KV` 数据导入 D1：
+   ```bash
+   curl -X POST https://bin0sky.tech/api/admin/migrate-kv-to-d1 \
+     -H "Authorization: Bearer <ADMIN_TOKEN>"
+   ```

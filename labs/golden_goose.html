@@ -9,17 +9,19 @@
   <script>
     (function() {
       try {
-        function getAuthCookie(name) {
-          try {
-            var match = document.cookie.match(new RegExp('(^|;\\s*)' + name + '=([^;]*)'));
-            return match ? decodeURIComponent(match[2]) : null;
-          } catch(e) { return null; }
-        }
-        var isAdm = (localStorage.getItem("b0_auth_role") === "admin") || (getAuthCookie("b0_auth_role") === "admin");
-        if (!isAdm) {
-          window.location.replace("/#/golden-goose");
-          return;
-        }
+        // 边缘 Worker 已强制拦截未鉴权请求；此处额外通过 /api/auth/me 做客户端二次核验（禁止仅凭 localStorage/Cookie 放行）
+        fetch("/api/auth/me", { credentials: "include" })
+          .then(function(res) { return res.ok ? res.json() : null; })
+          .then(function(data) {
+            var scopes = (data && (data.scopes || (data.user && data.user.scopes))) || [];
+            var role = (data && (data.role || (data.user && data.user.role))) || "guest";
+            if (!data || !data.authenticated || (role !== "admin" && scopes.indexOf("labs:golden_goose") === -1)) {
+              window.location.replace("/#login?redirect_uri=" + encodeURIComponent(window.location.href));
+            }
+          })
+          .catch(function() {
+            window.location.replace("/#login?redirect_uri=" + encodeURIComponent(window.location.href));
+          });
 
         var params = new URLSearchParams(window.location.search);
         var urlTheme = params.get("b0_theme");

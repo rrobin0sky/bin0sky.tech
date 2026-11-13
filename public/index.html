@@ -1301,12 +1301,12 @@
           </button>
         </div>
 
-        <!-- Reset Password Header (仅在找回密码模式下展示) -->
+        <!-- Reset / Change Password Header -->
         <div id="authResetHeader" class="hidden flex items-center gap-2">
           <button type="button" onclick="switchAuthTab('login')" class="p-1 rounded-md hover:bg-[var(--bg-surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors duration-200 cursor-pointer" title="返回登录">
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
           </button>
-          <span class="text-xs font-semibold text-[var(--text-primary)]">找回登录密码</span>
+          <span class="text-xs font-semibold text-[var(--text-primary)]">修改账号密码</span>
         </div>
 
         <button onclick="toggleAuthModal(false)" class="text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer transition-colors duration-200" aria-label="Close">
@@ -1324,10 +1324,10 @@
           <input id="authUsernameInput" type="text" placeholder="输入用户名或绑定的密保邮箱" autocomplete="username" class="w-full h-9 px-3 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-primary)] text-xs font-mono text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors duration-200">
         </div>
 
-        <!-- 密保邮箱输入组 (注册与找回密码时显示) -->
+        <!-- 邮箱或当前旧密码输入组 -->
         <div id="authEmailGroup" class="hidden">
-          <label id="authEmailLabel" class="block text-[11px] font-medium text-[var(--text-muted)] mb-1">密保邮箱</label>
-          <input id="authEmailInput" type="email" placeholder="输入安全邮箱 (用于忘记密码时自救)" autocomplete="email" class="w-full h-9 px-3 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-primary)] text-xs font-mono text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors duration-200">
+          <label id="authEmailLabel" class="block text-[11px] font-medium text-[var(--text-muted)] mb-1">绑定邮箱</label>
+          <input id="authEmailInput" type="email" placeholder="输入常用安全邮箱" autocomplete="email" class="w-full h-9 px-3 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-primary)] text-xs font-mono text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors duration-200">
         </div>
 
         <div>
@@ -1526,10 +1526,10 @@
         }
       });
 
-      // Filter cards (preserve hidden state on golden-goose when non-admin)
-      const isAdmin = checkIsAdmin();
+      // Filter cards (preserve hidden state on golden-goose when lacking scope)
+      const canAccessGoldenGoose = hasScope('labs:golden_goose');
       document.querySelectorAll('.bento-card').forEach(card => {
-        if (card.id === 'card-golden-goose' && !isAdmin) {
+        if (card.id === 'card-golden-goose' && !canAccessGoldenGoose) {
           card.style.display = 'none';
           return;
         }
@@ -1614,11 +1614,11 @@
       }
       playHaptic('click');
 
-      // 金鹅自由实验室：仅管理员可访问
-      if (key === 'golden-goose' && !checkIsAdmin()) {
+      // 金鹅自由实验室：需管理员或 labs:golden_goose 权限
+      if (key === 'golden-goose' && !hasScope('labs:golden_goose')) {
         pendingStageAfterLogin = 'golden-goose';
         const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
-        openLoginModal(isZh ? '「金鹅自由实验室」为管理员专属内容，请先登录管理员权限' : 'Golden Goose Lab is restricted to admin. Please login first.');
+        openLoginModal(isZh ? '「金鹅自由实验室」需授权访问，请先登录已授权账号' : 'Golden Goose Lab requires authorization. Please login first.');
         return;
       }
 
@@ -1980,38 +1980,66 @@
       role: 'guest',
       username: '',
       uid: '',
+      scopes: [],
+      mustChangePassword: false,
     };
-    let currentAuthTab = 'login'; // 'login' | 'register'
+    let currentAuthTab = 'login'; // 'login' | 'register' | 'change-password'
     let pendingStageAfterLogin = null;
 
     function checkIsAdmin() {
-      try {
-        if (currentAuthUser && currentAuthUser.role === 'admin') return true;
-        const local = localStorage.getItem('b0_auth_role');
-        const cookie = getRootDomainCookie('b0_auth_role');
-        return local === 'admin' || cookie === 'admin';
-      } catch (e) {
-        return false;
-      }
+      return !!(currentAuthUser && currentAuthUser.authenticated && currentAuthUser.role === 'admin');
+    }
+
+    function hasScope(scope) {
+      if (!currentAuthUser || !currentAuthUser.authenticated) return false;
+      if (currentAuthUser.role === 'admin') return true;
+      return Array.isArray(currentAuthUser.scopes) && currentAuthUser.scopes.includes(scope);
     }
 
     function checkIsLoggedIn() {
       return !!(currentAuthUser && currentAuthUser.authenticated);
     }
 
+    function getSafeRedirectUri() {
+      try {
+        let raw = new URLSearchParams(window.location.search).get('redirect_uri') || '';
+        if (!raw && window.location.hash.includes('?')) {
+          const hashQuery = window.location.hash.split('?').slice(1).join('?');
+          raw = new URLSearchParams(hashQuery).get('redirect_uri') || '';
+        }
+        if (!raw) return null;
+        if (raw.startsWith('/') && !raw.startsWith('//')) return raw;
+        const parsed = new URL(raw, window.location.origin);
+        const h = parsed.hostname.toLowerCase();
+        if (
+          h === 'bin0sky.tech' ||
+          /^[a-z0-9-]+\.bin0sky\.tech$/i.test(h) ||
+          h === 'localhost' ||
+          h === '127.0.0.1'
+        ) {
+          return parsed.href;
+        }
+      } catch (e) {}
+      return null;
+    }
+
     function syncAuthToIframe() {
       const iframe = document.getElementById('stageIframe');
       const isAdmin = checkIsAdmin();
-      const isUser = (currentAuthUser && currentAuthUser.role === 'user') || isAdmin;
+      const isUser = checkIsLoggedIn();
+      const scopes = Array.isArray(currentAuthUser.scopes) ? currentAuthUser.scopes : [];
       if (iframe && iframe.contentWindow) {
         try {
           iframe.contentWindow.postMessage({
             type: 'B0_AUTH_CHANGE',
-            role: currentAuthUser.role || (isAdmin ? 'admin' : 'guest'),
+            authenticated: isUser,
+            role: currentAuthUser.role || 'guest',
             isAdmin,
             isUser,
             username: currentAuthUser.username || '',
             uid: currentAuthUser.uid || '',
+            scopes,
+            mustChangePassword: !!currentAuthUser.mustChangePassword,
           }, '*');
         } catch (e) {}
       }
@@ -2020,6 +2048,7 @@
     function updateAuthUI() {
       const isAdmin = checkIsAdmin();
       const isLogged = checkIsLoggedIn();
+      const canGoldenGoose = hasScope('labs:golden_goose');
       const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
       
       // 1. Auth Button
@@ -2032,7 +2061,8 @@
           authBtn.className = "h-8 px-2.5 rounded-lg border border-[var(--accent-primary)]/40 bg-[var(--accent-subtle)] hover:border-[var(--accent-hover)] text-[var(--accent-hover)] text-xs font-semibold transition-all duration-200 ease-linear cursor-pointer select-none";
         } else if (isLogged) {
           const name = currentAuthUser.username || 'User';
-          authBtn.textContent = `👤 ${name}`;
+          const proTag = (currentAuthUser.scopes && currentAuthUser.scopes.length > 0) ? ' ★' : '';
+          authBtn.textContent = `👤 ${name}${proTag}`;
           authBtn.title = isZh ? `已登录用户 [${name}]，点击退出` : `User [${name}], click to logout`;
           authBtn.className = "linear-btn-ghost h-8 px-2.5 text-xs font-medium cursor-pointer select-none";
         } else {
@@ -2042,10 +2072,10 @@
         }
       }
 
-      // 2. 金鹅入口受控展示 (仅管理员可见)
+      // 2. 金鹅入口受控展示 (管理员或 labs:golden_goose 权限可见)
       const navGolden = document.getElementById('nav-item-golden-goose');
       if (navGolden) {
-        if (isAdmin) {
+        if (canGoldenGoose) {
           navGolden.classList.remove('hidden');
         } else {
           navGolden.classList.add('hidden');
@@ -2054,7 +2084,7 @@
 
       const cardGolden = document.getElementById('card-golden-goose');
       if (cardGolden) {
-        if (isAdmin) {
+        if (canGoldenGoose) {
           cardGolden.classList.remove('hidden');
           if (currentCategoryFilter === 'all' || currentCategoryFilter === 'labs') {
             cardGolden.style.display = '';
@@ -2093,19 +2123,48 @@
       const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
 
       if (tab === 'reset') {
+        switchAuthTab('login');
+        if (err) {
+          err.textContent = isZh
+            ? '出于安全原因，无邮件验证码的自助重置密码已关闭。请联系管理员后台重置，或登录后在账号菜单修改密码。'
+            : 'Self-service password reset without email verification is disabled. Contact admin or login to change password.';
+          err.classList.remove('hidden');
+        }
+        return;
+      }
+
+      if (tab === 'change-password') {
         if (modalTabs) modalTabs.classList.add('hidden');
         if (resetHeader) resetHeader.classList.remove('hidden');
         if (emailGroup) emailGroup.classList.remove('hidden');
         if (forgotBtn) forgotBtn.classList.add('hidden');
 
-        if (userLabel) userLabel.textContent = isZh ? '用户名' : 'Username';
-        if (userInput) userInput.placeholder = isZh ? '输入需要重置密码的用户名' : 'Enter registered username';
+        const emailLabel = document.getElementById('authEmailLabel');
+        const emailInput = document.getElementById('authEmailInput');
+        if (userLabel) userLabel.textContent = isZh ? '当前账号' : 'Username';
+        if (userInput) {
+          userInput.value = currentAuthUser.username || '';
+          userInput.readOnly = true;
+        }
+        if (emailLabel) emailLabel.textContent = isZh ? '原密码 (验证当前身份)' : 'Current Password';
+        if (emailInput) {
+          emailInput.type = 'password';
+          emailInput.placeholder = isZh ? '输入当前密码' : 'Enter current password';
+        }
         if (passLabel) passLabel.textContent = isZh ? '设置新密码' : 'New Password';
         if (passInput) passInput.placeholder = isZh ? '输入新密码 (至少6位)' : 'Enter new password (min 6 chars)';
-        if (submitBtn) submitBtn.textContent = isZh ? '重置密码' : 'Reset Password';
-        if (switchTip) switchTip.textContent = isZh ? '想起密码了？返回登录' : 'Remembered? Back to login';
-        if (subtitle) subtitle.textContent = isZh ? '通过注册时绑定的密保邮箱快速自救重置登录密码。' : 'Reset your password with your verified security email.';
+        if (submitBtn) submitBtn.textContent = isZh ? '确认修改密码' : 'Update Password';
+        if (switchTip) switchTip.textContent = isZh ? '返回登录视图' : 'Back to login';
+        if (subtitle) subtitle.textContent = isZh ? '修改密码后将自动吊销所有设备历史会话，需使用新密码重新登录。' : 'Changing password revokes all existing sessions across devices.';
       } else if (tab === 'register') {
+        const emailLabel = document.getElementById('authEmailLabel');
+        const emailInput = document.getElementById('authEmailInput');
+        if (userInput) userInput.readOnly = false;
+        if (emailLabel) emailLabel.textContent = isZh ? '绑定邮箱' : 'Email';
+        if (emailInput) {
+          emailInput.type = 'email';
+          emailInput.placeholder = isZh ? '输入常用邮箱' : 'Enter valid email';
+        }
         if (modalTabs) modalTabs.classList.remove('hidden');
         if (resetHeader) resetHeader.classList.add('hidden');
         if (emailGroup) emailGroup.classList.remove('hidden');
@@ -2120,8 +2179,16 @@
         if (passInput) passInput.placeholder = isZh ? '输入密码 (至少6位)' : 'Password (min 6 chars)';
         if (submitBtn) submitBtn.textContent = isZh ? '注册并登录' : 'Register';
         if (switchTip) switchTip.textContent = isZh ? '已有账号？去登录' : 'Have an account? Login';
-        if (subtitle) subtitle.textContent = isZh ? '注册即享个人 NetBOM 云端工程自动多端同步与漫游。' : 'Register to enjoy multi-device cloud sync for NetBOM.';
+        if (subtitle) subtitle.textContent = isZh ? '注册即享全站 SSO 账号与 NetBOM 个人云端工程多端同步。' : 'Register for unified BinOS SSO & NetBOM cloud sync.';
       } else {
+        const emailLabel = document.getElementById('authEmailLabel');
+        const emailInput = document.getElementById('authEmailInput');
+        if (userInput) userInput.readOnly = false;
+        if (emailLabel) emailLabel.textContent = isZh ? '绑定邮箱' : 'Email';
+        if (emailInput) {
+          emailInput.type = 'email';
+          emailInput.placeholder = isZh ? '输入常用邮箱' : 'Enter valid email';
+        }
         if (modalTabs) modalTabs.classList.remove('hidden');
         if (resetHeader) resetHeader.classList.add('hidden');
         if (emailGroup) emailGroup.classList.add('hidden');
@@ -2130,13 +2197,13 @@
         if (tabLogin) tabLogin.className = "text-xs font-semibold px-2.5 py-1 rounded-md bg-[var(--bg-surface-hover)] text-[var(--text-primary)] border border-[var(--border-hairline)] transition-all duration-200 cursor-pointer";
         if (tabRegister) tabRegister.className = "text-xs font-medium px-2.5 py-1 rounded-md text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all duration-200 cursor-pointer";
 
-        if (userLabel) userLabel.textContent = isZh ? '用户名 / 密保邮箱' : 'Username / Email';
-        if (userInput) userInput.placeholder = isZh ? '输入用户名或绑定的密保邮箱' : 'Enter username or registered email';
+        if (userLabel) userLabel.textContent = isZh ? '用户名 / 邮箱' : 'Username / Email';
+        if (userInput) userInput.placeholder = isZh ? '输入用户名或绑定邮箱' : 'Enter username or registered email';
         if (passLabel) passLabel.textContent = isZh ? '登录密码' : 'Password';
         if (passInput) passInput.placeholder = isZh ? '输入登录密码 (至少6位)' : 'Enter password (min 6 chars)';
         if (submitBtn) submitBtn.textContent = isZh ? '登录' : 'Login';
         if (switchTip) switchTip.textContent = isZh ? '还没有账号？去注册' : 'No account? Register';
-        if (subtitle) subtitle.textContent = isZh ? '登录后可享受个人 NetBOM 云端工程多端漫游与持久保存。' : 'Login to access your personal NetBOM projects anywhere.';
+        if (subtitle) subtitle.textContent = isZh ? '一次登录即可在主站与 NetBOM、Ambient、工作台等全生态子域畅行无阻。' : 'Unified SSO login across BinOS portal and all subdomains.';
       }
 
       if (window.lucide) {
@@ -2145,7 +2212,7 @@
     }
 
     function toggleAuthModeSwitch() {
-      if (currentAuthTab === 'reset') {
+      if (currentAuthTab === 'change-password' || currentAuthTab === 'reset') {
         switchAuthTab('login');
       } else {
         switchAuthTab(currentAuthTab === 'login' ? 'register' : 'login');
@@ -2203,7 +2270,7 @@
         await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
       } catch (e) {}
 
-      currentAuthUser = { authenticated: false, role: 'guest', username: '', uid: '' };
+      currentAuthUser = { authenticated: false, role: 'guest', username: '', uid: '', scopes: [], mustChangePassword: false };
       try {
         localStorage.removeItem('b0_auth_role');
         localStorage.removeItem('b0_auth_username');
@@ -2245,15 +2312,24 @@
         return;
       }
 
-      if (currentAuthTab === 'register' || currentAuthTab === 'reset') {
+      if (currentAuthTab === 'register') {
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           if (err) {
-            err.textContent = isZh ? '请输入有效的密保邮箱（用于忘记密码时自救）' : 'Please enter valid security email';
+            err.textContent = isZh ? '请输入有效的常用邮箱' : 'Please enter valid email';
             err.classList.remove('hidden');
           }
           if (emailInput) emailInput.focus();
           return;
         }
+      }
+
+      if (currentAuthTab === 'change-password' && !email) {
+        if (err) {
+          err.textContent = isZh ? '请输入当前原密码' : 'Please enter current password';
+          err.classList.remove('hidden');
+        }
+        if (emailInput) emailInput.focus();
+        return;
       }
 
       if (!password) {
@@ -2271,24 +2347,26 @@
       }
 
       try {
-        // 分支 1: 找回并重置密码
-        if (currentAuthTab === 'reset') {
-          const res = await fetch('/api/auth/reset-password', {
+        // 分支 1: 已登录态修改密码 (全端会话吊销)
+        if (currentAuthTab === 'change-password') {
+          const res = await fetch('/api/auth/change-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, email, newPassword: password }),
+            body: JSON.stringify({ oldPassword: email, newPassword: password }),
             credentials: 'include'
           });
           const data = await res.json().catch(() => ({}));
           if (!res.ok || !data.success) {
             if (err) {
-              err.textContent = data.error || (isZh ? '重置失败，请核对信息' : 'Reset failed');
+              err.textContent = data.error || (isZh ? '修改密码失败，请核对原密码' : 'Failed to change password');
               err.classList.remove('hidden');
             }
             return;
           }
+          currentAuthUser = { authenticated: false, role: 'guest', username: '', uid: '', scopes: [], mustChangePassword: false };
+          updateAuthUI();
           if (successMsg) {
-            successMsg.textContent = isZh ? '密码重置成功！正在返回登录...' : 'Password reset successful! Returning to login...';
+            successMsg.textContent = data.message || (isZh ? '密码已修改，请重新登录！' : 'Password updated, please re-login!');
             successMsg.classList.remove('hidden');
           }
           setTimeout(() => {
@@ -2317,22 +2395,6 @@
         const data = await res.json().catch(() => ({}));
 
         if (!res.ok || !data.success) {
-          // 向后兼容：旧管理员口令直接提权
-          if (password === 'bin0sky.tech' && !isRegister) {
-            currentAuthUser = { authenticated: true, role: 'admin', username: username || 'Admin', uid: 'legacy_admin' };
-            localStorage.setItem('b0_auth_role', 'admin');
-            localStorage.setItem('b0_auth_username', username || 'Admin');
-            setRootDomainCookie('b0_auth_role', 'admin');
-            toggleAuthModal(false);
-            updateAuthUI();
-            if (pendingStageAfterLogin) {
-              const target = pendingStageAfterLogin;
-              pendingStageAfterLogin = null;
-              loadStage(target);
-            }
-            return;
-          }
-
           if (err) {
             err.textContent = data.error || (isZh ? '认证失败，请重试' : 'Authentication failed');
             err.classList.remove('hidden');
@@ -2341,19 +2403,37 @@
         }
 
         // 成功登录 / 注册
+        const loggedUser = data.user || data;
         currentAuthUser = {
           authenticated: true,
-          role: data.user.role,
-          username: data.user.username,
-          uid: data.user.uid
+          role: loggedUser.role || 'user',
+          username: loggedUser.username || username,
+          uid: loggedUser.uid || '',
+          scopes: Array.isArray(loggedUser.scopes) ? loggedUser.scopes : [],
+          mustChangePassword: !!loggedUser.mustChangePassword,
         };
 
-        localStorage.setItem('b0_auth_role', data.user.role);
-        localStorage.setItem('b0_auth_username', data.user.username);
-        setRootDomainCookie('b0_auth_role', data.user.role);
+        localStorage.setItem('b0_auth_role', currentAuthUser.role);
+        localStorage.setItem('b0_auth_username', currentAuthUser.username);
+        setRootDomainCookie('b0_auth_role', currentAuthUser.role);
+        updateAuthUI();
+
+        if (currentAuthUser.mustChangePassword) {
+          switchAuthTab('change-password');
+          if (successMsg) {
+            successMsg.textContent = isZh ? '检测到迁移初始密码，建议立即修改为新密码。' : 'Please update your migrated password.';
+            successMsg.classList.remove('hidden');
+          }
+          return;
+        }
 
         toggleAuthModal(false);
-        updateAuthUI();
+
+        const redirectUri = getSafeRedirectUri();
+        if (redirectUri) {
+          window.location.href = redirectUri;
+          return;
+        }
 
         if (pendingStageAfterLogin) {
           const target = pendingStageAfterLogin;
@@ -2378,31 +2458,35 @@
         const res = await fetch('/api/auth/me', { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
-          if (data && data.authenticated && data.user) {
+          if (data && data.authenticated && (data.user || data.uid)) {
+            const u = data.user || data;
             currentAuthUser = {
               authenticated: true,
-              role: data.user.role,
-              username: data.user.username,
-              uid: data.user.uid
+              role: u.role || 'user',
+              username: u.username || '',
+              uid: u.uid || '',
+              scopes: Array.isArray(u.scopes) ? u.scopes : (Array.isArray(data.scopes) ? data.scopes : []),
+              mustChangePassword: !!(u.mustChangePassword || data.mustChangePassword),
             };
-            localStorage.setItem('b0_auth_role', data.user.role);
-            localStorage.setItem('b0_auth_username', data.user.username);
+            localStorage.setItem('b0_auth_role', currentAuthUser.role);
+            localStorage.setItem('b0_auth_username', currentAuthUser.username);
             updateAuthUI();
             return;
           }
+          // 服务端明确返回未登录：清理可能残留的本地缓存，防止伪造
+          currentAuthUser = { authenticated: false, role: 'guest', username: '', uid: '', scopes: [], mustChangePassword: false };
+          try {
+            localStorage.removeItem('b0_auth_role');
+            localStorage.removeItem('b0_auth_username');
+            setRootDomainCookie('b0_auth_role', '');
+          } catch (err) {}
+          updateAuthUI();
+          return;
         }
       } catch (e) {}
 
-      // Fallback: 检查本地缓存
-      const savedRole = localStorage.getItem('b0_auth_role') || getRootDomainCookie('b0_auth_role');
-      const savedUser = localStorage.getItem('b0_auth_username') || '';
-      if (savedRole === 'admin') {
-        currentAuthUser = { authenticated: true, role: 'admin', username: savedUser || 'Admin', uid: 'cached_admin' };
-      } else if (savedRole === 'user') {
-        currentAuthUser = { authenticated: true, role: 'user', username: savedUser || 'User', uid: 'cached_user' };
-      } else {
-        currentAuthUser = { authenticated: false, role: 'guest', username: '', uid: '' };
-      }
+      // Fail closed: 服务端不可达时不信任本地角色缓存，默认降级为访客
+      currentAuthUser = { authenticated: false, role: 'guest', username: '', uid: '', scopes: [], mustChangePassword: false };
       updateAuthUI();
     }
 
@@ -2544,13 +2628,16 @@
         { id: 'teacher', title: isZh ? '教师工作台' : 'Teacher Workspace', category: 'LABS', badge: '', action: () => loadStage('teacher') },
       ];
 
-      // 金鹅自由实验室：仅管理员在搜索列表中可见
-      if (isAdmin) {
+      // 金鹅自由实验室：管理员或拥有 labs:golden_goose 权限者可见
+      if (hasScope('labs:golden_goose')) {
         list.push({ id: 'golden-goose', title: isZh ? '金鹅自由实验室' : 'Golden Goose Lab', category: 'LABS', badge: '', action: () => loadStage('golden-goose') });
       }
 
+      if (checkIsLoggedIn()) {
+        list.push({ id: 'change-password', title: isZh ? '修改登录密码' : 'Change Password', category: 'ACTION', badge: '', action: () => { switchAuthTab('change-password'); toggleAuthModal(true); } });
+      }
       list.push(
-        { id: 'auth', title: isAdmin ? (isZh ? '退出管理员身份' : 'Logout Admin') : (isZh ? '管理员登录' : 'Admin Login'), category: 'ACTION', badge: '', action: () => handleAuthBtnClick() },
+        { id: 'auth', title: checkIsLoggedIn() ? (isZh ? '退出当前账号' : 'Logout') : (isZh ? '统一账号登录 / 注册' : 'SSO Login / Register'), category: 'ACTION', badge: '', action: () => handleAuthBtnClick() },
         { id: 'overview', title: isZh ? '返回工作台全景看板' : 'Return to Overview', category: 'ACTION', badge: '', action: () => loadStage('overview') },
         { id: 'theme', title: isZh ? '切换外观模式 (Dark / Light)' : 'Toggle Theme (Dark / Light)', category: 'ACTION', badge: '⌘\\', action: () => toggleTheme() },
         { id: 'sound', title: isZh ? '切换微触感声效' : 'Toggle Sound Effects', category: 'ACTION', badge: 'Sound', action: () => toggleSound() },
@@ -2710,7 +2797,11 @@
     function handleRoute() {
       const h = location.hash.toLowerCase();
       const p = location.pathname.toLowerCase();
-      if (h === '#/apps' || p.endsWith('/apps')) loadCategoryHub('apps');
+      if (h === '#login' || h.startsWith('#login?') || h === '#/login' || h.startsWith('#/login?')) {
+        loadStage('overview', false);
+        openLoginModal();
+      }
+      else if (h === '#/apps' || p.endsWith('/apps')) loadCategoryHub('apps');
       else if (h === '#/notes' || p.endsWith('/notes')) loadCategoryHub('notes');
       else if (h === '#/labs' || p.endsWith('/labs')) loadCategoryHub('labs');
       else if (h.includes('icon') || p.endsWith('/icon')) loadStage('icon', false);
