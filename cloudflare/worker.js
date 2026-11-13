@@ -40,6 +40,7 @@ export default {
       '/ambient': '#/ambient',
       '/bom': '#/bom',
       '/nettest': '#/nettest',
+      '/mdview': '#/mdview',
       '/apps': '#/apps',
       '/notes': '#/notes',
       '/labs': '#/labs',
@@ -75,6 +76,7 @@ export default {
       { prefix: '/ambient', target: 'https://ambient.bin0sky.tech' },
       { prefix: '/bom', target: 'https://bom.bin0sky.tech' },
       { prefix: '/nettest', target: 'https://nettest.bin0sky.tech' },
+      { prefix: '/mdview', target: 'https://mdview.bin0sky.tech' },
     ];
 
     for (const route of routes) {

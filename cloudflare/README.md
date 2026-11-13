@@ -14,6 +14,7 @@
 | `bin0sky.tech/ambient/*` | `https://ambient.bin0sky.tech` | `Ambient4K-Web` | 4K 视觉画廊与声学专注空间 |
 | `bin0sky.tech/bom/*` | `https://bom.bin0sky.tech` | `online-ai-netbom` | NetBOM 网络设备智能物料与报价工作台 |
 | `bin0sky.tech/nettest/*` | `https://nettest.bin0sky.tech` | `online-ai-nettest` | NetPath-Lens Pro 网络卡顿与链路根因分析仪 |
+| `bin0sky.tech/mdview/*` | `https://mdview.bin0sky.tech` | `online-ai-mdview` | MDView 极轻量 Markdown 阅读与双栏编辑神器 |
 
 ## 🚀 Cloudflare 部署步骤（3 步）
 
