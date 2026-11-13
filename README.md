@@ -12,7 +12,8 @@
 | **03 AIConsole** | `bin0sky.tech/console` / `console.bin0sky.tech` | `/Antigravity/online-ai-aiconsole` | `rrobin0sky/online-ai-aiconsole` | 🚀 生产力工具 APPS |
 | **04 Ambient 4K** | `bin0sky.tech/ambient` / `ambient.bin0sky.tech` | `/Antigravity/online-ai-ambient` | `rrobin0sky/online-ai-ambient` | 🚀 生产力工具 APPS |
 | **05 NetBOM** | `bin0sky.tech/bom` / `bom.bin0sky.tech` | `/Antigravity/online-ai-netbom` | `rrobin0sky/online-ai-netbom` | 🚀 生产力工具 APPS |
-| **06 人口结构变迁**| `bin0sky.tech/notes/population_structure_1950_2100.html` | `/Antigravity/bin0sky.tech/notes/` | `rrobin0sky/bin0sky.tech` | 📑 交互研报 NOTES |
+| **06 NetPath-Lens** | `bin0sky.tech/nettest` / `nettest.bin0sky.tech` | `/Antigravity/online-ai-nettest` | `rrobin0sky/online-ai-nettest` | 🚀 生产力工具 APPS |
+| **07 人口结构变迁**| `bin0sky.tech/notes/population_structure_1950_2100.html` | `/Antigravity/bin0sky.tech/notes/` | `rrobin0sky/bin0sky.tech` | 📑 交互研报 NOTES |
 
 ---
 
