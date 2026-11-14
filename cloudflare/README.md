@@ -15,7 +15,6 @@
 | `bin0sky.tech/bom/*` | `https://bom.bin0sky.tech` | `online-ai-netbom` | NetBOM 网络设备智能物料与报价工作台 |
 | `bin0sky.tech/nettest/*` | `https://nettest.bin0sky.tech` | `online-ai-nettest` | NetPath-Lens Pro 网络卡顿与链路根因分析仪 |
 | `bin0sky.tech/mdview/*` | `https://mdview.bin0sky.tech` | `online-ai-mdview` | MDView 极轻量 Markdown 阅读与双栏编辑神器 |
-| `bin0sky.tech/radio/*` | `https://radio.bin0sky.tech` | `online-ai-radio` | Time Slice Radio 千禧时代切片电台（LABS） |
 
 ## 🚀 Cloudflare 部署步骤（3 步）
 

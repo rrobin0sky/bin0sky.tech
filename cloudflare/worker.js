@@ -51,7 +51,6 @@ export default {
       '/bom': '#/bom',
       '/nettest': '#/nettest',
       '/mdview': '#/mdview',
-      '/radio': '#/radio',
       '/apps': '#/apps',
       '/notes': '#/notes',
       '/labs': '#/labs',
@@ -87,7 +86,6 @@ export default {
       { prefix: '/bom', target: 'https://bom.bin0sky.tech' },
       { prefix: '/nettest', target: 'https://nettest.bin0sky.tech' },
       { prefix: '/mdview', target: 'https://mdview.bin0sky.tech' },
-      { prefix: '/radio', target: 'https://radio.bin0sky.tech' },
     ];
 
     for (const route of routes) {
