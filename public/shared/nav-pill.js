@@ -31,41 +31,24 @@
   }
 
   // Universal Theme Sync Engine
-  function applyTheme(isDark) {
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('light');
-      if (document.body) {
-        document.body.classList.add('dark');
-        document.body.classList.remove('light');
-      }
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.documentElement.classList.add('light');
-      if (document.body) {
-        document.body.classList.remove('dark');
-        document.body.classList.add('light');
-      }
+  function applyTheme() {
+    document.documentElement.classList.add('dark');
+    document.documentElement.classList.remove('light');
+    if (document.body) {
+      document.body.classList.add('dark');
+      document.body.classList.remove('light');
     }
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', isDark ? '#08090A' : '#F8FAFC');
-
-    // Update pill icons if rendered
-    const moonIcon = document.getElementById('b0-pill-moon-icon');
-    const sunIcon = document.getElementById('b0-pill-sun-icon');
-    if (moonIcon && sunIcon) {
-      moonIcon.style.display = isDark ? 'block' : 'none';
-      sunIcon.style.display = isDark ? 'none' : 'block';
-    }
+    if (meta) meta.setAttribute('content', '#08090A');
 
     try {
-      localStorage.setItem('b0_theme', isDark ? 'dark' : 'light');
+      localStorage.setItem('b0_theme', 'dark');
     } catch(e) {}
-    setRootDomainCookie('b0_theme', isDark ? 'dark' : 'light');
+    setRootDomainCookie('b0_theme', 'dark');
 
     // Dispatch event so host pages (charts, canvases, tables, sub-apps) update immediately
     try {
-      const evt = new CustomEvent('b0-theme-change', { detail: { theme: isDark ? 'dark' : 'light', isDark: isDark } });
+      const evt = new CustomEvent('b0-theme-change', { detail: { theme: 'dark', isDark: true } });
       window.dispatchEvent(evt);
       document.dispatchEvent(evt);
     } catch(e) {}
@@ -106,15 +89,9 @@
     paramEmbedded = (urlParams.get('b0_embedded') === '1');
   } catch(e) {}
 
-  // Read saved theme & lang from URL params, localStorage, or root cookies
-  let savedTheme = (paramTheme === 'dark' || paramTheme === 'light') ? paramTheme : null;
-  if (!savedTheme) {
-    try {
-      savedTheme = localStorage.getItem('b0_theme') || getCookie('b0_theme');
-    } catch(e) {}
-  }
-  const initialDark = savedTheme ? (savedTheme === 'dark') : true;
-  applyTheme(initialDark);
+  // Dark-only theme enforcement
+  const initialDark = true;
+  applyTheme(true);
 
   let savedLang = paramLang;
   if (!savedLang) {
@@ -255,7 +232,7 @@
   window.addEventListener('message', function(e) {
     if (!e.data || !isTrustedOrigin(e.origin)) return;
     if (e.data.type === 'B0_THEME_CHANGE') {
-      applyTheme(e.data.theme === 'dark');
+      applyTheme(true);
     } else if (e.data.type === 'B0_LANG_CHANGE') {
       applyLang(e.data.lang);
     }
@@ -264,7 +241,7 @@
   // Listen for storage changes across tabs
   window.addEventListener('storage', function(e) {
     if (e.key === 'b0_theme' && e.newValue) {
-      applyTheme(e.newValue === 'dark');
+      applyTheme(true);
     } else if (e.key === 'b0_lang' && e.newValue) {
       applyLang(e.newValue);
     }
@@ -614,10 +591,6 @@
       <span class="b0-pill-title">${title}</span>
       <span class="b0-pill-sep"></span>
       <div id="b0-pill-auth-slot" class="b0-pill-auth"></div>
-      <button id="b0-pill-theme-btn" class="b0-pill-btn" title="切换深色/浅色模式 (Dark/Light)" aria-label="Toggle Theme">
-        <svg id="b0-pill-moon-icon" style="display:${initialDark ? 'block' : 'none'};" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-        <svg id="b0-pill-sun-icon" style="display:${initialDark ? 'none' : 'block'};" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-      </button>
       <button id="b0-pill-menu-btn" class="b0-pill-btn" title="浏览全站应用矩阵" aria-label="Tool Switcher">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
       </button>
@@ -721,17 +694,6 @@
   `;
 
   document.body.appendChild(host);
-
-  // Toggle Theme Button
-  const themeBtn = document.getElementById('b0-pill-theme-btn');
-  themeBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    const isNowDark = !document.documentElement.classList.contains('dark');
-    try {
-      localStorage.setItem('b0_theme', isNowDark ? 'dark' : 'light');
-    } catch(err) {}
-    applyTheme(isNowDark);
-  });
 
   // Toggle Menu
   const btn = document.getElementById('b0-pill-menu-btn');

@@ -17,21 +17,15 @@
   <meta name="apple-mobile-web-app-title" content="bin0sky">
   <meta name="theme-color" content="#08090A">
 
-  <!-- Instant FOUC-prevention Theme Init (Dark-First Default) -->
+  <!-- Instant Dark Theme Init (Dark-Only Obsidian Aesthetic) -->
   <script>
     (function() {
       try {
-        var saved = localStorage.getItem('b0_theme');
-        var isDark = saved ? (saved === 'dark') : true;
-        if (isDark) {
-          document.documentElement.classList.add('dark');
-          document.documentElement.classList.remove('light');
-        } else {
-          document.documentElement.classList.remove('dark');
-          document.documentElement.classList.add('light');
-        }
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+        localStorage.setItem('b0_theme', 'dark');
         var meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute('content', isDark ? '#08090A' : '#F8FAFC');
+        if (meta) meta.setAttribute('content', '#08090A');
       } catch (e) {}
     })();
   </script>
@@ -81,11 +75,11 @@
 
   <style>
     :root {
-      /* Dark-First Linear Aesthetic Tokens (Default) */
+      /* Dark-Only Obsidian Aesthetic Tokens */
       --bg-primary: #08090A;
       --bg-surface: #111214;
       --bg-surface-hover: #18191C;
-      --bg-nav: rgba(8, 9, 10, 0.75);
+      --bg-nav: rgba(8, 9, 10, 0.58);
 
       --text-primary: #F7F8F8;
       --text-secondary: #D0D6E0;
@@ -98,7 +92,7 @@
       --border-hairline: rgba(255, 255, 255, 0.08);
       --border-hairline-hover: rgba(255, 255, 255, 0.16);
 
-      --radius-card: 12px;
+      --radius-card: 14px;
       --radius-control: 8px;
       --radius-badge: 6px;
       --transition-linear: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -110,41 +104,15 @@
       --accent: var(--accent-primary);
     }
 
-    html.light {
-      --bg-primary: #F8FAFC;
-      --bg-surface: #FFFFFF;
-      --bg-surface-hover: #F1F5F9;
-      --bg-nav: rgba(248, 250, 252, 0.82);
-
-      --text-primary: #0F172A;
-      --text-secondary: #334155;
-      --text-muted: #64748B;
-
-      --accent-primary: #5E6AD2;
-      --accent-hover: #4F5BC4;
-      --accent-subtle: rgba(94, 106, 210, 0.10);
-
-      --border-hairline: rgba(15, 23, 42, 0.09);
-      --border-hairline-hover: rgba(15, 23, 42, 0.18);
-    }
-
-    html.theme-transitioning,
-    html.theme-transitioning *,
-    html.theme-transitioning *:before,
-    html.theme-transitioning *:after {
-      transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-                  border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-                  color 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      transition-delay: 0s !important;
-    }
-
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); border-radius: 9999px; }
-    html.light ::-webkit-scrollbar-thumb { background: rgba(15, 23, 42, 0.16); }
 
     body {
-      background: var(--bg-primary);
+      background-color: var(--bg-primary);
+      background-image:
+        radial-gradient(ellipse 80% 42% at 50% -8%, rgba(120, 119, 198, 0.14), transparent 70%),
+        radial-gradient(ellipse 45% 28% at 78% 0%, rgba(56, 189, 248, 0.045), transparent 65%);
       color: var(--text-secondary);
       font-family: 'Inter', 'Geist', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -158,19 +126,63 @@
       font-feature-settings: "tnum" 1;
     }
 
-    /* Linear Glass Nav */
+    /* Linear Translucent Floating Top Navigation (Seamless Sky) */
     .linear-nav {
       background: var(--bg-nav);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-hairline);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    /* Linear Restrained Hero Ambient Glow */
-    .linear-hero-glow {
-      background:
-        radial-gradient(ellipse 75% 42% at 50% -12%, rgba(120, 119, 198, 0.14), transparent 70%),
-        radial-gradient(ellipse 45% 30% at 80% 0%, rgba(56, 189, 248, 0.05), transparent 65%);
+    .linear-nav-pill {
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: transparent;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .linear-nav-pill:hover,
+    .linear-nav-pill.active {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Linear Obsidian Mega-Menu Popover */
+    @keyframes megaFadeIn {
+      from { opacity: 0; transform: translateY(-4px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .linear-mega-shell {
+      background: rgba(11, 12, 14, 0.94);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 6px;
+      box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+      animation: megaFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .linear-mega-inner {
+      background: #111215;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 11px;
+      overflow: hidden;
+    }
+    .linear-mega-item {
+      display: block;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      transition: background-color 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      text-align: left;
+    }
+    .linear-mega-item:hover {
+      background: rgba(255, 255, 255, 0.048);
     }
 
     /* Linear Obsidian Hairline Cards with Top-Edge Specular Border & Spotlight */
@@ -209,19 +221,6 @@
     .bento-card:hover::before {
       opacity: 1;
     }
-    html.light .bento-card {
-      background: linear-gradient(180deg, #FFFFFF 0%, #F9FBFF 100%);
-      border: 1px solid rgba(15, 23, 42, 0.08);
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 4px 16px -4px rgba(15, 23, 42, 0.05);
-    }
-    html.light .bento-card::before {
-      background: radial-gradient(360px circle at var(--mouse-x, 50%) var(--mouse-y, 0%), rgba(94, 106, 210, 0.065), transparent 45%);
-    }
-    html.light .bento-card:hover {
-      background: #FFFFFF;
-      border-color: rgba(94, 106, 210, 0.28);
-      box-shadow: 0 10px 26px -6px rgba(15, 23, 42, 0.09);
-    }
 
     /* Monochrome-First Icons: quiet at rest, vibrant on card hover */
     .bento-icon {
@@ -230,10 +229,6 @@
       transition: filter 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                   opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                   transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    html.light .bento-icon {
-      filter: saturate(0.25) brightness(0.96);
-      opacity: 0.85;
     }
     .bento-card:hover .bento-icon {
       filter: saturate(1) brightness(1.04) contrast(1);
@@ -253,12 +248,6 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    html.light .linear-heading-gradient {
-      background: linear-gradient(180deg, #0F172A 0%, #334155 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
     .linear-tag {
       font-family: 'JetBrains Mono', 'Fira Code', monospace;
       font-size: 11px;
@@ -269,9 +258,6 @@
       background: rgba(255, 255, 255, 0.025);
       color: var(--text-muted);
       transition: var(--transition-linear);
-    }
-    html.light .linear-tag {
-      background: rgba(15, 23, 42, 0.03);
     }
     .bento-card:hover .linear-tag {
       border-color: var(--border-hairline-hover);
@@ -295,18 +281,10 @@
       color: var(--text-primary);
       background: rgba(255, 255, 255, 0.04);
     }
-    html.light .filter-pill:hover {
-      background: rgba(15, 23, 42, 0.04);
-    }
     .filter-pill.active {
       color: var(--text-primary);
       background: rgba(255, 255, 255, 0.08);
       border-color: rgba(255, 255, 255, 0.12);
-    }
-    html.light .filter-pill.active {
-      color: var(--text-primary);
-      background: rgba(15, 23, 42, 0.07);
-      border-color: rgba(15, 23, 42, 0.12);
     }
 
     /* Controls & Buttons */
@@ -334,110 +312,6 @@
       border-color: var(--accent-hover);
     }
 
-    /* Sidebar Architecture */
-    #appSidebar {
-      width: 58px;
-      background: var(--bg-primary);
-      border-right: 1px solid var(--border-hairline);
-      transition: width 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      box-sizing: border-box;
-    }
-    #appSidebar.expanded {
-      width: 240px;
-    }
-    .icon-slot {
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #appSidebar .expanded-content {
-      display: none;
-      opacity: 0;
-      pointer-events: none;
-      white-space: nowrap;
-    }
-    #appSidebar.expanded .expanded-content {
-      display: flex;
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* Mobile Drawer Mode (<768px): eliminates narrow-screen squeeze */
-    @media (max-width: 767px) {
-      #appSidebar {
-        position: fixed;
-        top: 56px;
-        bottom: 0;
-        left: 0;
-        width: 248px !important;
-        transform: translateX(-100%);
-        z-index: 45;
-      }
-      #appSidebar.mobile-open {
-        transform: translateX(0);
-      }
-      #appSidebar .expanded-content {
-        display: flex;
-        opacity: 1;
-        pointer-events: auto;
-      }
-      #sidebarResizer {
-        display: none !important;
-      }
-    }
-
-    /* Collapsed Sidebar Instant HUD Tooltip (Desktop only) */
-    @media (min-width: 768px) {
-      #appSidebar:not(.expanded) .sidebar-nav-item:hover::after,
-      #appSidebar:not(.expanded) .sidebar-group-header:hover::after {
-        content: attr(data-tooltip);
-        position: absolute;
-        left: 54px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: var(--bg-surface-hover);
-        color: var(--text-primary);
-        border: 1px solid var(--border-hairline-hover);
-        padding: 5px 10px;
-        border-radius: 6px;
-        font-size: 12px;
-        font-weight: 500;
-        white-space: nowrap;
-        pointer-events: none;
-        z-index: 999;
-      }
-    }
-
-    /* Sidebar Group Header & Nav Items */
-    .sidebar-group-header,
-    .sidebar-nav-item {
-      position: relative;
-      border-radius: var(--radius-control);
-      transition: var(--transition-linear);
-    }
-    .sidebar-nav-item:hover,
-    .sidebar-group-header:hover {
-      background: var(--bg-surface-hover);
-    }
-    .sidebar-nav-item.active {
-      background: var(--bg-surface-hover);
-      color: var(--text-primary);
-      font-weight: 600;
-    }
-    .sidebar-nav-item.active::before {
-      content: "";
-      position: absolute;
-      left: 2px;
-      top: 6px;
-      bottom: 6px;
-      width: 2.5px;
-      border-radius: 9999px;
-      background: var(--accent-primary);
-    }
-
     /* Keycap badge */
     .kbd {
       font-family: 'JetBrains Mono', 'Fira Code', monospace;
@@ -445,50 +319,9 @@
       padding: 2px 6px;
       border-radius: 4px;
       border: 1px solid var(--border-hairline);
-      background: var(--bg-surface);
+      background: rgba(255, 255, 255, 0.04);
       color: var(--text-muted);
       font-variant-numeric: tabular-nums;
-    }
-
-    /* Draggable Resizer Handle (1px Hairline) */
-    .resizer-handle {
-      width: 10px;
-      margin-left: -5px;
-      margin-right: -5px;
-      height: 100%;
-      z-index: 35;
-      cursor: col-resize;
-      position: relative;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: none;
-      -webkit-user-select: none;
-      background: transparent;
-    }
-    .resizer-line {
-      width: 1px;
-      height: 100%;
-      background: transparent;
-      transition: var(--transition-linear);
-    }
-    .resizer-handle:hover .resizer-line,
-    .resizer-handle.resizing .resizer-line {
-      width: 1.5px;
-      background: var(--accent-primary);
-    }
-    body.is-resizing {
-      cursor: col-resize !important;
-      user-select: none !important;
-      -webkit-user-select: none !important;
-    }
-    body.is-resizing iframe { pointer-events: none !important; }
-
-    .sidebar-hairline {
-      height: 1px;
-      margin: 8px 4px;
-      background: var(--border-hairline);
     }
 
     :focus-visible {
@@ -511,339 +344,158 @@
   <!-- ==================== TOP PROGRESS BAR (Linear 1.5px Indigo) ==================== -->
   <div id="stageProgressBar" class="fixed top-0 left-0 right-0 h-[1.5px] bg-[var(--accent-primary)] transition-all duration-200 ease-linear z-50 opacity-0 pointer-events-none" style="width: 0%;"></div>
 
-  <!-- ==================== TOP NAVIGATION BAR (Glassmorphism + 1px Hairline) ==================== -->
-  <header class="linear-nav h-14 px-4 flex items-center justify-between z-40 flex-shrink-0">
-    
-    <!-- 区域 1: 侧栏切换 + Logo -->
-    <div class="flex items-center gap-2.5 min-w-0">
-      <button onclick="toggleSidebarState()" id="sidebarToggleBtn" class="linear-btn-ghost w-8 h-8 flex items-center justify-center cursor-pointer flex-shrink-0" title="切换侧边栏 (⌘0)" aria-label="Toggle sidebar">
-        <svg viewBox="0 0 24 24" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="4" ry="4"/>
-          <line x1="9" y1="3" x2="9" y2="21"/>
-        </svg>
-      </button>
+  <!-- ==================== TOP NAVIGATION BAR (Linear 1120px Centered + Obsidian Mega-Menu) ==================== -->
+  <header id="topHeader" class="linear-nav h-16 w-full z-40 flex-shrink-0 relative" onmouseleave="scheduleCloseNavPopover()" onmouseenter="cancelCloseNavPopover()">
+    <div class="max-w-[1120px] w-full h-full mx-auto px-5 sm:px-10 flex items-center justify-between relative">
 
-      <a href="javascript:void(0)" onclick="loadStage('overview')" class="flex items-center gap-2.5 group cursor-pointer min-w-0" title="返回 BinOS 工作台全景">
-        <div class="w-7 h-7 rounded-lg overflow-hidden flex items-center justify-center transition-all duration-200 ease-linear flex-shrink-0 border border-[var(--border-hairline)]">
-          <svg viewBox="0 0 64 64" class="w-full h-full" fill="none">
-            <defs>
-              <linearGradient id="brand-sky" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0284c7"/></linearGradient>
-              <linearGradient id="brand-sky-d" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0284c7"/><stop offset="100%" stop-color="#075985"/></linearGradient>
-              <linearGradient id="brand-rose" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fb7185"/><stop offset="100%" stop-color="#e11d48"/></linearGradient>
-              <linearGradient id="brand-rose-d" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e11d48"/><stop offset="100%" stop-color="#9f1239"/></linearGradient>
-              <linearGradient id="brand-emerald" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#059669"/></linearGradient>
-              <linearGradient id="brand-emerald-d" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#064e3b"/></linearGradient>
-            </defs>
-            <rect x="0" y="0" width="64" height="64" fill="#111214"/>
-            <g transform="translate(32,32)">
-              <g><path d="M 0,0 C 0,-10 3,-18 0,-22 C 8,-21 16,-17 20,-11 Z" fill="url(#brand-sky)"/><path d="M 0,0 L 20,-11 C 18,-6 14,-1 8,0 Z" fill="url(#brand-sky-d)"/></g>
-              <g transform="rotate(120)"><path d="M 0,0 C 0,-10 3,-18 0,-22 C 8,-21 16,-17 20,-11 Z" fill="url(#brand-rose)"/><path d="M 0,0 L 20,-11 C 18,-6 14,-1 8,0 Z" fill="url(#brand-rose-d)"/></g>
-              <g transform="rotate(240)"><path d="M 0,0 C 0,-10 3,-18 0,-22 C 8,-21 16,-17 20,-11 Z" fill="url(#brand-emerald)"/><path d="M 0,0 L 20,-11 C 18,-6 14,-1 8,0 Z" fill="url(#brand-emerald-d)"/></g>
-              <circle cx="0" cy="0" r="4" fill="#F7F8F8"/>
-              <circle cx="0" cy="0" r="1.8" fill="#111214"/>
-            </g>
-          </svg>
-        </div>
-        <span class="font-semibold text-[16px] tracking-[-0.02em] text-[var(--text-primary)] group-hover:text-[var(--accent-hover)] transition-colors duration-200 select-none leading-none">BinOS</span>
-        <span class="hidden sm:inline-block font-mono text-[12px] text-[var(--text-muted)] border-l border-[var(--border-hairline)] pl-2.5">bin0sky.tech</span>
-      </a>
-    </div>
+      <!-- Left: Monochrome Brand + Active Stage Breadcrumb -->
+      <div class="flex items-center min-w-0">
+        <a href="javascript:void(0)" onclick="closeNavPopover(); loadStage('overview')" class="flex items-center gap-2.5 group cursor-pointer min-w-0" title="返回 BinOS 主页">
+          <div class="w-6 h-6 flex items-center justify-center flex-shrink-0 text-[#F7F8F8] group-hover:text-white transition-transform duration-300 group-hover:scale-105">
+            <svg viewBox="0 0 24 24" class="w-full h-full" fill="currentColor" aria-hidden="true">
+              <path d="M12 2a10 10 0 0 0-8.66 5.01l9.65 9.65A10 10 0 0 0 12 2Zm-9.4 7.05a10.05 10.05 0 0 0-.6 3.45 10 10 0 0 0 10 10c1.22 0 2.39-.22 3.47-.62L2.6 9.05Zm-0.12 4.35 8.12 8.12a10.02 10.02 0 0 1-8.12-8.12Z" opacity="0.92"/>
+            </svg>
+          </div>
+          <span class="font-semibold text-[16px] tracking-[-0.025em] text-[#F7F8F8] group-hover:text-white transition-colors duration-200 select-none leading-none">BinOS</span>
+        </a>
 
-    <!-- 区域 2: 功能按键 (快速指令、语言、外观与登录) -->
-    <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-      <!-- Quick Command Palette Trigger (⌘K) -->
-      <button onclick="toggleCommandPalette(true)" class="linear-btn-ghost h-8 px-2.5 flex items-center gap-2 text-[13px] cursor-pointer" title="指令面板 (⌘K)" aria-label="Command Palette">
-        <i data-lucide="search" class="w-3.5 h-3.5 text-[var(--text-muted)]"></i>
-        <span class="hidden md:inline text-[var(--text-muted)]">Search...</span>
-        <span class="kbd hidden sm:inline-block">⌘K</span>
-      </button>
-
-      <!-- 2-Language Segmented Switcher: 简 / EN -->
-      <div class="flex items-center rounded-lg border border-[var(--border-hairline)] p-0.5 text-[12px] select-none bg-[var(--bg-surface)]">
-        <button id="langBtnZh" onclick="setLanguage('zh-CN')" class="px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[12px] font-semibold bg-[var(--bg-surface-hover)] text-[var(--text-primary)]" title="切换至简体中文">简</button>
-        <button id="langBtnEn" onclick="setLanguage('en')" class="px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[12px] font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)]" title="Switch to English">EN</button>
+        <button id="activeStageCrumb" type="button" onclick="closeNavPopover(); loadStage('overview')" class="hidden ml-3 pl-3 border-l border-white/[0.1] inline-flex items-center gap-1.5 text-[13px] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer truncate max-w-[160px] sm:max-w-[260px]" title="返回主页总览">
+          <span id="activeStageCrumbTitle" class="truncate"></span>
+        </button>
       </div>
 
-      <!-- Theme Switcher -->
-      <button onclick="toggleTheme()" aria-label="Toggle theme" class="linear-btn-ghost w-8 h-8 flex items-center justify-center cursor-pointer" title="切换外观主题 (⌘\)">
-        <i data-lucide="moon" class="w-3.5 h-3.5 hidden dark:block"></i>
-        <i data-lucide="sun" class="w-3.5 h-3.5 block dark:hidden"></i>
-      </button>
+      <!-- Right: Borderless Navigation Triggers & Minimal Utilities -->
+      <div class="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
+        <nav class="flex items-center gap-0.5 sm:gap-1" aria-label="Main navigation">
+          <button type="button" id="navTriggerApps" data-nav-menu="apps" onmouseenter="openNavPopover('apps')" onclick="toggleNavPopover('apps')" class="linear-nav-pill" data-i18n="tab.apps">器物</button>
+          <button type="button" id="navTriggerNotes" data-nav-menu="notes" onmouseenter="openNavPopover('notes')" onclick="toggleNavPopover('notes')" class="linear-nav-pill" data-i18n="tab.notes">长思</button>
+          <button type="button" id="navTriggerLabs" data-nav-menu="labs" onmouseenter="openNavPopover('labs')" onclick="toggleNavPopover('labs')" class="linear-nav-pill hidden" data-i18n="tab.labs">实验</button>
+          <button type="button" id="ambientZenBtn" onmouseenter="closeNavPopover()" onclick="closeNavPopover(); toggleAmbientZen()" class="linear-nav-pill hidden sm:inline-flex" title="Ambient 4K (⌘J)" data-i18n="nav.ambient">禅意 4K</button>
+        </nav>
 
-      <!-- Ambient 4K Zen Mode Trigger (⌘J) -->
-      <button id="ambientZenBtn" onclick="toggleAmbientZen()" aria-label="Ambient 4K" class="linear-btn-ghost w-8 h-8 flex items-center justify-center cursor-pointer" title="Ambient 4K (⌘J)" data-tooltip="Ambient 4K">
-        <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="4" width="18" height="14" rx="2.5"/>
-          <path d="M7 14.5l3.5-4 3 3.5 2-2.5 3.5 3"/>
-          <circle cx="15.5" cy="8.5" r="1"/>
-          <path d="M9 21h6"/>
-        </svg>
-      </button>
+        <span class="hidden sm:inline-block h-3.5 w-[1px] bg-white/[0.1] mx-1.5"></span>
 
-      <!-- Auth Action Button -->
-      <button id="authBtn" onclick="handleAuthBtnClick()" class="linear-btn-ghost h-8 px-2.5 text-[13px] font-medium cursor-pointer select-none" title="管理员登录 / 退出">
-        登录
-      </button>
+        <!-- Command Palette Trigger (⌘K) -->
+        <button type="button" onmouseenter="closeNavPopover()" onclick="closeNavPopover(); toggleCommandPalette(true)" class="linear-nav-pill !px-2.5 inline-flex items-center gap-1.5" title="指令面板 (⌘K)" aria-label="Command Palette">
+          <i data-lucide="search" class="w-3.5 h-3.5"></i>
+          <span class="hidden md:inline font-mono text-[11px] opacity-75">⌘K</span>
+        </button>
+
+        <!-- Minimal Inline Language Switcher: 简 / EN -->
+        <div class="hidden sm:inline-flex items-center gap-1 px-2 text-[12.5px] select-none">
+          <button type="button" id="langBtnZh" onclick="setLanguage('zh-CN')" class="cursor-pointer font-medium text-[#F7F8F8] transition-colors" title="切换至简体中文">简</button>
+          <span class="text-white/20 text-[11px]">/</span>
+          <button type="button" id="langBtnEn" onclick="setLanguage('en')" class="cursor-pointer font-normal text-[var(--text-muted)] hover:text-[#F7F8F8] transition-colors" title="Switch to English">EN</button>
+        </div>
+
+        <!-- Auth Pill (Linear High-Contrast Sign In / Quiet Logged-In Dot) -->
+        <button type="button" id="authBtn" onmouseenter="closeNavPopover()" onclick="closeNavPopover(); handleAuthBtnClick()" class="ml-1 h-7 px-3.5 rounded-full bg-[#F7F8F8] hover:bg-white text-[#08090A] text-[12.5px] font-medium transition-all duration-200 cursor-pointer select-none inline-flex items-center gap-1.5" title="登录 / 注册">
+          登录
+        </button>
+      </div>
+
+      <!-- Obsidian Mega-Menu Popover Shell -->
+      <div id="navMegaPopover" class="hidden absolute right-5 sm:right-10 top-[58px] w-[calc(100vw-2.5rem)] max-w-[680px] z-50">
+        <div class="linear-mega-shell">
+          <div class="linear-mega-inner">
+
+            <!-- Panel: 器物 · Craft -->
+            <div id="megaPanelApps" class="hidden">
+              <div class="grid grid-cols-1 md:grid-cols-3">
+                <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-1 p-3">
+                  <button type="button" onclick="closeNavPopover(); loadStage('icon')" class="linear-mega-item">
+                    <div class="text-[14px] font-medium text-[#F7F8F8]">ArchIcons</div>
+                    <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="mega.archicons.desc">云架构与网络拓扑 2.5D 矢量图元</div>
+                  </button>
+                  <button type="button" onclick="closeNavPopover(); loadStage('ppt')" class="linear-mega-item">
+                    <div class="text-[14px] font-medium text-[#F7F8F8]">SlideCraft</div>
+                    <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="mega.slidecraft.desc">把灵感静静铺陈成结构化演示文稿</div>
+                  </button>
+                  <button type="button" onclick="closeNavPopover(); loadStage('console')" class="linear-mega-item">
+                    <div class="text-[14px] font-medium text-[#F7F8F8]">AIConsole</div>
+                    <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="mega.aiconsole.desc">macOS 原生智能终端与根因诊断</div>
+                  </button>
+                  <button type="button" onclick="closeNavPopover(); loadStage('bom')" class="linear-mega-item">
+                    <div class="text-[14px] font-medium text-[#F7F8F8]">NetBOM</div>
+                    <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="mega.bom.desc">网络设备选型与清朗物料报价台</div>
+                  </button>
+                </div>
+                <div class="md:border-l md:border-white/[0.06] flex flex-col gap-1 p-3">
+                  <button type="button" onclick="closeNavPopover(); loadStage('nettest')" class="linear-mega-item">
+                    <div class="text-[14px] font-medium text-[#F7F8F8]">NetPath-Lens</div>
+                    <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="mega.nettest.desc">端到端链路延迟与抖动透视</div>
+                  </button>
+                  <button type="button" onclick="closeNavPopover(); loadStage('mdview')" class="linear-mega-item">
+                    <div class="text-[14px] font-medium text-[#F7F8F8]">MDView</div>
+                    <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="mega.mdview.desc">纯粹清朗的 Markdown 阅读写作台</div>
+                  </button>
+                  <button type="button" onclick="closeNavPopover(); toggleAmbientZen()" class="linear-mega-item sm:hidden">
+                    <div class="text-[14px] font-medium text-[#F7F8F8]" data-i18n="nav.ambient">禅意 4K</div>
+                    <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="card.ambient.tag">沉浸式 4K 视觉画廊与声学空间</div>
+                  </button>
+                </div>
+              </div>
+              <div class="px-4 py-2.5 border-t border-white/[0.06] bg-white/[0.015] flex items-center justify-between text-[12.5px]">
+                <span class="text-[var(--text-muted)]"><span class="kbd mr-1.5">⌘K</span><span data-i18n="mega.hint.palette">随时全局搜索直达</span></span>
+                <button type="button" onclick="closeNavPopover(); loadCategoryHub('apps')" class="text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer" data-i18n="mega.all.apps">查看全部器物 →</button>
+              </div>
+            </div>
+
+            <!-- Panel: 长思 · Essays -->
+            <div id="megaPanelNotes" class="hidden">
+              <div class="grid grid-cols-1 md:grid-cols-3">
+                <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-1 p-3">
+                  <button type="button" onclick="closeNavPopover(); loadStage('population')" class="linear-mega-item">
+                    <div class="text-[14px] font-medium text-[#F7F8F8]" data-i18n="item.population">人口结构变迁</div>
+                    <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="mega.population.desc">百年尺度下的人口潮汐动态模型</div>
+                  </button>
+                  <button type="button" onclick="closeNavPopover(); loadStage('fund-cycle')" class="linear-mega-item">
+                    <div class="text-[14px] font-medium text-[#F7F8F8]" data-i18n="item.fund_cycle">公募与产业周期</div>
+                    <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="mega.fund_cycle.desc">24 产业赛道估值出清与周期记录</div>
+                  </button>
+                </div>
+                <div class="md:border-l md:border-white/[0.06] flex flex-col gap-1 p-3">
+                  <button type="button" onclick="closeNavPopover(); loadStage('fund-breakdown')" class="linear-mega-item">
+                    <div class="text-[14px] font-medium text-[#F7F8F8]" data-i18n="item.breakdown">破位基金透视</div>
+                    <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="mega.breakdown.desc">以常识丈量流动性与真实价值</div>
+                  </button>
+                </div>
+              </div>
+              <div class="px-4 py-2.5 border-t border-white/[0.06] bg-white/[0.015] flex items-center justify-between text-[12.5px]">
+                <span class="text-[var(--text-muted)]" data-i18n="mega.hint.notes">跨越周期的观察与商业常识</span>
+                <button type="button" onclick="closeNavPopover(); loadCategoryHub('notes')" class="text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer" data-i18n="mega.all.notes">查看全部长思 →</button>
+              </div>
+            </div>
+
+            <!-- Panel: 实验 · Sandbox -->
+            <div id="megaPanelLabs" class="hidden">
+              <div class="p-3">
+                <button type="button" onclick="closeNavPopover(); loadStage('golden-goose')" class="linear-mega-item">
+                  <div class="text-[14px] font-medium text-[#F7F8F8]" data-i18n="item.golden-goose">金鹅自由实验室</div>
+                  <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="card.golden-goose.tag">复利曲线、安全提现率与永续现金流的静默时间推演。</div>
+                </button>
+              </div>
+              <div class="px-4 py-2.5 border-t border-white/[0.06] bg-white/[0.015] flex items-center justify-between text-[12.5px]">
+                <span class="text-[var(--text-muted)]" data-i18n="mega.hint.labs">受控访问的推演空间</span>
+                <button type="button" onclick="closeNavPopover(); loadCategoryHub('labs')" class="text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer" data-i18n="mega.all.labs">进入实验沙盒 →</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </div>
   </header>
 
-  <!-- ==================== BODY APP SHELL ==================== -->
+  <!-- ==================== BODY APP SHELL (Full-Width Borderless Canvas) ==================== -->
   <div class="flex-1 flex overflow-hidden relative">
 
-    <!-- Mobile Sidebar Backdrop -->
-    <div id="sidebarBackdrop" onclick="closeMobileSidebar()" class="fixed inset-0 top-14 bg-[#08090A]/60 backdrop-blur-[4px] z-40 hidden md:hidden"></div>
-
-    <!-- ==================== LEFT SIDEBAR ==================== -->
-    <aside id="appSidebar" class="h-full z-30 flex flex-col justify-between p-2 flex-shrink-0 overflow-y-auto overflow-x-hidden select-none">
-      
-      <div class="space-y-1.5 pt-1">
-        <!-- ==================== APPS ==================== -->
-        <div>
-          <button onclick="handleSidebarGroupClick('apps')" class="sidebar-group-header w-full flex items-center justify-between p-1.5 mb-0.5 text-xs font-semibold tracking-wider text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer group select-none relative" title="APPS" data-tooltip="APPS">
-            <span class="flex items-center gap-2.5">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] bg-sky-500/10 text-sky-500 dark:text-sky-400 border border-sky-500/20 flex items-center justify-center shadow-xs shrink-0">
-                  <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
-                    <rect width="8" height="8" x="2" y="2" rx="1.5"/><rect width="8" height="8" x="14" y="2" rx="1.5"/><rect width="8" height="8" x="14" y="14" rx="1.5"/><rect width="8" height="8" x="2" y="14" rx="1.5"/>
-                  </svg>
-                </div>
-              </span>
-              <span class="expanded-content font-mono text-[11.5px] font-bold text-zinc-800 dark:text-zinc-100 tracking-wider">APPS</span>
-            </span>
-            <svg id="disclosure-apps" class="expanded-content w-2.5 h-2.5 inline-block text-zinc-400 dark:text-zinc-500 transition-transform duration-200 rotate-90 shrink-0 mr-1 opacity-60 group-hover:opacity-100" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M5 3.5l6 4.5-6 4.5z"/>
-            </svg>
-          </button>
-          <nav class="space-y-1" id="nav-group-apps">
-            <button onclick="loadStage('icon')" id="nav-item-icon" data-tooltip="ArchIcons" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="ArchIcons">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] overflow-hidden flex items-center justify-center shadow-xs shrink-0">
-                  <svg viewBox="0 0 32 32" class="w-full h-full" fill="none">
-                    <defs>
-                      <linearGradient id="arch-side-g" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#1d4ed8"/><stop offset="50%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#7c3aed"/>
-                      </linearGradient>
-                    </defs>
-                    <rect width="32" height="32" rx="7.5" fill="url(#arch-side-g)"/>
-                    <path d="M16 5.5 L25 10.7 V21.3 L16 26.5 L7 21.3 V10.7 Z" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round"/>
-                    <path d="M16 5.5 V16 L25 10.7 M16 16 L7 10.7 M16 16 V26.5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-                    <circle cx="16" cy="16" r="2.8" fill="#38bdf8"/>
-                  </svg>
-                </div>
-              </span>
-              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
-                ArchIcons
-              </span>
-            </button>
-
-            <button onclick="loadStage('ppt')" id="nav-item-ppt" data-tooltip="SlideCraft" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="SlideCraft">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] overflow-hidden flex items-center justify-center shadow-xs shrink-0">
-                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
-                    <defs>
-                      <linearGradient id="slide-side-g" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#818cf8"/><stop offset="0.5" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/>
-                      </linearGradient>
-                      <linearGradient id="slide-side-i" x1="12" y1="12" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#38bdf8"/><stop offset="1" stop-color="#a855f7"/>
-                      </linearGradient>
-                    </defs>
-                    <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#slide-side-g)"/>
-                    <rect x="11" y="12" width="26" height="17" rx="3.5" fill="rgba(10, 12, 20, 0.7)" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1.2"/>
-                    <path d="M24 15L25.3 18.5L28.8 19.8L25.3 21.1L24 24.6L22.7 21.1L19.2 19.8L22.7 18.5L24 15Z" fill="url(#slide-side-i)"/>
-                    <path d="M24 31V37M19 37H29" stroke="rgba(255, 255, 255, 0.9)" stroke-width="2.5" stroke-linecap="round"/>
-                  </svg>
-                </div>
-              </span>
-              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
-                SlideCraft
-              </span>
-            </button>
-
-            <button onclick="loadStage('console')" id="nav-item-console" data-tooltip="AIConsole" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="AIConsole">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] overflow-hidden flex items-center justify-center shadow-xs shrink-0">
-                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
-                    <defs>
-                      <linearGradient id="aiconsole-side-g" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#181a22"/><stop offset="100%" stop-color="#0d0e14"/>
-                      </linearGradient>
-                      <linearGradient id="aiconsole-side-c" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#00d2ff"/><stop offset="100%" stop-color="#a855f7"/>
-                      </linearGradient>
-                    </defs>
-                    <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#aiconsole-side-g)"/>
-                    <path d="M13 14L22 23L13 32" stroke="url(#aiconsole-side-c)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <rect x="24" y="29" width="11" height="4.5" rx="2.25" fill="#00f2fe"/>
-                  </svg>
-                </div>
-              </span>
-              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
-                AIConsole
-              </span>
-            </button>
-
-            <button onclick="loadStage('bom')" id="nav-item-bom" data-tooltip="NetBOM" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="NetBOM">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] overflow-hidden flex items-center justify-center shadow-xs shrink-0">
-                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
-                    <rect x="2" y="2" width="44" height="44" rx="11" fill="#18181b" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
-                    <rect x="9" y="11" width="30" height="11" rx="2.5" fill="#09090b" stroke="#e4e4e7" stroke-width="1.8"/>
-                    <rect x="9" y="26" width="30" height="11" rx="2.5" fill="#09090b" stroke="#e4e4e7" stroke-width="1.8"/>
-                    <circle cx="14.5" cy="16.5" r="1.6" fill="#38bdf8"/>
-                    <circle cx="19.5" cy="16.5" r="1.6" fill="#e4e4e7"/>
-                    <circle cx="14.5" cy="31.5" r="1.6" fill="#34d399"/>
-                    <circle cx="19.5" cy="31.5" r="1.6" fill="#e4e4e7"/>
-                    <line x1="26" y1="16.5" x2="34" y2="16.5" stroke="#e4e4e7" stroke-width="1.8" stroke-linecap="round"/>
-                    <line x1="26" y1="31.5" x2="34" y2="31.5" stroke="#e4e4e7" stroke-width="1.8" stroke-linecap="round"/>
-                  </svg>
-                </div>
-              </span>
-              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
-                NetBOM
-              </span>
-            </button>
-
-            <button onclick="loadStage('nettest')" id="nav-item-nettest" data-tooltip="NetPath-Lens" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="NetPath-Lens">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] overflow-hidden flex items-center justify-center shadow-xs shrink-0">
-                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
-                    <rect x="2" y="2" width="44" height="44" rx="11" fill="#0f172a" stroke="rgba(56,189,248,0.25)" stroke-width="1.5"/>
-                    <circle cx="24" cy="24" r="16" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="3 3"/>
-                    <circle cx="24" cy="24" r="9" stroke="#818cf8" stroke-width="2"/>
-                    <circle cx="24" cy="24" r="3.5" fill="#38bdf8"/>
-                    <path d="M24 8V12M24 36V40M8 24H12M36 24H40" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
-                  </svg>
-                </div>
-              </span>
-              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
-                NetPath-Lens
-              </span>
-            </button>
-
-            <button onclick="loadStage('mdview')" id="nav-item-mdview" data-tooltip="MDView" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="MDView">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] overflow-hidden flex items-center justify-center shadow-xs shrink-0">
-                  <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
-                    <defs>
-                      <linearGradient id="mdview-side-g" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#3b82f6"/>
-                        <stop offset="100%" stop-color="#1d4ed8"/>
-                      </linearGradient>
-                    </defs>
-                    <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#mdview-side-g)"/>
-                    <path d="M12 31V17L17.5 23L23 17V31" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M32 20V29M28.5 25.5L32 29L35.5 25.5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-              </span>
-              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
-                MDView
-              </span>
-            </button>
-          </nav>
-        </div>
-
-        <div class="sidebar-hairline"></div>
-
-        <!-- ==================== NOTES ==================== -->
-        <div>
-          <button onclick="handleSidebarGroupClick('notes')" class="sidebar-group-header w-full flex items-center justify-between p-1.5 mb-0.5 text-xs font-semibold tracking-wider text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer group select-none relative" title="NOTES" data-tooltip="NOTES">
-            <span class="flex items-center gap-2.5">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] bg-rose-500/10 text-rose-500 dark:text-rose-400 border border-rose-500/20 flex items-center justify-center shadow-xs shrink-0">
-                  <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M4 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4zm4 4h8v2H8V8zm0 4h8v2H8v-2zm0 4h5v2H8v-2z"/>
-                  </svg>
-                </div>
-              </span>
-              <span class="expanded-content font-mono text-[11.5px] font-bold text-zinc-800 dark:text-zinc-100 tracking-wider">NOTES</span>
-            </span>
-            <svg id="disclosure-notes" class="expanded-content w-2.5 h-2.5 inline-block text-zinc-400 dark:text-zinc-500 transition-transform duration-200 rotate-90 shrink-0 mr-1 opacity-60 group-hover:opacity-100" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M5 3.5l6 4.5-6 4.5z"/>
-            </svg>
-          </button>
-          <nav class="space-y-1" id="nav-group-notes">
-            <button onclick="loadStage('population')" id="nav-item-population" data-tooltip="人口结构变迁" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="全球人口结构变迁">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] bg-rose-500/10 text-rose-500 dark:text-rose-400 border border-rose-500/25 flex items-center justify-center shadow-xs shrink-0">
-                  <i data-lucide="bar-chart-2" class="w-3 h-3"></i>
-                </div>
-              </span>
-              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.population">
-                人口结构变迁
-              </span>
-            </button>
-
-            <button onclick="loadStage('fund-cycle')" id="nav-item-fund-cycle" data-tooltip="公募产业周期" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="公募基金与产业周期">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] bg-blue-500/10 text-blue-500 dark:text-blue-400 border border-blue-500/25 flex items-center justify-center shadow-xs shrink-0">
-                  <i data-lucide="trending-up" class="w-3 h-3"></i>
-                </div>
-              </span>
-              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.fund_cycle">
-                公募与产业周期
-              </span>
-            </button>
-
-            <button onclick="loadStage('fund-breakdown')" id="nav-item-fund-breakdown" data-tooltip="破位基金透视" class="sidebar-nav-item w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="破位基金本质透视">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/25 flex items-center justify-center shadow-xs shrink-0">
-                  <i data-lucide="activity" class="w-3 h-3"></i>
-                </div>
-              </span>
-              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.breakdown">
-                破位基金透视
-              </span>
-            </button>
-          </nav>
-        </div>
-
-        <div class="sidebar-hairline"></div>
-
-        <!-- ==================== LABS ==================== -->
-        <div>
-          <button onclick="handleSidebarGroupClick('labs')" class="sidebar-group-header w-full flex items-center justify-between p-1.5 mb-0.5 text-xs font-semibold tracking-wider text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-left cursor-pointer group select-none relative" title="LABS" data-tooltip="LABS">
-            <span class="flex items-center gap-2.5">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center shadow-xs shrink-0">
-                  <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 2a1 1 0 0 0-1 1v1h6V3a1 1 0 0 0-1-1h-4zm-1 4v3.2l-4.5 9A2 2 0 0 0 6.3 21h11.4a2 2 0 0 0 1.8-2.8L15 9.2V6H9z"/>
-                  </svg>
-                </div>
-              </span>
-              <span class="expanded-content font-mono text-[11.5px] font-bold text-zinc-800 dark:text-zinc-100 tracking-wider">LABS</span>
-            </span>
-            <svg id="disclosure-labs" class="expanded-content w-2.5 h-2.5 inline-block text-zinc-400 dark:text-zinc-500 transition-transform duration-200 rotate-90 shrink-0 mr-1 opacity-60 group-hover:opacity-100" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M5 3.5l6 4.5-6 4.5z"/>
-            </svg>
-          </button>
-          <nav class="space-y-1" id="nav-group-labs">
-            <button onclick="loadStage('golden-goose')" id="nav-item-golden-goose" data-tooltip="金鹅自由实验室" class="sidebar-nav-item hidden w-full flex items-center gap-2.5 p-1.5 text-xs font-medium hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition-colors text-left group cursor-pointer" title="金鹅自由实验室">
-              <span class="icon-slot flex items-center justify-center flex-shrink-0">
-                <div class="w-5 h-5 rounded-[5px] bg-amber-500/10 border border-amber-500/25 flex items-center justify-center shadow-xs shrink-0 overflow-hidden p-0.5">
-                  <img src="/labs/assets/golden_goose.png?v=perfect2026" alt="金鹅" class="w-full h-full object-contain" />
-                </div>
-              </span>
-              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.golden-goose">
-                金鹅自由实验室
-              </span>
-            </button>
-          </nav>
-        </div>
-      </div>
-    </aside>
-
-    <!-- 可拖拽分割线 (macOS Pro Splitter) -->
-    <div id="sidebarResizer" class="resizer-handle group" title="左右拖动调整侧栏宽度 (双击恢复默认)">
-      <div class="resizer-line"></div>
-    </div>
-
     <!-- ==================== MAIN STAGE ==================== -->
-    <main class="flex-1 h-full overflow-hidden relative flex flex-col bg-[var(--bg-primary)]">
+    <main class="flex-1 h-full overflow-hidden relative flex flex-col bg-transparent">
       
       <!-- 视图 A: 矩阵总览看板 (Linear Zen Studio · 呼吸感秩序画布) -->
-      <div id="stageOverview" class="flex-1 h-full overflow-y-auto linear-hero-glow">
+      <div id="stageOverview" class="flex-1 h-full overflow-y-auto">
         <div class="max-w-[1120px] w-full mx-auto px-5 sm:px-10 pt-9 sm:pt-12 pb-16">
 
           <!-- Zen Hero & Quiet Section Switcher -->
@@ -1155,9 +807,6 @@
               <button type="button" onclick="toggleCommandPalette(true)" class="hover:text-[var(--text-primary)] transition-colors duration-200 cursor-pointer flex items-center gap-1.5">
                 <span class="kbd">⌘K</span> <span>Palette</span>
               </button>
-              <button type="button" onclick="toggleTheme()" class="hover:text-[var(--text-primary)] transition-colors duration-200 cursor-pointer flex items-center gap-1.5">
-                <span class="kbd">⌘\</span> <span>Theme</span>
-              </button>
               <button type="button" onclick="toggleAmbientZen()" class="hover:text-[var(--text-primary)] transition-colors duration-200 cursor-pointer flex items-center gap-1.5">
                 <span class="kbd">⌘J</span> <span>Zen</span>
               </button>
@@ -1187,7 +836,7 @@
     <div class="w-full max-w-xl rounded-xl border border-[var(--border-hairline-hover)] bg-[var(--bg-surface)] overflow-hidden flex flex-col" onclick="event.stopPropagation()">
       <div class="flex items-center px-4 py-3 border-b border-[var(--border-hairline)]">
         <i data-lucide="search" class="w-4 h-4 text-[var(--text-muted)] mr-3"></i>
-        <input id="cmdInput" type="text" placeholder="搜索应用、研报、实验或输入指令 (如: theme)..." class="w-full bg-transparent border-none outline-none text-[13.5px] sm:text-sm placeholder-[var(--text-muted)] font-medium text-[var(--text-primary)]" oninput="filterPalette()" onkeydown="handlePaletteKeydown(event)">
+        <input id="cmdInput" type="text" placeholder="搜索器物、长思或输入指令 (如: overview)..." class="w-full bg-transparent border-none outline-none text-[13.5px] sm:text-sm placeholder-[var(--text-muted)] font-medium text-[var(--text-primary)]" oninput="filterPalette()" onkeydown="handlePaletteKeydown(event)">
         <span class="kbd">ESC</span>
       </div>
       <div id="cmdList" class="p-2 max-h-96 overflow-y-auto space-y-1 text-[13.5px]">
@@ -1223,20 +872,16 @@
           <span class="kbd">⌘K</span>
         </div>
         <div class="flex items-center justify-between py-1.5 border-b border-[var(--border-hairline)]">
-          <span data-i18n="shortcut.sidebar">折叠 / 展开侧边栏</span>
-          <span class="kbd">⌘0</span>
-        </div>
-        <div class="flex items-center justify-between py-1.5 border-b border-[var(--border-hairline)]">
-          <span data-i18n="shortcut.theme">切换外观主题 (Dark / Light)</span>
-          <span class="kbd">⌘\</span>
-        </div>
-        <div class="flex items-center justify-between py-1.5 border-b border-[var(--border-hairline)]">
           <span data-i18n="shortcut.ambient">Ambient 4K 禅意模式</span>
           <span class="kbd">⌘J</span>
         </div>
         <div class="flex items-center justify-between py-1.5 border-b border-[var(--border-hairline)]">
           <span data-i18n="shortcut.reload">重新载入当前视窗舞台</span>
           <span class="kbd">⌘R</span>
+        </div>
+        <div class="flex items-center justify-between py-1.5 border-b border-[var(--border-hairline)]">
+          <span data-i18n="shortcut.overview">回到主页总览</span>
+          <span class="kbd">ESC / BinOS</span>
         </div>
         <div class="flex items-center justify-between py-1.5">
           <span data-i18n="shortcut.fullscreen">全屏沉浸视窗</span>
@@ -1358,7 +1003,23 @@
         'nav.apps': '应用',
         'nav.notes': '研报',
         'nav.labs': '实验室',
+        'nav.ambient': '禅意 4K',
         'nav.overview': '总览看板',
+        'mega.archicons.desc': '云架构与网络拓扑 2.5D 矢量图元',
+        'mega.slidecraft.desc': '把灵感静静铺陈成结构化演示文稿',
+        'mega.aiconsole.desc': 'macOS 原生智能终端与根因诊断',
+        'mega.bom.desc': '网络设备选型与清朗物料报价台',
+        'mega.nettest.desc': '端到端链路延迟与抖动透视',
+        'mega.mdview.desc': '纯粹清朗的 Markdown 阅读写作台',
+        'mega.population.desc': '百年尺度下的人口潮汐动态模型',
+        'mega.fund_cycle.desc': '24 产业赛道估值出清与周期记录',
+        'mega.breakdown.desc': '以常识丈量流动性与真实价值',
+        'mega.hint.palette': '随时全局搜索直达',
+        'mega.hint.notes': '跨越周期的观察与商业常识',
+        'mega.hint.labs': '受控访问的推演空间',
+        'mega.all.apps': '查看全部器物 →',
+        'mega.all.notes': '查看全部长思 →',
+        'mega.all.labs': '进入实验沙盒 →',
         'item.bom': 'NetBOM 选型报价',
         'item.population': '人口结构变迁',
         'item.fund_cycle': '公募与产业周期',
@@ -1410,7 +1071,23 @@
         'nav.apps': 'Apps',
         'nav.notes': 'Notes',
         'nav.labs': 'Labs',
+        'nav.ambient': 'Zen 4K',
         'nav.overview': 'Overview',
+        'mega.archicons.desc': '2.5D vector glyphs for cloud and network topologies',
+        'mega.slidecraft.desc': 'Calm structured technical presentation studio',
+        'mega.aiconsole.desc': 'Native macOS AI terminal and root-cause lens',
+        'mega.bom.desc': 'Hardware sizing and clean BOM quote planner',
+        'mega.nettest.desc': 'End-to-end latency and jitter observability',
+        'mega.mdview.desc': 'Minimalist Markdown reader and split editor',
+        'mega.population.desc': 'Century-scale demographic tide simulation',
+        'mega.fund_cycle.desc': '24 sector valuation clearing and cycles',
+        'mega.breakdown.desc': 'Measuring liquidity and intrinsic value',
+        'mega.hint.palette': 'Jump anywhere quickly',
+        'mega.hint.notes': 'Long-horizon market & demographic notes',
+        'mega.hint.labs': 'Controlled simulation environment',
+        'mega.all.apps': 'View all craft →',
+        'mega.all.notes': 'View all essays →',
+        'mega.all.labs': 'Open sandbox →',
         'item.bom': 'NetBOM Studio',
         'item.population': 'Demographics 1950–2100',
         'item.fund_cycle': 'Industry Cycles',
@@ -1566,6 +1243,7 @@
     }
 
     function loadCategoryHub(category) {
+      closeNavPopover();
       const viewOverview = document.getElementById('stageOverview');
       const viewFrame = document.getElementById('stageFrameContainer');
       const iframe = document.getElementById('stageIframe');
@@ -1575,8 +1253,7 @@
       iframe.src = 'about:blank';
       iframe.removeAttribute('data-key');
 
-      // Clear nav active highlights
-      document.querySelectorAll('.sidebar-nav-item').forEach(btn => btn.classList.remove('active'));
+      updateBreadcrumb(category || 'overview', 'overview');
 
       filterOverview(category, true);
       viewOverview.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1586,9 +1263,8 @@
       if (!rawSrc) return '';
       try {
         const url = new URL(rawSrc, window.location.origin);
-        const isDark = document.documentElement.classList.contains('dark');
         const currentLang = localStorage.getItem('b0_lang') || getRootDomainCookie('b0_lang') || 'zh-CN';
-        url.searchParams.set('b0_theme', isDark ? 'dark' : 'light');
+        url.searchParams.set('b0_theme', 'dark');
         url.searchParams.set('b0_lang', currentLang);
         url.searchParams.set('b0_embedded', '1');
         if (stageKey && STAGES[stageKey] && STAGES[stageKey].hash) {
@@ -1612,7 +1288,7 @@
     }
 
     function openAmbientZen(updateHistory = true) {
-      closeMobileSidebar();
+      closeNavPopover();
       toggleCommandPalette(false);
       toggleShortcutModal(false);
       const overlay = document.getElementById('ambientZenOverlay');
@@ -1689,7 +1365,7 @@
     }
 
     function loadStage(key, updateHistory = true) {
-      closeMobileSidebar();
+      closeNavPopover();
       if (key === 'ambient') {
         openAmbientZen(updateHistory);
         return;
@@ -1719,15 +1395,6 @@
       const loadingOverlay = document.getElementById('stageLoadingOverlay');
       
       updateBreadcrumb(stage.category, key);
-
-      // Update sidebar active state
-      document.querySelectorAll('.sidebar-nav-item').forEach(btn => {
-        if (btn.id === 'nav-item-' + key) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
-      });
 
       if (key === 'overview') {
         viewOverview.classList.remove('hidden');
@@ -1856,143 +1523,112 @@
       }
     }
 
-    // Jump Bar Menus
-    
+    // Linear Mega-Menu Popover & Active Stage Breadcrumb
+    let activeNavPopover = null;
+    let navPopoverCloseTimer = null;
+    let lastNavHoverOpen = { key: null, ts: 0 };
+    let currentStageKey = 'overview';
+
+    const NAV_PANELS = {
+      apps: { triggerId: 'navTriggerApps', panelId: 'megaPanelApps' },
+      notes: { triggerId: 'navTriggerNotes', panelId: 'megaPanelNotes' },
+      labs: { triggerId: 'navTriggerLabs', panelId: 'megaPanelLabs' }
+    };
+
+    const STAGE_I18N_KEYS = {
+      'population': 'item.population',
+      'fund-cycle': 'item.fund_cycle',
+      'fund-breakdown': 'item.breakdown',
+      'golden-goose': 'item.golden-goose'
+    };
+
     function updateBreadcrumb(category, stageKey) {
-      // Top breadcrumb removed per user request: avoids duplicate sidebar navigation
-    }
-
-    function closeJumpMenus() {
-      // Safe no-op for shortcuts (Escape key)
-    }
-
-    const DEFAULT_EXPANDED_WIDTH = 240;
-    const COLLAPSED_WIDTH = 58;
-
-    function handleSidebarGroupClick(groupKey) {
-      const sb = document.getElementById('appSidebar');
-      if (sb && !sb.classList.contains('expanded')) {
-        toggleSidebarState();
-      } else {
-        toggleSidebarGroup(groupKey);
-      }
-    }
-    
-    function toggleSidebarGroup(groupKey) {
-      playHaptic('click');
-      const nav = document.getElementById('nav-group-' + groupKey);
-      const icon = document.getElementById('disclosure-' + groupKey);
-      if (!nav || !icon) return;
-      const isHidden = nav.classList.toggle('hidden');
-      if (isHidden) {
-        icon.classList.remove('rotate-90');
-      } else {
-        icon.classList.add('rotate-90');
-      }
-      localStorage.setItem('b0_collapsed_' + groupKey, isHidden ? 'true' : 'false');
-    }
-
-    function initSidebarGroups() {
-      ['apps', 'notes', 'labs'].forEach(k => {
-        const isCollapsed = localStorage.getItem('b0_collapsed_' + k) === 'true';
-        const nav = document.getElementById('nav-group-' + k);
-        const icon = document.getElementById('disclosure-' + k);
-        if (nav && icon && isCollapsed) {
-          nav.classList.add('hidden');
-          icon.classList.remove('rotate-90');
-        }
-      });
-    }
-
-    function closeMobileSidebar() {
-      const sb = document.getElementById('appSidebar');
-      const backdrop = document.getElementById('sidebarBackdrop');
-      if (sb) sb.classList.remove('mobile-open');
-      if (backdrop) backdrop.classList.add('hidden');
-    }
-
-    function toggleSidebarState() {
-      playHaptic('click');
-      const sb = document.getElementById('appSidebar');
-      const backdrop = document.getElementById('sidebarBackdrop');
-      if (!sb) return;
-      if (window.innerWidth < 768) {
-        const isOpen = sb.classList.toggle('mobile-open');
-        if (backdrop) backdrop.classList.toggle('hidden', !isOpen);
-        return;
-      }
-      const isCurrentlyExpanded = sb.classList.contains('expanded');
-      if (isCurrentlyExpanded) {
-        sb.classList.remove('expanded');
-        sb.style.width = COLLAPSED_WIDTH + 'px';
-        localStorage.setItem('b0_sidebar_expanded', 'false');
-      } else {
-        sb.classList.add('expanded');
-        const savedW = parseInt(localStorage.getItem('b0_sidebar_custom_width')) || DEFAULT_EXPANDED_WIDTH;
-        sb.style.width = savedW + 'px';
-        localStorage.setItem('b0_sidebar_expanded', 'true');
-      }
-    }
-
-    function initSidebarResizer() {
-      const resizer = document.getElementById('sidebarResizer');
-      const sb = document.getElementById('appSidebar');
-      if (!resizer || !sb) return;
-
-      let isDragging = false;
-      let startX = 0;
-      let startWidth = 0;
-
-      resizer.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.clientX;
-        startWidth = sb.getBoundingClientRect().width;
-        document.body.classList.add('is-resizing');
-        resizer.classList.add('resizing');
-        sb.style.transition = 'none';
-        e.preventDefault();
-      });
-
-      window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        let newWidth = startWidth + (e.clientX - startX);
-        if (newWidth < 110) {
-          sb.classList.remove('expanded');
-          sb.style.width = COLLAPSED_WIDTH + 'px';
+      currentStageKey = stageKey || 'overview';
+      const crumb = document.getElementById('activeStageCrumb');
+      const crumbTitle = document.getElementById('activeStageCrumbTitle');
+      if (crumb && crumbTitle) {
+        if (!stageKey || stageKey === 'overview') {
+          crumb.classList.add('hidden');
+          crumbTitle.textContent = '';
         } else {
-          newWidth = Math.max(180, Math.min(newWidth, Math.min(480, window.innerWidth * 0.5)));
-          sb.classList.add('expanded');
-          sb.style.width = newWidth + 'px';
+          const lang = (document.documentElement.getAttribute('lang') || 'zh-CN').startsWith('en') ? 'en' : 'zh-CN';
+          const dict = I18N[lang] || I18N['zh-CN'];
+          const i18nKey = STAGE_I18N_KEYS[stageKey];
+          const stageInfo = STAGES[stageKey];
+          crumbTitle.textContent = (i18nKey && dict[i18nKey]) || (stageInfo && stageInfo.title) || stageKey;
+          crumb.classList.remove('hidden');
         }
+      }
+      syncNavTriggerHighlight();
+    }
+
+    function syncNavTriggerHighlight() {
+      const stageInfo = STAGES[currentStageKey];
+      const stageCat = stageInfo && stageInfo.category ? stageInfo.category.toLowerCase() : '';
+      Object.entries(NAV_PANELS).forEach(([key, cfg]) => {
+        const btn = document.getElementById(cfg.triggerId);
+        if (!btn) return;
+        const isActive = (activeNavPopover === key) || (!activeNavPopover && currentStageKey !== 'overview' && stageCat === key);
+        btn.classList.toggle('active', isActive);
       });
+    }
 
-      window.addEventListener('mouseup', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        document.body.classList.remove('is-resizing');
-        resizer.classList.remove('resizing');
-        sb.style.transition = '';
+    function openNavPopover(menuKey) {
+      cancelCloseNavPopover();
+      if (!NAV_PANELS[menuKey]) return;
+      if (window.event && window.event.type === 'mouseenter') {
+        lastNavHoverOpen = { key: menuKey, ts: Date.now() };
+      }
+      activeNavPopover = menuKey;
+      const popover = document.getElementById('navMegaPopover');
+      if (popover) popover.classList.remove('hidden');
+      Object.entries(NAV_PANELS).forEach(([key, cfg]) => {
+        const panel = document.getElementById(cfg.panelId);
+        if (panel) panel.classList.toggle('hidden', key !== menuKey);
+      });
+      syncNavTriggerHighlight();
+    }
 
-        const currentWidth = sb.getBoundingClientRect().width;
-        if (currentWidth <= COLLAPSED_WIDTH + 10) {
-          sb.classList.remove('expanded');
-          sb.style.width = COLLAPSED_WIDTH + 'px';
-          localStorage.setItem('b0_sidebar_expanded', 'false');
-        } else {
-          sb.classList.add('expanded');
-          localStorage.setItem('b0_sidebar_expanded', 'true');
-          localStorage.setItem('b0_sidebar_custom_width', Math.round(currentWidth));
+    function closeNavPopover() {
+      cancelCloseNavPopover();
+      if (!activeNavPopover) return;
+      activeNavPopover = null;
+      lastNavHoverOpen = { key: null, ts: 0 };
+      const popover = document.getElementById('navMegaPopover');
+      if (popover) popover.classList.add('hidden');
+      Object.values(NAV_PANELS).forEach((cfg) => {
+        const panel = document.getElementById(cfg.panelId);
+        if (panel) panel.classList.add('hidden');
+      });
+      syncNavTriggerHighlight();
+    }
+
+    function toggleNavPopover(menuKey) {
+      playHaptic('click');
+      if (activeNavPopover === menuKey) {
+        if (lastNavHoverOpen.key === menuKey && (Date.now() - lastNavHoverOpen.ts < 450)) {
+          lastNavHoverOpen = { key: null, ts: 0 };
+          return;
         }
-      });
+        closeNavPopover();
+      } else {
+        lastNavHoverOpen = { key: null, ts: 0 };
+        openNavPopover(menuKey);
+      }
+    }
 
-      resizer.addEventListener('dblclick', () => {
-        sb.classList.add('expanded');
-        sb.style.transition = 'width 0.24s cubic-bezier(0.16, 1, 0.3, 1)';
-        sb.style.width = DEFAULT_EXPANDED_WIDTH + 'px';
-        localStorage.setItem('b0_sidebar_expanded', 'true');
-        localStorage.setItem('b0_sidebar_custom_width', DEFAULT_EXPANDED_WIDTH);
-        playHaptic('pop');
-      });
+    function scheduleCloseNavPopover() {
+      cancelCloseNavPopover();
+      navPopoverCloseTimer = setTimeout(() => {
+        closeNavPopover();
+      }, 140);
+    }
+
+    function cancelCloseNavPopover() {
+      if (navPopoverCloseTimer) {
+        clearTimeout(navPopoverCloseTimer);
+        navPopoverCloseTimer = null;
+      }
     }
 
     function setRootDomainCookie(name, value) {
@@ -2011,65 +1647,29 @@
     }
 
     function initTheme() {
-      const saved = localStorage.getItem('b0_theme') || getRootDomainCookie('b0_theme');
-      const isDark = saved ? (saved === 'dark') : true;
-      if (isDark) {
-        document.documentElement.classList.add('dark');
-        document.documentElement.classList.remove('light');
-        if (document.body) {
-          document.body.classList.add('dark');
-          document.body.classList.remove('light');
-        }
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.documentElement.classList.add('light');
-        if (document.body) {
-          document.body.classList.remove('dark');
-          document.body.classList.add('light');
-        }
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+      if (document.body) {
+        document.body.classList.add('dark');
+        document.body.classList.remove('light');
       }
-      try { localStorage.setItem('b0_theme', isDark ? 'dark' : 'light'); } catch(e) {}
-      setRootDomainCookie('b0_theme', isDark ? 'dark' : 'light');
-      updateSafariThemeColor(isDark);
+      try { localStorage.setItem('b0_theme', 'dark'); } catch(e) {}
+      setRootDomainCookie('b0_theme', 'dark');
+      updateSafariThemeColor(true);
       syncThemeToIframe();
     }
 
-    function updateSafariThemeColor(isDark) {
+    function updateSafariThemeColor() {
       const meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) meta.setAttribute('content', isDark ? '#08090A' : '#F8FAFC');
+      if (meta) meta.setAttribute('content', '#08090A');
     }
 
     function toggleTheme() {
-      playHaptic('click');
-      document.documentElement.classList.add('theme-transitioning');
-      const isDark = !document.documentElement.classList.contains('dark');
-      if (isDark) {
-        document.documentElement.classList.add('dark');
-        document.documentElement.classList.remove('light');
-        if (document.body) {
-          document.body.classList.add('dark');
-          document.body.classList.remove('light');
-        }
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.documentElement.classList.add('light');
-        if (document.body) {
-          document.body.classList.remove('dark');
-          document.body.classList.add('light');
-        }
-      }
-      try { localStorage.setItem('b0_theme', isDark ? 'dark' : 'light'); } catch(e) {}
-      setRootDomainCookie('b0_theme', isDark ? 'dark' : 'light');
-      updateSafariThemeColor(isDark);
-      syncThemeToIframe();
-      setTimeout(() => {
-        document.documentElement.classList.remove('theme-transitioning');
-      }, 300);
+      initTheme();
     }
 
     function syncThemeToIframe() {
-      const isDark = document.documentElement.classList.contains('dark');
-      const msg = { type: 'B0_THEME_CHANGE', theme: isDark ? 'dark' : 'light' };
+      const msg = { type: 'B0_THEME_CHANGE', theme: 'dark' };
       ['stageIframe', 'ambientZenIframe'].forEach((id) => {
         const frame = document.getElementById(id);
         if (frame && frame.contentWindow) {
@@ -2171,32 +1771,33 @@
       // 1. Auth Button
       const authBtn = document.getElementById('authBtn');
       if (authBtn) {
-        if (isAdmin) {
-          const name = currentAuthUser.username || 'Admin';
-          authBtn.textContent = isZh ? `⚡ ${name}` : `⚡ ${name}`;
-          authBtn.title = isZh ? `管理员身份 [${name}]，点击退出` : `Admin active [${name}], click to logout`;
-          authBtn.className = "h-8 px-2.5 rounded-lg border border-[var(--accent-primary)]/40 bg-[var(--accent-subtle)] hover:border-[var(--accent-hover)] text-[var(--accent-hover)] text-[13px] font-semibold transition-all duration-200 ease-linear cursor-pointer select-none";
-        } else if (isLogged) {
-          const name = currentAuthUser.username || 'User';
-          const proTag = (currentAuthUser.scopes && currentAuthUser.scopes.length > 0) ? ' ★' : '';
-          authBtn.textContent = `👤 ${name}${proTag}`;
-          authBtn.title = isZh ? `已登录用户 [${name}]，点击退出` : `User [${name}], click to logout`;
-          authBtn.className = "linear-btn-ghost h-8 px-2.5 text-[13px] font-medium cursor-pointer select-none";
+        authBtn.textContent = '';
+        if (isLogged) {
+          const name = currentAuthUser.username || (isAdmin ? 'Admin' : 'User');
+          const dot = document.createElement('span');
+          dot.className = isAdmin
+            ? 'w-1.5 h-1.5 rounded-full bg-[#5E6AD2] flex-shrink-0'
+            : 'w-1.5 h-1.5 rounded-full bg-emerald-400/85 flex-shrink-0';
+          const label = document.createElement('span');
+          label.className = 'truncate max-w-[110px]';
+          label.textContent = name;
+          authBtn.appendChild(dot);
+          authBtn.appendChild(label);
+          authBtn.title = isAdmin
+            ? (isZh ? `管理员身份 [${name}]，点击退出` : `Admin [${name}], click to logout`)
+            : (isZh ? `已登录 [${name}]，点击退出` : `Signed in as [${name}], click to logout`);
+          authBtn.className = "ml-1 h-7 px-3 rounded-full border border-white/[0.12] bg-white/[0.04] hover:bg-white/[0.08] text-[#F7F8F8] text-[12.5px] font-medium transition-all duration-200 cursor-pointer select-none inline-flex items-center gap-1.5";
         } else {
           authBtn.textContent = isZh ? '登录' : 'Login';
           authBtn.title = isZh ? '登录 / 注册' : 'Login / Register';
-          authBtn.className = "linear-btn-ghost h-8 px-2.5 text-[13px] font-medium cursor-pointer select-none";
+          authBtn.className = "ml-1 h-7 px-3.5 rounded-full bg-[#F7F8F8] hover:bg-white text-[#08090A] text-[12.5px] font-medium transition-all duration-200 cursor-pointer select-none inline-flex items-center gap-1.5";
         }
       }
 
       // 2. 金鹅入口受控展示 (管理员或 labs:golden_goose 权限可见)
-      const navGolden = document.getElementById('nav-item-golden-goose');
-      if (navGolden) {
-        if (canGoldenGoose) {
-          navGolden.classList.remove('hidden');
-        } else {
-          navGolden.classList.add('hidden');
-        }
+      const navTriggerLabs = document.getElementById('navTriggerLabs');
+      if (navTriggerLabs) {
+        navTriggerLabs.classList.toggle('hidden', !canGoldenGoose);
       }
 
       const cardGolden = document.getElementById('card-golden-goose');
@@ -2699,11 +2300,9 @@
       if (!e.data || !isTrustedMessageOrigin(e.origin)) return;
       const type = e.data.type;
       if (type === 'B0_REQUEST_THEME') {
-        const isDark = document.documentElement.classList.contains('dark');
-        const theme = isDark ? 'dark' : 'light';
         try {
           if (e.source && e.source.postMessage) {
-            e.source.postMessage({ type: 'B0_THEME_CHANGE', theme }, e.origin);
+            e.source.postMessage({ type: 'B0_THEME_CHANGE', theme: 'dark' }, e.origin);
           }
         } catch(err) {}
         syncThemeToIframe();
@@ -2771,33 +2370,12 @@
           el.textContent = dict[key];
         }
       });
-      // Update sidebar tooltips for collapsed mode
-      const tooltips = {
-        'nav-item-icon': 'ArchIcons',
-        'nav-item-ppt': 'SlideCraft',
-        'nav-item-console': 'AIConsole',
-        'nav-item-bom': 'NetBOM',
-        'nav-item-nettest': 'NetPath-Lens',
-        'nav-item-mdview': 'MDView',
-        'nav-item-population': dict['item.population'],
-        'nav-item-fund-cycle': dict['item.fund_cycle'],
-        'nav-item-fund-breakdown': dict['item.breakdown'],
-        'nav-item-golden-goose': dict['item.golden-goose'] || '金鹅自由实验室'
-      };
-      Object.entries(tooltips).forEach(([id, text]) => {
-        const el = document.getElementById(id);
-        if (el && text) {
-          el.setAttribute('data-tooltip', text);
-          el.setAttribute('title', text);
-        }
-      });
-
       // Update dynamic elements
       const cmdInput = document.getElementById('cmdInput');
       if (cmdInput) {
         cmdInput.placeholder = (activeLang === 'en')
-          ? 'Search apps, notes, labs or commands (e.g. theme)...'
-          : '搜索应用、研报、实验或输入指令 (如: theme)...';
+          ? 'Search apps, notes, labs or commands...'
+          : '搜索应用、研报、实验或输入指令...';
       }
       const loadingText = document.getElementById('stageLoadingText');
       if (loadingText) {
@@ -2806,8 +2384,9 @@
           : '正在连接舞台工作区...';
       }
 
-      // Update dynamic hero copy for active filter
+      // Update dynamic hero copy for active filter and active stage breadcrumb
       filterOverview(currentCategoryFilter, false);
+      updateBreadcrumb(null, currentStageKey);
     }
 
     function setLanguage(lang) {
@@ -2815,16 +2394,16 @@
       try { localStorage.setItem('b0_lang', activeLang); } catch(e) {}
       setRootDomainCookie('b0_lang', activeLang);
 
-      // Update [ 简 | EN ] segmented buttons
+      // Update inline [ 简 / EN ] buttons
       const btnZh = document.getElementById('langBtnZh');
       const btnEn = document.getElementById('langBtnEn');
       if (btnZh && btnEn) {
         if (activeLang === 'zh-CN') {
-          btnZh.className = "px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[12px] font-semibold bg-[var(--bg-surface-hover)] text-[var(--text-primary)]";
-          btnEn.className = "px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[12px] font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)]";
+          btnZh.className = "cursor-pointer font-medium text-[#F7F8F8] transition-colors";
+          btnEn.className = "cursor-pointer font-normal text-[var(--text-muted)] hover:text-[#F7F8F8] transition-colors";
         } else {
-          btnEn.className = "px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[12px] font-semibold bg-[var(--bg-surface-hover)] text-[var(--text-primary)]";
-          btnZh.className = "px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[12px] font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)]";
+          btnEn.className = "cursor-pointer font-medium text-[#F7F8F8] transition-colors";
+          btnZh.className = "cursor-pointer font-normal text-[var(--text-muted)] hover:text-[#F7F8F8] transition-colors";
         }
       }
 
@@ -2871,7 +2450,6 @@
       list.push(
         { id: 'auth', title: checkIsLoggedIn() ? (isZh ? '退出当前账号' : 'Logout') : (isZh ? '统一账号登录 / 注册' : 'SSO Login / Register'), category: 'ACTION', badge: '', action: () => handleAuthBtnClick() },
         { id: 'overview', title: isZh ? '返回工作台全景看板' : 'Return to Overview', category: 'ACTION', badge: '', action: () => loadStage('overview') },
-        { id: 'theme', title: isZh ? '切换外观模式 (Dark / Light)' : 'Toggle Theme (Dark / Light)', category: 'ACTION', badge: '⌘\\', action: () => toggleTheme() },
         { id: 'sound', title: isZh ? '切换微触感声效' : 'Toggle Sound Effects', category: 'ACTION', badge: 'Sound', action: () => toggleSound() },
         { id: 'fullscreen', title: isZh ? '切换全屏模式' : 'Toggle Fullscreen', category: 'ACTION', badge: '⌃⌘F', action: () => toggleFullscreen() },
         { id: 'shortcuts', title: isZh ? '查看快捷键全景帮助' : 'View Keyboard Shortcuts', category: 'ACTION', badge: '?', action: () => toggleShortcutModal(true) },
@@ -3000,10 +2578,10 @@
           closeAmbientZen(true);
           return;
         }
+        closeNavPopover();
         toggleCommandPalette(false);
         toggleShortcutModal(false);
         toggleAuthModal(false);
-        closeMobileSidebar();
         return;
       }
       if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
@@ -3011,16 +2589,6 @@
       if (e.key === '?' || (e.shiftKey && e.key === '/')) {
         e.preventDefault();
         toggleShortcutModal(true);
-        return;
-      }
-      if (hasMeta && e.key === '0') {
-        e.preventDefault();
-        toggleSidebarState();
-        return;
-      }
-      if (hasMeta && (e.key === '\\' || e.key === 't')) {
-        e.preventDefault();
-        toggleTheme();
         return;
       }
       if (hasMeta && e.key.toLowerCase() === 'r') {
@@ -3066,20 +2634,14 @@
       initTheme();
       updateAuthUI();
       fetchCurrentAuth();
-      const sb = document.getElementById('appSidebar');
-      const storedExpanded = localStorage.getItem('b0_sidebar_expanded');
-      const isExpanded = storedExpanded !== null ? (storedExpanded === 'true') : (window.innerWidth >= 1024);
-      if (isExpanded) {
-        sb.classList.add('expanded');
-        const savedW = parseInt(localStorage.getItem('b0_sidebar_custom_width')) || DEFAULT_EXPANDED_WIDTH;
-        sb.style.width = savedW + 'px';
-      } else {
-        sb.classList.remove('expanded');
-        sb.style.width = COLLAPSED_WIDTH + 'px';
-      }
-      initSidebarResizer();
-      initSidebarGroups();
-      
+
+      document.addEventListener('click', (e) => {
+        const header = document.getElementById('topHeader');
+        if (header && !header.contains(e.target)) {
+          closeNavPopover();
+        }
+      });
+
       const savedLang = localStorage.getItem('b0_lang') || getRootDomainCookie('b0_lang') || 'zh-CN';
       setLanguage(savedLang);
 
