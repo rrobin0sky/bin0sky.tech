@@ -4,6 +4,7 @@
  *   bin0sky.tech/api/auth/*     -> Universal SSO Auth, Session Revocation & Password Management
  *   bin0sky.tech/api/admin/*    -> Entitlements Management, Admin Reset & KV->D1 Migration
  *   bin0sky.tech/api/bom/*      -> NetBOM D1 Projects, Global Defaults & Collaboration Sync
+ *   bin0sky.tech/api/ai/*       -> Unified Official DeepSeek Proxy & Strategy-A Daily Quota
  *   bin0sky.tech/{subapp}/*     -> Reverse Proxy to Subdomain Apps
  *   Everything else             -> bin0sky.tech Static Assets (ASSETS)
  */
@@ -35,6 +36,9 @@ export default {
     if (pathname.startsWith('/api/bom/')) {
       return handleBomApi(request, env);
     }
+    if (pathname.startsWith('/api/ai/')) {
+      return handleAiApi(request, env);
+    }
 
     // Archived route redirect: /teacher -> / (302)
     const cleanPath = pathname.replace(/\/+$/, '');
@@ -58,6 +62,7 @@ export default {
       '/population': '#/population',
       '/fund-cycle': '#/fund-cycle',
       '/fund-breakdown': '#/fund-breakdown',
+      '/prompt-sop': '#/prompt-sop',
     };
 
     if (hashRoutes[cleanPath]) {
@@ -163,6 +168,7 @@ function isAllowedCorsOrigin(origin) {
   if (origin === 'https://bin0sky.tech') return true;
   if (/^https:\/\/[a-z0-9-]+\.bin0sky\.tech$/i.test(origin)) return true;
   if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin)) return true;
+  if (origin === 'tauri://localhost' || origin === 'http://tauri.localhost' || origin === 'https://tauri.localhost') return true;
   return false;
 }
 
@@ -1579,5 +1585,259 @@ async function handleBomApi(request, env) {
     return jsonResponse(corsHeaders, { error: 'Not Found' }, 404);
   } catch (err) {
     return jsonResponse(corsHeaders, { error: 'Server Error: ' + err.message }, 500);
+  }
+}
+
+// ==========================================
+// 🤖 UNIFIED AI GATEWAY (/api/ai/* -> DeepSeek Proxy + Strategy-A Quota)
+// ==========================================
+
+function getAiCorsHeaders(request) {
+  const base = getAuthCorsHeaders(request);
+  return {
+    ...base,
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Expose-Headers': 'X-RateLimit-Limit, X-RateLimit-Remaining',
+  };
+}
+
+async function handleAiApi(request, env) {
+  const url = new URL(request.url);
+  const path = url.pathname.replace(/\/+$/, '');
+  const corsHeaders = getAiCorsHeaders(request);
+
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { status: 204, headers: corsHeaders });
+  }
+
+  try {
+    const user = await authenticateRequest(request, env);
+    const isAdmin = Boolean(user && user.role === 'admin');
+    const utcDate = new Date().toISOString().slice(0, 10);
+    const guestLimit = Math.max(1, Number(env && env.AI_DAILY_LIMIT_GUEST) || 30);
+    const userLimit = Math.max(1, Number(env && env.AI_DAILY_LIMIT_USER) || 100);
+
+    let limit = null;
+    let quotaKey = null;
+    if (!isAdmin) {
+      if (user && user.uid) {
+        limit = userLimit;
+        quotaKey = `ai_quota:${utcDate}:uid:${user.uid}`;
+      } else {
+        const ip = request.headers.get('CF-Connecting-IP') || 'local';
+        limit = guestLimit;
+        quotaKey = `ai_quota:${utcDate}:ip:${ip}`;
+      }
+    }
+
+    const readUsedCount = async () => {
+      if (isAdmin || !env || !env.TEACHER_KV || !quotaKey) return 0;
+      const raw = await env.TEACHER_KV.get(quotaKey);
+      return raw ? Math.max(0, parseInt(raw, 10) || 0) : 0;
+    };
+
+    // 1. GET /api/ai/status - 查询官方 DeepSeek 网关配置状态与今日剩余免费额度
+    if (path === '/api/ai/status' && request.method === 'GET') {
+      const configured = Boolean(env && env.DEEPSEEK_API_KEY && String(env.DEEPSEEK_API_KEY).trim());
+      const used = await readUsedCount();
+      const remaining = limit === null ? null : Math.max(0, limit - used);
+      return jsonResponse(corsHeaders, {
+        success: true,
+        configured,
+        provider: 'deepseek',
+        defaultModel: 'deepseek-v4-flash',
+        models: ['deepseek-v4-flash', 'deepseek-flash', 'deepseek-chat', 'deepseek-v4-pro', 'deepseek-reasoner'],
+        role: user ? user.role : 'guest',
+        authenticated: Boolean(user),
+        limit,
+        used,
+        remaining,
+      });
+    }
+
+    // 2. POST /api/ai/chat/completions | /api/ai/v1/chat/completions | /api/ai/chat
+    const isChatEndpoint =
+      path === '/api/ai/chat/completions' ||
+      path === '/api/ai/v1/chat/completions' ||
+      path === '/api/ai/chat';
+
+    if (isChatEndpoint && request.method === 'POST') {
+      const apiKey = env && env.DEEPSEEK_API_KEY ? String(env.DEEPSEEK_API_KEY).trim() : '';
+      if (!apiKey) {
+        return jsonResponse(
+          corsHeaders,
+          {
+            error: {
+              message: '服务端暂未配置 DEEPSEEK_API_KEY，请在 Cloudflare Worker Secret 中配置或填入自有 API Key',
+              code: 'DEEPSEEK_KEY_MISSING',
+            },
+          },
+          503
+        );
+      }
+
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return jsonResponse(
+          corsHeaders,
+          { error: { message: '请求体必须为合法的 JSON 格式', code: 'INVALID_JSON' } },
+          400
+        );
+      }
+
+      const messages = body && Array.isArray(body.messages) ? body.messages : null;
+      if (!messages || messages.length === 0) {
+        return jsonResponse(
+          corsHeaders,
+          { error: { message: 'messages 不能为空数组', code: 'INVALID_MESSAGES' } },
+          400
+        );
+      }
+
+      let totalChars = 0;
+      for (const msg of messages) {
+        if (!msg || typeof msg !== 'object') {
+          return jsonResponse(
+            corsHeaders,
+            { error: { message: 'messages 中存在无效消息对象', code: 'INVALID_MESSAGES' } },
+            400
+          );
+        }
+        const c = msg.content;
+        if (typeof c === 'string') {
+          totalChars += c.length;
+        } else if (c !== undefined && c !== null) {
+          totalChars += JSON.stringify(c).length;
+        }
+      }
+
+      if (totalChars > 60000) {
+        return jsonResponse(
+          corsHeaders,
+          { error: { message: '单次请求消息总长度超出 60,000 字符上限，请精简输入后重试', code: 'PAYLOAD_TOO_LARGE' } },
+          400
+        );
+      }
+
+      const ALLOWED_MODELS = new Set([
+        'deepseek-v4-flash',
+        'deepseek-flash',
+        'deepseek-chat',
+        'deepseek-v4-pro',
+        'deepseek-reasoner',
+      ]);
+      const defaultModel = (env && env.DEEPSEEK_MODEL) ? String(env.DEEPSEEK_MODEL).trim() : 'deepseek-v4-flash';
+      const requestedModel = typeof body.model === 'string' ? body.model.trim() : '';
+      const model = ALLOWED_MODELS.has(requestedModel) ? requestedModel : defaultModel;
+
+      let maxTokens = undefined;
+      if (body.max_tokens !== undefined && body.max_tokens !== null) {
+        const parsedMax = Number(body.max_tokens);
+        if (Number.isFinite(parsedMax)) {
+          maxTokens = Math.min(8192, Math.max(1, Math.floor(parsedMax)));
+        }
+      }
+
+      // 连通性测试（如 Ping / Say "OK"）免扣正式业务额度
+      const isPingTest = maxTokens !== undefined && maxTokens <= 10 && totalChars <= 100;
+
+      const used = await readUsedCount();
+      if (!isAdmin && limit !== null && used >= limit) {
+        const msg = user
+          ? `您今日内置 DeepSeek 免费额度（${limit} 次/天）已用完，明日 UTC 00:00 自动重置，或可在设置中填入自有 API Key`
+          : `当前 IP 今日内置 DeepSeek 免费额度（${limit} 次/天）已用完。登录 bin0sky 账号可享 ${userLimit} 次/天，或可在设置中填入自有 API Key`;
+        const limitHeaders = new Headers({
+          'X-RateLimit-Limit': String(limit),
+          'X-RateLimit-Remaining': '0',
+        });
+        return jsonResponse(
+          corsHeaders,
+          { error: { message: msg, code: 'DAILY_QUOTA_EXCEEDED' } },
+          429,
+          limitHeaders
+        );
+      }
+
+      const baseUrl = ((env && env.DEEPSEEK_BASE_URL) || 'https://api.deepseek.com/v1').trim().replace(/\/+$/, '');
+      const isFastChatModel = model === 'deepseek-v4-flash' || model === 'deepseek-flash' || model === 'deepseek-chat';
+      const thinkingConfig =
+        body.thinking !== undefined
+          ? { thinking: body.thinking }
+          : isFastChatModel
+          ? { thinking: { type: 'disabled' } }
+          : {};
+      const upstreamPayload = {
+        model,
+        messages,
+        stream: Boolean(body.stream),
+        ...thinkingConfig,
+        ...(typeof body.temperature === 'number' ? { temperature: body.temperature } : {}),
+        ...(maxTokens !== undefined ? { max_tokens: maxTokens } : {}),
+      };
+
+      const upstreamRes = await fetch(`${baseUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(upstreamPayload),
+      });
+
+      if (!upstreamRes.ok) {
+        const errText = await upstreamRes.text().catch(() => '');
+        let errMsg = `DeepSeek 上游接口响应异常 (HTTP ${upstreamRes.status})`;
+        try {
+          const parsedErr = JSON.parse(errText);
+          if (parsedErr && parsedErr.error && parsedErr.error.message) {
+            errMsg = parsedErr.error.message;
+          }
+        } catch {
+          if (errText) errMsg = `${errMsg}: ${errText.slice(0, 200)}`;
+        }
+        return jsonResponse(
+          corsHeaders,
+          { error: { message: errMsg, code: 'UPSTREAM_ERROR' } },
+          upstreamRes.status
+        );
+      }
+
+      let remaining = null;
+      if (!isAdmin && limit !== null) {
+        const nextUsed = !isPingTest ? used + 1 : used;
+        if (!isPingTest && env && env.TEACHER_KV && quotaKey) {
+          await env.TEACHER_KV.put(quotaKey, String(nextUsed), { expirationTtl: 86400 });
+        }
+        remaining = Math.max(0, limit - nextUsed);
+      }
+
+      const respHeaders = new Headers(corsHeaders);
+      if (limit !== null && remaining !== null) {
+        respHeaders.set('X-RateLimit-Limit', String(limit));
+        respHeaders.set('X-RateLimit-Remaining', String(remaining));
+      }
+
+      if (body.stream) {
+        respHeaders.set('Content-Type', 'text/event-stream; charset=utf-8');
+        respHeaders.set('Cache-Control', 'no-cache');
+        respHeaders.set('Connection', 'keep-alive');
+        return new Response(upstreamRes.body, {
+          status: 200,
+          headers: respHeaders,
+        });
+      }
+
+      respHeaders.set('Content-Type', 'application/json; charset=utf-8');
+      return new Response(upstreamRes.body, {
+        status: 200,
+        headers: respHeaders,
+      });
+    }
+
+    return jsonResponse(corsHeaders, { error: 'Not Found' }, 404);
+  } catch (err) {
+    return jsonResponse(corsHeaders, { error: { message: 'AI Gateway Error: ' + err.message } }, 500);
   }
 }

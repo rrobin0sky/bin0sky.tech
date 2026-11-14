@@ -15,6 +15,7 @@
 | **06 NetPath-Lens** | `bin0sky.tech/nettest` / `nettest.bin0sky.tech` | `/Antigravity/online-ai-nettest` | `rrobin0sky/online-ai-nettest` | 🚀 生产力工具 APPS |
 | **07 MDView** | `bin0sky.tech/mdview` / `mdview.bin0sky.tech` | `/Antigravity/online-ai-mdview` | `rrobin0sky/online-ai-mdview` | 🚀 生产力工具 APPS |
 | **08 人口结构变迁**| `bin0sky.tech/notes/population_structure_1950_2100.html` | `/Antigravity/bin0sky.tech/notes/` | `rrobin0sky/bin0sky.tech` | 📑 交互研报 NOTES |
+| **09 AI 提示词工程 SOP**| `bin0sky.tech/notes/prompt_engineering_sop.html` | `/Antigravity/bin0sky.tech/notes/` | `rrobin0sky/bin0sky.tech` | 📑 交互研报 NOTES |
 
 ---
 
@@ -40,6 +41,8 @@
 - **主站网关 (`bin0sky-tech`)**：
   ```bash
   npx wrangler secret put JWT_SECRET
+  # 统一 AI 网关（全站内置 DeepSeek 免配引擎，必需）
+  npx wrangler secret put DEEPSEEK_API_KEY
   # 可选：自定义管理员静默白名单与应急初始化密钥
   npx wrangler secret put ADMIN_USERNAMES
   npx wrangler secret put ADMIN_EMAILS
