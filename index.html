@@ -469,10 +469,14 @@
 
             <!-- Panel: 实验 · Sandbox -->
             <div id="megaPanelLabs" class="hidden">
-              <div class="p-3">
+              <div class="p-3 space-y-1">
                 <button type="button" onclick="closeNavPopover(); loadStage('golden-goose')" class="linear-mega-item">
                   <div class="text-[14px] font-medium text-[#F7F8F8]" data-i18n="item.golden-goose">金鹅自由实验室</div>
                   <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="card.golden-goose.tag">复利曲线、安全提现率与永续现金流的静默时间推演。</div>
+                </button>
+                <button type="button" onclick="closeNavPopover(); loadStage('radio')" class="linear-mega-item">
+                  <div class="text-[14px] font-medium text-[#F7F8F8]" data-i18n="item.radio">Time Slice Radio · 千禧切片电台</div>
+                  <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="card.radio.tag">2004–2010 时代切片与 12 支电影感循环画面的私享电台。</div>
                 </button>
               </div>
               <div class="px-4 py-2.5 border-t border-white/[0.06] bg-white/[0.015] flex items-center justify-between text-[12.5px]">
@@ -792,6 +796,28 @@
                 </div>
               </div>
 
+              <!-- Time Slice Radio (受控展示：LABS 私享切片电台) -->
+              <div id="card-radio" tabindex="0" onclick="loadStage('radio')" data-category="labs" class="bento-card hidden group p-5 sm:p-6 flex flex-col justify-between cursor-pointer">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="w-8 h-8 rounded-[8px] bg-sky-500/10 text-sky-400 border border-[var(--border-hairline)] flex items-center justify-center flex-shrink-0 bento-icon">
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/>
+                        <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/>
+                        <path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/>
+                      </svg>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] opacity-0 -translate-x-0.5 translate-y-0.5 group-hover:opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300"></i>
+                  </div>
+                  <h3 class="font-semibold text-[16px] text-[var(--text-primary)] tracking-[-0.018em] group-hover:text-[var(--accent-hover)] transition-colors duration-200" data-i18n="item.radio">Time Slice Radio · 千禧切片电台</h3>
+                  <p class="text-[14px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] mt-2 leading-[1.7] transition-colors duration-200" data-i18n="card.radio.tag">
+                    2004–2010 时代切片与 12 支电影感循环画面的私享电台。
+                  </p>
+                </div>
+              </div>
+
             </div>
           </section>
 
@@ -972,6 +998,7 @@
       'notes': { title: '深度研报总览', category: 'NOTES', src: null, hash: '#/notes' },
       'labs': { title: '前沿实验总览', category: 'LABS', src: null, hash: '#/labs' },
       'golden-goose': { title: '金鹅自由实验室', category: 'LABS', src: '/labs/golden_goose.html', hash: '#/golden-goose' },
+      'radio': { title: 'Time Slice Radio', category: 'LABS', src: 'https://radio.bin0sky.tech', hash: '#/radio' },
       'icon': { title: 'ArchIcons', category: 'APPS', src: 'https://icon.bin0sky.tech', hash: '#/icon' },
       'ppt': { title: 'SlideCraft', category: 'APPS', src: 'https://ppt.bin0sky.tech', hash: '#/ppt' },
       'console': { title: 'AIConsole', category: 'APPS', src: 'https://console.bin0sky.tech', hash: '#/console' },
@@ -1026,6 +1053,8 @@
         'item.breakdown': '破位基金透视',
         'item.golden-goose': '金鹅自由实验室',
         'card.golden-goose.tag': '复利曲线、安全提现率与永续现金流的静默时间推演。',
+        'item.radio': 'Time Slice Radio · 千禧切片电台',
+        'card.radio.tag': '2004–2010 时代切片与 12 支电影感循环画面的私享电台。',
         'card.archicons.tag': '将复杂云网拓扑收拢为一目了然的 2.5D 矢量图元。',
         'card.slidecraft.tag': '把零散灵感静静铺陈成结构清晰的演示文稿。',
         'card.aiconsole.tag': '伴随 macOS 呼吸的原生 AI 终端，温和抚平晦涩报错。',
@@ -1094,6 +1123,8 @@
         'item.breakdown': 'Breakdown Fund Analysis',
         'item.golden-goose': 'Golden Goose Lab',
         'card.golden-goose.tag': 'Quiet long-horizon projections of compounding, safe withdrawal, and cashflow.',
+        'item.radio': 'Time Slice Radio',
+        'card.radio.tag': '2004–2010 nostalgia time-slice radio with 12 cinematic loop visuals.',
         'card.archicons.tag': 'Distilling complex cloud and network topologies into crisp 2.5D vector icons.',
         'card.slidecraft.tag': 'Turning scattered thoughts into calm, structured technical presentations.',
         'card.aiconsole.tag': 'A native macOS terminal with quiet intelligence for tracing root causes.',
@@ -1539,7 +1570,8 @@
       'population': 'item.population',
       'fund-cycle': 'item.fund_cycle',
       'fund-breakdown': 'item.breakdown',
-      'golden-goose': 'item.golden-goose'
+      'golden-goose': 'item.golden-goose',
+      'radio': 'item.radio'
     };
 
     function updateBreadcrumb(category, stageKey) {
@@ -1813,6 +1845,19 @@
         }
       }
 
+      const cardRadio = document.getElementById('card-radio');
+      if (cardRadio) {
+        if (canGoldenGoose) {
+          cardRadio.classList.remove('hidden');
+          if (currentCategoryFilter === 'all' || currentCategoryFilter === 'labs') {
+            cardRadio.style.display = '';
+          }
+        } else {
+          cardRadio.classList.add('hidden');
+          cardRadio.style.display = 'none';
+        }
+      }
+
       const tabLabsBtn = document.querySelector('#overviewFilterBar button[data-cat="labs"]');
       if (tabLabsBtn) {
         tabLabsBtn.classList.toggle('hidden', !canGoldenGoose);
@@ -2012,10 +2057,10 @@
       } catch (e) {}
       updateAuthUI();
 
-      // 如果当前正处于金鹅页面，退出登录后返回 overview
+      // 如果当前正处于受控 LABS 页面，退出登录后返回 overview
       const iframe = document.getElementById('stageIframe');
       const curKey = iframe ? iframe.getAttribute('data-key') : null;
-      if (curKey === 'golden-goose' || location.hash.includes('golden-goose') || location.hash.includes('goose')) {
+      if (curKey === 'golden-goose' || curKey === 'radio' || location.hash.includes('golden-goose') || location.hash.includes('goose') || location.hash.includes('radio')) {
         loadStage('overview');
       }
     }
@@ -2439,9 +2484,10 @@
         { id: 'fund-breakdown', title: isZh ? '破位基金本质透视看板' : 'Breakdown Fund Analysis', category: 'NOTES', badge: '', action: () => loadStage('fund-breakdown') },
       ];
 
-      // 金鹅自由实验室：管理员或拥有 labs:golden_goose 权限者可见
+      // 金鹅自由实验室与 Time Slice Radio：管理员或拥有 labs:golden_goose 权限者可见
       if (hasScope('labs:golden_goose')) {
         list.push({ id: 'golden-goose', title: isZh ? '金鹅自由实验室' : 'Golden Goose Lab', category: 'LABS', badge: '', action: () => loadStage('golden-goose') });
+        list.push({ id: 'radio', title: isZh ? 'Time Slice Radio · 千禧切片电台' : 'Time Slice Radio', category: 'LABS', badge: '', action: () => loadStage('radio') });
       }
 
       if (checkIsLoggedIn()) {
@@ -2623,6 +2669,7 @@
       else if (h.includes('fund-cycle') || h.includes('cycle') || p.includes('cycle') || p.includes('%e5%85%ac%e5%8b%9f')) loadStage('fund-cycle', false);
       else if (h.includes('fund-breakdown') || h.includes('breakdown') || p.includes('breakdown') || p.includes('%e7%a0%b4%e4%bd%8d')) loadStage('fund-breakdown', false);
       else if (h.includes('golden-goose') || h.includes('goose') || p.includes('golden_goose')) loadStage('golden-goose', false);
+      else if (h.includes('radio') || p.endsWith('/radio')) loadStage('radio', false);
       else if (h.includes('population') || h.includes('popul') || p.includes('popul')) loadStage('population', false);
       else loadStage('overview', false);
     }
