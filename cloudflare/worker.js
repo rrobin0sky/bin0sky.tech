@@ -4,14 +4,12 @@
  *   bin0sky.tech/api/auth/*     -> Universal SSO Auth, Session Revocation & Password Management
  *   bin0sky.tech/api/admin/*    -> Entitlements Management, Admin Reset & KV->D1 Migration
  *   bin0sky.tech/api/bom/*      -> NetBOM D1 Projects, Global Defaults & Collaboration Sync
- *   bin0sky.tech/api/teacher/*  -> Teacher Workspace Auth & D1 Cloud Sync
  *   bin0sky.tech/{subapp}/*     -> Reverse Proxy to Subdomain Apps
  *   Everything else             -> bin0sky.tech Static Assets (ASSETS)
  */
 
 const ALL_SCOPES = [
   'labs:golden_goose',
-  'app:teacher',
   'netbom:cost_view',
   'netbom:publish',
   'ambient:vip',
@@ -37,8 +35,11 @@ export default {
     if (pathname.startsWith('/api/bom/')) {
       return handleBomApi(request, env);
     }
-    if (pathname.startsWith('/api/teacher/')) {
-      return handleTeacherApi(request, env);
+
+    // Archived route redirect: /teacher -> / (302)
+    const cleanPath = pathname.replace(/\/+$/, '');
+    if (cleanPath === '/teacher' || pathname.startsWith('/teacher/')) {
+      return Response.redirect(`${url.origin}/`, 302);
     }
 
     // Direct app routes: Redirect to App Shell workstation hash navigation
@@ -53,14 +54,12 @@ export default {
       '/apps': '#/apps',
       '/notes': '#/notes',
       '/labs': '#/labs',
-      '/teacher': '#/teacher',
       '/golden-goose': '#/golden-goose',
       '/population': '#/population',
       '/fund-cycle': '#/fund-cycle',
       '/fund-breakdown': '#/fund-breakdown',
     };
 
-    const cleanPath = pathname.replace(/\/+$/, '');
     if (hashRoutes[cleanPath]) {
       return Response.redirect(`${url.origin}/${hashRoutes[cleanPath]}`, 302);
     }
@@ -1575,172 +1574,6 @@ async function handleBomApi(request, env) {
           message: '保存成功',
         });
       }
-    }
-
-    return jsonResponse(corsHeaders, { error: 'Not Found' }, 404);
-  } catch (err) {
-    return jsonResponse(corsHeaders, { error: 'Server Error: ' + err.message }, 500);
-  }
-}
-
-// ==========================================
-// 🎓 TEACHER WORKSPACE API (/api/teacher/* -> Unified SSO + D1)
-// ==========================================
-
-async function handleTeacherApi(request, env) {
-  const url = new URL(request.url);
-  const path = url.pathname.replace(/\/+$/, '');
-  const corsHeaders = getAuthCorsHeaders(request);
-
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: corsHeaders });
-  }
-
-  try {
-    const hasDB = !!(env && env.DB);
-    const hasKV = !!(env && env.TEACHER_KV);
-
-    if (path === '/api/teacher/status') {
-      return jsonResponse(corsHeaders, {
-        status: 'ok',
-        dbAvailable: hasDB,
-        kvAvailable: hasKV,
-        serverTime: Date.now(),
-        message: hasDB ? 'Cloudflare D1 云端同步已就绪' : '本地/单机优先运行中',
-      });
-    }
-
-    if (!hasDB) {
-      return jsonResponse(corsHeaders, { error: 'Cloudflare D1 数据库未绑定' }, 503);
-    }
-
-    const jwtSecret = getJwtSecret(env);
-    if (!jwtSecret) {
-      return jsonResponse(corsHeaders, { error: '服务端未配置 JWT_SECRET 环境变量，云端同步鉴权不可用' }, 503);
-    }
-
-    // POST /api/teacher/auth - 统一使用 D1 users 鉴权，并校验 app:teacher 权限
-    if (path === '/api/teacher/auth' && request.method === 'POST') {
-      const canAttempt = await checkLoginRateLimit(request, env);
-      if (!canAttempt) {
-        return jsonResponse(corsHeaders, { error: '登录失败次数过多，请稍候 5 分钟后再试' }, 429);
-      }
-
-      const body = await request.json().catch(() => ({}));
-      const cleanUser = String(body.username || '').trim().toLowerCase();
-      const credential = body.password || body.passwordHash;
-
-      if (!cleanUser || !credential) {
-        return jsonResponse(corsHeaders, { error: '请提供用户名和密码' }, 400);
-      }
-
-      const existing = await env.DB
-        .prepare('SELECT uid, username, email, password_hash, salt, role, status, must_change_password FROM users WHERE username = ? OR email = ?')
-        .bind(cleanUser, cleanUser)
-        .first();
-
-      if (!existing) {
-        await recordLoginFailure(request, env);
-        return jsonResponse(corsHeaders, { error: '用户不存在，请先在 bin0sky.tech 主站注册并开通教师工作台权限' }, 404);
-      }
-      if (existing.status !== 'active') {
-        return jsonResponse(corsHeaders, { error: '账号已被禁用，请联系管理员' }, 403);
-      }
-
-      const validPwd = await verifyUserPassword(credential, existing, { allowRawClientSha256: true });
-      if (!validPwd) {
-        await recordLoginFailure(request, env);
-        return jsonResponse(corsHeaders, { error: '密码不正确，请重新输入' }, 401);
-      }
-
-      const scopes = await resolveUserScopes(env.DB, existing.uid, existing.role || 'user');
-      if (existing.role !== 'admin' && !scopes.includes('app:teacher')) {
-        return jsonResponse(corsHeaders, { error: '该账号暂未开通教师工作台 (app:teacher) 权限，请联系管理员授权', needScope: 'app:teacher' }, 403);
-      }
-
-      await clearLoginFailure(request, env);
-      const { token } = await createSessionAndToken(request, env, existing, scopes);
-      const cookieHeaders = new Headers();
-      appendAuthCookies(cookieHeaders, token, existing.role || 'user', request.url);
-
-      return jsonResponse(
-        corsHeaders,
-        {
-          success: true,
-          uid: existing.uid,
-          username: existing.username,
-          role: existing.role,
-          scopes,
-          mustChangePassword: Boolean(existing.must_change_password),
-          token,
-          dbAvailable: true,
-          message: existing.must_change_password ? '登录成功（建议前往主站或设置修改迁移初始密码）' : '登录成功',
-        },
-        200,
-        cookieHeaders
-      );
-    }
-
-    // Authenticated teacher sync routes (/api/teacher/sync)
-    const user = await authenticateRequest(request, env);
-    if (!user) {
-      return jsonResponse(corsHeaders, { error: '未授权或登录凭证已过期，请先登录', needAuth: true }, 401);
-    }
-    if (!requireScope(user, 'app:teacher')) {
-      return jsonResponse(corsHeaders, { error: '当前账号未开通教师工作台 (app:teacher) 权限', needScope: 'app:teacher' }, 403);
-    }
-
-    if (path === '/api/teacher/sync' && request.method === 'GET') {
-      const row = await env.DB
-        .prepare('SELECT data_json, updated_at FROM teacher_workspaces WHERE uid = ?')
-        .bind(user.uid)
-        .first();
-
-      let payload = null;
-      if (row && row.data_json) {
-        try {
-          payload = JSON.parse(row.data_json);
-        } catch (e) {}
-      }
-
-      return jsonResponse(corsHeaders, {
-        success: true,
-        uid: user.uid,
-        username: user.username,
-        payload,
-        serverTime: Date.now(),
-      });
-    }
-
-    if (path === '/api/teacher/sync' && request.method === 'POST') {
-      const body = await request.json().catch(() => ({}));
-      const now = Date.now();
-      const record = {
-        data: body.data || {},
-        ui: body.ui || {},
-        version: body.version || 1,
-        clientUpdatedAt: body.clientUpdatedAt || now,
-        serverUpdatedAt: now,
-        updatedBy: user.username,
-      };
-
-      await env.DB
-        .prepare(
-          `INSERT INTO teacher_workspaces (uid, data_json, updated_at)
-           VALUES (?, ?, ?)
-           ON CONFLICT(uid) DO UPDATE SET
-             data_json = excluded.data_json,
-             updated_at = excluded.updated_at`
-        )
-        .bind(user.uid, JSON.stringify(record), now)
-        .run();
-
-      return jsonResponse(corsHeaders, {
-        success: true,
-        serverTime: now,
-        dbAvailable: true,
-        message: '云端同步成功',
-      });
     }
 
     return jsonResponse(corsHeaders, { error: 'Not Found' }, 404);

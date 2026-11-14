@@ -145,9 +145,115 @@
     });
   }
 
+  // Trusted origin check for BinOS cross-window postMessage bridge
+  function isTrustedOrigin(origin) {
+    if (!origin) return false;
+    if (origin === window.location.origin) return true;
+    if (origin === 'https://bin0sky.tech') return true;
+    if (/^https:\/\/[a-z0-9-]+\.bin0sky\.tech$/i.test(origin)) return true;
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin)) return true;
+    return false;
+  }
+
+  function getParentTargetOrigin() {
+    if (document.referrer) {
+      try {
+        const refOrigin = new URL(document.referrer).origin;
+        if (isTrustedOrigin(refOrigin)) return refOrigin;
+      } catch (e) {}
+    }
+    if (/(^|\.)bin0sky\.tech$/i.test(window.location.hostname)) {
+      return 'https://bin0sky.tech';
+    }
+    return '*';
+  }
+
+  function postToParent(type, payload) {
+    if (!type || typeof type !== 'string') return false;
+    if (!window.parent || window.parent === window) return false;
+    try {
+      const msg = Object.assign({}, payload && typeof payload === 'object' ? payload : {}, { type: type });
+      window.parent.postMessage(msg, getParentTargetOrigin());
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function showStandaloneToast(message, options) {
+    if (!message) return;
+    const opts = options && typeof options === 'object' ? options : {};
+    const duration = Number(opts.duration) > 0 ? Number(opts.duration) : 2400;
+    let toast = document.getElementById('b0-standalone-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'b0-standalone-toast';
+      toast.style.cssText = 'position:fixed;top:16px;right:16px;z-index:2147483647;padding:8px 14px;border-radius:12px;backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);background:rgba(24,24,27,0.82);border:1px solid rgba(255,255,255,0.14);color:#f8fafc;font-size:12px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif;box-shadow:0 12px 32px rgba(0,0,0,0.32);transition:all 0.22s cubic-bezier(0.16,1,0.3,1);opacity:0;transform:translateY(-8px);pointer-events:none;';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = String(message);
+    requestAnimationFrame(() => {
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateY(0)';
+    });
+    clearTimeout(window.__b0_standalone_toast_timer);
+    window.__b0_standalone_toast_timer = setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(-8px)';
+    }, duration);
+  }
+
+  const isBin0skyDomain = /(^|\.)bin0sky\.tech$/i.test(window.location.hostname);
+  const authBaseUrl = isBin0skyDomain ? 'https://bin0sky.tech' : '';
+
+  // Check if running inside iframe (BinOS Workstation Stage)
+  const isEmbedded = (paramEmbedded || window.top !== window.self);
+
+  // Lightweight Cross-Window Communication Bridge (available in both embedded and standalone modes)
+  window.B0Bridge = {
+    isEmbedded: isEmbedded,
+    postMessage: postToParent,
+    requireAuth: function(options) {
+      const opts = typeof options === 'string' ? { reason: options } : (options && typeof options === 'object' ? options : {});
+      if (postToParent('B0_AUTH_REQUIRED', {
+        reason: opts.reason || '',
+        needScope: opts.needScope || '',
+        mode: opts.mode || 'login',
+      })) {
+        return true;
+      }
+      window.location.href = `${authBaseUrl}/#login?redirect_uri=${encodeURIComponent(window.location.href)}`;
+      return false;
+    },
+    syncRoute: function(routeOrOptions) {
+      const opts = typeof routeOrOptions === 'string'
+        ? { route: routeOrOptions }
+        : (routeOrOptions && typeof routeOrOptions === 'object' ? routeOrOptions : {});
+      return postToParent('B0_ROUTE_SYNC', {
+        route: opts.route || '',
+        path: opts.path || '',
+        hash: opts.hash || '',
+        query: opts.query || '',
+        title: opts.title || '',
+      });
+    },
+    toast: function(message, options) {
+      const opts = options && typeof options === 'object' ? options : {};
+      if (postToParent('B0_TOAST', {
+        message: String(message || ''),
+        variant: opts.variant || 'info',
+        duration: opts.duration,
+      })) {
+        return true;
+      }
+      showStandaloneToast(message, opts);
+      return false;
+    }
+  };
+
   // Listen for parent theme & lang bridge in both embedded and top windows
   window.addEventListener('message', function(e) {
-    if (!e.data) return;
+    if (!e.data || !isTrustedOrigin(e.origin)) return;
     if (e.data.type === 'B0_THEME_CHANGE') {
       applyTheme(e.data.theme === 'dark');
     } else if (e.data.type === 'B0_LANG_CHANGE') {
@@ -164,15 +270,11 @@
     }
   });
 
-  // Check if running inside iframe (BinOS Workstation Stage)
-  const isEmbedded = (paramEmbedded || window.top !== window.self);
   if (isEmbedded) {
     document.documentElement.classList.add('b0-embedded');
     // Request current theme and language from parent workstation shell
-    try {
-      window.parent.postMessage({ type: 'B0_REQUEST_THEME' }, '*');
-      window.parent.postMessage({ type: 'B0_REQUEST_LANG' }, '*');
-    } catch(e) {}
+    postToParent('B0_REQUEST_THEME');
+    postToParent('B0_REQUEST_LANG');
     // If embedded, parent workstation shell handles chrome, controls, and pills
     return;
   }
@@ -612,15 +714,6 @@
           <div>
             <div class="b0-menu-name">金鹅自由实验室</div>
             <div class="b0-menu-desc">动态复利与4%永续自由沙盒</div>
-          </div>
-        </div>
-      </a>
-      <a href="/labs/teacher_workspace.html" class="b0-menu-item">
-        <div class="b0-menu-item-left">
-          <span class="b0-menu-icon" style="background: rgba(16,185,129,0.15); color: #10b981;">09</span>
-          <div>
-            <div class="b0-menu-name">教师工作台</div>
-            <div class="b0-menu-desc">高中日语教学空间与学情分析</div>
           </div>
         </div>
       </a>
