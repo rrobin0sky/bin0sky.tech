@@ -168,30 +168,100 @@
 
     /* Linear Restrained Hero Ambient Glow */
     .linear-hero-glow {
-      background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, 0.15), transparent);
+      background:
+        radial-gradient(ellipse 75% 42% at 50% -12%, rgba(120, 119, 198, 0.14), transparent 70%),
+        radial-gradient(ellipse 45% 30% at 80% 0%, rgba(56, 189, 248, 0.05), transparent 65%);
     }
 
-    /* Linear Hairline Surface Cards (Zero Heavy Shadows) */
+    /* Linear Obsidian Hairline Cards with Top-Edge Specular Border & Spotlight */
     .bento-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-card);
-      transition: var(--transition-linear);
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.008) 100%), var(--bg-surface);
+      border: 1px solid rgba(255, 255, 255, 0.065);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.10), 0 4px 20px -4px rgba(0, 0, 0, 0.35);
+      border-radius: 14px;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                  background-color 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bento-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      background: radial-gradient(360px circle at var(--mouse-x, 50%) var(--mouse-y, 0%), rgba(255, 255, 255, 0.06), transparent 45%);
+      z-index: 0;
+    }
+    .bento-card > * {
+      position: relative;
+      z-index: 1;
     }
     .bento-card:hover {
-      background: var(--bg-surface-hover);
-      border-color: var(--border-hairline-hover);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0.015) 100%), var(--bg-surface-hover);
+      border-color: rgba(255, 255, 255, 0.14);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.18), 0 10px 30px -8px rgba(0, 0, 0, 0.5);
+      transform: translateY(-1.5px);
+    }
+    .bento-card:hover::before {
+      opacity: 1;
+    }
+    html.light .bento-card {
+      background: linear-gradient(180deg, #FFFFFF 0%, #F9FBFF 100%);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 4px 16px -4px rgba(15, 23, 42, 0.05);
+    }
+    html.light .bento-card::before {
+      background: radial-gradient(360px circle at var(--mouse-x, 50%) var(--mouse-y, 0%), rgba(94, 106, 210, 0.065), transparent 45%);
+    }
+    html.light .bento-card:hover {
+      background: #FFFFFF;
+      border-color: rgba(94, 106, 210, 0.28);
+      box-shadow: 0 10px 26px -6px rgba(15, 23, 42, 0.09);
     }
 
-    /* Linear Typography & Tags */
+    /* Monochrome-First Icons: quiet at rest, vibrant on card hover */
+    .bento-icon {
+      filter: saturate(0.18) brightness(0.92) contrast(0.95);
+      opacity: 0.8;
+      transition: filter 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    html.light .bento-icon {
+      filter: saturate(0.25) brightness(0.96);
+      opacity: 0.85;
+    }
+    .bento-card:hover .bento-icon {
+      filter: saturate(1) brightness(1.04) contrast(1);
+      opacity: 1;
+      transform: scale(1.04);
+    }
+
+    /* Linear Typography & Luminance Text Gradient */
     .linear-heading {
       color: var(--text-primary);
       font-weight: 600;
       letter-spacing: -0.02em;
     }
+    .linear-heading-gradient {
+      background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.68) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    html.light .linear-heading-gradient {
+      background: linear-gradient(180deg, #0F172A 0%, #334155 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
     .linear-tag {
       font-family: 'JetBrains Mono', 'Fira Code', monospace;
-      font-size: 10px;
+      font-size: 11px;
       line-height: 1;
       padding: 4px 7px;
       border-radius: var(--radius-badge);
@@ -208,11 +278,11 @@
       color: var(--text-secondary);
     }
 
-    /* Filter Pills */
+    /* Quiet Zen Filter Pills */
     .filter-pill {
-      padding: 5px 11px;
-      border-radius: var(--radius-control);
-      font-size: 12px;
+      padding: 6px 13px;
+      border-radius: 9999px;
+      font-size: 13px;
       font-weight: 500;
       color: var(--text-muted);
       border: 1px solid transparent;
@@ -223,12 +293,20 @@
     }
     .filter-pill:hover {
       color: var(--text-primary);
-      background: var(--bg-surface-hover);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    html.light .filter-pill:hover {
+      background: rgba(15, 23, 42, 0.04);
     }
     .filter-pill.active {
-      color: #FFFFFF;
-      background: var(--accent-primary);
-      border-color: var(--accent-primary);
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+    html.light .filter-pill.active {
+      color: var(--text-primary);
+      background: rgba(15, 23, 42, 0.07);
+      border-color: rgba(15, 23, 42, 0.12);
     }
 
     /* Controls & Buttons */
@@ -323,9 +401,9 @@
         background: var(--bg-surface-hover);
         color: var(--text-primary);
         border: 1px solid var(--border-hairline-hover);
-        padding: 4px 9px;
+        padding: 5px 10px;
         border-radius: 6px;
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 500;
         white-space: nowrap;
         pointer-events: none;
@@ -363,8 +441,8 @@
     /* Keycap badge */
     .kbd {
       font-family: 'JetBrains Mono', 'Fira Code', monospace;
-      font-size: 10px;
-      padding: 2px 5px;
+      font-size: 11px;
+      padding: 2px 6px;
       border-radius: 4px;
       border: 1px solid var(--border-hairline);
       background: var(--bg-surface);
@@ -466,24 +544,24 @@
             </g>
           </svg>
         </div>
-        <span class="font-semibold text-[15px] tracking-[-0.02em] text-[var(--text-primary)] group-hover:text-[var(--accent-hover)] transition-colors duration-200 select-none leading-none">BinOS</span>
-        <span class="hidden sm:inline-block font-mono text-[11px] text-[var(--text-muted)] border-l border-[var(--border-hairline)] pl-2.5">bin0sky.tech</span>
+        <span class="font-semibold text-[16px] tracking-[-0.02em] text-[var(--text-primary)] group-hover:text-[var(--accent-hover)] transition-colors duration-200 select-none leading-none">BinOS</span>
+        <span class="hidden sm:inline-block font-mono text-[12px] text-[var(--text-muted)] border-l border-[var(--border-hairline)] pl-2.5">bin0sky.tech</span>
       </a>
     </div>
 
     <!-- 区域 2: 功能按键 (快速指令、语言、外观与登录) -->
     <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
       <!-- Quick Command Palette Trigger (⌘K) -->
-      <button onclick="toggleCommandPalette(true)" class="linear-btn-ghost h-8 px-2.5 flex items-center gap-2 text-xs cursor-pointer" title="指令面板 (⌘K)" aria-label="Command Palette">
+      <button onclick="toggleCommandPalette(true)" class="linear-btn-ghost h-8 px-2.5 flex items-center gap-2 text-[13px] cursor-pointer" title="指令面板 (⌘K)" aria-label="Command Palette">
         <i data-lucide="search" class="w-3.5 h-3.5 text-[var(--text-muted)]"></i>
         <span class="hidden md:inline text-[var(--text-muted)]">Search...</span>
         <span class="kbd hidden sm:inline-block">⌘K</span>
       </button>
 
       <!-- 2-Language Segmented Switcher: 简 / EN -->
-      <div class="flex items-center rounded-lg border border-[var(--border-hairline)] p-0.5 text-xs select-none bg-[var(--bg-surface)]">
-        <button id="langBtnZh" onclick="setLanguage('zh-CN')" class="px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[11px] font-semibold bg-[var(--bg-surface-hover)] text-[var(--text-primary)]" title="切换至简体中文">简</button>
-        <button id="langBtnEn" onclick="setLanguage('en')" class="px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[11px] font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)]" title="Switch to English">EN</button>
+      <div class="flex items-center rounded-lg border border-[var(--border-hairline)] p-0.5 text-[12px] select-none bg-[var(--bg-surface)]">
+        <button id="langBtnZh" onclick="setLanguage('zh-CN')" class="px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[12px] font-semibold bg-[var(--bg-surface-hover)] text-[var(--text-primary)]" title="切换至简体中文">简</button>
+        <button id="langBtnEn" onclick="setLanguage('en')" class="px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[12px] font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)]" title="Switch to English">EN</button>
       </div>
 
       <!-- Theme Switcher -->
@@ -503,7 +581,7 @@
       </button>
 
       <!-- Auth Action Button -->
-      <button id="authBtn" onclick="handleAuthBtnClick()" class="linear-btn-ghost h-8 px-2.5 text-xs font-medium cursor-pointer select-none" title="管理员登录 / 退出">
+      <button id="authBtn" onclick="handleAuthBtnClick()" class="linear-btn-ghost h-8 px-2.5 text-[13px] font-medium cursor-pointer select-none" title="管理员登录 / 退出">
         登录
       </button>
     </div>
@@ -530,7 +608,7 @@
                   </svg>
                 </div>
               </span>
-              <span class="expanded-content font-mono text-[11px] font-bold text-zinc-800 dark:text-zinc-100 tracking-wider">APPS</span>
+              <span class="expanded-content font-mono text-[11.5px] font-bold text-zinc-800 dark:text-zinc-100 tracking-wider">APPS</span>
             </span>
             <svg id="disclosure-apps" class="expanded-content w-2.5 h-2.5 inline-block text-zinc-400 dark:text-zinc-500 transition-transform duration-200 rotate-90 shrink-0 mr-1 opacity-60 group-hover:opacity-100" viewBox="0 0 16 16" fill="currentColor">
               <path d="M5 3.5l6 4.5-6 4.5z"/>
@@ -553,7 +631,7 @@
                   </svg>
                 </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-xs font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
+              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
                 ArchIcons
               </span>
             </button>
@@ -577,7 +655,7 @@
                   </svg>
                 </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-xs font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
+              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
                 SlideCraft
               </span>
             </button>
@@ -600,7 +678,7 @@
                   </svg>
                 </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-xs font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
+              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
                 AIConsole
               </span>
             </button>
@@ -621,7 +699,7 @@
                   </svg>
                 </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-xs font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
+              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
                 NetBOM
               </span>
             </button>
@@ -638,7 +716,7 @@
                   </svg>
                 </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-xs font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
+              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
                 NetPath-Lens
               </span>
             </button>
@@ -659,7 +737,7 @@
                   </svg>
                 </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-xs font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
+              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
                 MDView
               </span>
             </button>
@@ -679,7 +757,7 @@
                   </svg>
                 </div>
               </span>
-              <span class="expanded-content font-mono text-[11px] font-bold text-zinc-800 dark:text-zinc-100 tracking-wider">NOTES</span>
+              <span class="expanded-content font-mono text-[11.5px] font-bold text-zinc-800 dark:text-zinc-100 tracking-wider">NOTES</span>
             </span>
             <svg id="disclosure-notes" class="expanded-content w-2.5 h-2.5 inline-block text-zinc-400 dark:text-zinc-500 transition-transform duration-200 rotate-90 shrink-0 mr-1 opacity-60 group-hover:opacity-100" viewBox="0 0 16 16" fill="currentColor">
               <path d="M5 3.5l6 4.5-6 4.5z"/>
@@ -692,7 +770,7 @@
                   <i data-lucide="bar-chart-2" class="w-3 h-3"></i>
                 </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-xs font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.population">
+              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.population">
                 人口结构变迁
               </span>
             </button>
@@ -703,7 +781,7 @@
                   <i data-lucide="trending-up" class="w-3 h-3"></i>
                 </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-xs font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.fund_cycle">
+              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.fund_cycle">
                 公募与产业周期
               </span>
             </button>
@@ -714,7 +792,7 @@
                   <i data-lucide="activity" class="w-3 h-3"></i>
                 </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-xs font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.breakdown">
+              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.breakdown">
                 破位基金透视
               </span>
             </button>
@@ -734,7 +812,7 @@
                   </svg>
                 </div>
               </span>
-              <span class="expanded-content font-mono text-[11px] font-bold text-zinc-800 dark:text-zinc-100 tracking-wider">LABS</span>
+              <span class="expanded-content font-mono text-[11.5px] font-bold text-zinc-800 dark:text-zinc-100 tracking-wider">LABS</span>
             </span>
             <svg id="disclosure-labs" class="expanded-content w-2.5 h-2.5 inline-block text-zinc-400 dark:text-zinc-500 transition-transform duration-200 rotate-90 shrink-0 mr-1 opacity-60 group-hover:opacity-100" viewBox="0 0 16 16" fill="currentColor">
               <path d="M5 3.5l6 4.5-6 4.5z"/>
@@ -747,7 +825,7 @@
                   <img src="/labs/assets/golden_goose.png?v=perfect2026" alt="金鹅" class="w-full h-full object-contain" />
                 </div>
               </span>
-              <span class="expanded-content flex-1 truncate text-xs font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.golden-goose">
+              <span class="expanded-content flex-1 truncate text-[13.5px] font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" data-i18n="item.golden-goose">
                 金鹅自由实验室
               </span>
             </button>
@@ -764,343 +842,324 @@
     <!-- ==================== MAIN STAGE ==================== -->
     <main class="flex-1 h-full overflow-hidden relative flex flex-col bg-[var(--bg-primary)]">
       
-      <!-- 视图 A: 矩阵总览看板 (Linear Cool Dark Tech · 1120px 秩序网格) -->
+      <!-- 视图 A: 矩阵总览看板 (Linear Zen Studio · 呼吸感秩序画布) -->
       <div id="stageOverview" class="flex-1 h-full overflow-y-auto linear-hero-glow">
-        <div class="max-w-[1120px] w-full mx-auto px-4 sm:px-8 pt-5 pb-10">
+        <div class="max-w-[1120px] w-full mx-auto px-5 sm:px-10 pt-9 sm:pt-12 pb-16">
 
-          <!-- Compact Hero & Category Filter Bar (总高度控制在 ~125px，确保首屏直出网格首行) -->
-          <section class="mb-5 pb-4 border-b border-[var(--border-hairline)]">
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
-              <div class="inline-flex items-center gap-2 px-2 py-1 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[11px] font-mono text-[var(--text-muted)]">
-                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]"></span>
-                <span id="overviewHeroBadge" data-i18n="badge.overview">bin0sky 统一工作台架构已激活</span>
+          <!-- Zen Hero & Quiet Section Switcher -->
+          <section class="mb-10 pb-7 border-b border-[var(--border-hairline)]">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <div class="inline-flex items-center gap-2 text-[12.5px] tracking-[0.04em] text-[var(--text-muted)]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]/70"></span>
+                <span id="overviewHeroBadge" data-i18n="badge.overview">静心造物 · 沉思致远</span>
               </div>
-              <!-- Category Filter Pills -->
+              <!-- Quiet Category Switcher -->
               <div id="overviewFilterBar" class="flex items-center gap-1 flex-wrap" role="tablist" aria-label="Category filter">
-                <button type="button" onclick="filterOverview('all')" data-cat="all" class="filter-pill active font-mono text-[11px]" data-i18n="tab.all">全部 (9)</button>
-                <button type="button" onclick="filterOverview('apps')" data-cat="apps" class="filter-pill font-mono text-[11px]" data-i18n="tab.apps">APPS (6)</button>
-                <button type="button" onclick="filterOverview('notes')" data-cat="notes" class="filter-pill font-mono text-[11px]" data-i18n="tab.notes">NOTES (3)</button>
-                <button type="button" onclick="filterOverview('labs')" data-cat="labs" class="filter-pill font-mono text-[11px]" data-i18n="tab.labs">LABS (0)</button>
+                <button type="button" onclick="filterOverview('all')" data-cat="all" class="filter-pill active" data-i18n="tab.all">全部</button>
+                <button type="button" onclick="filterOverview('apps')" data-cat="apps" class="filter-pill" data-i18n="tab.apps">器物</button>
+                <button type="button" onclick="filterOverview('notes')" data-cat="notes" class="filter-pill" data-i18n="tab.notes">长思</button>
+                <button type="button" onclick="filterOverview('labs')" data-cat="labs" class="filter-pill hidden" data-i18n="tab.labs">实验</button>
               </div>
             </div>
-            <h1 id="overviewHeroTitle" class="linear-heading text-[21px] sm:text-[25px] leading-[1.2] mb-1" data-i18n="hero.title">Tools for Focus. Notes for Depth.</h1>
-            <p id="overviewHeroSubtitle" class="text-[13px] sm:text-[13.5px] leading-[1.65] text-[var(--text-secondary)] max-w-[760px]" data-i18n="hero.subtitle">
-              原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。
+            <h1 id="overviewHeroTitle" class="linear-heading linear-heading-gradient text-[26px] sm:text-[32px] font-medium tracking-[-0.03em] leading-[1.2] mb-2.5" data-i18n="hero.title">专注造物，静心思考。</h1>
+            <p id="overviewHeroSubtitle" class="text-[14.5px] sm:text-[15.5px] leading-[1.75] text-[var(--text-secondary)]/85 max-w-[680px]" data-i18n="hero.subtitle">
+              慢下来，专注一件事。这里收纳日常打磨的趁手器物，以及跨越周期的深度笔记。
             </p>
           </section>
 
-          <!-- Compact Linear Bento Cards Grid (1080-1140px 容器规范) -->
-          <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5" id="overviewCardsGrid">
-            
-            <!-- ArchIcons -->
-            <div tabindex="0" onclick="loadStage('icon')" data-category="apps" class="bento-card group p-4 sm:p-5 flex flex-col justify-between cursor-pointer">
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-7 h-7 rounded-[7px] overflow-hidden flex items-center justify-center flex-shrink-0">
-                    <svg viewBox="0 0 32 32" class="w-full h-full" fill="none">
-                      <defs>
-                        <linearGradient id="arch-card-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stop-color="#1d4ed8"/>
-                          <stop offset="50%" stop-color="#3b82f6"/>
-                          <stop offset="100%" stop-color="#7c3aed"/>
-                        </linearGradient>
-                      </defs>
-                      <rect width="32" height="32" rx="7.5" fill="url(#arch-card-grad)"/>
-                      <rect width="32" height="32" rx="7.5" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25"/>
-                      <path d="M16 5.5 L25 10.7 V21.3 L16 26.5 L7 21.3 V10.7 Z" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
-                      <path d="M16 5.5 V16 L25 10.7 M16 16 L7 10.7 M16 16 V26.5" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
-                      <circle cx="16" cy="16" r="2.6" fill="#38bdf8"/>
-                      <circle cx="16" cy="16" r="1.4" fill="#ffffff"/>
-                    </svg>
-                  </div>
-                  <span class="linear-tag uppercase">APPS</span>
-                </div>
-                <h3 class="font-semibold text-[14.5px] text-[var(--text-primary)] tracking-[-0.015em] group-hover:text-[var(--accent-hover)] transition-colors duration-200">ArchIcons</h3>
-                <p class="text-[12.5px] text-[var(--text-muted)] mt-1.5 leading-[1.65]" data-i18n="card.archicons.tag">
-                  云架构与网络拓扑 2.5D/2D 矢量设备图标库。
-                </p>
-              </div>
-              <div class="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-end text-xs">
-                <span class="group-hover:translate-x-0.5 transition-all duration-200 ease-linear text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] flex items-center gap-1 font-medium">
-                  <span data-i18n="btn.enter">进入</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
-              </div>
+          <!-- Section 1: 器物 · Craft -->
+          <section id="section-apps">
+            <div class="flex items-baseline justify-between mb-4">
+              <h2 class="text-[13px] font-medium tracking-[0.04em] text-[var(--text-secondary)]" data-i18n="section.apps.title">器物 · Craft</h2>
+              <span class="text-[12.5px] text-[var(--text-muted)] hidden sm:inline" data-i18n="section.apps.subtitle">日常构建的原生数字工具</span>
             </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="overviewAppsGrid">
 
-            <!-- SlideCraft -->
-            <div tabindex="0" onclick="loadStage('ppt')" data-category="apps" class="bento-card group p-4 sm:p-5 flex flex-col justify-between cursor-pointer">
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-7 h-7 rounded-[7px] overflow-hidden flex items-center justify-center flex-shrink-0">
-                    <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
-                      <defs>
-                        <linearGradient id="slide-card-grad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-                          <stop stop-color="#818cf8"/>
-                          <stop offset="0.5" stop-color="#6366f1"/>
-                          <stop offset="1" stop-color="#4f46e5"/>
-                        </linearGradient>
-                        <linearGradient id="slide-card-inner" x1="12" y1="12" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-                          <stop stop-color="#38bdf8"/>
-                          <stop offset="1" stop-color="#a855f7"/>
-                        </linearGradient>
-                      </defs>
-                      <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#slide-card-grad)"/>
-                      <rect x="2.5" y="2.5" width="43" height="43" rx="10.5" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1"/>
-                      <rect x="11" y="12" width="26" height="17" rx="3.5" fill="rgba(10, 12, 20, 0.7)" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1"/>
-                      <path d="M24 15L25.3 18.5L28.8 19.8L25.3 21.1L24 24.6L22.7 21.1L19.2 19.8L22.7 18.5L24 15Z" fill="url(#slide-card-inner)"/>
-                      <path d="M24 31V37M19 37H29" stroke="rgba(255, 255, 255, 0.9)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+              <!-- ArchIcons -->
+              <div tabindex="0" onclick="loadStage('icon')" data-category="apps" class="bento-card group p-5 sm:p-6 flex flex-col justify-between cursor-pointer">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="w-8 h-8 rounded-[8px] overflow-hidden flex items-center justify-center flex-shrink-0 bento-icon">
+                      <svg viewBox="0 0 32 32" class="w-full h-full" fill="none">
+                        <defs>
+                          <linearGradient id="arch-card-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#1d4ed8"/>
+                            <stop offset="50%" stop-color="#3b82f6"/>
+                            <stop offset="100%" stop-color="#7c3aed"/>
+                          </linearGradient>
+                        </defs>
+                        <rect width="32" height="32" rx="7.5" fill="url(#arch-card-grad)"/>
+                        <rect width="32" height="32" rx="7.5" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25"/>
+                        <path d="M16 5.5 L25 10.7 V21.3 L16 26.5 L7 21.3 V10.7 Z" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M16 5.5 V16 L25 10.7 M16 16 L7 10.7 M16 16 V26.5" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+                        <circle cx="16" cy="16" r="2.6" fill="#38bdf8"/>
+                        <circle cx="16" cy="16" r="1.4" fill="#ffffff"/>
+                      </svg>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] opacity-0 -translate-x-0.5 translate-y-0.5 group-hover:opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300"></i>
                   </div>
-                  <span class="linear-tag uppercase">APPS</span>
+                  <h3 class="font-semibold text-[16px] text-[var(--text-primary)] tracking-[-0.018em] group-hover:text-[var(--accent-hover)] transition-colors duration-200">ArchIcons</h3>
+                  <p class="text-[14px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] mt-2 leading-[1.7] transition-colors duration-200" data-i18n="card.archicons.tag">
+                    将复杂云网拓扑收拢为一目了然的 2.5D 矢量图元。
+                  </p>
                 </div>
-                <h3 class="font-semibold text-[14.5px] text-[var(--text-primary)] tracking-[-0.015em] group-hover:text-[var(--accent-hover)] transition-colors duration-200">SlideCraft</h3>
-                <p class="text-[12.5px] text-[var(--text-muted)] mt-1.5 leading-[1.65]" data-i18n="card.slidecraft.tag">
-                  AI 演示文稿工作台，技术方案与汇报文档秒级生成。
-                </p>
               </div>
-              <div class="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-end text-xs">
-                <span class="group-hover:translate-x-0.5 transition-all duration-200 ease-linear text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] flex items-center gap-1 font-medium">
-                  <span data-i18n="btn.enter">进入</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
-              </div>
-            </div>
 
-            <!-- AIConsole -->
-            <div tabindex="0" onclick="loadStage('console')" data-category="apps" class="bento-card group p-4 sm:p-5 flex flex-col justify-between cursor-pointer">
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-7 h-7 rounded-[7px] overflow-hidden flex items-center justify-center flex-shrink-0">
-                    <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
-                      <defs>
-                        <linearGradient id="aiconsole-card-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stop-color="#181a22"/>
-                          <stop offset="100%" stop-color="#0d0e14"/>
-                        </linearGradient>
-                        <linearGradient id="aiconsole-card-chev" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stop-color="#00d2ff"/>
-                          <stop offset="50%" stop-color="#3a7bd5"/>
-                          <stop offset="100%" stop-color="#a855f7"/>
-                        </linearGradient>
-                        <linearGradient id="aiconsole-card-cur" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stop-color="#00f2fe"/>
-                          <stop offset="100%" stop-color="#4facfe"/>
-                        </linearGradient>
-                      </defs>
-                      <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#aiconsole-card-bg)"/>
-                      <rect x="2.5" y="2.5" width="43" height="43" rx="10.5" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-                      <path d="M34 11L34.8 14.2L38 15L34.8 15.8L34 19L33.2 15.8L30 15L33.2 14.2Z" fill="#c084fc" opacity="0.9"/>
-                      <circle cx="29" cy="11" r="0.8" fill="#4ade80"/>
-                      <circle cx="38" cy="11" r="0.8" fill="#38bdf8"/>
-                      <path d="M14 15L21.5 22.5L14 30" stroke="url(#aiconsole-card-chev)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      <rect x="24" y="28" width="9" height="3.5" rx="1.75" fill="url(#aiconsole-card-cur)"/>
-                    </svg>
+              <!-- SlideCraft -->
+              <div tabindex="0" onclick="loadStage('ppt')" data-category="apps" class="bento-card group p-5 sm:p-6 flex flex-col justify-between cursor-pointer">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="w-8 h-8 rounded-[8px] overflow-hidden flex items-center justify-center flex-shrink-0 bento-icon">
+                      <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                        <defs>
+                          <linearGradient id="slide-card-grad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#818cf8"/>
+                            <stop offset="0.5" stop-color="#6366f1"/>
+                            <stop offset="1" stop-color="#4f46e5"/>
+                          </linearGradient>
+                          <linearGradient id="slide-card-inner" x1="12" y1="12" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#38bdf8"/>
+                            <stop offset="1" stop-color="#a855f7"/>
+                          </linearGradient>
+                        </defs>
+                        <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#slide-card-grad)"/>
+                        <rect x="2.5" y="2.5" width="43" height="43" rx="10.5" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1"/>
+                        <rect x="11" y="12" width="26" height="17" rx="3.5" fill="rgba(10, 12, 20, 0.7)" stroke="rgba(255, 255, 255, 0.35)" stroke-width="1"/>
+                        <path d="M24 15L25.3 18.5L28.8 19.8L25.3 21.1L24 24.6L22.7 21.1L19.2 19.8L22.7 18.5L24 15Z" fill="url(#slide-card-inner)"/>
+                        <path d="M24 31V37M19 37H29" stroke="rgba(255, 255, 255, 0.9)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] opacity-0 -translate-x-0.5 translate-y-0.5 group-hover:opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300"></i>
                   </div>
-                  <span class="linear-tag uppercase">APPS</span>
+                  <h3 class="font-semibold text-[16px] text-[var(--text-primary)] tracking-[-0.018em] group-hover:text-[var(--accent-hover)] transition-colors duration-200">SlideCraft</h3>
+                  <p class="text-[14px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] mt-2 leading-[1.7] transition-colors duration-200" data-i18n="card.slidecraft.tag">
+                    把零散灵感静静铺陈成结构清晰的演示文稿。
+                  </p>
                 </div>
-                <h3 class="font-semibold text-[14.5px] text-[var(--text-primary)] tracking-[-0.015em] group-hover:text-[var(--accent-hover)] transition-colors duration-200">AIConsole</h3>
-                <p class="text-[12.5px] text-[var(--text-muted)] mt-1.5 leading-[1.65]" data-i18n="card.aiconsole.tag">
-                  为 macOS 打造的原生 AI 智能终端，支持报错根因即时诊断。
-                </p>
               </div>
-              <div class="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-end text-xs">
-                <span class="group-hover:translate-x-0.5 transition-all duration-200 ease-linear text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] flex items-center gap-1 font-medium">
-                  <span data-i18n="btn.enter">进入</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
-              </div>
-            </div>
 
-            <!-- NetBOM -->
-            <div tabindex="0" onclick="loadStage('bom')" data-category="apps" class="bento-card group p-4 sm:p-5 flex flex-col justify-between cursor-pointer">
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-7 h-7 rounded-[7px] overflow-hidden flex items-center justify-center flex-shrink-0">
-                    <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
-                      <rect x="2" y="2" width="44" height="44" rx="11" fill="#18181b" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
-                      <rect x="9" y="11" width="30" height="11" rx="2.5" fill="#09090b" stroke="#e4e4e7" stroke-width="1.8"/>
-                      <rect x="9" y="26" width="30" height="11" rx="2.5" fill="#09090b" stroke="#e4e4e7" stroke-width="1.8"/>
-                      <circle cx="14.5" cy="16.5" r="1.6" fill="#38bdf8"/>
-                      <circle cx="19.5" cy="16.5" r="1.6" fill="#e4e4e7"/>
-                      <circle cx="14.5" cy="31.5" r="1.6" fill="#34d399"/>
-                      <circle cx="19.5" cy="31.5" r="1.6" fill="#e4e4e7"/>
-                      <line x1="26" y1="16.5" x2="34" y2="16.5" stroke="#e4e4e7" stroke-width="1.8" stroke-linecap="round"/>
-                      <line x1="26" y1="31.5" x2="34" y2="31.5" stroke="#e4e4e7" stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
+              <!-- AIConsole -->
+              <div tabindex="0" onclick="loadStage('console')" data-category="apps" class="bento-card group p-5 sm:p-6 flex flex-col justify-between cursor-pointer">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="w-8 h-8 rounded-[8px] overflow-hidden flex items-center justify-center flex-shrink-0 bento-icon">
+                      <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                        <defs>
+                          <linearGradient id="aiconsole-card-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#181a22"/>
+                            <stop offset="100%" stop-color="#0d0e14"/>
+                          </linearGradient>
+                          <linearGradient id="aiconsole-card-chev" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00d2ff"/>
+                            <stop offset="50%" stop-color="#3a7bd5"/>
+                            <stop offset="100%" stop-color="#a855f7"/>
+                          </linearGradient>
+                          <linearGradient id="aiconsole-card-cur" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00f2fe"/>
+                            <stop offset="100%" stop-color="#4facfe"/>
+                          </linearGradient>
+                        </defs>
+                        <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#aiconsole-card-bg)"/>
+                        <rect x="2.5" y="2.5" width="43" height="43" rx="10.5" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+                        <path d="M34 11L34.8 14.2L38 15L34.8 15.8L34 19L33.2 15.8L30 15L33.2 14.2Z" fill="#c084fc" opacity="0.9"/>
+                        <circle cx="29" cy="11" r="0.8" fill="#4ade80"/>
+                        <circle cx="38" cy="11" r="0.8" fill="#38bdf8"/>
+                        <path d="M14 15L21.5 22.5L14 30" stroke="url(#aiconsole-card-chev)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <rect x="24" y="28" width="9" height="3.5" rx="1.75" fill="url(#aiconsole-card-cur)"/>
+                      </svg>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] opacity-0 -translate-x-0.5 translate-y-0.5 group-hover:opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300"></i>
                   </div>
-                  <span class="linear-tag uppercase">APPS</span>
+                  <h3 class="font-semibold text-[16px] text-[var(--text-primary)] tracking-[-0.018em] group-hover:text-[var(--accent-hover)] transition-colors duration-200">AIConsole</h3>
+                  <p class="text-[14px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] mt-2 leading-[1.7] transition-colors duration-200" data-i18n="card.aiconsole.tag">
+                    伴随 macOS 呼吸的原生 AI 终端，温和抚平晦涩报错。
+                  </p>
                 </div>
-                <h3 class="font-semibold text-[14.5px] text-[var(--text-primary)] tracking-[-0.015em] group-hover:text-[var(--accent-hover)] transition-colors duration-200">NetBOM</h3>
-                <p class="text-[12.5px] text-[var(--text-muted)] mt-1.5 leading-[1.65]" data-i18n="card.bom.tag">
-                  企业网络设备选型、参数对比与智能 BOM 报价工作台。
-                </p>
               </div>
-              <div class="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-end text-xs">
-                <span class="group-hover:translate-x-0.5 transition-all duration-200 ease-linear text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] flex items-center gap-1 font-medium">
-                  <span data-i18n="btn.enter">进入</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
-              </div>
-            </div>
 
-            <!-- NetPath-Lens Pro -->
-            <div tabindex="0" onclick="loadStage('nettest')" data-category="apps" class="bento-card group p-4 sm:p-5 flex flex-col justify-between cursor-pointer">
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-7 h-7 rounded-[7px] overflow-hidden flex items-center justify-center flex-shrink-0">
-                    <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
-                      <rect x="2" y="2" width="44" height="44" rx="11" fill="#0f172a" stroke="rgba(56,189,248,0.3)" stroke-width="1.5"/>
-                      <circle cx="24" cy="24" r="16" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="3 3"/>
-                      <circle cx="24" cy="24" r="9" stroke="#818cf8" stroke-width="2"/>
-                      <circle cx="24" cy="24" r="3.5" fill="#38bdf8"/>
-                      <path d="M24 8V12M24 36V40M8 24H12M36 24H40" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
-                    </svg>
+              <!-- NetBOM -->
+              <div tabindex="0" onclick="loadStage('bom')" data-category="apps" class="bento-card group p-5 sm:p-6 flex flex-col justify-between cursor-pointer">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="w-8 h-8 rounded-[8px] overflow-hidden flex items-center justify-center flex-shrink-0 bento-icon">
+                      <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                        <rect x="2" y="2" width="44" height="44" rx="11" fill="#18181b" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
+                        <rect x="9" y="11" width="30" height="11" rx="2.5" fill="#09090b" stroke="#e4e4e7" stroke-width="1.8"/>
+                        <rect x="9" y="26" width="30" height="11" rx="2.5" fill="#09090b" stroke="#e4e4e7" stroke-width="1.8"/>
+                        <circle cx="14.5" cy="16.5" r="1.6" fill="#38bdf8"/>
+                        <circle cx="19.5" cy="16.5" r="1.6" fill="#e4e4e7"/>
+                        <circle cx="14.5" cy="31.5" r="1.6" fill="#34d399"/>
+                        <circle cx="19.5" cy="31.5" r="1.6" fill="#e4e4e7"/>
+                        <line x1="26" y1="16.5" x2="34" y2="16.5" stroke="#e4e4e7" stroke-width="1.8" stroke-linecap="round"/>
+                        <line x1="26" y1="31.5" x2="34" y2="31.5" stroke="#e4e4e7" stroke-width="1.8" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] opacity-0 -translate-x-0.5 translate-y-0.5 group-hover:opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300"></i>
                   </div>
-                  <span class="linear-tag uppercase">APPS</span>
+                  <h3 class="font-semibold text-[16px] text-[var(--text-primary)] tracking-[-0.018em] group-hover:text-[var(--accent-hover)] transition-colors duration-200">NetBOM</h3>
+                  <p class="text-[14px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] mt-2 leading-[1.7] transition-colors duration-200" data-i18n="card.bom.tag">
+                    以清晰有序的物料清单，从容规划每一次设备选型与方案报价。
+                  </p>
                 </div>
-                <h3 class="font-semibold text-[14.5px] text-[var(--text-primary)] tracking-[-0.015em] group-hover:text-[var(--accent-hover)] transition-colors duration-200">NetPath-Lens</h3>
-                <p class="text-[12.5px] text-[var(--text-muted)] mt-1.5 leading-[1.65]" data-i18n="card.nettest.tag">
-                  端到端链路卡顿与网络根因诊断，五层遥测与哨兵黑匣子。
-                </p>
               </div>
-              <div class="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-end text-xs">
-                <span class="group-hover:translate-x-0.5 transition-all duration-200 ease-linear text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] flex items-center gap-1 font-medium">
-                  <span data-i18n="btn.enter">进入</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
-              </div>
-            </div>
 
-            <!-- MDView -->
-            <div tabindex="0" onclick="loadStage('mdview')" data-category="apps" class="bento-card group p-4 sm:p-5 flex flex-col justify-between cursor-pointer">
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-7 h-7 rounded-[7px] overflow-hidden flex items-center justify-center flex-shrink-0">
-                    <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
-                      <defs>
-                        <linearGradient id="mdview-card-g" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stop-color="#3b82f6"/>
-                          <stop offset="100%" stop-color="#1d4ed8"/>
-                        </linearGradient>
-                      </defs>
-                      <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#mdview-card-g)"/>
-                      <path d="M12 31V17L17.5 23L23 17V31" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M32 20V29M28.5 25.5L32 29L35.5 25.5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+              <!-- NetPath-Lens Pro -->
+              <div tabindex="0" onclick="loadStage('nettest')" data-category="apps" class="bento-card group p-5 sm:p-6 flex flex-col justify-between cursor-pointer">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="w-8 h-8 rounded-[8px] overflow-hidden flex items-center justify-center flex-shrink-0 bento-icon">
+                      <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                        <rect x="2" y="2" width="44" height="44" rx="11" fill="#0f172a" stroke="rgba(56,189,248,0.3)" stroke-width="1.5"/>
+                        <circle cx="24" cy="24" r="16" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="3 3"/>
+                        <circle cx="24" cy="24" r="9" stroke="#818cf8" stroke-width="2"/>
+                        <circle cx="24" cy="24" r="3.5" fill="#38bdf8"/>
+                        <path d="M24 8V12M24 36V40M8 24H12M36 24H40" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] opacity-0 -translate-x-0.5 translate-y-0.5 group-hover:opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300"></i>
                   </div>
-                  <span class="linear-tag uppercase">APPS</span>
+                  <h3 class="font-semibold text-[16px] text-[var(--text-primary)] tracking-[-0.018em] group-hover:text-[var(--accent-hover)] transition-colors duration-200">NetPath-Lens</h3>
+                  <p class="text-[14px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] mt-2 leading-[1.7] transition-colors duration-200" data-i18n="card.nettest.tag">
+                    沿端到端链路静听脉搏，温和定位卡顿与抖动的真正去处。
+                  </p>
                 </div>
-                <h3 class="font-semibold text-[14.5px] text-[var(--text-primary)] tracking-[-0.015em] group-hover:text-[var(--accent-hover)] transition-colors duration-200">MDView</h3>
-                <p class="text-[12.5px] text-[var(--text-muted)] mt-1.5 leading-[1.65]" data-i18n="card.mdview.tag">
-                  极轻量秒开 Markdown 阅读与双栏编辑神器，Shiki 语法高亮 & Mermaid。
-                </p>
               </div>
-              <div class="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-end text-xs">
-                <span class="group-hover:translate-x-0.5 transition-all duration-200 ease-linear text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] flex items-center gap-1 font-medium">
-                  <span data-i18n="btn.enter">进入</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
-              </div>
-            </div>
 
-            <!-- Population Structure -->
-            <div tabindex="0" onclick="loadStage('population')" data-category="notes" class="bento-card group p-4 sm:p-5 flex flex-col justify-between cursor-pointer">
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-7 h-7 rounded-[7px] bg-[var(--accent-subtle)] text-[var(--accent-hover)] border border-[var(--border-hairline)] flex items-center justify-center flex-shrink-0">
-                    <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
+              <!-- MDView -->
+              <div tabindex="0" onclick="loadStage('mdview')" data-category="apps" class="bento-card group p-5 sm:p-6 flex flex-col justify-between cursor-pointer">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="w-8 h-8 rounded-[8px] overflow-hidden flex items-center justify-center flex-shrink-0 bento-icon">
+                      <svg viewBox="0 0 48 48" class="w-full h-full" fill="none">
+                        <defs>
+                          <linearGradient id="mdview-card-g" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#3b82f6"/>
+                            <stop offset="100%" stop-color="#1d4ed8"/>
+                          </linearGradient>
+                        </defs>
+                        <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#mdview-card-g)"/>
+                        <path d="M12 31V17L17.5 23L23 17V31" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M32 20V29M28.5 25.5L32 29L35.5 25.5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] opacity-0 -translate-x-0.5 translate-y-0.5 group-hover:opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300"></i>
                   </div>
-                  <span class="linear-tag uppercase">NOTES</span>
+                  <h3 class="font-semibold text-[16px] text-[var(--text-primary)] tracking-[-0.018em] group-hover:text-[var(--accent-hover)] transition-colors duration-200">MDView</h3>
+                  <p class="text-[14px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] mt-2 leading-[1.7] transition-colors duration-200" data-i18n="card.mdview.tag">
+                    回归纯粹的阅读与双栏写作台，落笔即见清朗排版。
+                  </p>
                 </div>
-                <h3 class="font-semibold text-[14.5px] text-[var(--text-primary)] tracking-[-0.015em] group-hover:text-[var(--accent-hover)] transition-colors duration-200" data-i18n="item.population">全球人口结构变迁</h3>
-                <p class="text-[12.5px] text-[var(--text-muted)] mt-1.5 leading-[1.65]" data-i18n="card.population.tag">
-                  中美印日 150 年人口年龄金字塔与老龄化拐点量化演化模型。
-                </p>
               </div>
-              <div class="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-end text-xs">
-                <span class="group-hover:translate-x-0.5 transition-all duration-200 ease-linear text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] flex items-center gap-1 font-medium">
-                  <span data-i18n="btn.read">阅读</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
-              </div>
-            </div>
 
-            <!-- Fund Cycles -->
-            <div tabindex="0" onclick="loadStage('fund-cycle')" data-category="notes" class="bento-card group p-4 sm:p-5 flex flex-col justify-between cursor-pointer">
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-7 h-7 rounded-[7px] bg-[var(--accent-subtle)] text-[var(--accent-hover)] border border-[var(--border-hairline)] flex items-center justify-center flex-shrink-0">
-                    <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
-                  </div>
-                  <span class="linear-tag uppercase">NOTES</span>
-                </div>
-                <h3 class="font-semibold text-[14.5px] text-[var(--text-primary)] tracking-[-0.015em] group-hover:text-[var(--accent-hover)] transition-colors duration-200" data-i18n="item.fund_cycle">公募基金与产业周期</h3>
-                <p class="text-[12.5px] text-[var(--text-muted)] mt-1.5 leading-[1.65]" data-i18n="card.fund_cycle.tag">
-                  24 产业赛道周期量化、前期估值出清与商业常识反弹催化看板。
-                </p>
-              </div>
-              <div class="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-end text-xs">
-                <span class="group-hover:translate-x-0.5 transition-all duration-200 ease-linear text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] flex items-center gap-1 font-medium">
-                  <span data-i18n="btn.read">阅读</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
-              </div>
             </div>
-
-            <!-- Fund Breakdown -->
-            <div tabindex="0" onclick="loadStage('fund-breakdown')" data-category="notes" class="bento-card group p-4 sm:p-5 flex flex-col justify-between cursor-pointer">
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-7 h-7 rounded-[7px] bg-[var(--accent-subtle)] text-[var(--accent-hover)] border border-[var(--border-hairline)] flex items-center justify-center flex-shrink-0">
-                    <i data-lucide="activity" class="w-3.5 h-3.5"></i>
-                  </div>
-                  <span class="linear-tag uppercase">NOTES</span>
-                </div>
-                <h3 class="font-semibold text-[14.5px] text-[var(--text-primary)] tracking-[-0.015em] group-hover:text-[var(--accent-hover)] transition-colors duration-200" data-i18n="item.breakdown">破位基金本质透视</h3>
-                <p class="text-[12.5px] text-[var(--text-muted)] mt-1.5 leading-[1.65]" data-i18n="card.breakdown.tag">
-                  穿透“底外有底”的技术陷阱，基于公募流动性与商业常识深度归因。
-                </p>
-              </div>
-              <div class="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-end text-xs">
-                <span class="group-hover:translate-x-0.5 transition-all duration-200 ease-linear text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] flex items-center gap-1 font-medium">
-                  <span data-i18n="btn.read">阅读</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
-              </div>
-            </div>
-
-            <!-- Golden Goose Freedom Lab (受控展示：仅管理员可见) -->
-            <div id="card-golden-goose" tabindex="0" onclick="loadStage('golden-goose')" data-category="labs" class="bento-card hidden group p-4 sm:p-5 flex flex-col justify-between cursor-pointer">
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-7 h-7 rounded-[7px] bg-amber-500/10 text-amber-400 border border-[var(--border-hairline)] flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M18 4.5c-.8-.5-1.8-.4-2.5.2-1 .8-1.2 2.2-1 3.5.2 1.5.2 3.2-.2 4.5-.4 1.2-1.4 1.8-2.8 1.8-2 0-3.5-.5-5-1.5-1-.6-1.8.4-1.2 1.4.8 1.5 2 2.8 4 3.6 3 1.2 6.5.5 8-1.5 1-1.4 1.2-3.2.8-5-.3-1.6-.5-3.2-.4-4 .2-.8.5-1.5.3-2.5z"/>
-                      <path d="M18 4.5l3.5 1.2-2.5 1.3"/>
-                    </svg>
-                  </div>
-                  <span class="linear-tag uppercase">LABS</span>
-                </div>
-                <h3 class="font-semibold text-[14.5px] text-[var(--text-primary)] tracking-[-0.015em] group-hover:text-[var(--accent-hover)] transition-colors duration-200" data-i18n="item.golden-goose">金鹅自由实验室</h3>
-                <p class="text-[12.5px] text-[var(--text-muted)] mt-1.5 leading-[1.65]" data-i18n="card.golden-goose.tag">
-                  动态财富自由沙盒：4%法则、复利抗通胀与永续现金流推演。
-                </p>
-              </div>
-              <div class="mt-4 pt-3 border-t border-[var(--border-hairline)] flex items-center justify-end text-xs">
-                <span class="group-hover:translate-x-0.5 transition-all duration-200 ease-linear text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] flex items-center gap-1 font-medium">
-                  <span>进入实验</span> <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
-              </div>
-            </div>
-
           </section>
 
-          <!-- Minimalist Linear Footer -->
-          <footer class="mt-10 pt-5 border-t border-[var(--border-hairline)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[var(--text-muted)]">
+          <!-- Section 2: 长思 · Essays -->
+          <section id="section-notes" class="mt-12">
+            <div class="flex items-baseline justify-between mb-4">
+              <h2 class="text-[13px] font-medium tracking-[0.04em] text-[var(--text-secondary)]" data-i18n="section.notes.title">长思 · Essays</h2>
+              <span class="text-[12.5px] text-[var(--text-muted)] hidden sm:inline" data-i18n="section.notes.subtitle">跨越周期的人口与商业常识笔记</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="overviewNotesGrid">
+
+              <!-- Population Structure -->
+              <div tabindex="0" onclick="loadStage('population')" data-category="notes" class="bento-card group p-5 sm:p-6 flex flex-col justify-between cursor-pointer">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="w-8 h-8 rounded-[8px] bg-[var(--accent-subtle)] text-[var(--accent-hover)] border border-[var(--border-hairline)] flex items-center justify-center flex-shrink-0 bento-icon">
+                      <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] opacity-0 -translate-x-0.5 translate-y-0.5 group-hover:opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300"></i>
+                  </div>
+                  <h3 class="font-semibold text-[16px] text-[var(--text-primary)] tracking-[-0.018em] group-hover:text-[var(--accent-hover)] transition-colors duration-200" data-i18n="item.population">全球人口结构变迁</h3>
+                  <p class="text-[14px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] mt-2 leading-[1.7] transition-colors duration-200" data-i18n="card.population.tag">
+                    百年尺度下的人口潮汐：从金字塔到倒金字塔的静水流深。
+                  </p>
+                </div>
+              </div>
+
+              <!-- Fund Cycles -->
+              <div tabindex="0" onclick="loadStage('fund-cycle')" data-category="notes" class="bento-card group p-5 sm:p-6 flex flex-col justify-between cursor-pointer">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="w-8 h-8 rounded-[8px] bg-[var(--accent-subtle)] text-[var(--accent-hover)] border border-[var(--border-hairline)] flex items-center justify-center flex-shrink-0 bento-icon">
+                      <i data-lucide="trending-up" class="w-4 h-4"></i>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] opacity-0 -translate-x-0.5 translate-y-0.5 group-hover:opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300"></i>
+                  </div>
+                  <h3 class="font-semibold text-[16px] text-[var(--text-primary)] tracking-[-0.018em] group-hover:text-[var(--accent-hover)] transition-colors duration-200" data-i18n="item.fund_cycle">公募基金与产业周期</h3>
+                  <p class="text-[14px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] mt-2 leading-[1.7] transition-colors duration-200" data-i18n="card.fund_cycle.tag">
+                    穿越喧嚣与周期轮动，记录产业估值出清后的常识微光。
+                  </p>
+                </div>
+              </div>
+
+              <!-- Fund Breakdown -->
+              <div tabindex="0" onclick="loadStage('fund-breakdown')" data-category="notes" class="bento-card group p-5 sm:p-6 flex flex-col justify-between cursor-pointer">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="w-8 h-8 rounded-[8px] bg-[var(--accent-subtle)] text-[var(--accent-hover)] border border-[var(--border-hairline)] flex items-center justify-center flex-shrink-0 bento-icon">
+                      <i data-lucide="activity" class="w-4 h-4"></i>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] opacity-0 -translate-x-0.5 translate-y-0.5 group-hover:opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300"></i>
+                  </div>
+                  <h3 class="font-semibold text-[16px] text-[var(--text-primary)] tracking-[-0.018em] group-hover:text-[var(--accent-hover)] transition-colors duration-200" data-i18n="item.breakdown">破位基金本质透视</h3>
+                  <p class="text-[14px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] mt-2 leading-[1.7] transition-colors duration-200" data-i18n="card.breakdown.tag">
+                    拨开“底外有底”的表象迷雾，以常识丈量流动性与真实价值。
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- Section 3: 实验 · Sandbox (受控展示：仅授权可见) -->
+          <section id="section-labs" class="mt-12 hidden">
+            <div class="flex items-baseline justify-between mb-4">
+              <h2 class="text-[13px] font-medium tracking-[0.04em] text-[var(--text-secondary)]" data-i18n="section.labs.title">实验 · Sandbox</h2>
+              <span class="text-[12.5px] text-[var(--text-muted)] hidden sm:inline" data-i18n="section.labs.subtitle">受控访问的复利与沙盒推演</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="overviewLabsGrid">
+
+              <!-- Golden Goose Freedom Lab (受控展示：仅管理员可见) -->
+              <div id="card-golden-goose" tabindex="0" onclick="loadStage('golden-goose')" data-category="labs" class="bento-card hidden group p-5 sm:p-6 flex flex-col justify-between cursor-pointer">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="w-8 h-8 rounded-[8px] bg-amber-500/10 text-amber-400 border border-[var(--border-hairline)] flex items-center justify-center flex-shrink-0 bento-icon">
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 4.5c-.8-.5-1.8-.4-2.5.2-1 .8-1.2 2.2-1 3.5.2 1.5.2 3.2-.2 4.5-.4 1.2-1.4 1.8-2.8 1.8-2 0-3.5-.5-5-1.5-1-.6-1.8.4-1.2 1.4.8 1.5 2 2.8 4 3.6 3 1.2 6.5.5 8-1.5 1-1.4 1.2-3.2.8-5-.3-1.6-.5-3.2-.4-4 .2-.8.5-1.5.3-2.5z"/>
+                        <path d="M18 4.5l3.5 1.2-2.5 1.3"/>
+                      </svg>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] opacity-0 -translate-x-0.5 translate-y-0.5 group-hover:opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300"></i>
+                  </div>
+                  <h3 class="font-semibold text-[16px] text-[var(--text-primary)] tracking-[-0.018em] group-hover:text-[var(--accent-hover)] transition-colors duration-200" data-i18n="item.golden-goose">金鹅自由实验室</h3>
+                  <p class="text-[14px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] mt-2 leading-[1.7] transition-colors duration-200" data-i18n="card.golden-goose.tag">
+                    复利曲线、安全提现率与永续现金流的静默时间推演。
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- Minimalist Zen Footer -->
+          <footer class="mt-14 pt-6 border-t border-[var(--border-hairline)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[13px] text-[var(--text-muted)]">
             <div class="flex items-center gap-2 font-mono">
-              <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]"></span>
+              <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]/75"></span>
               <span>bin0sky.tech</span>
               <span class="opacity-40">·</span>
-              <span>Digital Studio & Engineering Lab</span>
+              <span class="font-sans">Quiet Craft &amp; Long-horizon Notes</span>
             </div>
-            <div class="flex items-center gap-4 font-mono text-[11px]">
+            <div class="flex items-center gap-4 font-mono text-[12px]">
               <button type="button" onclick="toggleCommandPalette(true)" class="hover:text-[var(--text-primary)] transition-colors duration-200 cursor-pointer flex items-center gap-1.5">
                 <span class="kbd">⌘K</span> <span>Palette</span>
               </button>
               <button type="button" onclick="toggleTheme()" class="hover:text-[var(--text-primary)] transition-colors duration-200 cursor-pointer flex items-center gap-1.5">
                 <span class="kbd">⌘\</span> <span>Theme</span>
+              </button>
+              <button type="button" onclick="toggleAmbientZen()" class="hover:text-[var(--text-primary)] transition-colors duration-200 cursor-pointer flex items-center gap-1.5">
+                <span class="kbd">⌘J</span> <span>Zen</span>
               </button>
               <button type="button" onclick="toggleShortcutModal(true)" class="hover:text-[var(--text-primary)] transition-colors duration-200 cursor-pointer flex items-center gap-1.5">
                 <span class="kbd">?</span> <span>Shortcuts</span>
@@ -1128,14 +1187,14 @@
     <div class="w-full max-w-xl rounded-xl border border-[var(--border-hairline-hover)] bg-[var(--bg-surface)] overflow-hidden flex flex-col" onclick="event.stopPropagation()">
       <div class="flex items-center px-4 py-3 border-b border-[var(--border-hairline)]">
         <i data-lucide="search" class="w-4 h-4 text-[var(--text-muted)] mr-3"></i>
-        <input id="cmdInput" type="text" placeholder="搜索应用、研报、实验或输入指令 (如: theme)..." class="w-full bg-transparent border-none outline-none text-xs sm:text-sm placeholder-[var(--text-muted)] font-medium text-[var(--text-primary)]" oninput="filterPalette()" onkeydown="handlePaletteKeydown(event)">
+        <input id="cmdInput" type="text" placeholder="搜索应用、研报、实验或输入指令 (如: theme)..." class="w-full bg-transparent border-none outline-none text-[13.5px] sm:text-sm placeholder-[var(--text-muted)] font-medium text-[var(--text-primary)]" oninput="filterPalette()" onkeydown="handlePaletteKeydown(event)">
         <span class="kbd">ESC</span>
       </div>
-      <div id="cmdList" class="p-2 max-h-96 overflow-y-auto space-y-1 text-xs">
+      <div id="cmdList" class="p-2 max-h-96 overflow-y-auto space-y-1 text-[13.5px]">
         <!-- Rendered dynamically with categorized items & actions -->
       </div>
       <!-- Footer Shortcut Hints -->
-      <div class="px-4 py-2 border-t border-[var(--border-hairline)] bg-[var(--bg-primary)]/60 flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)] select-none">
+      <div class="px-4 py-2.5 border-t border-[var(--border-hairline)] bg-[var(--bg-primary)]/60 flex items-center justify-between text-[11px] font-mono text-[var(--text-muted)] select-none">
         <div class="flex items-center gap-3">
           <span><span class="kbd">↑↓</span> 移动</span>
           <span><span class="kbd">↵</span> 执行</span>
@@ -1152,13 +1211,13 @@
       <div class="flex items-center justify-between mb-4 border-b border-[var(--border-hairline)] pb-3">
         <div class="flex items-center gap-2">
           <i data-lucide="command" class="w-4 h-4 text-[var(--accent-primary)]"></i>
-          <h3 class="linear-heading text-sm" data-i18n="shortcut.title">macOS 工作台快捷键</h3>
+          <h3 class="linear-heading text-[15px]" data-i18n="shortcut.title">macOS 工作台快捷键</h3>
         </div>
         <button onclick="toggleShortcutModal(false)" class="text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer transition-colors duration-200">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
-      <div class="space-y-2.5 text-xs text-[var(--text-secondary)] font-medium">
+      <div class="space-y-2.5 text-[13.5px] text-[var(--text-secondary)] font-medium">
         <div class="flex items-center justify-between py-1.5 border-b border-[var(--border-hairline)]">
           <span data-i18n="shortcut.cmd_k">呼出指令面板 / 快速检索</span>
           <span class="kbd">⌘K</span>
@@ -1214,42 +1273,42 @@
         </button>
       </div>
 
-      <p id="authModalSubtitle" class="text-xs text-[var(--text-muted)] mb-3.5 leading-[1.65]">
+      <p id="authModalSubtitle" class="text-[13px] text-[var(--text-muted)] mb-3.5 leading-[1.65]">
         登录后可享受个人 NetBOM 云端工程多端漫游与持久保存。
       </p>
 
       <form onsubmit="handleAuthSubmit(event)" class="space-y-3">
         <div>
-          <label id="authUsernameLabel" class="block text-[11px] font-medium text-[var(--text-muted)] mb-1">用户名 / 密保邮箱</label>
-          <input id="authUsernameInput" type="text" placeholder="输入用户名或绑定的密保邮箱" autocomplete="username" class="w-full h-9 px-3 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-primary)] text-xs font-mono text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors duration-200">
+          <label id="authUsernameLabel" class="block text-[12px] font-medium text-[var(--text-muted)] mb-1">用户名 / 密保邮箱</label>
+          <input id="authUsernameInput" type="text" placeholder="输入用户名或绑定的密保邮箱" autocomplete="username" class="w-full h-9 px-3 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-primary)] text-[13px] font-mono text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors duration-200">
         </div>
 
         <!-- 邮箱或当前旧密码输入组 -->
         <div id="authEmailGroup" class="hidden">
-          <label id="authEmailLabel" class="block text-[11px] font-medium text-[var(--text-muted)] mb-1">绑定邮箱</label>
-          <input id="authEmailInput" type="email" placeholder="输入常用安全邮箱" autocomplete="email" class="w-full h-9 px-3 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-primary)] text-xs font-mono text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors duration-200">
+          <label id="authEmailLabel" class="block text-[12px] font-medium text-[var(--text-muted)] mb-1">绑定邮箱</label>
+          <input id="authEmailInput" type="email" placeholder="输入常用安全邮箱" autocomplete="email" class="w-full h-9 px-3 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-primary)] text-[13px] font-mono text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors duration-200">
         </div>
 
         <div>
           <div class="flex items-center justify-between mb-1">
-            <label id="authPasswordLabel" class="text-[11px] font-medium text-[var(--text-muted)]">登录密码</label>
-            <button type="button" id="authForgotPwdBtn" onclick="switchAuthTab('reset')" class="text-[11px] text-[var(--text-muted)] hover:text-[var(--accent-hover)] transition-colors duration-200 cursor-pointer">
+            <label id="authPasswordLabel" class="text-[12px] font-medium text-[var(--text-muted)]">登录密码</label>
+            <button type="button" id="authForgotPwdBtn" onclick="switchAuthTab('reset')" class="text-[12px] text-[var(--text-muted)] hover:text-[var(--accent-hover)] transition-colors duration-200 cursor-pointer">
               忘记密码？
             </button>
           </div>
-          <input id="authPasswordInput" type="password" placeholder="输入登录密码 (至少6位)" autocomplete="current-password" class="w-full h-9 px-3 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-primary)] text-xs font-mono text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors duration-200">
+          <input id="authPasswordInput" type="password" placeholder="输入登录密码 (至少6位)" autocomplete="current-password" class="w-full h-9 px-3 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-primary)] text-[13px] font-mono text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors duration-200">
         </div>
 
-        <p id="authErrorMsg" class="hidden text-rose-500 text-[11px] font-medium"></p>
-        <p id="authSuccessMsg" class="hidden text-emerald-500 text-[11px] font-medium"></p>
+        <p id="authErrorMsg" class="hidden text-rose-500 text-[12px] font-medium"></p>
+        <p id="authSuccessMsg" class="hidden text-emerald-500 text-[12px] font-medium"></p>
 
         <div class="flex items-center justify-between pt-2.5 border-t border-[var(--border-hairline)]">
-          <button type="button" id="authSwitchTipBtn" onclick="toggleAuthModeSwitch()" class="text-[11px] text-[var(--text-muted)] hover:text-[var(--accent-hover)] cursor-pointer transition-colors duration-200">
+          <button type="button" id="authSwitchTipBtn" onclick="toggleAuthModeSwitch()" class="text-[12px] text-[var(--text-muted)] hover:text-[var(--accent-hover)] cursor-pointer transition-colors duration-200">
             还没有账号？去注册
           </button>
           <div class="flex items-center gap-2">
-            <button type="button" onclick="toggleAuthModal(false)" class="linear-btn-ghost px-3 py-1.5 text-xs font-medium cursor-pointer">取消</button>
-            <button type="submit" id="authSubmitBtn" class="linear-btn-primary px-3.5 py-1.5 text-xs font-semibold cursor-pointer">登录</button>
+            <button type="button" onclick="toggleAuthModal(false)" class="linear-btn-ghost px-3 py-1.5 text-[13px] font-medium cursor-pointer">取消</button>
+            <button type="submit" id="authSubmitBtn" class="linear-btn-primary px-3.5 py-1.5 text-[13px] font-semibold cursor-pointer">登录</button>
           </div>
         </div>
       </form>
@@ -1283,13 +1342,19 @@
     const I18N = {
       'zh-CN': {
         'breadcrumb.home': '主页',
-        'badge.overview': 'bin0sky 统一工作台架构已激活',
-        'hero.title': 'Tools for Focus. Notes for Depth.',
-        'hero.subtitle': '原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。',
-        'tab.all': '全部 (9)',
-        'tab.apps': 'APPS (6)',
-        'tab.notes': 'NOTES (3)',
-        'tab.labs': 'LABS (0)',
+        'badge.overview': '静心造物 · 沉思致远',
+        'hero.title': '专注造物，静心思考。',
+        'hero.subtitle': '慢下来，专注一件事。这里收纳日常打磨的趁手器物，以及跨越周期的深度笔记。',
+        'tab.all': '全部',
+        'tab.apps': '器物',
+        'tab.notes': '长思',
+        'tab.labs': '实验',
+        'section.apps.title': '器物 · Craft',
+        'section.apps.subtitle': '日常构建的原生数字工具',
+        'section.notes.title': '长思 · Essays',
+        'section.notes.subtitle': '跨越周期的人口与商业常识笔记',
+        'section.labs.title': '实验 · Sandbox',
+        'section.labs.subtitle': '受控访问的复利与沙盒推演',
         'nav.apps': '应用',
         'nav.notes': '研报',
         'nav.labs': '实验室',
@@ -1299,17 +1364,17 @@
         'item.fund_cycle': '公募与产业周期',
         'item.breakdown': '破位基金透视',
         'item.golden-goose': '金鹅自由实验室',
-        'card.golden-goose.tag': '动态财富自由沙盒：4%法则、复利抗通胀与永续现金流推演。',
-        'card.archicons.tag': '云架构与网络拓扑 2.5D/2D 矢量设备图标库。',
-        'card.slidecraft.tag': 'AI 演示文稿工作台，技术方案与汇报文档秒级生成。',
-        'card.aiconsole.tag': '为 macOS 打造的原生 AI 智能终端，全协议 & 报错根因诊断。',
+        'card.golden-goose.tag': '复利曲线、安全提现率与永续现金流的静默时间推演。',
+        'card.archicons.tag': '将复杂云网拓扑收拢为一目了然的 2.5D 矢量图元。',
+        'card.slidecraft.tag': '把零散灵感静静铺陈成结构清晰的演示文稿。',
+        'card.aiconsole.tag': '伴随 macOS 呼吸的原生 AI 终端，温和抚平晦涩报错。',
         'card.ambient.tag': '沉浸式 4K 视觉画廊与极简声学氛围工作空间。',
-        'card.bom.tag': '企业网络设备选型、参数对比与智能 BOM 报价工作台。',
-        'card.nettest.tag': '端到端链路卡顿与网络根因诊断，五层遥测与哨兵黑匣子。',
-        'card.mdview.tag': '极轻量秒开 Markdown 阅读与双栏编辑神器，Shiki 语法高亮 & Mermaid。',
-        'card.population.tag': '中美印日 150 年人口年龄金字塔与老龄化拐点量化演化模型。',
-        'card.fund_cycle.tag': '24 产业赛道周期量化、前期估值出清与商业常识反弹催化看板。',
-        'card.breakdown.tag': '穿透技术性破位迷雾，基于底线常识识别真出清与结构性反转。',
+        'card.bom.tag': '以清晰有序的物料清单，从容规划每一次设备选型与方案报价。',
+        'card.nettest.tag': '沿端到端链路静听脉搏，温和定位卡顿与抖动的真正去处。',
+        'card.mdview.tag': '回归纯粹的阅读与双栏写作台，落笔即见清朗排版。',
+        'card.population.tag': '百年尺度下的人口潮汐：从金字塔到倒金字塔的静水流深。',
+        'card.fund_cycle.tag': '穿越喧嚣与周期轮动，记录产业估值出清后的常识微光。',
+        'card.breakdown.tag': '拨开“底外有底”的表象迷雾，以常识丈量流动性与真实价值。',
         'btn.openLibrary': '打开图标库',
         'btn.createDeck': '立即生成',
         'btn.getApp': '下载 / 体验',
@@ -1329,13 +1394,19 @@
       },
       'en': {
         'breadcrumb.home': 'Home',
-        'badge.overview': 'Unified Workstation Architecture Active',
-        'hero.title': 'Tools for Focus. Notes for Depth.',
-        'hero.subtitle': 'Native minimalist tool matrix and interactive data models. Left sidebar navigation, direct stage interaction.',
-        'tab.all': 'All (9)',
-        'tab.apps': 'APPS (6)',
-        'tab.notes': 'NOTES (3)',
-        'tab.labs': 'LABS (0)',
+        'badge.overview': 'Quiet Craft · Deep Reflection',
+        'hero.title': 'Quiet tools for clear thinking.',
+        'hero.subtitle': 'Slow down and focus on one thing well. A calm collection of everyday craft and long-horizon notes.',
+        'tab.all': 'All',
+        'tab.apps': 'Craft',
+        'tab.notes': 'Essays',
+        'tab.labs': 'Sandbox',
+        'section.apps.title': 'Craft · Tools',
+        'section.apps.subtitle': 'Native utilities shaped for calm, focused workflows',
+        'section.notes.title': 'Essays · Notes',
+        'section.notes.subtitle': 'Long-horizon observations on demographics and market cycles',
+        'section.labs.title': 'Sandbox · Labs',
+        'section.labs.subtitle': 'Controlled compounding and simulation experiments',
         'nav.apps': 'Apps',
         'nav.notes': 'Notes',
         'nav.labs': 'Labs',
@@ -1345,17 +1416,17 @@
         'item.fund_cycle': 'Industry Cycles',
         'item.breakdown': 'Breakdown Fund Analysis',
         'item.golden-goose': 'Golden Goose Lab',
-        'card.golden-goose.tag': 'Dynamic FIRE Sandbox: 4% safe withdrawal rule, compound interest & passive cashflow.',
-        'card.archicons.tag': 'Network topology & cloud architecture 2.5D/2D vector device icon library.',
-        'card.slidecraft.tag': 'AI presentation workstation • Instant slide generation for tech architecture.',
-        'card.aiconsole.tag': 'Native AI Terminal built for macOS • Full-protocol SSH & root-cause diagnostics.',
+        'card.golden-goose.tag': 'Quiet long-horizon projections of compounding, safe withdrawal, and cashflow.',
+        'card.archicons.tag': 'Distilling complex cloud and network topologies into crisp 2.5D vector icons.',
+        'card.slidecraft.tag': 'Turning scattered thoughts into calm, structured technical presentations.',
+        'card.aiconsole.tag': 'A native macOS terminal with quiet intelligence for tracing root causes.',
         'card.ambient.tag': 'Immersive 4K visual gallery with minimalist acoustic ambient soundscapes.',
-        'card.bom.tag': 'Enterprise network hardware sizing, spec diff & intelligent BOM CPQ studio.',
-        'card.nettest.tag': 'End-to-end network stutter & link root-cause analyzer • 5-layer telemetry & Sentinel blackbox.',
-        'card.mdview.tag': 'Ultra-lightweight instant Markdown reader & split-view editor with Shiki & Mermaid.',
-        'card.population.tag': 'Pyramid to inverted pyramid • 150-year age structures & fertility inflection of CN, IN, US, JP.',
-        'card.fund_cycle.tag': '24 industry sector cycles, valuation clearing, and recovery catalysts.',
-        'card.breakdown.tag': 'Breakdown fund anatomy: cut through technical traps to find structural pivots.',
+        'card.bom.tag': 'Bringing quiet order to hardware sizing, spec comparison, and BOM quotes.',
+        'card.nettest.tag': 'Listening along the end-to-end path to surface hidden latency and jitter.',
+        'card.mdview.tag': 'A distraction-free Markdown reader and split editor built for clear prose.',
+        'card.population.tag': 'A century of demographic tides: watching age pyramids invert in slow motion.',
+        'card.fund_cycle.tag': 'Looking past market noise to trace sector clearing and common-sense cycles.',
+        'card.breakdown.tag': 'Seeing through technical breakdowns to measure liquidity and intrinsic value.',
         'btn.openLibrary': 'Open Library',
         'btn.createDeck': 'Create Deck',
         'btn.getApp': 'Download App',
@@ -1416,10 +1487,14 @@
     }
 
     function filterOverview(category, updateHash = true) {
+      const canAccessGoldenGoose = hasScope('labs:golden_goose');
+      if (category === 'labs' && !canAccessGoldenGoose) {
+        category = 'all';
+      }
       currentCategoryFilter = category;
       playHaptic('click');
 
-      // Update Linear filter pills
+      // Update Quiet Zen filter pills
       document.querySelectorAll('#overviewFilterBar .filter-pill').forEach(btn => {
         if (btn.dataset.cat === category) {
           btn.classList.add('active');
@@ -1428,8 +1503,22 @@
         }
       });
 
+      // Toggle chapter sections cleanly
+      const secApps = document.getElementById('section-apps');
+      const secNotes = document.getElementById('section-notes');
+      const secLabs = document.getElementById('section-labs');
+
+      if (secApps) secApps.classList.toggle('hidden', category !== 'all' && category !== 'apps');
+      if (secNotes) {
+        secNotes.classList.toggle('hidden', category !== 'all' && category !== 'notes');
+        secNotes.classList.toggle('mt-12', category === 'all');
+      }
+      if (secLabs) {
+        secLabs.classList.toggle('hidden', !canAccessGoldenGoose || (category !== 'all' && category !== 'labs'));
+        secLabs.classList.toggle('mt-12', category === 'all');
+      }
+
       // Filter cards (preserve hidden state on golden-goose when lacking scope)
-      const canAccessGoldenGoose = hasScope('labs:golden_goose');
       document.querySelectorAll('.bento-card').forEach(card => {
         if (card.id === 'card-golden-goose' && !canAccessGoldenGoose) {
           card.style.display = 'none';
@@ -1439,39 +1528,39 @@
         card.style.display = (category === 'all' || cat === category) ? '' : 'none';
       });
 
-      // Dynamic Hero Copy (Bilingual & Compact)
+      // Dynamic Zen Hero Copy (Bilingual & Calm)
       const badge = document.getElementById('overviewHeroBadge');
       const title = document.getElementById('overviewHeroTitle');
       const subtitle = document.getElementById('overviewHeroSubtitle');
       const isZh = (document.documentElement.getAttribute('lang') || 'zh').startsWith('zh');
 
       if (category === 'apps') {
-        if (badge) badge.textContent = isZh ? '生产力工具矩阵' : 'Productivity Tools Matrix';
-        if (title) title.textContent = isZh ? '原生效率工具 · 开箱即用' : 'Native Productivity Tools · Ready to Use';
-        if (subtitle) subtitle.textContent = isZh 
-          ? '涵盖网络拓扑、AI 演示文稿、智能终端、选型报价、链路诊断与 Markdown 阅读。原生流畅，开箱即用。' 
-          : 'Architecture icons, AI presentations, intelligent terminal, NetBOM, NetPath-Lens, and MDView.';
+        if (badge) badge.textContent = isZh ? '器物 · 日常称手工具' : 'Craft · Everyday Utilities';
+        if (title) title.textContent = isZh ? '把复杂留给背后，把清朗留给眼前。' : 'Tools crafted for calm clarity.';
+        if (subtitle) subtitle.textContent = isZh
+          ? '拓扑图元、演示文稿、原生终端、设备选型与阅读写作台，随时打开即刻专注。'
+          : 'Vector topologies, presentations, native terminal, hardware sizing, and quiet prose.';
         if (updateHash && location.hash !== '#/apps') history.pushState(null, '', '#/apps');
       } else if (category === 'notes') {
-        if (badge) badge.textContent = isZh ? '深度数据研报书架' : 'Quantitative Research Reports';
-        if (title) title.textContent = isZh ? '宏观人口与公募产业周期' : 'Global Demographics & Industry Cycles';
-        if (subtitle) subtitle.textContent = isZh 
-          ? '基于真实联合国宏观人口结构、公募基金出清与破位常识的交互量化研报专栏。' 
-          : 'Interactive macro demographic models, fund valuation clearing, and structural pivot analysis.';
+        if (badge) badge.textContent = isZh ? '长思 · 跨越周期的笔记' : 'Essays · Long-horizon Notes';
+        if (title) title.textContent = isZh ? '在变化的世界里，寻找不变的常识。' : 'Quiet patience through shifting cycles.';
+        if (subtitle) subtitle.textContent = isZh
+          ? '关于百年人口潮汐、产业估值出清与资产本质的长期观察记录。'
+          : 'Long-horizon reflections on global demographics, valuation clearing, and intrinsic value.';
         if (updateHash && location.hash !== '#/notes') history.pushState(null, '', '#/notes');
       } else if (category === 'labs') {
-        if (badge) badge.textContent = isZh ? '创新实验室与专属空间' : 'Innovation Labs & Dedicated Spaces';
-        if (title) title.textContent = isZh ? '前沿实验与交互沙盒' : 'Frontier Experiments & Sandboxes';
-        if (subtitle) subtitle.textContent = isZh 
-          ? '面向前沿实验、复利模型与专用效率系统的创新试验场。' 
-          : 'Experimental sandbox for specialized tools and interactive financial models.';
+        if (badge) badge.textContent = isZh ? '实验 · 受控推演沙盒' : 'Sandbox · Private Experiments';
+        if (title) title.textContent = isZh ? '在静默推演中观察时间的复利。' : 'Simulating the quiet power of compounding.';
+        if (subtitle) subtitle.textContent = isZh
+          ? '面向个人自由现金流与安全提现率边界的专属推演空间。'
+          : 'Controlled sandboxes for modeling cashflow durability and safe withdrawal bounds.';
         if (updateHash && location.hash !== '#/labs') history.pushState(null, '', '#/labs');
       } else {
-        if (badge) badge.textContent = isZh ? 'bin0sky 统一工作台架构已激活' : 'Unified Workstation Architecture Active';
-        if (title) title.textContent = 'Tools for Focus. Notes for Depth.';
-        if (subtitle) subtitle.textContent = isZh 
-          ? '原生极简工具矩阵与交互数据模型。左侧常驻导航，视窗直接交互。' 
-          : 'Native minimalist tool matrix and interactive data models. Left sidebar navigation, direct stage interaction.';
+        if (badge) badge.textContent = isZh ? '静心造物 · 沉思致远' : 'Quiet Craft · Deep Reflection';
+        if (title) title.textContent = isZh ? '专注造物，静心思考。' : 'Quiet tools for clear thinking.';
+        if (subtitle) subtitle.textContent = isZh
+          ? '慢下来，专注一件事。这里收纳日常打磨的趁手器物，以及跨越周期的深度笔记。'
+          : 'Slow down and focus on one thing well. A calm collection of everyday craft and long-horizon notes.';
         if (updateHash && location.hash !== '' && location.hash !== '#/') history.pushState(null, '', location.pathname);
       }
     }
@@ -2086,17 +2175,17 @@
           const name = currentAuthUser.username || 'Admin';
           authBtn.textContent = isZh ? `⚡ ${name}` : `⚡ ${name}`;
           authBtn.title = isZh ? `管理员身份 [${name}]，点击退出` : `Admin active [${name}], click to logout`;
-          authBtn.className = "h-8 px-2.5 rounded-lg border border-[var(--accent-primary)]/40 bg-[var(--accent-subtle)] hover:border-[var(--accent-hover)] text-[var(--accent-hover)] text-xs font-semibold transition-all duration-200 ease-linear cursor-pointer select-none";
+          authBtn.className = "h-8 px-2.5 rounded-lg border border-[var(--accent-primary)]/40 bg-[var(--accent-subtle)] hover:border-[var(--accent-hover)] text-[var(--accent-hover)] text-[13px] font-semibold transition-all duration-200 ease-linear cursor-pointer select-none";
         } else if (isLogged) {
           const name = currentAuthUser.username || 'User';
           const proTag = (currentAuthUser.scopes && currentAuthUser.scopes.length > 0) ? ' ★' : '';
           authBtn.textContent = `👤 ${name}${proTag}`;
           authBtn.title = isZh ? `已登录用户 [${name}]，点击退出` : `User [${name}], click to logout`;
-          authBtn.className = "linear-btn-ghost h-8 px-2.5 text-xs font-medium cursor-pointer select-none";
+          authBtn.className = "linear-btn-ghost h-8 px-2.5 text-[13px] font-medium cursor-pointer select-none";
         } else {
           authBtn.textContent = isZh ? '登录' : 'Login';
           authBtn.title = isZh ? '登录 / 注册' : 'Login / Register';
-          authBtn.className = "linear-btn-ghost h-8 px-2.5 text-xs font-medium cursor-pointer select-none";
+          authBtn.className = "linear-btn-ghost h-8 px-2.5 text-[13px] font-medium cursor-pointer select-none";
         }
       }
 
@@ -2123,15 +2212,20 @@
         }
       }
 
-      // 动态更新 All / LABS 标签计数
-      const tabAllBtn = document.querySelector('#overviewFilterBar button[data-cat="all"]');
       const tabLabsBtn = document.querySelector('#overviewFilterBar button[data-cat="labs"]');
-      if (tabAllBtn) {
-        const totalCount = canGoldenGoose ? 10 : 9;
-        tabAllBtn.textContent = isZh ? `全部 (${totalCount})` : `All (${totalCount})`;
-      }
       if (tabLabsBtn) {
-        tabLabsBtn.textContent = `LABS (${canGoldenGoose ? 1 : 0})`;
+        tabLabsBtn.classList.toggle('hidden', !canGoldenGoose);
+      }
+
+      const secLabs = document.getElementById('section-labs');
+      if (secLabs) {
+        const showLabs = canGoldenGoose && (currentCategoryFilter === 'all' || currentCategoryFilter === 'labs');
+        secLabs.classList.toggle('hidden', !showLabs);
+        secLabs.classList.toggle('mt-12', currentCategoryFilter === 'all');
+      }
+
+      if (!canGoldenGoose && currentCategoryFilter === 'labs') {
+        filterOverview('all', false);
       }
 
       // 3. 实时向内嵌 iframe 广播身份变更
@@ -2726,11 +2820,11 @@
       const btnEn = document.getElementById('langBtnEn');
       if (btnZh && btnEn) {
         if (activeLang === 'zh-CN') {
-          btnZh.className = "px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[11px] font-semibold bg-[var(--bg-surface-hover)] text-[var(--text-primary)]";
-          btnEn.className = "px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[11px] font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)]";
+          btnZh.className = "px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[12px] font-semibold bg-[var(--bg-surface-hover)] text-[var(--text-primary)]";
+          btnEn.className = "px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[12px] font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)]";
         } else {
-          btnEn.className = "px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[11px] font-semibold bg-[var(--bg-surface-hover)] text-[var(--text-primary)]";
-          btnZh.className = "px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[11px] font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)]";
+          btnEn.className = "px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[12px] font-semibold bg-[var(--bg-surface-hover)] text-[var(--text-primary)]";
+          btnZh.className = "px-2 py-1 rounded-md transition-all duration-200 ease-linear cursor-pointer text-[12px] font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)]";
         }
       }
 
@@ -2816,7 +2910,7 @@
       paletteActiveIndex = 0;
 
       if (paletteItems.length === 0) {
-        listEl.innerHTML = `<div class="p-4 text-center text-[var(--text-muted)] font-mono text-xs">${isZh ? '未找到匹配项' : 'No matching results'}</div>`;
+        listEl.innerHTML = `<div class="p-4 text-center text-[var(--text-muted)] font-mono text-[13px]">${isZh ? '未找到匹配项' : 'No matching results'}</div>`;
         return;
       }
 
@@ -2824,9 +2918,9 @@
         const itemEl = document.createElement('div');
         itemEl.className = `cmd-item flex items-center justify-between p-2.5 rounded-lg border transition-all duration-200 ease-linear cursor-pointer ${idx === 0 ? 'bg-[var(--accent-subtle)] border-[var(--accent-primary)]/40 text-[var(--text-primary)] font-semibold' : 'border-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]'}`;
         itemEl.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border border-[var(--border-hairline)] bg-[var(--bg-primary)] text-[var(--text-muted)] font-semibold">${cmd.category}</span>
-            <span class="text-xs font-medium">${cmd.title}</span>
+          <div class="flex items-center gap-2.5">
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded border border-[var(--border-hairline)] bg-[var(--bg-primary)] text-[var(--text-muted)] font-semibold">${cmd.category}</span>
+            <span class="text-[13.5px] font-medium">${cmd.title}</span>
           </div>
           ${cmd.badge ? `<span class="kbd">${cmd.badge}</span>` : ''}
         `;
@@ -2991,6 +3085,20 @@
 
       handleRoute();
       if (window.lucide) lucide.createIcons();
+
+      // Linear Mouse-Tracking Radial Spotlight on Bento Cards
+      const overviewEl = document.getElementById('stageOverview');
+      if (overviewEl) {
+        overviewEl.addEventListener('mousemove', (e) => {
+          document.querySelectorAll('.bento-card').forEach((card) => {
+            if (card.style.display === 'none') return;
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+            card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+          });
+        }, { passive: true });
+      }
+
       // Spatial Arrow Key Navigation on Bento Cards (3-column grid stride)
       document.querySelectorAll('.bento-card').forEach((card, idx, all) => {
         card.addEventListener('keydown', (e) => {
