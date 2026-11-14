@@ -681,6 +681,15 @@
           </div>
         </div>
       </a>
+      <a href="/notes/prompt_engineering_sop.html" class="b0-menu-item">
+        <div class="b0-menu-item-left">
+          <span class="b0-menu-icon" style="background: rgba(94,106,210,0.18); color: #818cf8;">09</span>
+          <div>
+            <div class="b0-menu-name">AI 提示词工程与指令库 SOP</div>
+            <div class="b0-menu-desc">从底层心法到工业级指令工作台</div>
+          </div>
+        </div>
+      </a>
       <a href="/labs/golden_goose.html" class="b0-menu-item">
         <div class="b0-menu-item-left">
           <span class="b0-menu-icon" style="background: rgba(245,158,11,0.15); color: #f59e0b;">🪿</span>

@@ -459,6 +459,10 @@
                     <div class="text-[14px] font-medium text-[#F7F8F8]" data-i18n="item.breakdown">破位基金透视</div>
                     <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="mega.breakdown.desc">以常识丈量流动性与真实价值</div>
                   </button>
+                  <button type="button" onclick="closeNavPopover(); loadStage('prompt-sop')" class="linear-mega-item">
+                    <div class="text-[14px] font-medium text-[#F7F8F8]" data-i18n="item.prompt_sop">AI 提示词工程 SOP</div>
+                    <div class="text-[12.5px] text-[var(--text-muted)] mt-0.5 leading-snug" data-i18n="mega.prompt_sop.desc">从底层心法到工业级指令工作台</div>
+                  </button>
                 </div>
               </div>
               <div class="px-4 py-2.5 border-t border-white/[0.06] bg-white/[0.015] flex items-center justify-between text-[12.5px]">
@@ -762,6 +766,22 @@
                 </div>
               </div>
 
+              <!-- Prompt Engineering SOP -->
+              <div tabindex="0" onclick="loadStage('prompt-sop')" data-category="notes" class="bento-card group p-5 sm:p-6 flex flex-col justify-between cursor-pointer">
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="w-8 h-8 rounded-[8px] bg-[var(--accent-subtle)] text-[var(--accent-hover)] border border-[var(--border-hairline)] flex items-center justify-center flex-shrink-0 bento-icon">
+                      <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] opacity-0 -translate-x-0.5 translate-y-0.5 group-hover:opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300"></i>
+                  </div>
+                  <h3 class="font-semibold text-[16px] text-[var(--text-primary)] tracking-[-0.018em] group-hover:text-[var(--accent-hover)] transition-colors duration-200" data-i18n="item.prompt_sop">AI 提示词工程 SOP</h3>
+                  <p class="text-[14px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] mt-2 leading-[1.7] transition-colors duration-200" data-i18n="card.prompt_sop.tag">
+                    面向概率生成模型的精准编程规范：三大结构化框架与可交互实战指令库。
+                  </p>
+                </div>
+              </div>
+
             </div>
           </section>
 
@@ -981,7 +1001,8 @@
       'mdview': { title: 'MDView', category: 'APPS', src: 'https://mdview.bin0sky.tech', hash: '#/mdview' },
       'population': { title: '全球人口结构变迁', category: 'NOTES', src: '/notes/population_structure_1950_2100.html', hash: '#/population' },
       'fund-cycle': { title: '公募基金与产业周期', category: 'NOTES', src: '/notes/fund_industry_cycles_2026.html', hash: '#/fund-cycle' },
-      'fund-breakdown': { title: '破位基金透视看板', category: 'NOTES', src: '/notes/breakdown_fund_analysis_2026.html', hash: '#/fund-breakdown' }
+      'fund-breakdown': { title: '破位基金透视看板', category: 'NOTES', src: '/notes/breakdown_fund_analysis_2026.html', hash: '#/fund-breakdown' },
+      'prompt-sop': { title: 'AI 提示词工程 SOP', category: 'NOTES', src: '/notes/prompt_engineering_sop.html', hash: '#/prompt-sop' }
     };
 
     const I18N = {
@@ -1014,6 +1035,7 @@
         'mega.population.desc': '百年尺度下的人口潮汐动态模型',
         'mega.fund_cycle.desc': '24 产业赛道估值出清与周期记录',
         'mega.breakdown.desc': '以常识丈量流动性与真实价值',
+        'mega.prompt_sop.desc': '从底层心法到工业级指令工作台',
         'mega.hint.palette': '随时全局搜索直达',
         'mega.hint.notes': '跨越周期的观察与商业常识',
         'mega.hint.labs': '受控访问的推演空间',
@@ -1024,6 +1046,7 @@
         'item.population': '人口结构变迁',
         'item.fund_cycle': '公募与产业周期',
         'item.breakdown': '破位基金透视',
+        'item.prompt_sop': 'AI 提示词工程 SOP',
         'item.golden-goose': '金鹅自由实验室',
         'card.golden-goose.tag': '复利曲线、安全提现率与永续现金流的静默时间推演。',
         'card.archicons.tag': '将复杂云网拓扑收拢为一目了然的 2.5D 矢量图元。',
@@ -1036,6 +1059,7 @@
         'card.population.tag': '百年尺度下的人口潮汐：从金字塔到倒金字塔的静水流深。',
         'card.fund_cycle.tag': '穿越喧嚣与周期轮动，记录产业估值出清后的常识微光。',
         'card.breakdown.tag': '拨开“底外有底”的表象迷雾，以常识丈量流动性与真实价值。',
+        'card.prompt_sop.tag': '面向概率生成模型的精准编程规范：三大结构化框架与可交互实战指令库。',
         'btn.openLibrary': '打开图标库',
         'btn.createDeck': '立即生成',
         'btn.getApp': '下载 / 体验',
@@ -1082,6 +1106,7 @@
         'mega.population.desc': 'Century-scale demographic tide simulation',
         'mega.fund_cycle.desc': '24 sector valuation clearing and cycles',
         'mega.breakdown.desc': 'Measuring liquidity and intrinsic value',
+        'mega.prompt_sop.desc': 'From mental models to industrial prompt workbench',
         'mega.hint.palette': 'Jump anywhere quickly',
         'mega.hint.notes': 'Long-horizon market & demographic notes',
         'mega.hint.labs': 'Controlled simulation environment',
@@ -1092,6 +1117,7 @@
         'item.population': 'Demographics 1950–2100',
         'item.fund_cycle': 'Industry Cycles',
         'item.breakdown': 'Breakdown Fund Analysis',
+        'item.prompt_sop': 'Prompt Engineering SOP',
         'item.golden-goose': 'Golden Goose Lab',
         'card.golden-goose.tag': 'Quiet long-horizon projections of compounding, safe withdrawal, and cashflow.',
         'card.archicons.tag': 'Distilling complex cloud and network topologies into crisp 2.5D vector icons.',
@@ -1104,6 +1130,7 @@
         'card.population.tag': 'A century of demographic tides: watching age pyramids invert in slow motion.',
         'card.fund_cycle.tag': 'Looking past market noise to trace sector clearing and common-sense cycles.',
         'card.breakdown.tag': 'Seeing through technical breakdowns to measure liquidity and intrinsic value.',
+        'card.prompt_sop.tag': 'Precision programming for probabilistic LLMs: structured frameworks and interactive SOP templates.',
         'btn.openLibrary': 'Open Library',
         'btn.createDeck': 'Create Deck',
         'btn.getApp': 'Download App',
@@ -1539,6 +1566,7 @@
       'population': 'item.population',
       'fund-cycle': 'item.fund_cycle',
       'fund-breakdown': 'item.breakdown',
+      'prompt-sop': 'item.prompt_sop',
       'golden-goose': 'item.golden-goose'
     };
 
@@ -2437,6 +2465,7 @@
         { id: 'population', title: isZh ? '全球人口结构变迁 1950–2100' : 'Demographics 1950–2100', category: 'NOTES', badge: '', action: () => loadStage('population') },
         { id: 'fund-cycle', title: isZh ? '公募基金与产业周期全景' : 'Industry Cycles 2026', category: 'NOTES', badge: '', action: () => loadStage('fund-cycle') },
         { id: 'fund-breakdown', title: isZh ? '破位基金本质透视看板' : 'Breakdown Fund Analysis', category: 'NOTES', badge: '', action: () => loadStage('fund-breakdown') },
+        { id: 'prompt-sop', title: isZh ? 'AI 提示词工程与指令库 SOP' : 'Prompt Engineering SOP', category: 'NOTES', badge: '', action: () => loadStage('prompt-sop') },
       ];
 
       // 金鹅自由实验室：管理员或拥有 labs:golden_goose 权限者可见
@@ -2622,6 +2651,7 @@
       else if (h.includes('mdview') || p.endsWith('/mdview')) loadStage('mdview', false);
       else if (h.includes('fund-cycle') || h.includes('cycle') || p.includes('cycle') || p.includes('%e5%85%ac%e5%8b%9f')) loadStage('fund-cycle', false);
       else if (h.includes('fund-breakdown') || h.includes('breakdown') || p.includes('breakdown') || p.includes('%e7%a0%b4%e4%bd%8d')) loadStage('fund-breakdown', false);
+      else if (h.includes('prompt-sop') || h.includes('prompt') || p.includes('prompt_engineering')) loadStage('prompt-sop', false);
       else if (h.includes('golden-goose') || h.includes('goose') || p.includes('golden_goose')) loadStage('golden-goose', false);
       else if (h.includes('population') || h.includes('popul') || p.includes('popul')) loadStage('population', false);
       else loadStage('overview', false);
