@@ -16,6 +16,8 @@
 | **07 MDView** | `bin0sky.tech/mdview` / `mdview.bin0sky.tech` | `/Antigravity/online-ai-mdview` | `rrobin0sky/online-ai-mdview` | 🚀 生产力工具 APPS |
 | **08 人口结构变迁**| `bin0sky.tech/notes/population_structure_1950_2100.html` | `/Antigravity/bin0sky.tech/notes/` | `rrobin0sky/bin0sky.tech` | 📑 交互研报 NOTES |
 | **09 AI 提示词工程 SOP**| `bin0sky.tech/notes/prompt_engineering_sop.html` | `/Antigravity/bin0sky.tech/notes/` | `rrobin0sky/bin0sky.tech` | 📑 交互研报 NOTES |
+| **10 破位基金 12 周追踪**| `bin0sky.tech/notes/breakdown_fund_12weeks_2026.html` | `/Antigravity/bin0sky.tech/notes/` | `rrobin0sky/bin0sky.tech` | 📑 交互研报 NOTES |
+| **11 超跌反转 13 周全景**| `bin0sky.tech/notes/fund_reversal_13weeks_2026.html` | `/Antigravity/bin0sky.tech/notes/` | `rrobin0sky/bin0sky.tech` | 📑 交互研报 NOTES |
 
 ---
 

@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- BinOS High-Precision Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=binos2026-v2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=binos2026-v2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=binos2026-v2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=binos2026-v2">
+  <link rel="shortcut icon" href="/favicon.ico?v=binos2026-v2">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A股公募基金「超跌稳盘 → 右侧反转」全周期全景数据看板 (13周全量沉淀)</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Instant FOUC-prevention Theme Init & Runtime Bridge -->
+  <script>
+    (function() {
+      document.documentElement.classList.add('dark');
+      try {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('b0_embedded') === '1' || window.top !== window.self) {
+          document.documentElement.classList.add('b0-embedded');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <script src="/shared/nav-pill.js" data-category="notes" data-title="超跌稳盘与右侧反转全景 (13周)" defer></script>
+  <style>
+    :root {
+      --bg: #090D16;
+      --surface: #111827;
+      --surface-elevated: #182235;
+      --border: #1E293B;
+      --border-hover: #334155;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --sky: #38BDF8;
+      --emerald: #10B981;
+      --amber: #F59E0B;
+      --rose: #F43F5E;
+      --purple: #A855F7;
+      --cyan: #06B6D4;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.55;
+      padding: 24px 20px 48px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .num {
+      font-variant-numeric: tabular-nums;
+    }
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    /* Header Bar */
+    .header-bar {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.96), rgba(9, 13, 22, 0.98));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .header-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--sky);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+    .badge.green {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--emerald);
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+    .header-sub {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      max-width: 860px;
+    }
+    .header-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+    .timestamp {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .btn-export {
+      background: var(--surface-elevated);
+      color: var(--text);
+      border: 1px solid var(--border-hover);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-export:hover {
+      border-color: var(--sky);
+      color: var(--sky);
+    }
+
+    /* BLUF Executive Summary */
+    .bluf-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 1024px) {
+      .bluf-grid { grid-template-columns: 1fr; }
+    }
+    .bluf-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--sky);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .bluf-card.green { border-top-color: var(--emerald); }
+    .bluf-card.amber { border-top-color: var(--amber); }
+    .bluf-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .bluf-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+    .bluf-body {
+      font-size: 13px;
+      color: #CBD5E1;
+      line-height: 1.55;
+    }
+
+    /* KPI Row */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 1200px) {
+      .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .kpi-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .kpi-name {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .kpi-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+    .kb-sky { background: rgba(56, 189, 248, 0.14); color: var(--sky); }
+    .kb-rose { background: rgba(244, 63, 94, 0.14); color: var(--rose); }
+    .kb-amber { background: rgba(245, 158, 11, 0.14); color: var(--amber); }
+    .kb-green { background: rgba(16, 185, 129, 0.14); color: var(--emerald); }
+    .kb-purple { background: rgba(168, 85, 247, 0.14); color: var(--purple); }
+    .kpi-val {
+      font-size: 28px;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -0.02em;
+    }
+    .kpi-val span {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-left: 3px;
+    }
+    .kpi-foot {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Charts Grid */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 1080px) {
+      .charts-grid { grid-template-columns: 1fr; }
+    }
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .chart-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+    .chart-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .chart-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--bg);
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .chart-tab {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chart-tab.active {
+      background: var(--surface-elevated);
+      color: var(--sky);
+    }
+    .chart-wrap {
+      position: relative;
+      height: 330px;
+      width: 100%;
+    }
+
+    /* Filter & Control Bar */
+    .controls-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .filter-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      min-width: 78px;
+    }
+    .pill {
+      background: var(--bg);
+      color: #CBD5E1;
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .pill:hover {
+      border-color: var(--border-hover);
+      color: #FFFFFF;
+    }
+    .pill.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--sky);
+      color: var(--sky);
+      font-weight: 600;
+    }
+    .pill.veteran.active {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--emerald);
+      color: var(--emerald);
+    }
+    .search-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      width: 300px;
+      outline: none;
+    }
+    .search-box:focus {
+      border-color: var(--sky);
+    }
+    .view-toggle {
+      margin-left: auto;
+      display: flex;
+      gap: 6px;
+    }
+
+    /* Interactive Data Table */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .table-scroll {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    thead th {
+      background: var(--surface-elevated);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 12px;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    thead th:hover {
+      color: var(--sky);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    tbody tr:hover {
+      background: rgba(56, 189, 248, 0.05);
+    }
+    tbody td {
+      padding: 13px 16px;
+      vertical-align: middle;
+    }
+    .tag-cat {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #090D16;
+      white-space: nowrap;
+    }
+    .fund-pill {
+      display: inline-block;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 11px;
+      color: #CBD5E1;
+      margin: 2px 4px 2px 0;
+      white-space: nowrap;
+    }
+    .fund-pill.vet {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.08);
+      color: #6EE7B7;
+    }
+    .btn-detail {
+      background: transparent;
+      border: 1px solid var(--border-hover);
+      color: var(--sky);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-detail:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: var(--sky);
+    }
+
+    /* Cards Grid View */
+    .cards-grid {
+      display: none;
+      grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .sector-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .sector-card:hover {
+      border-color: var(--sky);
+    }
+    .mini-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 13, 22, 0.78);
+      backdrop-filter: blur(5px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border-hover);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 720px;
+      max-height: 86vh;
+      overflow-y: auto;
+      padding: 26px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .modal-close:hover { color: #FFF; }
+
+    /* Footer Provenance */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    @media print {
+      body { background: #fff; color: #000; padding: 0; }
+      .controls-card, .btn-export, .chart-tabs, .btn-detail { display: none !important; }
+      .header-bar, .bluf-card, .kpi-card, .chart-card, .table-card {
+        border-color: #cbd5e1;
+        background: #fff;
+        color: #000;
+      }
+      h1, .bluf-title, .kpi-val, .chart-title { color: #000; }
+    }
+      html.b0-embedded body {
+      padding: 16px 20px 36px;
+    }
+    @media print {
+      #b0-nav-pill-host { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 1. Header Bar -->
+    <header class="header-bar">
+      <div>
+        <div class="header-badges">
+          <span class="badge">Executive Dark Mode · 单文件交互看板</span>
+          <span class="badge green">覆盖周期：2026-08-22 至 2026-11-14 (连续13周)</span>
+        </div>
+        <h1>A股公募基金「超跌稳盘 → 右侧反转」全周期全景数据看板</h1>
+        <p class="header-sub">
+          整合连续 13 周跟踪沉淀的 <strong>39 个核心产业赛道</strong>、对应代表性 ETF 与 <strong>18 只成立 10 年以上老牌公募基金</strong>。从“前期泡沫杀估值 → 底部多空平衡稳盘 → 常识催化右侧突破”三阶段进行结构化量化与商业逻辑解构。
+        </p>
+      </div>
+      <div class="header-actions">
+        <span class="timestamp num">数据截止：2026-11-14 08:05</span>
+        <button class="btn-export" onclick="window.print()">🖨️ 导出 / 打印简报</button>
+      </div>
+    </header>
+
+    <!-- 2. BLUF Executive Summary -->
+    <section class="bluf-grid">
+      <div class="bluf-card">
+        <div class="bluf-label">BLUF 01 · 周期赔率规律</div>
+        <div class="bluf-title">深跌近六成 + 磨底超两年是右侧爆发沃土</div>
+        <div class="bluf-body">
+          39 个启动右侧行情的赛道前期平均回撤达 <strong class="num" style="color:var(--rose)">-57.0%</strong>，底部平均横盘 <strong class="num" style="color:var(--amber)">28.9 个月</strong>，启动时估值均值仅处于历史 <strong class="num" style="color:var(--sky)">12.4%</strong> 分位，筹码出清后形成了平均 <strong class="num" style="color:var(--emerald)">+31.9%</strong> 的反弹弹性。
+        </div>
+      </div>
+      <div class="bluf-card green">
+        <div class="bluf-label">BLUF 02 · 常识催化核心</div>
+        <div class="bluf-title">“跌透”只是必要条件，真正涨靠三大硬催化</div>
+        <div class="bluf-body">
+          单纯跌得多不会自动涨。统计显示，右侧突破主要依赖：<strong>① 新需求/AI赋能</strong>（如光模块、稀土人形机器人）；<strong>② 产能出清与联合反内卷</strong>（如光伏 0.68 元底线、44 家钢企控产）；<strong>③ 政策托底与出海高毛利</strong>（以旧换新、电网与逆变器出海）。
+        </div>
+      </div>
+      <div class="bluf-card amber">
+        <div class="bluf-label">BLUF 03 · 实操配置建议</div>
+        <div class="bluf-title">场内 ETF 抓弹性，10 年老牌基做底仓压舱石</div>
+        <div class="bluf-body">
+          11 月起已针对轨交、环保、煤炭、稀土、航运、银行增配 <strong>18 只 10 年+ 老牌公募基金</strong>（如 2004 年成立的 <code>110003</code>、2006 年的 <code>510880</code>、2010 年的 <code>090010</code>），适合通过场外红利再投资平滑周期波动。
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. KPI Cards Row -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-name">累计跟踪产业赛道</span>
+          <span class="kpi-badge kb-sky">13 周全量</span>
+        </div>
+        <div class="kpi-val num">39 <span>个板块</span></div>
+        <div class="kpi-foot">覆盖硬科技/制造/资源/医药/消费/金融</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-name">平均前期回撤深度</span>
+          <span class="kpi-badge kb-rose">充分杀估值</span>
+        </div>
+        <div class="kpi-val num" style="color:var(--rose)">-57.0%</div>
+        <div class="kpi-foot">最大回撤达 -79.2%（光伏主链）</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-name">平均底部稳盘时长</span>
+          <span class="kpi-badge kb-amber">时间换空间</span>
+        </div>
+        <div class="kpi-val num">28.9 <span>个月</span></div>
+        <div class="kpi-foot">最长地产建材 46 月、轨交 48 月</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-name">启动后平均反弹幅度</span>
+          <span class="kpi-badge kb-green">右侧动量</span>
+        </div>
+        <div class="kpi-val num" style="color:var(--emerald)">+31.9%</div>
+        <div class="kpi-foot">半导体、光储逆变器弹性近 50%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-name">已筛选 10 年+老牌基金</span>
+          <span class="kpi-badge kb-purple">穿越牛熊</span>
+        </div>
+        <div class="kpi-val num">18 <span>只标的</span></div>
+        <div class="kpi-foot">含 W12-W13 重点增选老牌基清单</div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Charts Grid -->
+    <section class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title" id="mainChartTitle">周期定位分布：底部稳盘时长 vs 右侧反弹幅度</div>
+            <div class="chart-sub" id="mainChartSub">横轴为底部稳盘月数，纵轴为右侧反弹涨幅；点击任意散点查看该赛道深度解析</div>
+          </div>
+          <div class="chart-tabs">
+            <button class="chart-tab active" data-chart="scatter" onclick="switchMainChart('scatter', this)">周期定位散点</button>
+            <button class="chart-tab" data-chart="weekly" onclick="switchMainChart('weekly', this)">13周反弹趋势</button>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="mainChartCanvas"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">核心反转常识动力分布</div>
+            <div class="chart-sub">各赛道从横盘转向右侧上涨的核心商业催化剂占比</div>
+          </div>
+          <div class="chart-tabs">
+            <button class="chart-tab active" data-right="driver" onclick="switchRightChart('driver', this)">催化动力</button>
+            <button class="chart-tab" data-right="category" onclick="switchRightChart('category', this)">产业门类</button>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="rightChartCanvas"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Controls & Filter Bar -->
+    <section class="controls-card">
+      <div class="filter-row">
+        <span class="filter-label">产业门类：</span>
+        <button class="pill active" data-cat="all" onclick="setCatFilter('all', this)">全部 (39)</button>
+        <button class="pill" data-cat="硬科技" onclick="setCatFilter('硬科技', this)">硬科技</button>
+        <button class="pill" data-cat="高端制造" onclick="setCatFilter('高端制造', this)">高端制造</button>
+        <button class="pill" data-cat="周期资源" onclick="setCatFilter('周期资源', this)">周期资源</button>
+        <button class="pill" data-cat="医药生物" onclick="setCatFilter('医药生物', this)">医药生物</button>
+        <button class="pill" data-cat="大消费" onclick="setCatFilter('大消费', this)">大消费</button>
+        <button class="pill" data-cat="大金融" onclick="setCatFilter('大金融', this)">大金融</button>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">反转动力：</span>
+        <button class="pill active" data-drv="all" onclick="setDrvFilter('all', this)">全部动力</button>
+        <button class="pill" data-drv="新需求/AI赋能" onclick="setDrvFilter('新需求/AI赋能', this)">新需求/AI赋能</button>
+        <button class="pill" data-drv="产能/库存出清" onclick="setDrvFilter('产能/库存出清', this)">产能/库存出清</button>
+        <button class="pill" data-drv="政策催化/顶层设计" onclick="setDrvFilter('政策催化/顶层设计', this)">政策催化/顶层设计</button>
+        <button class="pill" data-drv="出海第二增长曲线" onclick="setDrvFilter('出海第二增长曲线', this)">出海第二增长曲线</button>
+        <button class="pill" data-drv="大额回购与重组" onclick="setDrvFilter('大额回购与重组', this)">大额回购与重组</button>
+        <button class="pill veteran" id="vetToggle" onclick="toggleVeteranOnly(this)">★ 仅看含10年+老牌基金</button>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">检索定位：</span>
+        <input type="text" id="searchInput" class="search-box" placeholder="搜代码(如 510880 / 110025)、板块或关键词..." oninput="handleSearch(this.value)" />
+        <span id="matchCounter" class="num" style="font-size:12.5px; color:var(--text-muted);">当前显示 39 个赛道</span>
+        <div class="view-toggle">
+          <button class="pill active" id="btnTable" onclick="switchView('table')">📋 明细数据表</button>
+          <button class="pill" id="btnCards" onclick="switchView('cards')">🗂️ 逻辑卡片视图</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6A. Interactive Data Table -->
+    <section class="table-card" id="tableView">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortBy('week_num')">周次 ↕</th>
+              <th onclick="sortBy('name')">赛道板块 ↕</th>
+              <th onclick="sortBy('category')">门类 ↕</th>
+              <th onclick="sortBy('drawdown_pct')">前期回撤 ↕</th>
+              <th onclick="sortBy('sideways_months')">稳盘月数 ↕</th>
+              <th onclick="sortBy('rebound_pct')">右侧反弹 ↕</th>
+              <th onclick="sortBy('pe_percentile')">估值分位 ↕</th>
+              <th>核心驱动</th>
+              <th>代表 ETF / 10年+老牌基金</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 6B. Cards View -->
+    <section class="cards-grid" id="cardsView"></section>
+
+    <!-- 7. Data Provenance & Footer -->
+    <footer class="footer">
+      <div>
+        <strong>数据溯源与方法论</strong>：数据源于 2026-08-22 至 2026-11-14 连续 13 周公开市场行情、公募基金定期报告（天天基金网/东方财富档案）及证券时报、财联社、界面新闻等权威信源。
+      </div>
+      <div>
+        免责声明：本可视化看板仅作商业常识与产业周期研究复盘，不构成任何投资买卖建议。
+      </div>
+    </footer>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this) closeModal()">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const sectorsData = [{"id": "biopharma", "week": "W01 · 2026-08-22", "week_num": 1, "name": "创新药与生物医药", "category": "医药生物", "category_color": "#a855f7", "etfs": ["512290 生物医药ETF", "159992 创新药ETF", "513700 港股通创新药ETF"], "veteran_funds": [], "drawdown_pct": -68.5, "sideways_months": 34, "rebound_pct": 36.8, "pe_percentile": 8.2, "main_driver": "出海第二增长曲线", "fall_reason": "前几年赛道炒作过热，医保集采常态化降价压缩利润，叠加全球投融资寒冬，CXO研发订单断崖，预期杀估值。", "sideways_reason": "砸盘资金出清，估值跌破历史极限底部；企业海外授权（License-out）首付款与研发分成开始放量，多空形成平衡。", "rise_reason": "从'国内内卷'到'全球收美元'，License-out交易额创新高；医保全链条支持政策落地，科技高位资金进行'高切低'避险回流。", "risks": "海外地缘审查摩擦、海外临床三期数据不达预期风险。", "sources": [{"title": "证券时报：医药基金回血报道", "url": "https://epaper.stcn.com/con/202608/10/content_2959188.html"}, {"title": "证券时报：创新药ETF反弹分析", "url": "https://www.stcn.com/article/detail/4054127.html"}]}, {"id": "machinery", "week": "W01 · 2026-08-22", "week_num": 1, "name": "工程机械与制造业出海", "category": "高端制造", "category_color": "#10b981", "etfs": ["516010 工程机械ETF", "159895 高端装备ETF"], "veteran_funds": [], "drawdown_pct": -58.2, "sideways_months": 26, "rebound_pct": 28.4, "pe_percentile": 14.5, "main_driver": "产能/库存出清", "fall_reason": "上一轮机械牛市在2021年见顶，随后国内房地产和传统基建开工断崖下滑，挖掘机等核心设备销量腰斩，产能严重闲置。", "sideways_reason": "企业连续两年深度去化老旧库存，产品价格跌破成本线后触底，中小杂牌厂商退出市场。", "rise_reason": "上一轮集中售出设备迎来8年强制换机报废大周期；国内龙头时隔6年集体提价；海外亚非拉及中东高毛利出口额连创历史新高。", "risks": "国内地产基建恢复斜率偏缓，海外新兴市场汇率波动。", "sources": [{"title": "全景网：工程机械上行周期解析", "url": "https://wxly.p5w.net/news/6494121.html"}, {"title": "新浪财经：工程机械出海报道", "url": "https://finance.sina.com.cn/money/fund/jjzl/2026-08-17/doc-ininrqsk9052968.shtml"}]}, {"id": "hog_farming", "week": "W01 · 2026-08-22", "week_num": 1, "name": "生猪养殖与畜牧产业链", "category": "大消费", "category_color": "#f59e0b", "etfs": ["159165 畜牧养殖ETF", "516760 农业产业ETF"], "veteran_funds": [], "drawdown_pct": -62.4, "sideways_months": 43, "rebound_pct": 24.5, "pe_percentile": 11.0, "main_driver": "产能/库存出清", "fall_reason": "前几年资本疯狂跨界盖楼养猪，导致生猪产能天量过剩，'养一头亏几百'，全行业深陷现金流失血长达数年。", "sideways_reason": "持续亏损导致高杠杆散户和中小猪场被迫退场，能繁母猪存栏量在政策与市场淘汰双重作用下缓慢回落至绿色区间。", "rise_reason": "前期去化供给缺口在终端显现，生猪价格稳步站上成本线；饲料成本下行，龙头企业头均利润由亏转盈，迎来确定性反转。", "risks": "生猪疫病反复风险，消费端猪肉消费旺季不旺风险。", "sources": [{"title": "易方达基金：猪周期投资观点", "url": "https://www.efunds.com.cn/c/673/673142.shtml"}, {"title": "证券时报：生猪周期反转分析", "url": "https://www.stcn.com/article/detail/4010228.html"}]}, {"id": "battery_storage", "week": "W02 · 2026-08-29", "week_num": 2, "name": "储能电池与锂电产业链", "category": "高端制造", "category_color": "#10b981", "etfs": ["159566 储能电池ETF", "561910 电池ETF招商", "159796 电池ETF汇添富"], "veteran_funds": [], "drawdown_pct": -71.2, "sideways_months": 24, "rebound_pct": 32.6, "pe_percentile": 9.4, "main_driver": "新需求/AI赋能", "fall_reason": "锂电从抢矿扩产到严重供大于求，碳酸锂价格由50万暴跌至不足10万，各路厂商大打价格战，毛利率急剧缩水。", "sideways_reason": "电芯价格跌破二三线厂商现金成本，落后产线停产关停，产业链去库存进入尾声，买卖双方形成价格拉锯。", "rise_reason": "AI数据中心（AIDC）耗电爆发催生全球大储采购潮，上半年储能出货同比增94%；月度排产超预期破300GWh，头部大厂相继提价。", "risks": "海外对中国储能电池的关税与贸易壁垒，原材料碳酸锂价格反复波动。", "sources": [{"title": "金融界：储能电池ETF报道", "url": "https://m.jrj.com.cn/madapter/fund/2026/08/26192758243472.shtml"}, {"title": "21财经：电池ETF行情分析", "url": "https://m.21jingji.com/article/20260811/herald/484543a06cd2f8893bd9623c4d9af5bb_zaker.html"}]}, {"id": "defense_aerospace", "week": "W02 · 2026-08-29", "week_num": 2, "name": "国防军工与商业航天", "category": "硬科技", "category_color": "#38bdf8", "etfs": ["512660 军工ETF国泰", "512680 中证军工ETF", "512710 国防军工ETF"], "veteran_funds": [], "drawdown_pct": -52.6, "sideways_months": 28, "rebound_pct": 27.2, "pe_percentile": 18.2, "main_driver": "新需求/AI赋能", "fall_reason": "受中期规划调整、采购节奏放缓及采购流程治理影响，出现长达两年多的订单真空期，业绩增速滑坡。", "sideways_reason": "公募持仓比例降至历史低点，悲观预期被彻底消化，市盈率在历史底部区间筑底整固。", "rise_reason": "规划接力与装备补单恢复，中报业绩拐点确立；商业航天（低轨卫星批量发射、可回收火箭）带来第二增长曲线。", "risks": "新型号列装招标进度不及预期，航天发射任务延期风险。", "sources": [{"title": "ZAKER：军工ETF估值底显现报道", "url": "https://app.myzaker.com/news/article.php?pk=6a8fdb1bb15ec07bed561879"}, {"title": "财联社：军工与商业航天配置线索", "url": "https://www.cls.cn/detail/2423860"}]}, {"id": "nonferrous", "week": "W02 · 2026-08-29", "week_num": 2, "name": "有色金属与工业资源", "category": "周期资源", "category_color": "#eab308", "etfs": ["560470 有色ETF易方达", "516650 有色金属ETF", "561330 矿业ETF"], "veteran_funds": [], "drawdown_pct": -46.5, "sideways_months": 20, "rebound_pct": 31.5, "pe_percentile": 15.0, "main_driver": "新需求/AI赋能", "fall_reason": "欧美激进加息抑制全球制造业需求，大宗商品面临高利率贴水，国内传统基建与地产用量承压走弱。", "sideways_reason": "全球矿山长期资本开支不足，矿石新增供给极度刚性，价格在边际成本线获得稳固支撑。", "rise_reason": "AI高算力数据中心机房与全球电网扩容是不可逆的'吃铜大户'；超9成有色企业中报报喜，海外降息周期开启催化金融属性。", "risks": "全球宏观经济衰退超预期，下游新能源汽车用铜增速放缓。", "sources": [{"title": "界面新闻：有色板块中报与供需分析", "url": "https://www.jiemian.com/article/15019456.html"}, {"title": "东方财富：有色ETF结构走强解析", "url": "https://caifuhao.eastmoney.com/news/20260819145236654698910"}]}, {"id": "home_appliances", "week": "W03 · 2026-09-05", "week_num": 3, "name": "家用电器与智能家居", "category": "大消费", "category_color": "#f59e0b", "etfs": ["159182 家电ETF南方", "159996 家电ETF国泰"], "veteran_funds": [], "drawdown_pct": -48.6, "sideways_months": 29, "rebound_pct": 26.8, "pe_percentile": 12.3, "main_driver": "政策催化/顶层设计", "fall_reason": "市场惯性将家电与房地产强绑定，认为地产销售不振导致没人买新家电，全行业估值被大幅压低至10倍PE以下。", "sideways_reason": "高股息与稳定自由现金流托底，长线红利资金在低位承接，板块在底部极度缩量整固。", "rise_reason": "国家以旧换新财政大补贴（直接立减15%~20%）激活国内存量换机大盘；冰洗空海外出口凭借全产业链优势在欧洲与新兴市场抢份额。", "risks": "以旧换新补贴资金额度提前用尽，海外关税壁垒增加。", "sources": [{"title": "财联社：以旧换新政策持续释放与家电分析", "url": "https://www.cls.cn/detail/2473964"}, {"title": "界面新闻：家电ETF走势动态", "url": "https://www.jiemian.com/article/15053800.html"}]}, {"id": "hk_internet", "week": "W03 · 2026-09-05", "week_num": 3, "name": "港股互联网与平台科技", "category": "硬科技", "category_color": "#38bdf8", "etfs": ["159740 恒生科技ETF大成", "520570 恒生科技ETF南方", "159742 恒生科技ETF博时"], "veteran_funds": [], "drawdown_pct": -74.8, "sideways_months": 36, "rebound_pct": 39.4, "pe_percentile": 6.8, "main_driver": "大额回购与重组", "fall_reason": "反垄断监管收紧、海外流动性抽水及中概审计摩擦，野蛮无序烧钱扩张逻辑破灭，外资机构集中甩卖抛售。", "sideways_reason": "估值跌至历史个位数，企业停止盲目跨界投资，全面开启降本增效，南向内资持续在底部沉淀接盘。", "rise_reason": "巨头大额注销式股票回购提升每股含金量；AI大模型深度嵌入协同办公、精准广告与电商，降本增效在财报中真金白银兑现。", "risks": "海外对中概科技股的投资限制政策变动，国内消费复苏节奏波动。", "sources": [{"title": "新浪财经：港股科技南向资金加码报道", "url": "https://finance.sina.com.cn/jjxw/2026-09-04/doc-iniqrpqw4133222.shtml"}, {"title": "财联社：港股科网全线爆发观察", "url": "https://www.cls.cn/detail/2420797"}]}, {"id": "gaming_media", "week": "W03 · 2026-09-05", "week_num": 3, "name": "游戏与数字文化传媒", "category": "硬科技", "category_color": "#38bdf8", "etfs": ["159869 游戏ETF华夏", "512980 传媒ETF"], "veteran_funds": [], "drawdown_pct": -54.0, "sideways_months": 18, "rebound_pct": 33.2, "pe_percentile": 19.5, "main_driver": "政策催化/顶层设计", "fall_reason": "2023年上半年AI概念炒作过度透支预期，随后因版号节奏担忧和新产品供给空档期，板块估值单边回落。", "sideways_reason": "低质换皮游戏作坊被洗牌淘汰，头部厂商深耕精品研发，估值压缩至历史20%分位以内横盘整理。", "rise_reason": "单月游戏版号审批接近200款创阶段新高，发货准生证彻底稳定；AI真正应用于原画、3D与NPC制作，中报利润同比翻数倍。", "risks": "新游戏上线后玩家留存不及预期，监管未成年人保护政策微调。", "sources": [{"title": "每日经济新闻：传媒概念走强报道", "url": "https://m.nbd.com.cn/articles/2026-09-04/4572534.html"}, {"title": "财中社：游戏出海与中报业绩兑现", "url": "https://m.caizhongshe.cn/news-7501189168786764969.html"}]}, {"id": "phosphorus_chemicals", "week": "W04 · 2026-09-12", "week_num": 4, "name": "基础化工与磷化工精选", "category": "周期资源", "category_color": "#eab308", "etfs": ["516220 化工ETF国泰", "159870 化工ETF嘉实"], "veteran_funds": [], "drawdown_pct": -59.3, "sideways_months": 31, "rebound_pct": 25.4, "pe_percentile": 10.8, "main_driver": "产能/库存出清", "fall_reason": "上一轮大宗景气顶峰后，各企业盲目上马产能，导致塑料原料、农药、化肥全行业过剩，价格战打到全盘亏损。", "sideways_reason": "中小化工厂因亏损和环保硬约束关停，老库存消耗殆尽，价格在成本线附近长期横盘磨底。", "rise_reason": "秋耕冬储备肥刚需启动；动力与储能磷酸铁锂电池进入排产旺季大口消耗高品质磷矿石；环保硬约束限制新增产能，行业量价齐升。", "risks": "国际原油与硫磺价格剧烈震荡，下游农业与工业接受度不及预期。", "sources": [{"title": "东方财富：磷化工行业分析报告", "url": "https://emwap.eastmoney.com/a/202609113872069027.html"}, {"title": "网易新闻：化工补库行情与资金配置", "url": "https://www.163.com/dy/article/L6GHMO81053735CL.html"}]}, {"id": "insurance_life", "week": "W04 · 2026-09-12", "week_num": 4, "name": "保险与人身寿险", "category": "大金融", "category_color": "#06b6d4", "etfs": ["515630 保险ETF", "510230 金融ETF"], "veteran_funds": [], "drawdown_pct": -51.8, "sideways_months": 38, "rebound_pct": 34.0, "pe_percentile": 7.5, "main_driver": "政策催化/顶层设计", "fall_reason": "市场利率持续下行，险企历史上承诺的3.5%~4%刚性高息保单面临巨大的'利差损'破产隐忧，叠加地产信托投资减值。", "sideways_reason": "内含价值倍数（PEV）跌至0.3~0.5倍的历史极限极值，坏账与利差损被极端悲观定价，股价在低位横盘近两年。", "rise_reason": "监管出手强力下调新保单预定利率并转向分红险，卸下负债端沉重包袱；股市权益回暖使投资端收益大幅回血，中报利润暴增超200%。", "risks": "长端国债利率再次大幅走低，保单退保率阶段性异常波动。", "sources": [{"title": "新浪财经：五大险企中报释放向好信号", "url": "https://finance.sina.com.cn/jjxw/2026-08-30/doc-iniqazcr8145655.shtml"}, {"title": "网易新闻：中国人寿中报利润爆发分析", "url": "https://www.163.com/dy/article/L6J8NKIQ0519GOPD.html"}]}, {"id": "power_grid", "week": "W04 · 2026-09-12", "week_num": 4, "name": "电网设备与特高压出海", "category": "高端制造", "category_color": "#10b981", "etfs": ["159326 电网设备ETF", "561170 电力设备ETF"], "veteran_funds": [], "drawdown_pct": -47.5, "sideways_months": 22, "rebound_pct": 29.8, "pe_percentile": 16.7, "main_driver": "出海第二增长曲线", "fall_reason": "前几年新能源大基地配套电网建设进入阶段性平台期，地方电网消纳节奏调整，国内设备招投标增速放缓。", "sideways_reason": "两网稳健投资提供坚实底座，行业估值在低位充分消化，估值回落至合理偏低区间横盘整固。", "rise_reason": "欧美电网严重老化且遭遇AI数据中心巨量用电缺口，变压器交付排期长达3~4年，中国企业凭借全产业链高毛利出海拿单；国内特高压新通道集中开工。", "risks": "海外电网设备本地化准入认证摩擦，大宗原材料铜铝价格大幅上涨吞噬利润。", "sources": [{"title": "新浪财经：出海订单催化电网设备板块", "url": "https://finance.sina.com.cn/stock/zqgd/2026-06-05/doc-iniaiusr9658014.shtml"}, {"title": "手机新浪网：电网设备资金流入与分析", "url": "https://finance.sina.cn/2026-09-11/detail-inirmvzz2123198.d.html?vt=4"}]}, {"id": "securities_broker", "week": "W05 · 2026-09-19", "week_num": 5, "name": "证券与券商并购重组", "category": "大金融", "category_color": "#06b6d4", "etfs": ["512880 证券ETF国泰", "512000 券商ETF华宝", "159841 证券ETF天弘"], "veteran_funds": [], "drawdown_pct": -56.8, "sideways_months": 42, "rebound_pct": 42.5, "pe_percentile": 5.4, "main_driver": "大额回购与重组", "fall_reason": "靠天吃饭特征显著，市场交投清淡，IPO节奏放缓，公募降费佣金下调，全行业陷入同质化价格战泥潭。", "sideways_reason": "市净率（PB）跌至1倍左右历史最低点，资产打折到净资产边缘，悲观预期全面反映在股价中。", "rise_reason": "国泰君安合并海通证券树立标杆，政策定调打造国际一流投行，大鱼吃大鱼终结内卷；大盘成交放量带来强烈的业绩估值双杠杆。", "risks": "重组落地审批时间跨度长，市场情绪脉冲后交投活跃度回落。", "sources": [{"title": "gxq8：超级航母与券商ETF冲高报道", "url": "http://gxq8.cn/article/0913-65422721.html"}, {"title": "网易新闻：证券ETF国泰资金净流入13.1亿元", "url": "https://www.163.com/dy/article/L6Q7KAED0534A4SC.html"}]}, {"id": "inverter_storage", "week": "W05 · 2026-09-19", "week_num": 5, "name": "光储逆变器与工商业储能", "category": "高端制造", "category_color": "#10b981", "etfs": ["516160 新能源ETF", "159857 光伏ETF龙头"], "veteran_funds": [], "drawdown_pct": -76.2, "sideways_months": 25, "rebound_pct": 48.6, "pe_percentile": 13.2, "main_driver": "出海第二增长曲线", "fall_reason": "2022年欧洲危机狂热囤货，2023年渠道库存积压严重，产品价格腰斩超60%，各原厂遭遇近两年的订单断崖与去库阵痛。", "sideways_reason": "欧洲老库存彻底卖光，厂商价格跌破中小企业底线后企稳，恶性价格战终结。", "rise_reason": "亚非拉新兴市场因缺电导致'光储平价替代柴油机'刚性爆发；工商业储能占比迅速突破35%；欧洲安装商重启补货采购新机。", "risks": "新兴市场外汇储备不足及汇率贬值风险，海外电网接入规范变动。", "sources": [{"title": "钛媒体：储能行业万字深度调研", "url": "https://www.tmtpost.com/8131896.html"}]}, {"id": "gold_mining", "week": "W05 · 2026-09-19", "week_num": 5, "name": "黄金股与贵金属采选", "category": "周期资源", "category_color": "#eab308", "etfs": ["159562 黄金股ETF华夏", "159321 黄金股ETF华安", "518880 黄金ETF华安"], "veteran_funds": [], "drawdown_pct": -41.2, "sideways_months": 15, "rebound_pct": 35.8, "pe_percentile": 21.0, "main_driver": "政策催化/顶层设计", "fall_reason": "高利率环境下开采设备、柴油与人工成本上涨挤压利润，资金更倾向存美元吃息，金矿股票估值长期大幅折价于实物金价。", "sideways_reason": "全球地缘不确定性下央行购金托底，金矿股在底部消化高息忧虑，缩量横盘整固。", "rise_reason": "全球实物金ETF单月净流入创180亿美元历史新高，美联储降息落地；开采成本锁定后，金价维持历史高位直接转化为金矿暴利。", "risks": "国际突发局势缓和引发黄金投机资金多头获利了结。", "sources": [{"title": "证券时报：8月全球黄金ETF净流入创新高", "url": "https://www.stcn.com/article/detail/4185339.html"}, {"title": "财联社：黄金牛市逻辑分析", "url": "https://m.cls.cn/detail/2487233"}]}, {"id": "real_estate_materials", "week": "W06 · 2026-09-26", "week_num": 6, "name": "房地产与消费建材", "category": "大消费", "category_color": "#f59e0b", "etfs": ["159707 地产ETF", "512200 房地产ETF", "159745 建材ETF"], "veteran_funds": [], "drawdown_pct": -78.4, "sideways_months": 46, "rebound_pct": 45.2, "pe_percentile": 4.8, "main_driver": "政策催化/顶层设计", "fall_reason": "高负债房企接连暴雷违约，商品房销量断崖，上下游水泥、防水、涂料等建材供应商大面积计提坏账减值。", "sideways_reason": "估值按全盘清算坏账定价，高风险弱小房企已淘汰殆尽，板块在底部长期极度缩量磨底。", "rise_reason": "高层定调'促进房地产市场止跌回稳'，存量房贷下调与限购松绑全力拆弹；活下来的龙头央国企接管存量旧改与出海新市场。", "risks": "居民长期购房意愿与人口结构变化对远期新房总量的约束。", "sources": [{"title": "每日经济新闻：地产与建材ETF反弹分析", "url": "https://www.nbd.com.cn/articles/2026-09-23/4589633.html"}, {"title": "中金在线：地产ETF与房地产ETF上涨报道", "url": "http://sc.stock.cnfol.com/gushizhibo/20260923/32378619.shtml"}]}, {"id": "optical_compute", "week": "W06 · 2026-09-26", "week_num": 6, "name": "算力基础设施与光通信", "category": "硬科技", "category_color": "#38bdf8", "etfs": ["159405 创业板算力ETF天弘", "159392 创业板算力ETF华夏"], "veteran_funds": [], "drawdown_pct": -45.2, "sideways_months": 14, "rebound_pct": 46.8, "pe_percentile": 23.5, "main_driver": "新需求/AI赋能", "fall_reason": "市场担心AI是否属于虚火炒作，质疑大模型商业化变现慢会导致科技巨头缩减服务器资本开支，引发回撤洗盘。", "sideways_reason": "获利盘离场后在业绩空窗期进行估值消化，筹码结构重归稳固。", "rise_reason": "创业板算力ETF集中上市获散户机构热捧；龙头光模块中报净利暴增240%，全球云巨头800G/1.6T订单直接排满至2027年。", "risks": "先进制程高端光芯片与代工供应链可能存在的产能供给瓶颈。", "sources": [{"title": "财联社：创业板算力ETF集中上市首日大涨", "url": "https://www.cls.cn/detail/2485081"}, {"title": "界面新闻：科技强势反弹与算力订单分析", "url": "https://www.jiemian.com/article/15119428.html"}]}, {"id": "consumer_retail", "week": "W06 · 2026-09-26", "week_num": 6, "name": "大消费与大众悦己零售", "category": "大消费", "category_color": "#f59e0b", "etfs": ["510150 消费ETF招商", "513230 港股通消费ETF"], "veteran_funds": [], "drawdown_pct": -56.4, "sideways_months": 35, "rebound_pct": 27.5, "pe_percentile": 11.2, "main_driver": "政策催化/顶层设计", "fall_reason": "居民预防性储蓄提升，传统高价面子消费降温，企业高溢价提价模式受阻，机构持仓降至十年历史低位。", "sideways_reason": "悲观资金基本离场，筹码出清干净；刚需消费韧性托底，在历史底部维持窄幅横盘。", "rise_reason": "全国超3.1亿元国庆文旅消费券集中发放；美妆护肤前8月破3000亿元，'悦己型'与'高性价比'平价消费品牌异军突起。", "risks": "居民就业与收入预期改善的传导时滞，双节之后消费场景自然回落。", "sources": [{"title": "新浪网：消费ETF招商迎双主线共振", "url": "https://cj.sina.cn/articles/view/5182171545/134e1a99902002jsea"}, {"title": "ZAKER：美妆消费复苏与消费ETF走强", "url": "https://www.myzaker.com/article/6ab0f6178e9f095396124a09"}]}, {"id": "semiconductor_star", "week": "W07 · 2026-10-03", "week_num": 7, "name": "硬科技半导体与科创板", "category": "硬科技", "category_color": "#38bdf8", "etfs": ["588000 科创50ETF华夏", "159582 半导体ETF博时", "512760 芯片ETF国泰"], "veteran_funds": [], "drawdown_pct": -66.8, "sideways_months": 27, "rebound_pct": 51.4, "pe_percentile": 14.8, "main_driver": "新需求/AI赋能", "fall_reason": "前几年估值炒作严重透支，全球消费电子下滑导致芯片从缺芯沦为去库甩卖，业绩大幅下滑杀估值。", "sideways_reason": "大资金在低位逆市狂买ETF几千亿筑底，利空钝化，产业在底部窄幅盘整消化估值。", "rise_reason": "AI算力巨头签订十年长期供货大单；先进制程扩产提速，国产替代攻坚突破；市场流动性爆发时高弹性品种领跑反弹。", "risks": "海外先进制程光刻及EDA出口限制升级风险，短期涨幅过大面临波动。", "sources": [{"title": "财联社：股票ETF净流入创历史峰值分析", "url": "https://www.cls.cn/detail/2443333"}, {"title": "东方财富：半导体ETF与AI扩产催化报道", "url": "https://finance.eastmoney.com/a/202609293886259687.html"}]}, {"id": "industrial_copper_alu", "week": "W07 · 2026-10-03", "week_num": 7, "name": "工业有色与关键铜铝", "category": "周期资源", "category_color": "#eab308", "etfs": ["515040 工业有色ETF华夏", "512400 有色金属ETF"], "veteran_funds": [], "drawdown_pct": -43.5, "sideways_months": 16, "rebound_pct": 28.5, "pe_percentile": 17.6, "main_driver": "产能/库存出清", "fall_reason": "海外高利率压制全球实体制造业投资，市场普遍悲观预测大宗工业原材料需求衰退，经历深幅回撤。", "sideways_reason": "矿端资本开支常年低迷，在低位区间获得供给刚性支撑，缩量盘整整固。", "rise_reason": "海外大型铜矿因事故突发停产拉大供给缺口；美联储降息落地刺激实体补库存；高密度算力机柜与新能源电网消耗海量铜铝材料。", "risks": "海外停工矿山超预期快速排险复产，全球制造业PMI不及预期。", "sources": [{"title": "东方财富：工业有色ETF华夏迎回撤修复报道", "url": "https://finance.eastmoney.com/a/202609293886427832.html"}, {"title": "证券时报：成长ETF与主动基金逆势走强", "url": "https://www.stcn.com/article/detail/4201316.html"}]}, {"id": "vaccine_biotech", "week": "W07 · 2026-10-03", "week_num": 7, "name": "生物疫苗与高端生物制造", "category": "医药生物", "category_color": "#a855f7", "etfs": ["159643 疫苗ETF", "512010 医药ETF"], "veteran_funds": [], "drawdown_pct": -73.6, "sideways_months": 39, "rebound_pct": 33.8, "pe_percentile": 6.2, "main_driver": "新需求/AI赋能", "fall_reason": "后疫情时代特殊红利退潮，高基数褪去后业绩断崖式下滑，加上集采降价，被市场当成'一次性生意'彻底抛售。", "sideways_reason": "估值砸穿历史底线，只剩下账面现金净资产，过去的不可持续利润在财报中完全出清完毕。", "rise_reason": "高基数包袱彻底卸下，新型带状疱疹、肺炎与流感自费多价疫苗获批兑现；十五五创新药产业规划支持，重回良性成长轨道。", "risks": "新型疫苗研发审批及终端民众接种渗透率提升不及预期。", "sources": [{"title": "东方财富：三季度收官疫苗与创新药掀涨停潮", "url": "https://finance.eastmoney.com/a/202609303887750351.html"}]}, {"id": "agent_software", "week": "W08 · 2026-10-10", "week_num": 8, "name": "基础软件与智能体/金融科技", "category": "硬科技", "category_color": "#38bdf8", "etfs": ["560790 软件ETF鹏华", "563670 金融科技ETF鹏华", "158011 创业板软件ETF"], "veteran_funds": [], "drawdown_pct": -57.2, "sideways_months": 19, "rebound_pct": 36.4, "pe_percentile": 13.5, "main_driver": "政策催化/顶层设计", "fall_reason": "前期纯炒作概念透支，而实体政企客户预算紧缩缺乏真实采购订单；软件企业研发与人员费用高企导致财报亏损。", "sideways_reason": "软件公司深度精简人员、优化研发开支，刚性成本大幅下降；估值压缩至历史15%分位以内磨底。", "rise_reason": "工信部定调2030年关键软件全面智能化；AI智能体（Agent）嵌入政企办公、安全巡检与金融交易，客户开始为降本提效买单，订单爆发。", "risks": "政企四季度预算落地与采购招标存在跨年递延风险。", "sources": [{"title": "界面新闻：软件ETF与金融科技共振走强报道", "url": "https://www.jiemian.com/article/15172319.html"}, {"title": "财闻网：工信部定调智能体软件新增长极分析", "url": "https://www.caiwennews.com/article/1642612.shtml"}]}, {"id": "offshore_wind", "week": "W08 · 2026-10-10", "week_num": 8, "name": "海上风电与深远海装备", "category": "高端制造", "category_color": "#10b981", "etfs": ["159656 风电ETF", "561190 高端装备ETF"], "veteran_funds": [], "drawdown_pct": -61.5, "sideways_months": 33, "rebound_pct": 27.6, "pe_percentile": 15.2, "main_driver": "产能/库存出清", "fall_reason": "抢装潮退坡后整机厂商恶性低价竞标，风机价格腰斩跌穿制造硬成本，全产业链毛利严重失血，进入三年单边下行。", "sideways_reason": "行业恶性价格战见底，非理性砸价结束；延期审批的海风项目在地方规划下逐步破冰。", "rise_reason": "风机中标均价触底反弹；沿海大省重大海风项目集中核准开工（如浙江超10GW）；欧洲深远海风电订单外溢，大兆瓦抗台风风机和海缆高毛利出海。", "risks": "海上台风等极端气象对实际吊装施工进度的季节性扰动。", "sources": [{"title": "中财网：浙江海上风电目标超10GW", "url": "https://www.cfi.net.cn/p20261007000756.html"}, {"title": "新浪财经：风电中期策略与两海空间", "url": "https://finance.sina.com.cn/stock/hkstock/ggscyd/2026-07-27/doc-inikezxn9956957.shtml"}]}, {"id": "oil_gas_energy", "week": "W08 · 2026-10-10", "week_num": 8, "name": "石油天然气与能源装备", "category": "周期资源", "category_color": "#eab308", "etfs": ["159026 石油ETF南方", "561360 油气ETF"], "veteran_funds": [], "drawdown_pct": -39.8, "sideways_months": 21, "rebound_pct": 23.4, "pe_percentile": 12.0, "main_driver": "政策催化/顶层设计", "fall_reason": "海外激进加息引发全球经济放缓担忧，国际油价从高位震荡回撤，大宗能源板块经历了较长时间的估值沉淀。", "sideways_reason": "全球上游油田勘探资本开支长期不足，供给缺乏弹性，油价在成本支撑线获得强韧底部支撑。", "rise_reason": "地缘摩擦升温叠加海外降息释放流动性；四季度北半球冬季供暖备货旺季到来；上游石油央企充沛现金流与高股息提供稳健防御安全垫。", "risks": "地缘局势降温引发投机多头平仓，全球能源替代加速削弱长期需求。", "sources": [{"title": "财联社：石油ETF南方大涨领跑报道", "url": "https://www.cls.cn/detail/2500166"}]}, {"id": "cnc_machine", "week": "W09 · 2026-10-17", "week_num": 9, "name": "工业母机与高端数控机床", "category": "高端制造", "category_color": "#10b981", "etfs": ["159663 机床ETF华夏", "159667 工业母机ETF"], "veteran_funds": [], "drawdown_pct": -55.4, "sideways_months": 24, "rebound_pct": 30.2, "pe_percentile": 14.2, "main_driver": "政策催化/顶层设计", "fall_reason": "制造业投资放缓，国内低端三轴机床同质化严重陷入恶性价格战，工厂老板不愿买新机器。", "sideways_reason": "低端小作坊在持续亏损中出清离场，行业三年去库存进入尾声，估值在低位横盘。", "rise_reason": "大规模工业设备更新财政贴息补贴逼退老机器；人形机器人精密齿轮与大飞机钛合金骨架加工倒逼高端五轴国产突围。", "risks": "地方设备更新补贴审批节奏放缓。", "sources": [{"title": "网易新闻：机床ETF华夏连续8日净流入", "url": "https://www.163.com/dy/article/L96SAC18051987V2.html"}, {"title": "CQTR研报：机床ETF焦点信息", "url": "http://m.cqtresearch.com/jinrong/2026/1016/271568.html"}]}, {"id": "auto_ev_export", "week": "W09 · 2026-10-17", "week_num": 9, "name": "乘用车整车与汽车智能化出海", "category": "高端制造", "category_color": "#10b981", "etfs": ["516840 汽车ETF南方", "159512 汽车ETF广发"], "veteran_funds": [], "drawdown_pct": -49.2, "sideways_months": 22, "rebound_pct": 29.5, "pe_percentile": 16.0, "main_driver": "出海第二增长曲线", "fall_reason": "国内车企陷入七折八折的降价肉搏战，单车利润被极度挤压，市场担心车越卖越多钱越赚越少。", "sideways_reason": "高风险尾部车企逐步被市场淘汰出清，行业竞争烈度边际收敛，在低位反复拉锯整固。", "rise_reason": "自主品牌新能源出海销量暴增（单车利润为国内2~3倍）；城市高阶智驾技术下沉到15~20万主流区间成换车硬指标。", "risks": "欧美反补贴关税政策波动对出口节奏的扰动。", "sources": [{"title": "财联社：汽车ETF南方与整车出海景气", "url": "https://www.cls.cn/detail/2503106"}, {"title": "新浪财经：汽车ETF赛力斯领跑分析", "url": "https://finance.sina.cn/stock/zqgd/2026-10-12/doc-iniuyarh0562813.shtml"}]}, {"id": "special_steel", "week": "W09 · 2026-10-17", "week_num": 9, "name": "钢铁普钢与优特钢材料", "category": "周期资源", "category_color": "#eab308", "etfs": ["515210 钢铁ETF"], "veteran_funds": [], "drawdown_pct": -63.0, "sideways_months": 36, "rebound_pct": 22.8, "pe_percentile": 5.8, "main_driver": "产能/库存出清", "fall_reason": "房地产开工断崖式下滑拖累螺纹钢需求，高炉停炉成本高昂迫使钢厂贴钱甩卖，市净率大面积跌破0.6倍。", "sideways_reason": "破净程度极其严重，坏账与亏损预期充分计价，在历史极端冰点长期磨底。", "rise_reason": "44家头部钢企联合签署自律控产协议严禁低于成本倾销；造船板、汽车板及风电主轴高附加值特钢需求极度旺盛扭亏。", "risks": "自律协议执行约束力松动，铁矿石原料价格大幅反弹。", "sources": [{"title": "财联社：44家头部钢企联合倡议自律控产", "url": "https://www.cls.cn/detail/2484179"}, {"title": "中财网：钢铁成本缓解进入低位修复期", "url": "https://www.cfi.net.cn/p20261011000369.html"}]}, {"id": "pv_main_chain", "week": "W10 · 2026-10-24", "week_num": 10, "name": "光伏主链与光伏制造装备", "category": "高端制造", "category_color": "#10b981", "etfs": ["562970 光伏ETF易方达", "159857 光伏ETF天弘"], "veteran_funds": [], "drawdown_pct": -79.2, "sideways_months": 28, "rebound_pct": 34.5, "pe_percentile": 3.5, "main_driver": "产能/库存出清", "fall_reason": "总产能达全球装机需求的2倍以上，组件价格跌破0.65元/W现金亏损线，全产业链陷入严重失血。", "sideways_reason": "估值跌至历史0%极限冰点，二三线小厂耗尽现金流停产退出，落后产能加速出清。", "rise_reason": "中国光伏行业协会（CPIA）划定0.68元/W成本红线，8家多晶硅龙头明确不低于4.3万元/吨底线，恶性低价招投标被叫停。", "risks": "行业协会自律价格底线的实际开标履约情况。", "sources": [{"title": "金融界：光伏产能调控与价格底线倡议", "url": "https://fund.jrj.com.cn/2026/10/21145858806475.shtml"}, {"title": "东方财富：光伏ETF天弘净申购居首", "url": "https://finance.eastmoney.com/a/202610223904106717.html"}]}, {"id": "express_logistics", "week": "W10 · 2026-10-24", "week_num": 10, "name": "物流快递与电商供应链", "category": "大消费", "category_color": "#f59e0b", "etfs": ["516910 物流快递ETF"], "veteran_funds": [], "drawdown_pct": -54.5, "sideways_months": 30, "rebound_pct": 28.0, "pe_percentile": 12.8, "main_driver": "政策催化/顶层设计", "fall_reason": "跨界新势力掀起补贴价格战导致单票收入腰斩，快递网点发一单亏一毛，全行业沦为微利苦力。", "sideways_reason": "烧钱抢份额阶段彻底结束，龙头自动化分拣降本见效，估值在底部维持窄幅横盘。", "rise_reason": "邮政反内卷与双十一旺季共振，多省加盟网点普涨0.1~0.3元/票直接转化为百亿级纯利润；跨境电商出海拉动海外单票高毛利。", "risks": "旺季结束后单票价格重新出现小幅回落竞争。", "sources": [{"title": "财联社：反内卷与旺季共振四季度快递普涨", "url": "https://www.cls.cn/detail/2502835"}, {"title": "新浪财经：快递旺季涨价潮向多省扩散", "url": "https://finance.sina.com.cn/jjxw/2026-10-15/doc-inivhtus1373842.shtml"}]}, {"id": "grain_seeds", "week": "W10 · 2026-10-24", "week_num": 10, "name": "粮食种植与抗逆生物育种", "category": "大消费", "category_color": "#f59e0b", "etfs": ["159587 粮食ETF广发", "159073 粮食ETF汇添富", "516550 农业ETF嘉实"], "veteran_funds": [], "drawdown_pct": -48.0, "sideways_months": 24, "rebound_pct": 21.6, "pe_percentile": 16.4, "main_driver": "新需求/AI赋能", "fall_reason": "全球气候连续平稳丰收导致粮仓库存充裕，大宗粮价回落缺乏涨价动力，种业盈利平淡。", "sideways_reason": "化肥农药等农资成本见顶回落，种子板块在历史低估值区间消化库存。", "rise_reason": "超强厄尔尼诺气候引发全球主产国减产紧平衡预期；国内转基因抗虫玉米产业化加速推广，增产抗虫带来硬科技溢价。", "risks": "秋冬季南美降雨实际情况好于干旱预期。", "sources": [{"title": "21财经：粮食ETF走强与厄尔尼诺紧平衡", "url": "https://m.21jingji.com/article/20261009/herald/e39fc41198fd06e82d2582875352c47a_zaker.html"}, {"title": "界面新闻：粮食ETF热门成分股走强", "url": "https://www.jiemian.com/article/15213134.html"}]}, {"id": "baijiu_food", "week": "W11 · 2026-10-31", "week_num": 11, "name": "白酒与核心食品饮料", "category": "大消费", "category_color": "#f59e0b", "etfs": ["512690 酒ETF鹏华", "516900 食品饮料ETF华安", "515170 食品饮料ETF华夏"], "veteran_funds": [], "drawdown_pct": -55.8, "sideways_months": 40, "rebound_pct": 29.2, "pe_percentile": 9.8, "main_driver": "产能/库存出清", "fall_reason": "商务宴请降温、经销商高价酒价格倒挂，市场认为白酒'年年提价'的神话故事彻底破灭，机构持续减持。", "sideways_reason": "一线酒企主动放缓回款、控货挺价，渠道实际库存降至健康红线内，筹码彻底清洗。", "rise_reason": "三季报落地确认周期磨底出清尾声；80%~90%高毛利现金奶牛叠加分红回购提升，资金在科技高位分歧时回流防御。", "risks": "元旦春节备货旺季终端实际开瓶率不及预期。", "sources": [{"title": "搜狐证券时报：白酒放量大涨与酒ETF领跑", "url": "https://m.sohu.com/a/1094978316_115433"}, {"title": "新浪财经：白酒板块处于周期磨底后期", "url": "https://finance.sina.com.cn/roll/2026-10-31/doc-inixaepe1888087.shtml"}]}, {"id": "retail_pharmacy", "week": "W11 · 2026-10-31", "week_num": 11, "name": "医药商业与线下连锁药房", "category": "医药生物", "category_color": "#a855f7", "etfs": ["512010 医药ETF", "159883 医疗器械ETF"], "veteran_funds": [], "drawdown_pct": -64.2, "sideways_months": 23, "rebound_pct": 26.5, "pe_percentile": 8.9, "main_driver": "产能/库存出清", "fall_reason": "线上线下医保比价系统推行与严查违规刷卡，切断了中小药店的高溢价套利路径，单店利润腰斩。", "sideways_reason": "严监管逼退无资质单体小药店，合规改造成本在财报中充分计提，估值砸至10%分位以内。", "rise_reason": "行业洗牌后上市连锁龙头市占率被动集中提升；公立医院慢病处方外流真正落地，药店迎来合规刚需客流与三季报盈利拐点。", "risks": "地方医保统筹结算拨付周期阶段性拉长。", "sources": [{"title": "搜狐证券时报：医药商业细分走强多股涨停", "url": "https://m.sohu.com/a/1094978316_115433"}]}, {"id": "foldable_electronics", "week": "W11 · 2026-10-31", "week_num": 11, "name": "消费电子与折叠屏/端侧AI", "category": "硬科技", "category_color": "#38bdf8", "etfs": ["562950 消费电子ETF易方达", "561600 消费电子ETF平安", "159178 消费电子ETF汇添富"], "veteran_funds": [], "drawdown_pct": -51.4, "sideways_months": 26, "rebound_pct": 38.0, "pe_percentile": 15.5, "main_driver": "新需求/AI赋能", "fall_reason": "直板手机外观与性能创新遇到瓶颈，换机周期拉长至40个月以上，供应链深陷砍单去库。", "sideways_reason": "老旧机型进入自然淘汰临界点，元器件价格在底部整固，等待新硬件形态催化。", "rise_reason": "全球大厂将折叠屏出货目标大幅上调44%至1400万台；通讯器材纳入国家以旧换新补贴激活购买欲，上游PCB与存储三季报净利暴增。", "risks": "折叠屏新机上市首月真实激活量与渠道库存消化速度。", "sources": [{"title": "东方财富：消费电子走强与ETF易方达", "url": "https://finance.eastmoney.com/a/202610283911462248.html"}, {"title": "网易新闻：折叠屏出货目标上调44%供应链放量", "url": "https://www.163.com/dy/article/LAB38OOF0550WHYR.html"}]}, {"id": "rail_transit", "week": "W12 · 2026-11-07", "week_num": 12, "name": "轨交设备与高铁装备", "category": "高端制造", "category_color": "#10b981", "etfs": ["159895 高端装备ETF", "510500 中证500ETF"], "veteran_funds": ["202027 南方高端装备混合 (2012年成立)", "180013 银华领先策略混合 (2008年成立)", "040016 华安行业轮动混合 (2010年成立)"], "drawdown_pct": -60.5, "sideways_months": 48, "rebound_pct": 31.0, "pe_percentile": 12.5, "main_driver": "产能/库存出清", "fall_reason": "全国高铁骨干网建成后新线建设里程放缓，市场认为不需要再造那么多新车，板块经历近十年估值消化。", "sideways_reason": "市盈率跌至历史15%分位以内，铁路投资结构平稳转型，股价在底部长期稳盘。", "rise_reason": "2013-2016年投产动车组集中迎来480万公里'五级大修'高峰，维保毛利远高于新车；中国中车重大合同达710亿，叠加老旧内燃机强制淘汰。", "risks": "国铁集团各铁路局高级修排期与检修工期跨期确认扰动。", "sources": [{"title": "东方财富：中国中车动车组订单井喷", "url": "https://finance.eastmoney.com/a/202611073925453685.html"}, {"title": "证券之星：机械与轨交装备行业周报", "url": "https://stock.stockstar.com/JC2026110300039241.shtml"}]}, {"id": "env_ccer", "week": "W12 · 2026-11-07", "week_num": 12, "name": "环保固废与生物质循环", "category": "高端制造", "category_color": "#10b981", "etfs": ["159861 环保ETF", "562550 绿色电力ETF"], "veteran_funds": ["000696 汇添富环保行业股票 (2014年成立)", "161005 富国天惠成长混合 (2005年成立)", "160607 鹏华动力增长混合 (2006年成立)"], "drawdown_pct": -65.0, "sideways_months": 36, "rebound_pct": 24.8, "pe_percentile": 5.0, "main_driver": "政策催化/顶层设计", "fall_reason": "过去环保公司靠垫资做市政工程，地方回款拖延导致应收账款坏账频发，估值跌至历史5%分位以内。", "sideways_reason": "行业剥离工程垫资业务，彻底转型为特许经营收现金流模式，资本开支结束。", "rise_reason": "垃圾焚烧运营现金流转正分红率有望升至50%+；CCER碳减排方法学扩容纳入厨余产沼气与生物航煤，地沟油提炼出口多赚一道纯利。", "risks": "地方环保补贴电费实际结算周期波动。", "sources": [{"title": "新浪财经：CCER方法学扩容环保周报", "url": "https://finance.sina.com.cn/roll/2026-10-22/doc-inivzivz5313705.shtml"}]}, {"id": "coal_dividend", "week": "W12 · 2026-11-07", "week_num": 12, "name": "煤炭开采与焦煤红利", "category": "周期资源", "category_color": "#eab308", "etfs": ["515220 煤炭ETF国泰"], "veteran_funds": ["260112 景顺长城能源基建混合 (2009年成立)", "166005 中欧价值发现混合 (2009年成立)", "110025 易方达资源行业混合 (2011年成立)"], "drawdown_pct": -32.4, "sideways_months": 22, "rebound_pct": 22.0, "pe_percentile": 19.0, "main_driver": "政策催化/顶层设计", "fall_reason": "动力煤暴利见顶回落至常态区间，叠加风光新能源替代担忧，市盈率长期压制在6~8倍。", "sideways_reason": "新增矿井审批长达5年以上且严守安监红线，供给极度缺乏弹性，股息率超6%提供铁底。", "rise_reason": "立冬寒潮来袭北方全面供暖，电厂日耗煤量抬升启动刚性补库；火电兜底地位不可替代，煤炭ETF近阶段逆势吸金超7亿元。", "risks": "四季度出现极端异常暖冬压制电厂日耗。", "sources": [{"title": "网易新闻：煤炭板块获资金连续流入", "url": "https://www.163.com/dy/article/L99BFV8K0512B07B.html"}, {"title": "财中社：煤炭ETF国泰抗跌风向标", "url": "https://m.caizhongshe.cn/news-7524392153087931612.html"}]}, {"id": "rare_earth_metals", "week": "W13 · 2026-11-14", "week_num": 13, "name": "稀土永磁与战略小金属", "category": "周期资源", "category_color": "#eab308", "etfs": ["159715 稀土ETF易方达", "516150 稀土ETF嘉实", "159713 稀土ETF富国"], "veteran_funds": ["110025 易方达资源行业混合 (2011年成立)", "070027 嘉实周期优选混合 (2011年成立)", "240022 华宝资源优选混合A (2012年成立)"], "drawdown_pct": -61.8, "sideways_months": 28, "rebound_pct": 33.5, "pe_percentile": 16.5, "main_driver": "新需求/AI赋能", "fall_reason": "前几年新能源电机概念炒高后，氧化镨钕价格回落，下游买车增速放缓导致冶炼厂高价矿石库存减值。", "sideways_reason": "市盈率回落至约22.63倍较低分位磨底，指令性开采指标严控供给，行业逐步消化高价库存。", "rise_reason": "四大稀土巨头前三季度净利集体暴增（最高+461%），四季度精矿价格上调；物理AI人形机器人每个关节伺服电机都刚需高性能稀土永磁。", "risks": "年度稀土开采指标配额变动，人形机器人量产爬坡进度。", "sources": [{"title": "金融界：稀土精矿上调叠加机器人催化", "url": "https://m.jrj.com.cn/madapter/fund/2026/11/10143959082139.shtml"}, {"title": "搜狐：稀土ETF易方达份额与成交增长", "url": "https://m.sohu.com/a/1099932515_122014422?scm=10001.325_13-325_13.0.0-0-0-0-0.5_1334"}]}, {"id": "shipping_ports", "week": "W13 · 2026-11-14", "week_num": 13, "name": "航运港口与远洋海运", "category": "高端制造", "category_color": "#10b981", "etfs": ["512680 交运/港口龙头标的", "159560 中证交运ETF"], "veteran_funds": ["001718 工银物流产业股票A (2016年3月成立)", "160505 博时主题行业混合(LOF) (2005年成立)", "110009 易方达价值精选混合 (2006年成立)"], "drawdown_pct": -53.2, "sideways_months": 26, "rebound_pct": 29.4, "pe_percentile": 11.4, "main_driver": "产能/库存出清", "fall_reason": "2021-2022年天价海运费见顶后，新造集装箱船陆续下水，市场担忧船多货少导致运费跌回亏本线。", "sideways_reason": "高股息分红与垄断港口岸线现金流提供极厚安全垫，股价在底部区域缩量整固。", "rise_reason": "霍尔木兹海峡受阻迫使绕行拉长航距，亚欧港口拥堵推升等待时间变相吸收运力；国际航运巨头赫伯罗特上调全年业绩展望，船东集体提价。", "risks": "海外地缘局势突然缓和导致绕行取消及运价脉冲回落。", "sources": [{"title": "东方财富：巨头集体提价航运港口走强", "url": "https://wap.eastmoney.com/a/202610303916087733.html"}, {"title": "英为财情：赫伯罗特上调2026全年业绩展望", "url": "https://cn.investing.com/news/transcripts/article-93CH-3664058"}]}, {"id": "bank_dividend", "week": "W13 · 2026-11-14", "week_num": 13, "name": "银行与高股息红利低波", "category": "大金融", "category_color": "#06b6d4", "etfs": ["512800 银行ETF华宝", "516310 银行ETF易方达", "515080 中证红利ETF招商"], "veteran_funds": ["510880 华泰柏瑞上证红利ETF (2006年成立)", "090010 大成中证红利指数A (2010年成立)", "110003 易方达上证50增强A (2004年成立)"], "drawdown_pct": -36.5, "sideways_months": 35, "rebound_pct": 24.2, "pe_percentile": 6.4, "main_driver": "政策催化/顶层设计", "fall_reason": "市场担忧房企与城投贷款沦为坏账，叠加降息压低净息差，银行股长期处于市净率低于1倍的破净状态。", "sideways_reason": "破净估值充分反映最坏资产质量预期，稳定分红吸引长线防守资金在低位默默吸筹。", "rise_reason": "三季度上市银行净息差环比罕见回升2bp，利润增速重回+3.78%；1000亿互换便利与1%低息股票回购再贷款落地，险资加速增配4%~6%高股息红利。", "risks": "城投敞口资产质量变化及拨备覆盖率回落至229%附近的后续演进。", "sources": [{"title": "财联社：银行净息差回升与险资增配", "url": "https://www.cls.cn/subject/1349"}, {"title": "网易新闻：中证红利ETF招商连续净流入", "url": "https://www.163.com/dy/article/LBK1LLLT05199NPP.html"}]}];
+
+    let state = {
+      cat: "all",
+      drv: "all",
+      vetOnly: false,
+      query: "",
+      sortKey: "week_num",
+      sortDir: "desc",
+      view: "table",
+      mainChart: "scatter",
+      rightChart: "driver"
+    };
+
+    let mainChartInstance = null;
+    let rightChartInstance = null;
+
+    function getFiltered() {
+      return sectorsData
+        .filter(item => {
+          if (state.cat !== "all" && item.category !== state.cat) return false;
+          if (state.drv !== "all" && item.main_driver !== state.drv) return false;
+          if (state.vetOnly && (!item.veteran_funds || item.veteran_funds.length === 0)) return false;
+          if (state.query) {
+            const q = state.query.toLowerCase();
+            const text = [
+              item.name, item.category, item.main_driver, item.week,
+              item.fall_reason, item.sideways_reason, item.rise_reason,
+              ...item.etfs, ...(item.veteran_funds || [])
+            ].join(" ").toLowerCase();
+            if (!text.includes(q)) return false;
+          }
+          return true;
+        })
+        .sort((a, b) => {
+          const vA = a[state.sortKey];
+          const vB = b[state.sortKey];
+          if (typeof vA === "string") {
+            return state.sortDir === "asc" ? vA.localeCompare(vB) : vB.localeCompare(vA);
+          }
+          return state.sortDir === "asc" ? vA - vB : vB - vA;
+        });
+    }
+
+    function setCatFilter(cat, btn) {
+      state.cat = cat;
+      document.querySelectorAll("[data-cat]").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      refreshAll();
+    }
+
+    function setDrvFilter(drv, btn) {
+      state.drv = drv;
+      document.querySelectorAll("[data-drv]").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      refreshAll();
+    }
+
+    function toggleVeteranOnly(btn) {
+      state.vetOnly = !state.vetOnly;
+      btn.classList.toggle("active", state.vetOnly);
+      refreshAll();
+    }
+
+    function handleSearch(val) {
+      state.query = val.trim();
+      refreshAll();
+    }
+
+    function sortBy(key) {
+      if (state.sortKey === key) {
+        state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+      } else {
+        state.sortKey = key;
+        state.sortDir = "desc";
+      }
+      renderTableAndCards();
+    }
+
+    function switchView(v) {
+      state.view = v;
+      document.getElementById("btnTable").classList.toggle("active", v === "table");
+      document.getElementById("btnCards").classList.toggle("active", v === "cards");
+      document.getElementById("tableView").style.display = v === "table" ? "block" : "none";
+      document.getElementById("cardsView").style.display = v === "cards" ? "grid" : "none";
+    }
+
+    function switchMainChart(type, btn) {
+      state.mainChart = type;
+      document.querySelectorAll("[data-chart]").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      if (type === "scatter") {
+        document.getElementById("mainChartTitle").innerText = "周期定位分布：底部稳盘时长 vs 右侧反弹幅度";
+        document.getElementById("mainChartSub").innerText = "横轴为底部稳盘月数，纵轴为右侧反弹涨幅；点击任意散点查看该赛道深度解析";
+      } else {
+        document.getElementById("mainChartTitle").innerText = "13 周跟踪演进：各周筛选赛道平均右侧反弹幅度 (%)";
+        document.getElementById("mainChartSub").innerText = "展示 W01 (08-22) 至 W13 (11-14) 每周入选赛道的平均反弹强度与前期回撤对比";
+      }
+      renderMainChart();
+    }
+
+    function switchRightChart(type, btn) {
+      state.rightChart = type;
+      document.querySelectorAll("[data-right]").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderRightChart();
+    }
+
+    function renderMainChart() {
+      const ctx = document.getElementById("mainChartCanvas").getContext("2d");
+      if (mainChartInstance) mainChartInstance.destroy();
+      const filtered = getFiltered();
+
+      if (state.mainChart === "scatter") {
+        const groups = {};
+        filtered.forEach(item => {
+          if (!groups[item.category]) {
+            groups[item.category] = { label: item.category, backgroundColor: item.category_color + "CC", borderColor: "#F8FAFC", borderWidth: 1, data: [] };
+          }
+          groups[item.category].data.push({
+            x: item.sideways_months,
+            y: item.rebound_pct,
+            r: Math.max(6, Math.min(16, Math.abs(item.drawdown_pct) / 5.2)),
+            raw: item
+          });
+        });
+
+        mainChartInstance = new Chart(ctx, {
+          type: "bubble",
+          data: { datasets: Object.values(groups) },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            onClick: (evt, elems) => {
+              if (elems.length > 0) {
+                const dsIdx = elems[0].datasetIndex;
+                const idx = elems[0].index;
+                const rawItem = mainChartInstance.data.datasets[dsIdx].data[idx].raw;
+                openModal(rawItem.id);
+              }
+            },
+            plugins: {
+              legend: { labels: { color: "#CBD5E1", boxWidth: 12, font: { size: 11.5 } } },
+              tooltip: {
+                backgroundColor: "rgba(9, 13, 22, 0.95)",
+                borderColor: "#334155",
+                borderWidth: 1,
+                titleColor: "#F8FAFC",
+                bodyColor: "#CBD5E1",
+                callbacks: {
+                  label: (context) => {
+                    const d = context.raw.raw;
+                    return [
+                      `${d.name} (${d.week})`,
+                      `前期回撤: ${d.drawdown_pct}% | 估值分位: ${d.pe_percentile}%`,
+                      `底部稳盘: ${d.sideways_months}个月 | 右侧反弹: +${d.rebound_pct}%`,
+                      `核心催化: ${d.main_driver}`
+                    ];
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                title: { display: true, text: "底部稳盘月数 (月)", color: "#94A3B8", font: { size: 11.5 } },
+                grid: { color: "rgba(148, 163, 184, 0.1)" },
+                ticks: { color: "#94A3B8" }
+              },
+              y: {
+                title: { display: true, text: "右侧反弹幅度 (%)", color: "#94A3B8", font: { size: 11.5 } },
+                grid: { color: "rgba(148, 163, 184, 0.1)" },
+                ticks: { color: "#94A3B8", callback: v => "+" + v + "%" }
+              }
+            }
+          }
+        });
+      } else {
+        const weekMap = {};
+        filtered.forEach(item => {
+          if (!weekMap[item.week_num]) weekMap[item.week_num] = [];
+          weekMap[item.week_num].push(item);
+        });
+        const weeks = Object.keys(weekMap).sort((a, b) => a - b);
+        const labels = weeks.map(w => `W${String(w).padStart(2, "0")}`);
+        const rebounds = weeks.map(w => +(weekMap[w].reduce((s, i) => s + i.rebound_pct, 0) / weekMap[w].length).toFixed(1));
+        const drawdowns = weeks.map(w => +(weekMap[w].reduce((s, i) => s + Math.abs(i.drawdown_pct), 0) / weekMap[w].length).toFixed(1));
+
+        mainChartInstance = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels,
+            datasets: [
+              { label: "右侧平均反弹 (%)", data: rebounds, backgroundColor: "#10B981CC", borderRadius: 5 },
+              { label: "前期平均回撤绝对值 (%)", data: drawdowns, backgroundColor: "rgba(244, 63, 94, 0.45)", borderRadius: 5 }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { labels: { color: "#CBD5E1", font: { size: 11.5 } } },
+              tooltip: { backgroundColor: "rgba(9, 13, 22, 0.95)", borderColor: "#334155", borderWidth: 1 }
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: "#94A3B8" } },
+              y: { grid: { color: "rgba(148, 163, 184, 0.1)" }, ticks: { color: "#94A3B8", callback: v => v + "%" } }
+            }
+          }
+        });
+      }
+    }
+
+    function renderRightChart() {
+      const ctx = document.getElementById("rightChartCanvas").getContext("2d");
+      if (rightChartInstance) rightChartInstance.destroy();
+      const filtered = getFiltered();
+      const counts = {};
+      const field = state.rightChart === "driver" ? "main_driver" : "category";
+      filtered.forEach(item => {
+        counts[item[field]] = (counts[item[field]] || 0) + 1;
+      });
+
+      const palette = state.rightChart === "driver"
+        ? ["#38BDF8", "#10B981", "#F59E0B", "#A855F7", "#06B6D4"]
+        : ["#38BDF8", "#10B981", "#F59E0B", "#A855F7", "#EAB308", "#06B6D4"];
+
+      rightChartInstance = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels: Object.keys(counts),
+          datasets: [{
+            data: Object.values(counts),
+            backgroundColor: palette,
+            borderColor: "#111827",
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "60%",
+          plugins: {
+            legend: { position: "bottom", labels: { color: "#CBD5E1", padding: 14, boxWidth: 12, font: { size: 11.5 } } },
+            tooltip: { backgroundColor: "rgba(9, 13, 22, 0.95)", borderColor: "#334155", borderWidth: 1 }
+          }
+        }
+      });
+    }
+
+    function renderTableAndCards() {
+      const list = getFiltered();
+      document.getElementById("matchCounter").innerText = `当前显示 ${list.length} 个赛道`;
+
+      // Table body
+      const tbody = document.getElementById("tableBody");
+      tbody.innerHTML = list.map(item => {
+        const etfBadges = item.etfs.slice(0, 2).map(e => `<span class="fund-pill">${e}</span>`).join("");
+        const vetBadges = (item.veteran_funds || []).map(v => `<span class="fund-pill vet">★ ${v.split(" ")[0]} ${v.split(" ")[1]}</span>`).join("");
+        return `
+          <tr onclick="openModal('${item.id}')">
+            <td class="num" style="color:var(--text-muted); font-size:12px;">${item.week}</td>
+            <td style="font-weight:700; color:#FFF;">${item.name}</td>
+            <td><span class="tag-cat" style="background:${item.category_color}">${item.category}</span></td>
+            <td class="num" style="color:var(--rose); font-weight:700;">${item.drawdown_pct}%</td>
+            <td class="num" style="color:var(--amber);">${item.sideways_months} 月</td>
+            <td class="num" style="color:var(--emerald); font-weight:700;">+${item.rebound_pct}%</td>
+            <td class="num" style="color:var(--sky);">${item.pe_percentile}%</td>
+            <td style="font-size:12px; color:#CBD5E1;">${item.main_driver}</td>
+            <td>${etfBadges}${vetBadges}</td>
+            <td><button class="btn-detail" onclick="event.stopPropagation(); openModal('${item.id}')">详情</button></td>
+          </tr>
+        `;
+      }).join("");
+
+      // Cards View
+      const cardsView = document.getElementById("cardsView");
+      cardsView.innerHTML = list.map(item => {
+        const etfs = item.etfs.map(e => `<span class="fund-pill">${e}</span>`).join("");
+        const vets = (item.veteran_funds || []).map(v => `<span class="fund-pill vet">★ ${v}</span>`).join("");
+        return `
+          <div class="sector-card">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div>
+                <div style="font-size:16px; font-weight:700; color:#FFF;">${item.name}</div>
+                <div class="num" style="font-size:11.5px; color:var(--text-muted);">${item.week} · ${item.main_driver}</div>
+              </div>
+              <span class="tag-cat" style="background:${item.category_color}">${item.category}</span>
+            </div>
+            <div class="mini-metrics num">
+              <div><div style="font-size:10.5px;color:var(--text-muted)">回撤</div><div style="color:var(--rose);font-weight:700">${item.drawdown_pct}%</div></div>
+              <div><div style="font-size:10.5px;color:var(--text-muted)">稳盘</div><div style="color:var(--amber);font-weight:700">${item.sideways_months}月</div></div>
+              <div><div style="font-size:10.5px;color:var(--text-muted)">反弹</div><div style="color:var(--emerald);font-weight:700">+${item.rebound_pct}%</div></div>
+              <div><div style="font-size:10.5px;color:var(--text-muted)">估值分位</div><div style="color:var(--sky);font-weight:700">${item.pe_percentile}%</div></div>
+            </div>
+            <div>${etfs}${vets}</div>
+            <div style="font-size:12.5px; color:#CBD5E1; background:rgba(9,13,22,0.5); padding:12px; border-radius:8px; border-left:3px solid ${item.category_color};">
+              <div style="margin-bottom:6px;"><strong style="color:var(--rose)">💥 跌因：</strong>${item.fall_reason}</div>
+              <div style="margin-bottom:6px;"><strong style="color:var(--amber)">⚖️ 稳盘：</strong>${item.sideways_reason}</div>
+              <div><strong style="color:var(--emerald)">🚀 涨因：</strong>${item.rise_reason}</div>
+            </div>
+            <button class="btn-detail" style="align-self:flex-end;" onclick="openModal('${item.id}')">查看风险与权威信源 →</button>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function openModal(id) {
+      const item = sectorsData.find(d => d.id === id);
+      if (!item) return;
+      const etfs = item.etfs.map(e => `<span class="fund-pill">${e}</span>`).join("");
+      const vets = (item.veteran_funds && item.veteran_funds.length > 0)
+        ? `<div style="margin-top:8px;"><div style="font-size:12px; color:var(--emerald); font-weight:600; margin-bottom:4px;">★ 成立 10 年以上老牌公募基金：</div>${item.veteran_funds.map(v => `<span class="fund-pill vet">${v}</span>`).join("")}</div>`
+        : "";
+      const srcs = item.sources.map(s => `<li><a href="${s.url}" target="_blank" style="color:var(--sky); text-decoration:none;">🔗 ${s.title}</a></li>`).join("");
+
+      document.getElementById("modalBody").innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:12px;">
+          <div>
+            <h2 style="font-size:20px; color:#FFF;">${item.name}</h2>
+            <div class="num" style="font-size:12px; color:var(--text-muted);">${item.week} · 核心动力：${item.main_driver}</div>
+          </div>
+          <span class="tag-cat" style="background:${item.category_color}; font-size:12px; padding:4px 10px;">${item.category}</span>
+        </div>
+        <div class="mini-metrics num">
+          <div><div style="font-size:11px;color:var(--text-muted)">前期最大回撤</div><div style="font-size:16px;color:var(--rose);font-weight:700">${item.drawdown_pct}%</div></div>
+          <div><div style="font-size:11px;color:var(--text-muted)">底部稳盘时长</div><div style="font-size:16px;color:var(--amber);font-weight:700">${item.sideways_months} 个月</div></div>
+          <div><div style="font-size:11px;color:var(--text-muted)">右侧反弹幅度</div><div style="font-size:16px;color:var(--emerald);font-weight:700">+${item.rebound_pct}%</div></div>
+          <div><div style="font-size:11px;color:var(--text-muted)">启动估值分位</div><div style="font-size:16px;color:var(--sky);font-weight:700">${item.pe_percentile}%</div></div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:var(--text-muted); font-weight:600; margin-bottom:4px;">代表性 ETF 标的：</div>
+          <div>${etfs}</div>
+          ${vets}
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px; background:var(--bg); padding:16px; border-radius:10px; border-left:4px solid ${item.category_color}; font-size:13px;">
+          <div><strong style="color:var(--rose)">💥 前期为什么跌？</strong><br/>${item.fall_reason}</div>
+          <div><strong style="color:var(--amber)">⚖️ 为什么在低位稳盘？</strong><br/>${item.sideways_reason}</div>
+          <div><strong style="color:var(--emerald)">🚀 为什么开启右侧上涨？</strong><br/>${item.rise_reason}</div>
+        </div>
+        <div style="background:rgba(244, 63, 94, 0.08); border:1px solid rgba(244, 63, 94, 0.25); padding:12px 14px; border-radius:8px; font-size:12.5px;">
+          <strong style="color:var(--rose)">⚠️ 潜在风险提示：</strong> <span style="color:#FDA4AF">${item.risks}</span>
+        </div>
+        <div style="font-size:12px;">
+          <div style="color:var(--text-muted); font-weight:600; margin-bottom:4px;">权威信源：</div>
+          <ul style="padding-left:18px; line-height:1.8;">${srcs}</ul>
+        </div>
+      `;
+      document.getElementById("modalOverlay").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modalOverlay").style.display = "none";
+    }
+
+    function refreshAll() {
+      renderMainChart();
+      renderRightChart();
+      renderTableAndCards();
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      refreshAll();
+    });
+  </script>
+</body>
+</html>

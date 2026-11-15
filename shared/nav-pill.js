@@ -690,6 +690,24 @@
           </div>
         </div>
       </a>
+      <a href="/notes/breakdown_fund_12weeks_2026.html" class="b0-menu-item">
+        <div class="b0-menu-item-left">
+          <span class="b0-menu-icon" style="background: rgba(244,63,94,0.16); color: #fb7185;">10</span>
+          <div>
+            <div class="b0-menu-name">破位基金 12 周深度追踪看板</div>
+            <div class="b0-menu-desc">从产能出清到黄金算力双杀的商业常识复盘</div>
+          </div>
+        </div>
+      </a>
+      <a href="/notes/fund_reversal_13weeks_2026.html" class="b0-menu-item">
+        <div class="b0-menu-item-left">
+          <span class="b0-menu-icon" style="background: rgba(16,185,129,0.16); color: #34d399;">11</span>
+          <div>
+            <div class="b0-menu-name">超跌稳盘 → 右侧反转全景 (13周)</div>
+            <div class="b0-menu-desc">39 产业赛道与 18 只十年老牌公募基金沉淀</div>
+          </div>
+        </div>
+      </a>
       <a href="/labs/golden_goose.html" class="b0-menu-item">
         <div class="b0-menu-item-left">
           <span class="b0-menu-icon" style="background: rgba(245,158,11,0.15); color: #f59e0b;">🪿</span>

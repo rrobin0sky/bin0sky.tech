@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- BinOS High-Precision Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=binos2026-v2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=binos2026-v2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=binos2026-v2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=binos2026-v2">
+  <link rel="shortcut icon" href="/favicon.ico?v=binos2026-v2">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>破位下跌基金12周深度追踪与商业常识分析看板 (2026 Q3-Q4)</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <!-- Instant FOUC-prevention Theme Init & Runtime Bridge -->
+  <script>
+    (function() {
+      document.documentElement.classList.add('dark');
+      try {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('b0_embedded') === '1' || window.top !== window.self) {
+          document.documentElement.classList.add('b0-embedded');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <script src="/shared/nav-pill.js" data-category="notes" data-title="破位基金12周深度追踪看板" defer></script>
+  <style>
+    :root {
+      --bg-page: #090D16;
+      --bg-card: #111827;
+      --bg-card-elevated: #161F30;
+      --border-subtle: #1E293B;
+      --border-highlight: #334155;
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --accent-blue: #38BDF8;
+      --accent-emerald: #10B981;
+      --accent-amber: #F59E0B;
+      --accent-rose: #F43F5E;
+      --accent-indigo: #818CF8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.55;
+      padding: 24px 20px 48px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Header Bar */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .header-title-wrap h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag-pill {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .header-subtitle {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .timestamp-badge {
+      font-size: 12px;
+      color: var(--text-secondary);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 7px 12px;
+      border-radius: 8px;
+    }
+
+    .btn-print {
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .btn-print:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+
+    /* Section Headings */
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-blue);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* BLUF Executive Summary */
+    .bluf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .bluf-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-top: 3px solid var(--accent-blue);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+
+    .bluf-card.rose { border-top-color: var(--accent-rose); }
+    .bluf-card.amber { border-top-color: var(--accent-amber); }
+    .bluf-card.emerald { border-top-color: var(--accent-emerald); }
+
+    .bluf-card h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .bluf-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .bluf-card strong {
+      color: var(--text-primary);
+    }
+
+    /* KPI Cards Row */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 18px 20px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .kpi-card:hover {
+      border-color: var(--border-highlight);
+      transform: translateY(-2px);
+    }
+
+    .kpi-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kpi-name {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .badge-rose { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+    .badge-emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
+    .badge-amber { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+    .badge-blue { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); }
+
+    .kpi-num {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 10px 0 6px;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .kpi-note {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Charts Grid */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 980px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px 22px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .panel-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .panel-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .control-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn {
+      background: var(--bg-page);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .pill-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--border-highlight);
+    }
+
+    .pill-btn.active {
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--accent-blue);
+      border-color: rgba(56, 189, 248, 0.45);
+    }
+
+    .chart-box {
+      position: relative;
+      height: 320px;
+      width: 100%;
+    }
+
+    /* Common Sense & Calculator Section */
+    .insight-split {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .insight-split {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .metaphor-box {
+      background: var(--bg-card-elevated);
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--accent-amber);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-top: 12px;
+    }
+
+    .metaphor-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-amber);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .metaphor-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .metaphor-body {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    .logic-list {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .logic-mini {
+      background: var(--bg-page);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .logic-mini span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .logic-mini strong {
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+
+    /* Simulator */
+    .slider-wrap {
+      margin-bottom: 16px;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .slider-label b {
+      color: var(--accent-blue);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+    }
+
+    .sim-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .sim-cell {
+      background: var(--bg-page);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .sim-cell .lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .sim-cell .val {
+      font-size: 18px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .sim-verdict {
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+
+    /* Interactive Data Table */
+    .table-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .search-input {
+      background: var(--bg-page);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      min-width: 260px;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 860px;
+    }
+
+    thead th {
+      background: var(--bg-card-elevated);
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    thead th:hover {
+      color: var(--text-primary);
+    }
+
+    tbody td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      vertical-align: top;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: rgba(56, 189, 248, 0.04);
+    }
+
+    tbody td strong {
+      color: var(--text-primary);
+    }
+
+    a.src-link {
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    a.src-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer & Provenance */
+    .footer-card {
+      margin-top: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px 22px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .footer-card h4 {
+      font-size: 13px;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 8px 16px;
+      margin-bottom: 14px;
+    }
+
+    .disclaimer {
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Print Adaptation */
+    @media print {
+      body {
+        background: #ffffff;
+        color: #0f172a;
+        padding: 0;
+      }
+      .btn-print, .control-pills, .table-toolbar {
+        display: none !important;
+      }
+      .panel-card, .bluf-card, .kpi-card, .footer-card, .metaphor-box {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #0f172a !important;
+        break-inside: avoid;
+      }
+      .kpi-num, .panel-title, .bluf-card h3, tbody td strong {
+        color: #0f172a !important;
+      }
+      .bluf-card p, .kpi-note, .panel-desc, tbody td, .metaphor-body {
+        color: #334155 !important;
+      }
+    }
+      html.b0-embedded body {
+      padding: 16px 20px 36px;
+    }
+    @media print {
+      #b0-nav-pill-host { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 1. Header Bar -->
+    <header class="header-bar">
+      <div class="header-title-wrap">
+        <h1>
+          破位下跌基金12周深度追踪与商业常识看板
+          <span class="tag-pill">2026.08.22 – 2026.11.14 全景复盘</span>
+        </h1>
+        <p class="header-subtitle">
+          从光伏/白酒产能出清到11月中旬黄金/算力双杀：穿透“跌破前低”背后的供需本质、流动性抽水与估值陷阱
+        </p>
+      </div>
+      <div class="header-actions">
+        <div class="timestamp-badge tabular-nums">数据截至：2026-11-14 18:51 · 12期追踪汇总</div>
+        <button class="btn-print" onclick="window.print()">🖨️ 导出 PDF / 打印报告</button>
+      </div>
+    </header>
+
+    <!-- 2. BLUF Executive Summary -->
+    <div class="section-label">📌 核心结论摘要 (BLUF Executive Summary)</div>
+    <section class="bluf-grid">
+      <div class="bluf-card rose">
+        <h3>1. 破位已从“边缘题材”蔓延至“抱团龙头与避险资产”</h3>
+        <p>8-10月破位集中于<strong>光伏(-75%)</strong>与<strong>白酒(-55%)</strong>；进入11月中旬，随着英伟达CEO辞任及美联储鹰派预期升温，公募前十大重仓高度集中的<strong>CPO算力链(单日-8%+)</strong>与<strong>黄金ETF(3日跌超260美元至一年新低)</strong>同步出现流动性踩踏破位。</p>
+      </div>
+      <div class="bluf-card amber">
+        <h3>2. 资金大迁徙：万亿固收“抽水”与透明化替代</h3>
+        <p>截至Q3末，债券型基金规模突破<strong>12.6万亿元</strong>历史新高，债券ETF截至11月12日达<strong>10,577.33亿元</strong>；同期主动权益规模净缩水超<strong>9000亿元</strong>。首批18只主动ETF募资<strong>360亿元</strong>售罄，资金正加速逃离“黑盒漂移”老基金。</p>
+      </div>
+      <div class="bluf-card">
+        <h3>3. 跌破前低的本质：出清未完成 + 估值陷阱</h3>
+        <p>光伏五大巨头半年报亏超<strong>148亿元</strong>、晶科前三季预亏超<strong>30亿元</strong>，停机沉没成本迫使企业“失血死扛”；而当利润跌幅大于股价跌幅时，表面便宜的市盈率反而飙升，形成<strong>“越跌越贵”的价值陷阱</strong>。</p>
+      </div>
+      <div class="bluf-card emerald">
+        <h3>4. 右侧策略：严防高弹性接飞刀，以红利/高股息作底仓</h3>
+        <p>截至11月13日，万得全A股债性价比达<strong>3.09</strong>（近3年<strong>85.60%</strong>高分位），银行股单日42只中40只收红。在算力抛压收敛、现货价格企稳与权益ETF持续净流入前，切忌左侧盲目抄底。</p>
+      </div>
+    </section>
+
+    <!-- 3. KPI Cards Row -->
+    <div class="section-label">📊 核心量化指标看板 (Key Performance Indicators)</div>
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-name">公募债券ETF总规模</span>
+          <span class="badge badge-emerald">↑ 历史新高</span>
+        </div>
+        <div class="kpi-num tabular-nums">10,577亿</div>
+        <div class="kpi-note">截至11/12共53只，百亿单品增至35只，虹吸权益活水</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-name">主动权益Q3规模变动</span>
+          <span class="badge badge-rose">↓ 净缩水</span>
+        </div>
+        <div class="kpi-num tabular-nums">-9,000亿+</div>
+        <div class="kpi-note">200亿以上主动权益基金缩水至仅剩5只</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-name">年内“翻倍基”存活数</span>
+          <span class="badge badge-rose">↓ 99.2%蒸发</span>
+        </div>
+        <div class="kpi-num tabular-nums">2 <span style="font-size:15px;color:var(--text-muted);font-weight:500;">/ 246只</span></div>
+        <div class="kpi-note">年内收益&gt;10%且回撤&lt;10%的权益基全市场仅11只</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-name">国际现货黄金低点</span>
+          <span class="badge badge-amber">1年新低</span>
+        </div>
+        <div class="kpi-num tabular-nums">$3,853.15</div>
+        <div class="kpi-note">11/11-13三日暴跌超$260，股票亏损引发保证金变现</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-name">光伏五大巨头半年亏损</span>
+          <span class="badge badge-rose">击穿现金线</span>
+        </div>
+        <div class="kpi-num tabular-nums">&gt; 148亿</div>
+        <div class="kpi-note">招标跌破0.7元/W，10月协会划定0.68元/W成本红线</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-name">上证指数 / 股债性价比</span>
+          <span class="badge badge-blue">85.6%分位</span>
+        </div>
+        <div class="kpi-num tabular-nums">3,634.35</div>
+        <div class="kpi-note">11/13收盘跌0.59%，创业板指单日跌3.32%，10Y国债1.60%</div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Charts Grid -->
+    <div class="section-label">📈 多维交互数据可视化 (Interactive Visual Analytics)</div>
+    <section class="charts-grid">
+      <!-- Chart 1: 12-Week Market & Breakdown Evolution -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">12周破位演化轨迹：情绪温度 vs 债券ETF虹吸</div>
+            <div class="panel-desc">追踪 2026.08.22 – 2026.11.14 关键拐点与跨资产冲击</div>
+          </div>
+          <div class="control-pills">
+            <button class="pill-btn active" onclick="toggleTimelineView('both', this)">双维对比</button>
+            <button class="pill-btn" onclick="toggleTimelineView('sentiment', this)">仅情绪温度</button>
+            <button class="pill-btn" onclick="toggleTimelineView('bond', this)">仅固收虹吸</button>
+          </div>
+        </div>
+        <div class="chart-box">
+          <canvas id="timelineChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: Sector Drawdown Comparison -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">破位板块历史高点至今最大回撤对比 (%)</div>
+            <div class="panel-desc">覆盖传统产能过剩赛道、漂移主动基及11月高位补跌板块</div>
+          </div>
+          <div class="control-pills">
+            <button class="pill-btn active" onclick="sortDrawdown('desc', this)">按跌幅排序</button>
+            <button class="pill-btn" onclick="sortDrawdown('time', this)">按破位先后</button>
+          </div>
+        </div>
+        <div class="chart-box">
+          <canvas id="drawdownChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 3: Fund Ecosystem Migration -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">公募资金生态大迁徙与头部重仓集中度 (Q3–11月)</div>
+            <div class="panel-desc">固收类产品吸金创新高 vs 主动权益失血与透明化ETF替代</div>
+          </div>
+        </div>
+        <div class="chart-box">
+          <canvas id="migrationChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 4: Bottoming Maturity Radar -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">四大核心破位板块“右侧见底成熟度”四维评估</div>
+            <div class="panel-desc">点击按钮切换/对比不同赛道的供给出清与抗跌状态 (满分100)</div>
+          </div>
+          <div class="control-pills">
+            <button class="pill-btn active" onclick="updateRadar('all', this)">全景对比</button>
+            <button class="pill-btn" onclick="updateRadar('solar', this)">光伏</button>
+            <button class="pill-btn" onclick="updateRadar('liquor', this)">白酒</button>
+            <button class="pill-btn" onclick="updateRadar('ai', this)">算力CPO</button>
+            <button class="pill-btn" onclick="updateRadar('gold', this)">黄金ETF</button>
+          </div>
+        </div>
+        <div class="chart-box">
+          <canvas id="radarChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Common Sense Penetration & Valuation Trap Simulator -->
+    <div class="section-label">💡 商业常识穿透模型与“越跌越贵”交互演算器</div>
+    <section class="insight-split">
+      <!-- Left: Common Sense Analogies -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">为什么会“底外有底”？五大破位板块常识拆解</div>
+            <div class="panel-desc">剥离晦涩金融黑话，用日常商业逻辑看清下跌本质</div>
+          </div>
+        </div>
+        <div class="control-pills" id="metaphorTabs">
+          <button class="pill-btn active" onclick="showMetaphor('solar', this)">☀️ 光伏奶茶店</button>
+          <button class="pill-btn" onclick="showMetaphor('liquor', this)">🍶 白酒蓄水池</button>
+          <button class="pill-btn" onclick="showMetaphor('ai', this)">🤖 算力换帅</button>
+          <button class="pill-btn" onclick="showMetaphor('gold', this)">🪙 黄金提款机</button>
+          <button class="pill-btn" onclick="showMetaphor('drift', this)">🎭 素食馆烤串</button>
+        </div>
+
+        <div class="metaphor-box" id="metaphorDisplay">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Right: Valuation Trap Calculator -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">“越跌越贵”估值陷阱动态演算器</div>
+            <div class="panel-desc">模拟行业价格战期：股价暴跌 vs 净利润坍塌的真实市盈率变化</div>
+          </div>
+        </div>
+
+        <div class="slider-wrap">
+          <div class="slider-label">
+            <span>股价 / 基金净值从高点回撤幅度</span>
+            <b class="tabular-nums" id="valPriceDrop">-60%</b>
+          </div>
+          <input type="range" id="rangePriceDrop" min="10" max="90" step="5" value="60" oninput="runValuationSim()" />
+        </div>
+
+        <div class="slider-wrap">
+          <div class="slider-label">
+            <span>重仓行业真实净利润下滑幅度</span>
+            <b class="tabular-nums" id="valProfitDrop">-85%</b>
+          </div>
+          <input type="range" id="rangeProfitDrop" min="0" max="96" step="2" value="85" oninput="runValuationSim()" />
+        </div>
+
+        <div class="sim-metrics">
+          <div class="sim-cell">
+            <div class="lbl">高位初始 PE</div>
+            <div class="val tabular-nums" style="color: var(--accent-blue);">15.0x</div>
+          </div>
+          <div class="sim-cell">
+            <div class="lbl">暴跌后实际 PE</div>
+            <div class="val tabular-nums" id="simPeOut">40.0x</div>
+          </div>
+          <div class="sim-cell">
+            <div class="lbl">贵贱变化倍数</div>
+            <div class="val tabular-nums" id="simRatioOut">2.7x</div>
+          </div>
+        </div>
+
+        <div class="sim-verdict" id="simVerdictBox"></div>
+      </div>
+    </section>
+
+    <!-- 6. Interactive Data Table -->
+    <div class="section-label">📋 12周破位资产与关键事件全景明细表 (可搜索 / 排序)</div>
+    <section class="panel-card">
+      <div class="table-toolbar">
+        <input
+          type="text"
+          id="tableSearch"
+          class="search-input"
+          placeholder="搜索板块、事件、常识逻辑或信源..."
+          oninput="filterTable()"
+        />
+        <div class="control-pills">
+          <button class="pill-btn active" onclick="setCategoryFilter('ALL', this)">全部 (10)</button>
+          <button class="pill-btn" onclick="setCategoryFilter('产能过剩', this)">产能/库存出清</button>
+          <button class="pill-btn" onclick="setCategoryFilter('科技补跌', this)">科技/算力补跌</button>
+          <button class="pill-btn" onclick="setCategoryFilter('跨资产/资金', this)">跨资产/资金异动</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="breakdownTable">
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">观察周期 ↕</th>
+              <th onclick="sortTable(1)">破位板块 / 基金类别 ↕</th>
+              <th onclick="sortTable(2)">分类 ↕</th>
+              <th onclick="sortTable(3)">核心数据与破位事实 ↕</th>
+              <th onclick="sortTable(4)">商业常识本质拆解 ↕</th>
+              <th onclick="sortTable(5)">出清状态 ↕</th>
+              <th>权威信源</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 7. Data Provenance & Footer -->
+    <footer class="footer-card">
+      <h4>📚 数据溯源、检索口径与方法论说明 (Data Provenance)</h4>
+      <div class="source-grid">
+        <div>• <strong>指数与估值分位</strong>：<a class="src-link" href="https://www.ifnews.com/news.html?aid=886558&cid=49" target="_blank">国际金融报 (11/13收盘)</a> · <a class="src-link" href="https://finance.ifeng.com/c/8y46x6sIQD2" target="_blank">凤凰网财经 (11/14股债性价比)</a> · <a class="src-link" href="https://cn.investing.com/indices/sse-star-50-historical-data" target="_blank">英为财情科创50</a></div>
+        <div>• <strong>公募三季报与ETF规模</strong>：<a class="src-link" href="http://www.ce.cn/macro/more/202610/t20261028_3273798.shtml" target="_blank">中国经济网 (Q3重仓与规模)</a> · <a class="src-link" href="https://www.chnfund.com/article/AR6d1b0812-35c5-cc41-3ca0-3a24e72858df" target="_blank">中国基金报 (11/13债券ETF 1.058万亿)</a></div>
+        <div>• <strong>翻倍基/主动ETF/漂移</strong>：<a class="src-link" href="https://finance.sina.com.cn/roll/2026-10-09/doc-iniuqqhr7097332.shtml" target="_blank">新浪财经 (246→2只)</a> · <a class="src-link" href="https://www.bbtnews.com.cn/2026/1105/610546.shtml" target="_blank">北京商报 (首批18只主动ETF)</a> · <a class="src-link" href="https://finance.sina.com.cn/roll/2026-11-05/doc-inixrcqq9863490.shtml" target="_blank">证券时报 (仅11只抗跌)</a></div>
+        <div>• <strong>黄金/算力/光伏/白酒</strong>：<a class="src-link" href="https://finance.sina.com.cn/wm/2026-11-13/doc-iniyqwtt0968513.shtml" target="_blank">华夏时报/新浪 (金价一年新低)</a> · <a class="src-link" href="https://www.cls.cn/detail/2533238" target="_blank">财联社 (英伟达事件)</a> · <a class="src-link" href="http://www.ce.cn/cysc/newmain/yc/jsxw/202610/t20261014_3257087.shtml" target="_blank">证券日报 (0.68元成本线)</a> · <a class="src-link" href="https://www.bjnews.com.cn/detail/1793357129129135.html" target="_blank">新京报贝壳财经 (茅台Q3)</a></div>
+      </div>
+      <div class="disclaimer">
+        <strong>分析边界与免责声明：</strong>本看板基于 2026年8月22日至11月14日连续12周公开市场追踪记录、公募基金定期报告及权威财经媒体披露数据综合整理；图表中“右侧成熟度评估”为基于供给出清、价格企稳、资金流向与盘面抗跌四维常识框架的定性量化映射（0-100分）。所有内容仅供投资研究与逻辑复盘参考，不构成任何具体基金买卖或投资建议。
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Global Chart Defaults for Executive Dark Mode
+    Chart.defaults.color = '#94A3B8';
+    Chart.defaults.font.family = 'Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif';
+
+    // ---------------------------------------------------------
+    // 1. Timeline Evolution Chart (12 Weeks)
+    // ---------------------------------------------------------
+    const timelineLabels = [
+      '08-22\n启动追踪',
+      '08-29\n中报披露',
+      '09-05\n光伏巨亏',
+      '09-12\n龙头补跌',
+      '09-19\n地量1499',
+      '09-26\n债ETF破万亿',
+      '10-03\nQ3收官',
+      '10-10\n翻倍基剩2只',
+      '10-17\n预亏35亿',
+      '10-24\nV反/0.68红线',
+      '10-31\nAI单日-8%',
+      '11-07\n仅11只抗跌',
+      '11-14\n黄金/算力双杀'
+    ];
+
+    const sentimentData = [48, 42, 35, 30, 22, 26, 28, 34, 29, 55, 38, 44, 31];
+    const bondEtfScale = [8.9, 9.1, 9.4, 9.6, 9.8, 10.0, 10.1, 10.2, 10.25, 10.35, 10.42, 10.50, 10.58]; // 单位: 千亿元 (10.58 = 1.058万亿)
+
+    const ctxTimeline = document.getElementById('timelineChart').getContext('2d');
+    const timelineChart = new Chart(ctxTimeline, {
+      type: 'line',
+      data: {
+        labels: timelineLabels,
+        datasets: [
+          {
+            label: '权益市场情绪温度指数 (0-100)',
+            data: sentimentData,
+            borderColor: '#F43F5E',
+            backgroundColor: 'rgba(244, 63, 94, 0.12)',
+            borderWidth: 2.5,
+            tension: 0.32,
+            fill: true,
+            yAxisID: 'y',
+            pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          {
+            label: '债券ETF规模走势 (千亿元)',
+            data: bondEtfScale,
+            borderColor: '#38BDF8',
+            backgroundColor: 'rgba(56, 189, 248, 0.08)',
+            borderWidth: 2.5,
+            borderDash: [5, 4],
+            tension: 0.25,
+            fill: false,
+            yAxisID: 'y1',
+            pointRadius: 3.5,
+            pointHoverRadius: 6
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'top', labels: { boxWidth: 12, font: { size: 12 } } },
+          tooltip: {
+            backgroundColor: '#0F172A',
+            borderColor: '#334155',
+            borderWidth: 1,
+            padding: 10
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(148, 163, 184, 0.08)' },
+            ticks: { font: { size: 10 }, maxRotation: 0 }
+          },
+          y: {
+            type: 'linear',
+            position: 'left',
+            min: 10,
+            max: 70,
+            title: { display: true, text: '权益情绪温度', font: { size: 11 } },
+            grid: { color: 'rgba(148, 163, 184, 0.1)' }
+          },
+          y1: {
+            type: 'linear',
+            position: 'right',
+            min: 8.5,
+            max: 11.0,
+            title: { display: true, text: '债券ETF (千亿)', font: { size: 11 } },
+            grid: { drawOnChartArea: false }
+          }
+        }
+      }
+    });
+
+    function toggleTimelineView(mode, btn) {
+      btn.parentElement.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      timelineChart.data.datasets[0].hidden = (mode === 'bond');
+      timelineChart.data.datasets[1].hidden = (mode === 'sentiment');
+      timelineChart.update();
+    }
+
+    // ---------------------------------------------------------
+    // 2. Sector Drawdown Bar Chart
+    // ---------------------------------------------------------
+    const rawDrawdowns = [
+      { label: '光伏与新能源制造', val: -75, order: 1, color: '#F43F5E' },
+      { label: '地产及建材产业链', val: -70, order: 2, color: '#FB7185' },
+      { label: '港股部分新消费/僵尸股', val: -70, order: 7, color: '#E11D48' },
+      { label: '传统白酒与核心消费', val: -55, order: 3, color: '#F59E0B' },
+      { label: '高估值次新/纯概念科技', val: -45, order: 4, color: '#A855F7' },
+      { label: '风格漂移主动权益基', val: -42, order: 5, color: '#818CF8' },
+      { label: '英伟达及海外算力链(自高点)', val: -30, order: 6, color: '#38BDF8' },
+      { label: '国际金价/黄金ETF(近3日急杀)', val: -18, order: 8, color: '#FBBF24' }
+    ];
+
+    const ctxDrawdown = document.getElementById('drawdownChart').getContext('2d');
+    const drawdownChart = new Chart(ctxDrawdown, {
+      type: 'bar',
+      data: {
+        labels: rawDrawdowns.map(d => d.label),
+        datasets: [{
+          label: '阶段最大回撤深度 (%)',
+          data: rawDrawdowns.map(d => d.val),
+          backgroundColor: rawDrawdowns.map(d => d.color),
+          borderRadius: 6,
+          barThickness: 18
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0F172A',
+            borderColor: '#334155',
+            borderWidth: 1,
+            callbacks: {
+              label: (ctx) => ` 最大回撤幅度: ${ctx.raw}%`
+            }
+          }
+        },
+        scales: {
+          x: {
+            min: -85,
+            max: 0,
+            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+            ticks: { callback: v => v + '%' }
+          },
+          y: {
+            grid: { display: false },
+            ticks: { font: { size: 11.5 } }
+          }
+        }
+      }
+    });
+
+    function sortDrawdown(mode, btn) {
+      btn.parentElement.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const sorted = [...rawDrawdowns].sort((a, b) => mode === 'desc' ? a.val - b.val : a.order - b.order);
+      drawdownChart.data.labels = sorted.map(d => d.label);
+      drawdownChart.data.datasets[0].data = sorted.map(d => d.val);
+      drawdownChart.data.datasets[0].backgroundColor = sorted.map(d => d.color);
+      drawdownChart.update();
+    }
+
+    // ---------------------------------------------------------
+    // 3. Fund Ecosystem Migration Chart
+    // ---------------------------------------------------------
+    const ctxMigration = document.getElementById('migrationChart').getContext('2d');
+    new Chart(ctxMigration, {
+      type: 'bar',
+      data: {
+        labels: ['Q3债基净增规模', 'Q3债券ETF增量', '首批18只主动ETF募资', 'Q3主动权益净缩水'],
+        datasets: [{
+          label: '资金规模变动 (亿元)',
+          data: [5000, 1434, 360, -9000],
+          backgroundColor: ['#10B981', '#38BDF8', '#818CF8', '#F43F5E'],
+          borderRadius: 6,
+          barThickness: 36
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0F172A',
+            borderColor: '#334155',
+            borderWidth: 1,
+            callbacks: {
+              label: (ctx) => ` 规模变动: ${ctx.raw > 0 ? '+' : ''}${ctx.raw} 亿元`
+            }
+          }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 11.5 } } },
+          y: {
+            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+            ticks: { callback: v => v + '亿' }
+          }
+        }
+      }
+    });
+
+    // ---------------------------------------------------------
+    // 4. Bottoming Maturity Radar Chart
+    // ---------------------------------------------------------
+    const radarDatasets = {
+      solar: {
+        label: '光伏制造 (成本红线介入)',
+        data: [62, 48, 35, 55],
+        borderColor: '#F59E0B',
+        backgroundColor: 'rgba(245, 158, 11, 0.15)'
+      },
+      liquor: {
+        label: '传统白酒 (渠道去库存)',
+        data: [35, 30, 28, 45],
+        borderColor: '#38BDF8',
+        backgroundColor: 'rgba(56, 189, 248, 0.15)'
+      },
+      ai: {
+        label: '算力硬件CPO (高位补跌期)',
+        data: [25, 40, 20, 22],
+        borderColor: '#F43F5E',
+        backgroundColor: 'rgba(244, 63, 94, 0.15)'
+      },
+      gold: {
+        label: '黄金ETF (保证金抽水破位)',
+        data: [40, 32, 25, 30],
+        borderColor: '#A855F7',
+        backgroundColor: 'rgba(168, 85, 247, 0.15)'
+      }
+    };
+
+    const ctxRadar = document.getElementById('radarChart').getContext('2d');
+    const radarChart = new Chart(ctxRadar, {
+      type: 'radar',
+      data: {
+        labels: ['供给端出清度', '现货价格企稳度', '增量资金承接度', '利空消息钝化度'],
+        datasets: [radarDatasets.solar, radarDatasets.liquor, radarDatasets.ai, radarDatasets.gold]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } },
+          tooltip: { backgroundColor: '#0F172A', borderColor: '#334155', borderWidth: 1 }
+        },
+        scales: {
+          r: {
+            min: 0,
+            max: 100,
+            ticks: { stepSize: 25, backdropColor: 'transparent', font: { size: 10 } },
+            grid: { color: 'rgba(148, 163, 184, 0.15)' },
+            angleLines: { color: 'rgba(148, 163, 184, 0.15)' },
+            pointLabels: { color: '#CBD5E1', font: { size: 11.5 } }
+          }
+        }
+      }
+    });
+
+    function updateRadar(key, btn) {
+      btn.parentElement.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (key === 'all') {
+        radarChart.data.datasets = [radarDatasets.solar, radarDatasets.liquor, radarDatasets.ai, radarDatasets.gold];
+      } else {
+        radarChart.data.datasets = [radarDatasets[key]];
+      }
+      radarChart.update();
+    }
+
+    // ---------------------------------------------------------
+    // 5. Common Sense Metaphor Switcher
+    // ---------------------------------------------------------
+    const metaphors = {
+      solar: {
+        tag: '供需失衡 · 沉没成本囚徒困境',
+        title: '“整条街扎堆开100家奶茶店 + 砖厂不敢熄火”',
+        body: '一条街本来只够3家奶茶店赚钱，结果涌入100家打价格战，5元甩卖还亏本。大厂就像重资产砖厂，停窑设备直接报废、银行立马抽贷（死刑），低速亏本运转还能靠流水拖延（无期徒刑）。直到协会划定 0.68元/W 成本红线，才开始用外部硬规则强制止血。',
+        metrics: [
+          { lbl: '半年报头部亏损', val: '> 148 亿元' },
+          { lbl: '招标跌破成本线', val: '< 0.7 元/W' },
+          { lbl: '10月自律红线', val: '0.68 元/W' }
+        ]
+      },
+      liquor: {
+        tag: '金融属性剥离 · 渠道库存倒灌',
+        title: '“社交硬通货变回一瓶普通饮料，蓄水池变泄洪口”',
+        body: '以前买名酒不喝，锁保险柜当理财凭证，经销商借钱囤货当蓄水池。现在商务宴请从严、代际饮酒习惯改变，批价跌破 1499 元指导价，名酒退化为普通酒精饮品。经销商为了还利息不得不折价甩卖，存量老酒不被真正喝掉前，任何反弹都会遭遇渠道抛压。',
+        metrics: [
+          { lbl: '茅台前三季净利', val: '-0.25% (Q3 +3.78%)' },
+          { lbl: '散瓶节后批价', val: '1720~1740元承压' },
+          { lbl: '二三线酒企', val: '营收净利大面积下滑' }
+        ]
+      },
+      ai: {
+        tag: '大客户依赖 · 高位抱团踩踏',
+        title: '“矿山口卖铲子的，突然听说唯一超级矿主换人了”',
+        body: '光模块(CPO)和PCB厂商就像给超级矿主（英伟达）供货的精密零件厂，大家按未来3年订单翻倍炒上天。突然矿主灵魂人物黄仁勋辞任，英伟达股价从高点跌超30%，市场立刻担忧“新掌门会不会砍预算、压采购价”。由于公募前十大重仓高度集中于此，机构年底抢跑砸盘导致权重单日跌超8%。',
+        metrics: [
+          { lbl: '英伟达高点回撤', val: '> 30%' },
+          { lbl: '中际/新易盛11/13', val: '单日跌超 8%' },
+          { lbl: '创业板指11/13', val: '收跌 3.32% 逼近前低' }
+        ]
+      },
+      gold: {
+        tag: '跨资产流动性抽水 · 机会成本上升',
+        title: '“家里着火急需用钱时，最先卖掉的是金条而不是破家具”',
+        body: '股市大跌时，机构和杠杆账户急需现金补交保证金。滞销的股票打折没人接，唯有黄金随时能变现成美元现金，导致黄金在下跌初期沦为“流动性提款机”；叠加美联储鹰派加码，不生息的黄金持有成本上升，3日大跌超260美元跌至一年新低。',
+        metrics: [
+          { lbl: '现货黄金11/12低点', val: '$3,853.15 /盎司' },
+          { lbl: '连续3日暴跌', val: '> $260' },
+          { lbl: '10/26 黄金ETF', val: '14只同日创年内新低' }
+        ]
+      },
+      drift: {
+        tag: '委托代理错位 · 监管强制纠偏',
+        title: '“素食馆老板后厨偷卖烤串，检查组一到只能掀翻烤架”',
+        body: '合同备案为消费/医药的老基金因为亏损严重，基金经理偷偷高位追买科技股博排名。监管严查“风格漂移”新规落地后，基金经理被迫在限定时间内不计成本砍仓非契约科技股，引发连环踩踏。年内246只翻倍基跌到仅剩2只，倒逼360亿资金涌入透明化主动ETF。',
+        metrics: [
+          { lbl: '翻倍基存活率', val: '246只 ➔ 2只' },
+          { lbl: '14只亏损主动基', val: '年内亏超 40%' },
+          { lbl: '首批主动ETF募资', val: '360亿元提前售罄' }
+        ]
+      }
+    };
+
+    function showMetaphor(key, btn) {
+      if (btn) {
+        btn.parentElement.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      const m = metaphors[key];
+      const html = `
+        <div class="metaphor-tag">${m.tag}</div>
+        <div class="metaphor-title">${m.title}</div>
+        <div class="metaphor-body">${m.body}</div>
+        <div class="logic-list">
+          ${m.metrics.map(x => `<div class="logic-mini"><span>${x.lbl}</span><strong class="tabular-nums">${x.val}</strong></div>`).join('')}
+        </div>
+      `;
+      document.getElementById('metaphorDisplay').innerHTML = html;
+    }
+
+    // ---------------------------------------------------------
+    // 6. Valuation Trap Simulator
+    // ---------------------------------------------------------
+    function runValuationSim() {
+      const pDrop = parseInt(document.getElementById('rangePriceDrop').value);
+      const eDrop = parseInt(document.getElementById('rangeProfitDrop').value);
+
+      document.getElementById('valPriceDrop').innerText = `-${pDrop}%`;
+      document.getElementById('valProfitDrop').innerText = `-${eDrop}%`;
+
+      const basePE = 15.0;
+      const newPE = basePE * ((100 - pDrop) / (100 - eDrop));
+      const ratio = newPE / basePE;
+
+      const peEl = document.getElementById('simPeOut');
+      const ratioEl = document.getElementById('simRatioOut');
+      const box = document.getElementById('simVerdictBox');
+
+      peEl.innerText = `${newPE.toFixed(1)}x`;
+
+      if (newPE > basePE) {
+        peEl.style.color = '#F43F5E';
+        ratioEl.innerText = `贵了 ${ratio.toFixed(1)}倍`;
+        ratioEl.style.color = '#F59E0B';
+        box.style.background = 'rgba(244, 63, 94, 0.12)';
+        box.style.border = '1px solid rgba(244, 63, 94, 0.35)';
+        box.style.color = '#FDA4AF';
+        box.innerHTML = `<strong>⚠️ 典型价值陷阱警报：</strong>股价暴跌 ${pDrop}% 看似打了骨折，但由于利润缩水 ${eDrop}%，实际市盈率从 15 倍飙升至 <strong>${newPE.toFixed(1)} 倍</strong>！资产实际上比高位时更贵。`;
+      } else {
+        peEl.style.color = '#10B981';
+        ratioEl.innerText = `便宜 ${(1/ratio).toFixed(1)}倍`;
+        ratioEl.style.color = '#10B981';
+        box.style.background = 'rgba(16, 185, 129, 0.12)';
+        box.style.border = '1px solid rgba(16, 185, 129, 0.35)';
+        box.style.color = '#6EE7B7';
+        box.innerHTML = `<strong>✅ 估值真实消化：</strong>利润跌幅小于股价回撤，估值从 15 倍压降至 <strong>${newPE.toFixed(1)} 倍</strong>，此时才具备初步的安全边际讨论基础。`;
+      }
+    }
+
+    // ---------------------------------------------------------
+    // 7. Interactive Searchable & Sortable Data Table
+    // ---------------------------------------------------------
+    const tableRecords = [
+      {
+        week: '2026-11-14',
+        sector: '黄金主题 ETF 与黄金股',
+        cat: '跨资产/资金',
+        fact: '现货金价3日跌超260美元至3853.15美元/盎司（一年新低）；10/26曾14只黄金ETF同日创年内新低',
+        logic: '股市调整引发机构抛售黄金补保证金（提款机效应），叠加美联储鹰派加码抬高无息资产机会成本',
+        status: '二次破位寻底',
+        badge: 'badge-rose',
+        srcName: '华夏时报 / EBC',
+        srcUrl: 'https://finance.sina.com.cn/wm/2026-11-13/doc-iniyqwtt0968513.shtml'
+      },
+      {
+        week: '2026-11-14',
+        sector: 'AI 算力硬件 (CPO / PCB)',
+        cat: '科技补跌',
+        fact: '英伟达CEO黄仁勋辞任致其股价从高点跌超30%；11/13中际旭创、新易盛等权重跌超8%，创业板跌3.32%',
+        logic: '核心大客户换帅引发资本开支重估，公募前十大重仓高度集中于此，年底考核前机构抢跑踩踏',
+        status: '放量破位补跌',
+        badge: 'badge-rose',
+        srcName: '财联社 / 国际金融报',
+        srcUrl: 'https://www.cls.cn/detail/2533898'
+      },
+      {
+        week: '2026-11-14',
+        sector: '加密货币与高弹性资产',
+        cat: '跨资产/资金',
+        fact: '比特币失守7万美元关口创近三月新低，加密货币ETF全线重挫',
+        logic: '无内生现金流托底的高杠杆流动性资产，在高利率预期重燃时成为最先被抽血的边缘品种',
+        status: '跌穿三月箱体',
+        badge: 'badge-rose',
+        srcName: '智通财经 / 金融界',
+        srcUrl: 'https://finance.jrj.com.cn/2026/11/13111459129339.shtml'
+      },
+      {
+        week: '2026-11-07',
+        sector: '传统“黑盒”主动权益基金',
+        cat: '跨资产/资金',
+        fact: '全市场年内收益>10%且回撤<10%主动基仅剩11只；首批18只主动ETF募资360亿售罄',
+        logic: '基民对黑盒漂移丧失信任，资金转向每日透明持仓的主动ETF，老基金遭遇赎回被迫卖底仓负反馈',
+        status: '信任替代出清',
+        badge: 'badge-amber',
+        srcName: '证券时报 / 北京商报',
+        srcUrl: 'https://www.bbtnews.com.cn/2026/1105/610546.shtml'
+      },
+      {
+        week: '2026-10-31',
+        sector: '传统白酒与核心消费',
+        cat: '产能过剩',
+        fact: '茅台Q3单季微增3.78%但前三季净利-0.25%，散瓶批价1720-1740元承压；二三线酒企断崖下滑',
+        logic: '社交硬通货金融属性剥离，商务场景缩减使经销商蓄水池决堤，库存未被真实喝掉前难言反转',
+        status: '存量去化磨底',
+        badge: 'badge-amber',
+        srcName: '新京报贝壳财经 / 财新',
+        srcUrl: 'https://www.bjnews.com.cn/detail/1793357129129135.html'
+      },
+      {
+        week: '2026-10-24',
+        sector: '光伏组件与新能源制造',
+        cat: '产能过剩',
+        fact: '五大巨头中报亏超148亿、晶科前三季预亏近36亿；10月行业协会划定0.68元/W成本红线',
+        logic: '重资产停机成本高于继续亏本生产，全行业借新还旧硬扛，需靠外部规则硬约束倒逼落后产能退出',
+        status: '成本红线止血中',
+        badge: 'badge-blue',
+        srcName: '中国经济网 / 证券日报',
+        srcUrl: 'http://www.ce.cn/cysc/newmain/yc/jsxw/202610/t20261014_3257087.shtml'
+      },
+      {
+        week: '2026-10-17',
+        sector: '周期硬件与解禁次新',
+        cat: '科技补跌',
+        fact: '存储龙头业绩预增20倍仍破位（定增机构浮亏56%）；次新芯片股解禁20cm跌停',
+        logic: '周期利润增速最高点往往对应估值透支极限，限售股解禁与获利盘出逃将业绩利好转化为出货窗口',
+        status: '估值透支坍塌',
+        badge: 'badge-rose',
+        srcName: '潮新闻 / 证券时报',
+        srcUrl: 'https://tidenews.com.cn/news.html?id=3587660'
+      },
+      {
+        week: '2026-10-10',
+        sector: '“翻倍基”与风格漂移基金',
+        cat: '科技补跌',
+        fact: 'Q2末246只翻倍基至Q3末仅剩2只，14只亏超40%；监管重拳严查挂羊头卖狗肉',
+        logic: '素食馆后厨偷卖烤串，突击检查迫使基金经理不计成本掀翻烤架斩仓非契约科技股，引发连环踩踏',
+        status: '整改被动砍仓',
+        badge: 'badge-rose',
+        srcName: '新浪财经',
+        srcUrl: 'https://finance.sina.com.cn/roll/2026-10-09/doc-iniuqqhr7097332.shtml'
+      },
+      {
+        week: '2026-09-26',
+        sector: '全市场公募固收 vs 权益',
+        cat: '跨资产/资金',
+        fact: '债基总规模破12.6万亿历史新高，年内超500家私募/GP机构注销离场',
+        logic: '旱季抽水机效应：资金大搬家至确定性票息端，中介机构物理出清提速，权益缺乏新增活水',
+        status: '结构性分化极值',
+        badge: 'badge-blue',
+        srcName: '中国经济网 / 证券之星',
+        srcUrl: 'http://www.ce.cn/macro/more/202610/t20261028_3273798.shtml'
+      },
+      {
+        week: '2026-09-05',
+        sector: '生猪养殖与传统地产链',
+        cat: '产能过剩',
+        fact: '养殖业连亏超10个月且中等场负债率超80%；地产链政策脉冲后多次击穿前期平台',
+        logic: '高负债现金流失血赛跑；仅靠政策擦地板代替不了修好居民收入预期水龙头',
+        status: '债务与产能出清',
+        badge: 'badge-amber',
+        srcName: '东方财富网',
+        srcUrl: 'https://finance.eastmoney.com/a/202609043865255924.html'
+      }
+    ];
+
+    let activeCategory = 'ALL';
+    let sortCol = 0;
+    let sortAsc = false;
+
+    function renderTable(data) {
+      const tbody = document.getElementById('tableBody');
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 28px; color: var(--text-muted);">未匹配到符合条件的破位追踪记录</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.map(row => `
+        <tr>
+          <td class="tabular-nums" style="white-space:nowrap;"><strong>${row.week}</strong></td>
+          <td><strong>${row.sector}</strong></td>
+          <td><span style="font-size:12px; color:var(--text-muted);">${row.cat}</span></td>
+          <td>${row.fact}</td>
+          <td>${row.logic}</td>
+          <td style="white-space:nowrap;"><span class="badge ${row.badge}">${row.status}</span></td>
+          <td style="white-space:nowrap;"><a class="src-link" href="${row.srcUrl}" target="_blank">${row.srcName} ↗</a></td>
+        </tr>
+      `).join('');
+    }
+
+    function filterTable() {
+      const kw = document.getElementById('tableSearch').value.trim().toLowerCase();
+      const filtered = tableRecords.filter(r => {
+        const matchCat = (activeCategory === 'ALL' || r.cat === activeCategory);
+        const matchKw = !kw || [r.week, r.sector, r.cat, r.fact, r.logic, r.status, r.srcName].some(v => v.toLowerCase().includes(kw));
+        return matchCat && matchKw;
+      });
+      renderTable(filtered);
+    }
+
+    function setCategoryFilter(cat, btn) {
+      btn.parentElement.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = cat;
+      filterTable();
+    }
+
+    function sortTable(colIdx) {
+      const keys = ['week', 'sector', 'cat', 'fact', 'logic', 'status'];
+      const key = keys[colIdx];
+      if (sortCol === colIdx) {
+        sortAsc = !sortAsc;
+      } else {
+        sortCol = colIdx;
+        sortAsc = true;
+      }
+      tableRecords.sort((a, b) => {
+        const va = a[key];
+        const vb = b[key];
+        return sortAsc ? va.localeCompare(vb, 'zh-CN') : vb.localeCompare(va, 'zh-CN');
+      });
+      filterTable();
+    }
+
+    // Initialize interactive components
+    window.addEventListener('DOMContentLoaded', () => {
+      showMetaphor('solar', null);
+      runValuationSim();
+      renderTable(tableRecords);
+    });
+  </script>
+</body>
+</html>

@@ -63,6 +63,8 @@ export default {
       '/fund-cycle': '#/fund-cycle',
       '/fund-breakdown': '#/fund-breakdown',
       '/prompt-sop': '#/prompt-sop',
+      '/cycle-13w': '#/cycle-13w',
+      '/breakdown-12w': '#/breakdown-12w',
     };
 
     if (hashRoutes[cleanPath]) {
