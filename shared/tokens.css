@@ -1,0 +1,39 @@
+/**
+ * BinOS Design System — Unified Obsidian Tokens (bin0sky.tech)
+ * Standardizes surface hierarchy, hairline borders, typography, and container widths
+ * across the main workstation portal and all craft web applications.
+ */
+
+:root {
+  /* 3-Tier Obsidian Surface Hierarchy */
+  --b0-bg-base: #08090A;
+  --b0-bg-surface: #111215;
+  --b0-bg-surface-hover: #18191D;
+  --b0-bg-elevated: rgba(17, 18, 21, 0.92);
+
+  /* Text Luminance */
+  --b0-text-primary: #F7F8F8;
+  --b0-text-secondary: #B4B8C0;
+  --b0-text-muted: #717680;
+
+  /* Hairline Borders & Accents */
+  --b0-border-hairline: rgba(255, 255, 255, 0.08);
+  --b0-border-hover: rgba(255, 255, 255, 0.14);
+  --b0-accent-indigo: #5E6AD2;
+  --b0-accent-indigo-hover: #6C78E0;
+
+  /* Radius & Layout Tiers */
+  --b0-radius-panel: 12px;
+  --b0-radius-control: 8px;
+  --b0-width-prose: 1120px;
+  --b0-width-studio: 1360px;
+
+  /* Typography */
+  --b0-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, sans-serif;
+  --b0-font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* Embedded Sub-Toolbar Normalization */
+html.b0-embedded .b0-brand-hide-embedded {
+  display: none !important;
+}
