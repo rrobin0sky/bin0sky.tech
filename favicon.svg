@@ -1,7 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect x="1" y="1" width="62" height="62" rx="14" fill="#08090A"/>
-  <rect x="1" y="1" width="62" height="62" rx="14" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1.5"/>
-  <g transform="translate(14, 14) scale(1.5)" fill="#F7F8F8">
+  <style>
+    .b0-mark { fill: #111215; }
+    @media (prefers-color-scheme: dark) {
+      .b0-mark { fill: #F7F8F8; }
+    }
+  </style>
+  <g class="b0-mark" transform="translate(4, 4) scale(2.3333)">
     <path d="M12 2a10 10 0 0 0-8.66 5.01l9.65 9.65A10 10 0 0 0 12 2Zm-9.4 7.05a10.05 10.05 0 0 0-.6 3.45 10 10 0 0 0 10 10c1.22 0 2.39-.22 3.47-.62L2.6 9.05Zm-0.12 4.35 8.12 8.12a10.02 10.02 0 0 1-8.12-8.12Z"/>
   </g>
 </svg>
